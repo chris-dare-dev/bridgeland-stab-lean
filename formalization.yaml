@@ -1,0 +1,125 @@
+# Trust record for BridgelandStabLean.
+#
+# Schema deliberately mirrors mattrobball/BridgelandStability's
+# formalization.yaml key-for-key, so a single parser can pin both the anchor
+# and this extension. Do not rename keys to taste.
+#
+# Every field is a claim. If a field cannot be filled honestly, it says
+# "none" or "pending" -- never a flattering guess.
+
+artifact:
+  name: BridgelandStabLean
+  url: https://github.com/chris-dare-dev/bridgeland-stab-lean
+  description: >
+    Extensions to mattrobball/BridgelandStability along two lanes that require
+    no algebraic-geometry substrate: rank-2 torsion-free lattice arithmetic,
+    and the Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does
+    not cover.
+  date: 2026-08-03
+  authors:
+    - Chris Dare
+  license: Apache-2.0
+  organization: personal
+  funding: none
+  contribution_target: none
+  maintenance: active
+
+source:
+  title: "Stability conditions on triangulated categories (section 8)"
+  authors:
+    - Tom Bridgeland
+  id: math/0212237
+  type: arXiv
+  license: arXiv perpetual non-exclusive
+  author_contacted: false
+  prior_formalization: >
+    mattrobball/BridgelandStability covers sections 2-7 of the same paper.
+    Section 8 is outside its stated scope. NOTE: that scope statement reads
+    "covers Sections 2-7"; the absence of section 8 is an INFERENCE from it,
+    not a sentence any upstream source asserts. Section 8's identity as the
+    group-action section comes from Bridgeland 2007's own table of contents.
+  size_bytes: null
+
+toolchain:
+  system: Lean 4
+  system_version: v4.29.0
+  dependencies:
+    - name: BridgelandStability
+      rev: 9e48f23a382ba117b63076a33e0e775389fef1ba
+      date: 2026-04-21
+    - name: mathlib
+      rev: 8a178386ffc0f5fef0b77738bb5449d50efeea95
+      note: transitive via BridgelandStability; not pinned separately
+  build_manifest_url: https://github.com/chris-dare-dev/bridgeland-stab-lean/blob/main/lake-manifest.json
+
+automation:
+  method: AI-assisted
+  framework: Claude Code
+  models:
+    - claude-opus-5
+
+cost:
+  wall_time: pending
+  compute_time: pending
+  person_hours: pending
+  api_spend: pending
+  hardware: Windows 11 workstation
+  includes_failures: true
+
+fidelity:
+  sorry_count: 0
+  sorry_in_definitions: false
+  sorry_details: >
+    None. The section 8 group structure is intentionally left UNDECLARED
+    rather than declared-with-sorry: an instance asserted ahead of its proof
+    is the exact debt this project exists to avoid. Absent is honest;
+    sorry-backed is not.
+  axiom_count: 0
+  axiom_details: >
+    No axiom declarations. Transitive closure enumerated 2026-08-03 via
+    `lake env lean scripts/Audit.lean` over all 11 declarations this project
+    introduces: every one depends on exactly [propext, Classical.choice,
+    Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
+    Re-run that script before editing this block.
+  builds_clean: true
+  builds_clean_date: 2026-08-03
+  human_review: none
+  machine_review: >
+    lake build (3289 jobs, exit 0) plus a #print axioms pass over every
+    introduced declaration. No human has reviewed any statement for
+    faithfulness to a source.
+  source_mapping: >
+    Lattice/ maps to no single paper section: it is the rank-2 torsion-free
+    arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
+    numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
+    and the autoequivalence action), currently at definitions only.
+  known_divergences: >
+    Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
+    Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
+    lattice, NOT about a Kuznetsov component. The identification is geometry,
+    is not expressible in Mathlib today, and is tracked as an unrealized
+    assumption -- never discharged in this repo.
+
+self_assessment:
+  source_detail_level: skeleton
+  math_sophistication: low
+  dependency_distance: near
+  formalization_quality: skeleton
+
+community:
+  related_projects:
+    - mattrobball/BridgelandStability
+  upstream_prs: none
+  reviews: none
+
+acknowledgements: >
+  Structure, conventions, and this trust-record schema follow
+  mattrobball/BridgelandStability.
+
+notes: >
+  v0 skeleton. No mathematical claim in this repo has had human faithfulness
+  review. Typechecking is not fidelity: the reference figure is
+  TheoremGraph's statement-only experiment, where 22/24 outputs typechecked
+  and 5/24 were semantically faithful. Nothing here should be cited as a
+  formalization of any paper result until the human_review field says
+  otherwise.
