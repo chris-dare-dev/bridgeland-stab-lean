@@ -202,9 +202,13 @@ Four claims to keep off the page.
     anywhere in Mathlib at this revision, so `π₁(S¹) ≅ ℤ` is unavailable and
     the covering-space route is closed.
   - The one open route is therefore **contractibility** — true, since
-    `G̃L⁺(2, ℝ) ≅ ℝ⁴` — which needs a polar or Iwasawa decomposition of
-    `2 × 2` real matrices. **Mathlib has no matrix polar decomposition at this
-    pin** (zero files match).
+    `G̃L⁺(2, ℝ) ≅ ℝ⁴` — which needs a polar decomposition. Mathlib has none at
+    this pin (zero files match); **that prerequisite is now supplied** by
+    `ForMathlib/PolarDecomposition.lean` (`Matrix.exists_polarDecomposition`,
+    general `n` over `ℝ`). It was cheap because the continuous functional
+    calculus reaches real matrices once `open scoped MatrixOrder` is in
+    effect, so `CFC.sqrt` is available and no spectral theorem is needed.
+    **This closes one prerequisite, not the gap** — see the next two bullets.
   - Independently, nothing in this repo puts a topology on `GLTilde` at all, so
     the statement is not currently expressible here, let alone provable.
 

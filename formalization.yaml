@@ -111,9 +111,11 @@ fidelity:
     but its ONLY instances are ofContractible and Unit; no fundamental group of
     any space is computed anywhere at this revision, so pi_1(S^1) = Z is
     unavailable and the covering-space route is closed. (b) The remaining route
-    is contractibility -- true, since GLTilde is homeomorphic to R^4 -- which
-    needs a polar or Iwasawa decomposition of 2x2 real matrices, and Mathlib
-    has NO matrix polar decomposition at this pin (zero files match). (c)
+    is contractibility -- true, since GLTilde is homeomorphic to R^4. It needs
+    a polar decomposition, which Mathlib does NOT have at this pin (zero files
+    match); that prerequisite is now supplied locally by
+    ForMathlib/PolarDecomposition.lean, for general n over R. It is ONE of
+    several missing pieces, not the whole gap -- see (c). (c)
     Independently, nothing in this repo puts a topology on GLTilde, so the
     statement is not currently expressible here. This is a
     missing-prerequisite program in the sense of CLAUDE.md section 4, not a
@@ -190,11 +192,11 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-04 at commit
-    HEAD-of-GLTildeSurj via `lake env lean scripts/Audit.lean` over all 174
+    HEAD-of-PolarDecomposition via `lake env lean scripts/Audit.lean` over 184
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11,
-    GLTildeFibre.lean 10, GLTildeSurj.lean 29.)
+    GLTildeFibre.lean 10, GLTildeSurj.lean 29, ForMathlib/PolarDecomposition.lean 10.)
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.

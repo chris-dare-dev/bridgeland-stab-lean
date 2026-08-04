@@ -27,6 +27,19 @@ import BridgelandStabLean
 
 open BridgelandStabLean
 
+/-! ## ForMathlib — results Mathlib lacks at the pin -/
+
+#print axioms Matrix.polarFactor
+#print axioms Matrix.polarFactor_posSemidef
+#print axioms Matrix.polarFactor_mul_self
+#print axioms Matrix.polarFactor_isHermitian
+#print axioms Matrix.det_polarFactor_ne_zero
+#print axioms Matrix.polarFactor_posDef
+#print axioms Matrix.polarOrthogonal
+#print axioms Matrix.polarOrthogonal_mul_polarFactor
+#print axioms Matrix.polarOrthogonal_mem_orthogonalGroup
+#print axioms Matrix.exists_polarDecomposition
+
 /-! ## Lattice lane -/
 
 #print axioms Lattice.eq_zero_of_zsmul_eq_zero

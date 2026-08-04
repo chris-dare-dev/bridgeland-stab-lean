@@ -2,6 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
+import BridgelandStabLean.ForMathlib.PolarDecomposition
 import BridgelandStabLean.Lattice.Basic
 import BridgelandStabLean.Lattice.NumericalK
 import BridgelandStabLean.GroupAction.NormalizedShift
@@ -28,6 +29,7 @@ Extensions to `mattrobball/BridgelandStability`, pinned at commit `9e48f23`.
 
 Two lanes, both chosen because they need **no** algebraic-geometry substrate:
 
+* `ForMathlib/` — results Mathlib lacks at the pin, written to be upstreamed.
 * `Lattice/` — rank-2 torsion-free arithmetic (closed proofs, today).
 * `GroupAction/` — the §8 `G̃L⁺(2, ℝ)` action the anchor does not cover.
 
