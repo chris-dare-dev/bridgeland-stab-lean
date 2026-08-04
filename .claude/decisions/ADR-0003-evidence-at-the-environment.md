@@ -123,7 +123,8 @@ Three implementation requirements, all found empirically:
    to elaborate with unresolved metavariables; with implicits printed, 0. So
    `review/1.0` needs its own `reviewed_statement_pp` under explicit options —
    `type_pp` from `emission/1.0` is not sufficient, and reusing it would make
-   the check fail on statements that are perfectly fine.
+   the check fail on statements that are perfectly fine. **The confirmation
+   below shows this requirement is stronger than the proxy revealed.**
 2. **The elaboration must be message-log sandboxed.** `elabTerm` *logs* errors
    rather than throwing them, so a `try`/`catch` alone returns success while the
    errors leak into the enclosing build. Snapshot `Core.State.messages`, treat
@@ -139,3 +140,46 @@ strong proxy, but the anchor was not built on the machine that ran the spike and
 the real corpus is untested. It is also the first 400 declarations in iteration
 order, not a random sample. Confirm on this repo's own statements before the
 first human review is recorded against a restate-check.
+
+### Confirmation, 2026-08-04 (later) — the proxy held, and it understated one requirement
+
+The caveat above is discharged. The anchor was built on this machine and the
+identical experiment re-run against the real corpus.
+
+| population | sampled | defeq | NOT-defeq | elab-fail | **E-07-clean subset** |
+|---|---|---|---|---|---|
+| `BridgelandStabLean`, `pp.explicit = false` *(what the emitter stores)* | 109 | 95 | **3** | 11 | 95/106 |
+| `BridgelandStabLean`, `pp.explicit = true` | 109 | 101 | 0 | 8 | **98/98** |
+| `BridgelandStability` (anchor), `pp.explicit = true` | 400 | 304 | 0 | 96 | **293/293** |
+
+Parse failures: 0 in every population. **E-07-clean implies round-trips, with
+zero exceptions** — 98/98 here, 293/293 on the anchor, against 339/339 on the
+`Std` proxy. The anchor's statements carry the `[Category C]`,
+`[Preadditive C]`, `[IsTriangulated C]` stacks that core `Std` never exercises,
+which is the case the proxy was standing in for. It stood.
+
+**Requirement 1 is load-bearing in a way the proxy could not show.** On `Std`,
+`pp.explicit := false` cost 5 *elaboration failures* — annoying, but detectable,
+and they would surface honestly as `not_checkable`. On this repo it produces
+**3 `NOT-defeq` results that carry no elision marker**, e.g.
+`Lattice.eq_zero_of_two_zsmul_eq_zero`. `E-07` does not flag those, so a
+restate-check reading `type_pp` would report **`changed` for a statement that
+never changed** — a spurious invalidation of exactly the human review this
+mitigation exists to protect. Under `pp.explicit := true`, `NOT-defeq` is **0**
+in both populations. Recording `reviewed_statement_pp` under explicit options is
+therefore not an optimization; it is the difference between a check that can
+silently lie and one that cannot.
+
+**`E-07` over-predicts failure, in the safe direction.** On `Std` the
+correlation was exact — no elided statement round-tripped. Here 14 elided
+statements did (3 in this repo, 11 in the anchor). So the rule excludes some
+checkable statements and admits no uncheckable one, which is the right
+direction, but it is a conservative filter rather than a precise one.
+
+**The coverage limit that follows, and it should be stated before anyone
+budgets review against it.** ~90% of this repo's statements are E-07-clean
+(98 of 109); on the anchor it is **~73%** (293 of 400 — 107 elided). Roughly a
+quarter of anchor-style statements are not restate-checkable at all, and for
+those a Mathlib or anchor bump still costs a full re-review. `--restate-check`
+shrinks #54's blast radius; it does not remove it, and a served record must not
+imply otherwise.
