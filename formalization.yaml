@@ -70,17 +70,22 @@ fidelity:
   sorry_count: 0
   sorry_in_definitions: false
   sorry_details: >
-    None. The section 8 group structure is intentionally left UNDECLARED
-    rather than declared-with-sorry: an instance asserted ahead of its proof
-    is the exact debt this project exists to avoid. Absent is honest;
-    sorry-backed is not.
+    None. The NormalizedShift group structure is PROVED, not asserted: it was
+    left undeclared in the initial skeleton and closed on 2026-08-03. The
+    standing rule stays -- a result that is not yet proved is left undeclared
+    with a TODO, never declared with sorry, because a sorry-backed instance
+    typechecks, gets imported, and launders an unproved claim downstream.
+    Currently undeclared under that rule: the GL+(2,R) pairing (lane-1 step 2)
+    and the action on the anchor's Slicing (lane-1 step 3).
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 11 declarations this project
+    `lake env lean scripts/Audit.lean` over all 15 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
-    Re-run that script before editing this block.
+    The same script carries rfl/simp spot checks that the Group instance
+    computes the intended composition, not merely some group structure that
+    typechecks. Re-run it before editing this block.
   builds_clean: true
   builds_clean_date: 2026-08-03
   human_review: none
@@ -92,7 +97,12 @@ fidelity:
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
     numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
-    and the autoequivalence action), currently at definitions only.
+    and the autoequivalence action). It currently contains the
+    phase-relabelling factor only -- the group of +1-equivariant order
+    isomorphisms of R -- proved to be a group under composition. That factor
+    is a genuine component of GL+(2,R)-tilde, but it is NOT the section 8
+    action: neither the pairing with GL+(2,R) nor any action on a slicing is
+    formalized, and nothing here touches the anchor's API yet.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free

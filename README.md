@@ -41,10 +41,13 @@ Bridgeland §8 is the `G̃L⁺(2, ℝ)` action on `Stab(D)` and the autoequivale
 action. It is outside the anchor's stated scope, it is purely categorical, and
 Serre-invariance arguments consume exactly it. Highest value in this repo.
 
-Current state: the phase-relabelling half (`NormalizedShift`) is defined and
-its inverse law is proved, with no dependency on the anchor's API. The group
-instance and the action on the anchor's `Slicing` are the next two steps, in
-that order.
+Current state: the phase-relabelling half (`NormalizedShift` — order
+isomorphisms of `ℝ` commuting with `φ ↦ φ + 1`) is defined and **proved to be
+a group under composition**, with no dependency on the anchor's API.
+
+That group is a real component of `G̃L⁺(2, ℝ)`, but it is not yet the §8
+action. Remaining: pair it with `T ∈ GL⁺(2, ℝ)` under the shared-map-on-`S¹`
+condition, then define the action on the anchor's `Slicing` — in that order.
 
 ### Lane 2 — `Lattice/` (closable today)
 

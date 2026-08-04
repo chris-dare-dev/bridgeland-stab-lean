@@ -50,10 +50,17 @@ axiomatizing the gap.
 
 ## 5. Order of work in lane 1 (§8)
 
-1. `Group` instance on `NormalizedShift` (needs a `DFunLike`-style `ext`).
+1. ~~`Group` instance on `NormalizedShift`.~~ **Done** (2026-08-03) — via
+   `toOrderIso_injective` + the `@[ext]` lemma `ext'`. Note `ext'`, not `ext`:
+   Lean auto-generates `NormalizedShift.ext` for the structure, so the
+   pointwise lemma needs a distinct name.
 2. Pair with `T ∈ GL⁺(2, ℝ)` under the shared-map-on-`S¹` condition to get
    `G̃L⁺(2, ℝ)`.
 3. The action on the anchor's `Slicing`.
+
+Do not describe the current state as "the §8 action is formalized". A group
+of phase relabellings is a *factor* of `G̃L⁺(2, ℝ)`; steps 2 and 3 are what
+make it an action on stability conditions.
 
 Step 3 is the first declaration here that touches the anchor's API. **Read
 `BridgelandStability/Slicing/` and `BridgelandStability/StabilityCondition/`

@@ -3,6 +3,7 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under Apache 2.0 license.
 -/
 import Mathlib.Order.Hom.Basic
+import Mathlib.Algebra.Group.Defs
 import Mathlib.Tactic
 
 /-!
@@ -26,9 +27,8 @@ half be developed and checked independently of the anchor's `Slicing` API.
 
 ## Status
 
-No `sorry` here. The group structure is deliberately *not* yet declared —
-see the TODO below. Statements land before instances; an instance asserted
-ahead of its proof is exactly the debt this project exists to avoid.
+No `sorry`. The group structure is now proved: `NormalizedShift` is a `Group`
+under composition, which is lane-1 step 1.
 -/
 
 namespace BridgelandStabLean.GroupAction
@@ -46,34 +46,66 @@ structure NormalizedShift where
 
 namespace NormalizedShift
 
-variable (f g : NormalizedShift)
+variable {f g : NormalizedShift}
 
-/-- The inverse of a normalized shift is again `+1`-equivariant. -/
-theorem symm_map_add_one (ψ : ℝ) :
+/-- A normalized shift is determined by its underlying order-isomorphism.
+
+`map_add_one` is a `Prop`, so it carries no data to disagree about. -/
+theorem toOrderIso_injective :
+    Function.Injective NormalizedShift.toOrderIso := by
+  rintro ⟨f, hf⟩ ⟨g, hg⟩ h
+  subst h
+  rfl
+
+@[ext]
+theorem ext' (h : ∀ φ, f.toOrderIso φ = g.toOrderIso φ) : f = g := by
+  apply toOrderIso_injective
+  exact DFunLike.ext _ _ h
+
+/-- The inverse of a normalized shift is again `+1`-equivariant.
+
+Apply `f` to both sides and use injectivity: this is the only step of the
+group structure that is not immediate from composition. -/
+theorem symm_map_add_one (f : NormalizedShift) (ψ : ℝ) :
     f.toOrderIso.symm (ψ + 1) = f.toOrderIso.symm ψ + 1 := by
   apply f.toOrderIso.injective
   rw [OrderIso.apply_symm_apply, f.map_add_one, OrderIso.apply_symm_apply]
 
-/-- The identity relabelling. -/
-protected def id : NormalizedShift where
-  toOrderIso := OrderIso.refl ℝ
-  map_add_one _ := rfl
+/-- Normalized shifts form a group under composition.
 
-/-- Composition of normalized shifts. -/
-protected def comp : NormalizedShift where
-  toOrderIso := g.toOrderIso.trans f.toOrderIso
-  map_add_one φ := by
-    simp only [OrderIso.trans_apply, g.map_add_one, f.map_add_one]
+Lane-1 step 1. The phase-relabelling factor of `G̃L⁺(2, ℝ)` is a group in its
+own right — before any pairing with `GL⁺(2, ℝ)`, and before any contact with
+the anchor's `Slicing` API. -/
+instance group : Group NormalizedShift where
+  mul f g :=
+    { toOrderIso := g.toOrderIso.trans f.toOrderIso
+      map_add_one := fun φ => by
+        simp only [OrderIso.trans_apply, g.map_add_one, f.map_add_one] }
+  one :=
+    { toOrderIso := OrderIso.refl ℝ
+      map_add_one := fun _ => rfl }
+  inv f :=
+    { toOrderIso := f.toOrderIso.symm
+      map_add_one := f.symm_map_add_one }
+  mul_assoc _ _ _ := by ext φ; rfl
+  one_mul _ := by ext φ; rfl
+  mul_one _ := by ext φ; rfl
+  inv_mul_cancel f := by
+    ext φ
+    exact f.toOrderIso.symm_apply_apply φ
 
-/-- The inverse relabelling. -/
-protected def symm : NormalizedShift where
-  toOrderIso := f.toOrderIso.symm
-  map_add_one := f.symm_map_add_one
+@[simp]
+theorem mul_apply (f g : NormalizedShift) (φ : ℝ) :
+    (f * g).toOrderIso φ = f.toOrderIso (g.toOrderIso φ) := rfl
+
+@[simp]
+theorem one_apply (φ : ℝ) : (1 : NormalizedShift).toOrderIso φ = φ := rfl
+
+@[simp]
+theorem inv_apply (f : NormalizedShift) (φ : ℝ) :
+    f⁻¹.toOrderIso φ = f.toOrderIso.symm φ := rfl
 
 /-
-TODO (lane-1, step 1): promote `id`/`comp`/`symm` to a `Group` instance.
-Needs a `DFunLike`-style `ext` lemma for `NormalizedShift` first.
-
 TODO (lane-1, step 2): pair with `T ∈ GL⁺(2, ℝ)` under the "same map on `S¹`"
 compatibility to obtain `G̃L⁺(2, ℝ)` proper.
 
