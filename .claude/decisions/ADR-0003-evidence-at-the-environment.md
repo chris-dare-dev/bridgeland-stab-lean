@@ -86,3 +86,56 @@ emitter replaces it; the script's own header already admits it can rot.
 depends on it, but because it is on the same wire an agent reads. Today an agent
 can get `outcome: "clean"` on a sorry-backed proof from the tool sitting next to
 the honest record. Tracked as a cross-repo epic.
+
+## Amendment, 2026-08-04 — `--restate-check` is in v1.0 scope
+
+Spike #27 asked whether `elabTerm`/`isDefEq` are usable at the v4.29.0 pin,
+because `--restate-check` was deferred to v1.1 on that uncertainty alone. They
+are, and it is promoted. **Supersedes #54** ("a Mathlib or anchor bump
+invalidates 100% of human review at once"), whose recovery cost was the entire
+original review budget, per bump.
+
+Measured over **400 Lean-core theorems carrying instance-implicit binders**
+(pretty-print the type, re-parse it, re-elaborate it in a fresh context,
+`isDefEq` against the original):
+
+| | count |
+|---|---|
+| round-tripped defeq | 339 |
+| failed | 61 |
+| of the 339 that passed, how many had elided pp | **0** |
+| of the 61 that failed, how many had elided pp | **61** |
+
+Parse failures: 0. Elaboration failures: 0. The correlation is exact, and it
+identifies the cause: **pretty-printer elision, and nothing else.** On
+statements free of `⋯`, the round trip is 339/339.
+
+**This makes lint rule `E-07` load-bearing for a second reason.** It was written
+to stop two different statements hashing identically. It happens to select
+exactly the set of statements that cannot be re-elaborated, so it is already the
+precondition `--restate-check` needs and no new gate is required. An emission
+that passes E-07 is an emission whose statements can be restated.
+
+Three implementation requirements, all found empirically:
+
+1. **`pp.explicit := true` is required**, and it is *not* what the emitter
+   stores. Under the emitter's `pp.explicit := false`, 5 of 76 declarations fail
+   to elaborate with unresolved metavariables; with implicits printed, 0. So
+   `review/1.0` needs its own `reviewed_statement_pp` under explicit options —
+   `type_pp` from `emission/1.0` is not sufficient, and reusing it would make
+   the check fail on statements that are perfectly fine.
+2. **The elaboration must be message-log sandboxed.** `elabTerm` *logs* errors
+   rather than throwing them, so a `try`/`catch` alone returns success while the
+   errors leak into the enclosing build. Snapshot `Core.State.messages`, treat
+   `hasErrors` as failure, restore afterwards. Without this the check is
+   both wrong and noisy — the failure mode this ADR exists to prevent, arriving
+   through the mitigation.
+3. **Transparency is not the lever.** `withTransparency .all` rescues exactly
+   zero cases — 339 both ways. Do not spend time there.
+
+**What this evidence is not.** The sample is Lean core `Std`, not Mathlib and
+not the anchor. These are genuinely typeclass-heavy statements, so it is a
+strong proxy, but the anchor was not built on the machine that ran the spike and
+the real corpus is untested. It is also the first 400 declarations in iteration
+order, not a random sample. Confirm on this repo's own statements before the
+first human review is recorded against a restate-check.
