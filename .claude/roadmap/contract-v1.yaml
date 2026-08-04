@@ -55,6 +55,7 @@ goal:
 generated_by: { agent: claude-opus-5, at: "2026-08-04" }
 generations:
   - { rev: 1, at: "2026-08-04" }
+  - { rev: 2, at: "2026-08-04", note: "Spike #27 answered: elabTerm/isDefEq are usable at the v4.29.0 pin, so `mfc restate-check` (#61) moves from v1.1 into M2/e9 and supersedes #54." }
 retired: []          # tombstoned item ids; ids are write-once, never deleted
 
 # ---------------------------------------------------------------------------
@@ -168,6 +169,7 @@ items:
       - "Given a tampered attestation bundle whose contains_sorry_ax was flipped and whose file digest was recomputed, when the pinner runs, then it refuses — because it re-derives every digest from the git tag object rather than trusting the bundle"
       - "Given a registry entry whose relation is claimed exact, when its frontier is non-empty, then lint fails"
       - "Given the served record for any key, when it is read, then no field anywhere in it collapses distinct trust questions, and caveats[] is generated mechanically from the axis values"
+      - "Given a reviewed entry and a bumped Mathlib or anchor rev, when `mfc restate-check` runs, then it reports restated / changed / not_checkable per entry — never a single verdict for the registry, and never not_checkable silently folded into changed"
     links:
       note: [".claude/decisions/ADR-0002-identity-is-minted-here.md", ".claude/decisions/ADR-0004-registry-lives-in-the-topic-repo.md"]
 
@@ -206,11 +208,11 @@ items:
 
   - id: contract-v1-e9
     gh_issue: 9
-    gh_sub_issues: [50, 51, 52, 53, 54]
+    gh_sub_issues: [50, 51, 52, 53, 54, 61]
     kind: epic
     parent: contract-v1-m2
     title: "Human faithfulness review — the axis no machine may write"
-    summary: "The only axis that can catch CLAUDE.md §3's failure, and the only one that does not scale. Two to three reviewed entries, named and dated, with the reviewed statement digest, quote hash, and env digest recorded — so the review has a baseline and starts detecting the same-name-different-statement drift the audit called undetectable. Also carries the coverage census, without which ten records against 15,280 chunks reads as a covered corpus."
+    summary: "The only axis that can catch CLAUDE.md §3's failure, and the only one that does not scale. Two to three reviewed entries, named and dated, with the reviewed statement digest, quote hash, and env digest recorded — so the review has a baseline and starts detecting the same-name-different-statement drift the audit called undetectable. Also carries the coverage census, without which ten records against 15,280 chunks reads as a covered corpus. NOW ALSO CARRIES `mfc restate-check` (#61), promoted from v1.1 by spike #27 and superseding #54: without it a single Mathlib or anchor bump invalidates 100% of human review at once, because env_digest includes every package rev and statement_stable is not_applicable across environments by construction. Recovery would cost the entire original review budget, per bump, at ~2h/entry. #27 measured the assumption it was deferred on -- 339/400 Lean-core theorems with instance-implicit binders round-trip defeq, 0 parse failures, 0 elaboration failures, and all 61 failures are pretty-printer elision, which E-07 already rejects. So the mitigation needs no new gate; it needs reviewed_statement_pp recorded under pp.explicit true, which is NOT what the emitter stores."
     priority: must
     size: M
     tags: [value, trust, gate-owner]
