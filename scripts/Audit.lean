@@ -73,6 +73,11 @@ open BridgelandStabLean
 #print axioms GroupAction.cplxCoord
 #print axioms GroupAction.cplxCoord_exp
 #print axioms GroupAction.compat_exp
+#print axioms GroupAction.actC
+#print axioms GroupAction.actC_apply
+#print axioms GroupAction.actC_one
+#print axioms GroupAction.actC_mul
+#print axioms GroupAction.actC_exp
 
 /-! ## GroupAction lane — SlicingAction (step 3a) -/
 
@@ -82,6 +87,15 @@ open BridgelandStabLean
 #print axioms GroupAction.smul_slicing_P
 #print axioms GroupAction.gltildeSlicingMulAction
 #print axioms GroupAction.gltilde_smul_slicing_P
+
+/-! ## GroupAction lane — PreStabilityAction (step 3b) -/
+
+#print axioms GroupAction.actPre
+#print axioms GroupAction.actPre_slicing
+#print axioms GroupAction.actPre_Z
+#print axioms GroupAction.preMulAction
+#print axioms GroupAction.smul_pre_slicing
+#print axioms GroupAction.smul_pre_Z
 
 /-! ## Group-law spot checks
 
@@ -143,5 +157,15 @@ example (f : NormalizedShift) (s : Slicing C) (φ : ℝ) :
 consulted. -/
 example (x : GLTilde) (s : Slicing C) (φ : ℝ) :
     (x • s).P φ = (x.shift • s).P φ := rfl
+
+/-! Step 3b: both factors act, each on its own component. -/
+
+variable {Λ : Type*} [AddCommGroup Λ] (v : K₀ C →+ Λ)
+
+example (x : GLTilde) (σ : PreStabilityCondition.WithClassMap C v) :
+    (x • σ).slicing = x • σ.slicing := rfl
+
+example (x : GLTilde) (σ : PreStabilityCondition.WithClassMap C v) (a : Λ) :
+    (x • σ).Z a = actC x.mat (σ.Z a) := rfl
 
 end SlicingChecks

@@ -8,6 +8,7 @@ import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.ComplexBridge
 import BridgelandStabLean.GroupAction.SlicingAction
+import BridgelandStabLean.GroupAction.PreStabilityAction
 
 /-!
 # BridgelandStabLean

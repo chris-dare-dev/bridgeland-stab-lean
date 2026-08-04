@@ -231,8 +231,24 @@ Do not attempt step 3 as one milestone.
    One gotcha: inside the `MulAction` instance's own elaboration `•` stays
    opaque, so `relabel_P` cannot match and `simp` reports "no progress". Add
    `show (relabel C … ).P φ = …` before the `simp` in `one_smul`/`mul_smul`.
-2. **3b — action on `PreStabilityCondition.WithClassMap`.** Needs the §3
-   bridge and the `compat'` computation. Medium.
+2. ~~**3b — action on `PreStabilityCondition.WithClassMap`.**~~ **Done**
+   (2026-08-03) — `GroupAction/PreStabilityAction.lean`, with `actC` and
+   `actC_exp` added to `ComplexBridge`. `MulAction GLTilde (…WithClassMap C v)`
+   with both laws proved. The `compat'` computation went exactly as worked
+   through in §2: `m` becomes `m * r`. As predicted, `[IsTriangulated C]` was
+   not needed.
+
+   Three gotchas:
+   - **`PreStabilityCondition.WithClassMap.ext` is in
+     `StabilityCondition/Basic.lean`, not `Defs.lean`.** Import `.Basic`. The
+     auto-generated structure `ext` is useless here — it would demand equality
+     of the `compat'` proofs.
+   - **`smul_smul` will not match `m • r • z` on `ℂ`** — the two scalar
+     actions sit on different instance paths. Convert out of `•` with
+     `Complex.real_smul`, then `push_cast; ring`.
+   - **`simp` will not close `↑c * w = c • w`** — it normalises `•` into `*`,
+     which is the direction you already have. Finish with
+     `exact Complex.real_smul.symm`.
 3. **3c — action on `StabilityCondition.WithClassMap`.** Needs §4's uniform
    continuity lemma. Hardest; schedule alone.
 

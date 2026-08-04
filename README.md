@@ -53,15 +53,25 @@ a group**, with both projections group homs.
 
 `SlicingAction` then makes this act: `NormalizedShift` — and hence `GLTilde`,
 through `toShiftHom` — acts on the anchor's `Slicing C` by relabelling phases,
-`(f • s).P φ = s.P (f⁻¹ φ)`, with the `MulAction` laws proved. This is the
-first and only file here that imports the anchor.
+`(f • s).P φ = s.P (f⁻¹ φ)`, with the `MulAction` laws proved.
+
+`PreStabilityAction` puts both factors to work at once:
+
+```
+(x • σ).slicing = x.shift • σ.slicing      -- phases relabelled
+(x • σ).Z       = actC x.mat ∘ σ.Z         -- charge transformed
+```
+
+The anchor's `compat'` axiom is what forces the two to agree, and `Compatible`
+is exactly what discharges it: a semistable object's charge ray moves from
+phase `f⁻¹ φ` to phase `φ`, with the positive scalar `m` becoming `m * r`.
+That is why step 2 defined `Compatible` the way it did.
 
 Two things that are deliberately *not* proved. `GLTilde` is not shown to be
 the universal cover — the projection is not shown surjective, the fibre is
 not shown to be `ℤ`, simple connectedness is untouched. And nothing yet acts
-on a *stability condition*: the central charge is untouched, so the full §8
-action still needs 3b (prestability, groundwork in `ComplexBridge`) and 3c
-(local finiteness, which needs uniform continuity of `f⁻¹`). See
+on a full *stability condition*, which additionally carries local finiteness;
+preserving that needs uniform continuity of `f⁻¹` and is step 3c. See
 [`notes/anchor-api-map.md`](notes/anchor-api-map.md).
 
 ### Lane 2 — `Lattice/` (closable today)

@@ -66,18 +66,25 @@ axiomatizing the gap.
    stages it 3a / 3b / 3c.
    - **3a — action on `Slicing`. Done** (2026-08-03),
      `GroupAction/SlicingAction.lean`.
-   - **3b — action on `PreStabilityCondition.WithClassMap`.** Next. The
-     groundwork is in `GroupAction/ComplexBridge.lean`; `compat_exp` is the
-     form to consume.
-   - **3c — action on `StabilityCondition.WithClassMap`.** Needs local
-     finiteness preserved, which needs uniform continuity of `f⁻¹`. Schedule
-     alone.
+   - **3b — action on `PreStabilityCondition.WithClassMap`. Done**
+     (2026-08-03), `GroupAction/PreStabilityAction.lean` + `actC` in
+     `ComplexBridge.lean`.
+   - **3c — action on `StabilityCondition.WithClassMap`.** Next, and the
+     hardest. Needs local finiteness preserved, which needs uniform
+     continuity of `f⁻¹`. Schedule alone.
 
-   Three facts worth having up front. A non-`module` file imports the anchor
-   fine — no migration needed. The anchor is **not** covered by
-   `lake exe cache get`; it is built now, keep it that way. And inside a
-   `MulAction` instance's own elaboration `•` is opaque, so `simp` needs a
-   `show` to see through it.
+   Facts worth having up front:
+
+   - A non-`module` file imports the anchor fine — no migration needed.
+   - The anchor is **not** covered by `lake exe cache get`; it is built now,
+     keep it that way.
+   - Inside a `MulAction` instance's own elaboration `•` is opaque, so `simp`
+     needs a `show` to see through it.
+   - The anchor's `ext` lemmas live in `StabilityCondition/Basic.lean`, not
+     `Defs.lean`. The auto-generated structure `ext` is useless — it demands
+     equality of the `compat'` proofs.
+   - On `ℂ`, `smul_smul` will not match `m • r • z` (different instance
+     paths). Convert out with `Complex.real_smul`, then `push_cast; ring`.
 
 Two claims to keep off the page. Do not describe the current state as "the §8
 action is formalized" — there is no action on a stability condition until

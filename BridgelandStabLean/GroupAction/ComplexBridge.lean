@@ -60,4 +60,46 @@ theorem compat_exp {T : Matrix.GLPos (Fin 2) ℝ} {f : NormalizedShift}
   obtain ⟨r, hr, hry⟩ := h φ
   exact ⟨r, hr, by rw [cplxCoord_exp, cplxCoord_exp, hry]⟩
 
+/-! ## The matrix factor acting on `ℂ`
+
+The anchor's central charge lands in `ℂ`, so this is the form in which the
+matrix factor of `G̃L⁺(2, ℝ)` has to act. Everything below is `GLTilde.mat`
+transported across `cplxCoord`.
+-/
+
+/-- `T` acting `ℝ`-linearly on `ℂ`, through the coordinate bridge. -/
+noncomputable def actC (T : Matrix.GLPos (Fin 2) ℝ) : ℂ →ₗ[ℝ] ℂ where
+  toFun z := cplxCoord.symm (toMat T *ᵥ cplxCoord z)
+  map_add' z w := by simp [Matrix.mulVec_add]
+  -- simp reduces this to `↑c * w = c • w` and then declines to go further:
+  -- it normalises `•` into `*` on `ℂ`, which is the direction we already have.
+  map_smul' c z := by
+    simp [Matrix.mulVec_smul]
+    exact Complex.real_smul.symm
+
+@[simp]
+theorem actC_apply (T : Matrix.GLPos (Fin 2) ℝ) (z : ℂ) :
+    actC T z = cplxCoord.symm (toMat T *ᵥ cplxCoord z) := rfl
+
+@[simp]
+theorem actC_one (z : ℂ) : actC 1 z = z := by
+  simp [toMat_one, Matrix.one_mulVec]
+
+theorem actC_mul (T U : Matrix.GLPos (Fin 2) ℝ) (z : ℂ) :
+    actC (T * U) z = actC T (actC U z) := by
+  simp [toMat_mul, ← Matrix.mulVec_mulVec]
+
+/-- `Compatible`, as a statement about `actC` on the anchor's rays.
+
+This is what step 3b's `compat'` obligation consumes: `T` carries the charge
+ray at phase `φ` to the charge ray at phase `f φ`, scaled by some `r > 0`. -/
+theorem actC_exp {T : Matrix.GLPos (Fin 2) ℝ} {f : NormalizedShift}
+    (h : Compatible T f) (φ : ℝ) :
+    ∃ r : ℝ, 0 < r ∧
+      actC T (Complex.exp (↑(Real.pi * φ) * Complex.I))
+        = r • Complex.exp (↑(Real.pi * f.toOrderIso φ) * Complex.I) := by
+  obtain ⟨r, hr, hry⟩ := compat_exp h φ
+  refine ⟨r, hr, ?_⟩
+  rw [actC_apply, hry, map_smul, LinearEquiv.symm_apply_apply]
+
 end BridgelandStabLean.GroupAction
