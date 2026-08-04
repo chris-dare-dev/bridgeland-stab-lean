@@ -107,6 +107,16 @@ open BridgelandStabLean
 #print axioms GroupAction.smul_pre_slicing
 #print axioms GroupAction.smul_pre_Z
 
+/-! ## GroupAction lane — StabilityAction (step 3c) -/
+
+#print axioms GroupAction.relabel_isLocallyFinite
+#print axioms GroupAction.actStab
+#print axioms GroupAction.actStab_slicing
+#print axioms GroupAction.actStab_Z
+#print axioms GroupAction.stabMulAction
+#print axioms GroupAction.smul_stab_slicing
+#print axioms GroupAction.smul_stab_Z
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually
@@ -177,5 +187,19 @@ example (x : GLTilde) (σ : PreStabilityCondition.WithClassMap C v) :
 
 example (x : GLTilde) (σ : PreStabilityCondition.WithClassMap C v) (a : Λ) :
     (x • σ).Z a = actC x.mat (σ.Z a) := rfl
+
+/-! Step 3c: the action reaches full stability conditions. -/
+
+section StabChecks
+
+variable [IsTriangulated C]
+
+example (x : GLTilde) (σ : StabilityCondition.WithClassMap C v) :
+    (x • σ).slicing = x • σ.slicing := rfl
+
+example (x : GLTilde) (σ : StabilityCondition.WithClassMap C v) (a : Λ) :
+    (x • σ).Z a = actC x.mat (σ.Z a) := rfl
+
+end StabChecks
 
 end SlicingChecks

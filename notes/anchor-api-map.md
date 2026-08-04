@@ -224,7 +224,42 @@ width.
   equality of `ObjectProperty`, not merely an equivalence. The interval
   subcategories match on the nose; there is no structure to transport.
 
-### The third piece is a real obstacle, and it is NOT in the anchor
+### The third piece — CORRECTION: it was in the anchor all along
+
+> **This section previously claimed the restriction lemma did not exist in the
+> anchor. That was wrong.** The search behind it covered `IntervalCategory/`
+> and `QuasiAbelian/` but not `Deformation/`, where the lemma lives. 3c was
+> never blocked. Corrected 2026-08-03; the reasoning below is kept because the
+> reduction it describes is still exactly how the proof goes.
+
+The lemma is **`interval_thinFiniteLength_of_inclusion_strict`**
+(`Deformation/IntervalSelection.lean:354`), and it is stated for two
+*different* slicings — precisely the shape phase relabelling produces:
+
+```lean
+theorem interval_thinFiniteLength_of_inclusion_strict
+    {s₁ s₂ : Slicing C} {a₁ b₁ a₂ b₂ : ℝ}
+    [Fact (a₁ < b₁)] [Fact (b₁ - a₁ ≤ 1)] [Fact (a₂ < b₂)] [Fact (b₂ - a₂ ≤ 1)]
+    (h : s₁.intervalProp C a₁ b₁ ≤ s₂.intervalProp C a₂ b₂)
+    (hFinite : ∀ Y : s₂.IntervalCat C a₂ b₂,
+      IsStrictArtinianObject Y ∧ IsStrictNoetherianObject Y) :
+    ∀ X : s₁.IntervalCat C a₁ b₁,
+      IsStrictArtinianObject X ∧ IsStrictNoetherianObject X
+```
+
+Take the `_strict` variants, not the plain ones: the plain
+`interval_strictArtinianObject_of_inclusion` wants `IsArtinianObject` of the
+image (DCC on *all* subobjects), which is strictly stronger than what
+`IsLocallyFinite` hands you. The whole `_strict` family sits at
+`IntervalSelection.lean:206-372`, resting on `intervalInclusion_map_strictMono`
+(`:121`), which transports strict monos via the cokernel's distinguished
+triangle.
+
+The lesson for future reads: **`Deformation/` is not only deformation theory.**
+It carries general interval-category infrastructure that the
+`IntervalCategory/` tree does not.
+
+### The reduction (still accurate)
 
 Combining the two above gets you: the objects of
 `(f • s).IntervalCat C (t-η') (t+η')` are the objects of
@@ -239,22 +274,12 @@ of it. So 3c reduces to exactly one missing lemma:
 > inclusion `s.IntervalCat C a' b' ⥤ s.IntervalCat C a b` for
 > `a ≤ a'`, `b' ≤ b`.
 
-**This does not exist in the anchor, and cannot be assembled from what does.**
-Verified 2026-08-03:
+`s.intervalProp_mono` turns that containment into the `h` argument above, and
+the anchor's lemma finishes it. `GroupAction/StabilityAction.lean`'s
+`relabel_isLocallyFinite` is exactly this argument in Lean.
 
-- `Slicing.intervalProp_mono` and `Slicing.IntervalCat.inclusion`
-  (`IntervalCategory/Basic.lean:185`) exist, but they are only the
-  object-property implication and the induced functor. `IsStrictArtinianObject`
-  (`QuasiAbelian/Basic.lean:448`) is ACC/DCC on *strict* subobjects, relative
-  to each interval category's own quasi-abelian structure, and does not
-  transfer along a full-subcategory inclusion for free.
-- `IsLocallyFinite`'s own docstring claims "any Bridgeland witness may be
-  shrunk to such an `η`" — but the anchor **never proves a shrinking lemma**.
-  Its only consumers (`Deformation/Setup.lean:58` and `:101`) just destructure
-  the witness, so it never had to.
-
-That is new quasi-abelian mathematics, not bookkeeping, and it is upstream
-work rather than glue. Budget it as its own milestone.
+Note `IsLocallyFinite`'s docstring remark that shrinking a witness is
+"harmless" — that is backed by the `_strict` family, not merely asserted.
 
 ---
 
@@ -289,13 +314,20 @@ Do not attempt step 3 as one milestone.
    - **`simp` will not close `↑c * w = c • w`** — it normalises `•` into `*`,
      which is the direction you already have. Finish with
      `exact Complex.real_smul.symm`.
-3. **3c — action on `StabilityCondition.WithClassMap`. BLOCKED**, and the
-   block is upstream, not here. Its two tractable pieces are **done**
-   (2026-08-03): uniform continuity (`ShiftAnalysis.lean`) and interval
-   reindexing (`relabel_intervalProp`). What remains is the strict-finite-length
-   restriction lemma in §4, which is new quasi-abelian mathematics the anchor
-   does not have. **No `MulAction` on `StabilityCondition.WithClassMap` is
-   declared** — per `CLAUDE.md` §2, absent beats sorry-backed.
+3. ~~**3c — action on `StabilityCondition.WithClassMap`.**~~ **Done**
+   (2026-08-03) — `GroupAction/StabilityAction.lean`.
+   `MulAction GLTilde (StabilityCondition.WithClassMap C v)`, both laws proved.
+   `relabel_isLocallyFinite` closes local finiteness from three ingredients:
+   `exists_radius` (uniform continuity), `relabel_intervalProp` (exact
+   reindexing), and the anchor's own
+   `interval_thinFiniteLength_of_inclusion_strict`.
+
+   It was briefly recorded here as blocked; see the correction in §4.
+
+**The §8 group action is complete.** What is still absent is the covering-space
+identification of `GLTilde` (§ `known_divergences` in `formalization.yaml`) and
+the autoequivalence half of Bridgeland §8 — the `Aut` action — which this
+track has not begun.
 
 Prove the `MulAction` laws (`one_smul`, `mul_smul`) at each stage rather than
 at the end — 3a's are cheap and will catch a wrong `f` vs `f⁻¹` convention

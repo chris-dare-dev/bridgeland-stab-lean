@@ -69,15 +69,12 @@ axiomatizing the gap.
    - **3b — action on `PreStabilityCondition.WithClassMap`. Done**
      (2026-08-03), `GroupAction/PreStabilityAction.lean` + `actC` in
      `ComplexBridge.lean`.
-   - **3c — action on `StabilityCondition.WithClassMap`. BLOCKED upstream.**
-     Its two tractable pieces are done (2026-08-03): uniform continuity
-     (`GroupAction/ShiftAnalysis.lean`) and interval reindexing
-     (`relabel_intervalProp`). What remains is a lemma the **anchor** lacks —
-     that strict Artinian/Noetherian restrict along a sub-interval's
-     full-subcategory inclusion. **Do not declare the `MulAction` on
-     `StabilityCondition.WithClassMap` until that lands**, and do not close
-     the gap with `sorry` (§2). Details in
-     [`notes/anchor-api-map.md`](notes/anchor-api-map.md) §4.
+   - **3c — action on `StabilityCondition.WithClassMap`. Done** (2026-08-03),
+     `GroupAction/StabilityAction.lean`. **The §8 `G̃L⁺(2, ℝ)` action is
+     complete.**
+
+   Remaining on this track: the autoequivalence (`Aut`) half of §8, not begun;
+   and the covering-space identification of `GLTilde`.
 
    Facts worth having up front:
 
@@ -91,6 +88,12 @@ axiomatizing the gap.
      equality of the `compat'` proofs.
    - On `ℂ`, `smul_smul` will not match `m • r • z` (different instance
      paths). Convert out with `Complex.real_smul`, then `push_cast; ring`.
+   - **`Deformation/` is not only deformation theory.** It carries general
+     interval-category infrastructure that `IntervalCategory/` does not — the
+     whole `interval_*_of_inclusion_strict` family lives in
+     `Deformation/IntervalSelection.lean`. Searching only `IntervalCategory/`
+     and `QuasiAbelian/` once produced a false "the anchor lacks this" finding.
+     **Search the whole anchor before concluding something is missing.**
 
 Two claims to keep off the page. Do not describe the current state as "the §8
 action is formalized" — there is no action on a stability condition until
