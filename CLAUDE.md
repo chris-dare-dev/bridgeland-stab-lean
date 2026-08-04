@@ -61,7 +61,20 @@ Current contents:
 
 | file | upstream | status |
 |---|---|---|
-| `PolarDecomposition.lean` | [mathlib4#42449](https://github.com/leanprover-community/mathlib4/pull/42449) | **closed, not merged** — keep. A maintainer is upstreaming a *more general* version (not matrix-specific); delete this file only once that lands and the pin passes it. |
+| `PolarDecomposition.lean` | [mathlib4#42449](https://github.com/leanprover-community/mathlib4/pull/42449) | **closed, not merged** — keep. A maintainer is upstreaming a *more general* version (not matrix-specific); delete this file only once that lands **and is in the pin**. Do not pre-emptively delete on the strength of the promise — see below. |
+
+**Do not treat "a maintainer has code for this" as a delivery date.** #42449 is
+the *second* matrix polar decomposition closed this way. The first,
+[mathlib4#33642](https://github.com/leanprover-community/mathlib4/pull/33642),
+was closed by a different maintainer in January 2026 with the same reasoning
+and the same offer — *"I have code for this somewhere"* — and as of August 2026
+nothing general had landed; #42449's reviewer then said the same thing again,
+adding *"I haven't had time to clean it up and upstream it yet."* Two people,
+seven months apart, both holding unupstreamed work. That is not bad faith, it
+is what volunteer capacity looks like, and the checklist above must not stall
+waiting for it. The deletion condition is a `lake build` against the new pin
+resolving `Matrix.polarFactor` (or its general replacement) from Mathlib — a
+command, not a citation.
 
 Two lessons from #42449 being closed, recorded so they are not repeated.
 **Ask on Zulip before writing an upstream PR** — check not only whether Mathlib
