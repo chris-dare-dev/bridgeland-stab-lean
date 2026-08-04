@@ -176,6 +176,16 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.K₀.mapF_comp
 #print axioms CategoryTheory.Triangulated.K₀.mapF_congr
 
+/-! ## StrictFiniteLength — general strict-hypothesis transfer -/
+
+#print axioms CategoryTheory.Triangulated.strictImage
+#print axioms CategoryTheory.Triangulated.strictImage_monotone
+#print axioms CategoryTheory.Triangulated.strictImage_injective
+#print axioms CategoryTheory.Triangulated.strictImage_strictMono
+#print axioms CategoryTheory.Triangulated.isStrictArtinian_of_faithful_strict
+#print axioms CategoryTheory.Triangulated.isStrictNoetherian_of_faithful_strict
+#print axioms CategoryTheory.Triangulated.mapEquiv_intervalProp_iff
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

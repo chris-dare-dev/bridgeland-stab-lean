@@ -141,35 +141,45 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 111 declarations this project
-    introduces: every one depends on exactly [propext, Classical.choice,
-    Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
+    No axiom declarations. Transitive closure enumerated 2026-08-03 at commit
+    at commit PIN_ME via `lake build` over all 118 declarations this project introduces:
+    every one depends on exactly [propext, Classical.choice, Quot.sound] and
+    nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.
+
+    COUNTS ARE PINNED TO A COMMIT, deliberately. This repo moved five times on
+    2026-08-03 alone (58359e1 -> PIN_ME) and the count went 15 -> 43 -> 77 ->
+    90 -> 105 -> 111 in that span, so a bare number here is stale on arrival
+    and two fields quoting different bare numbers is the normal failure, not an
+    unlucky one. Quote the commit with the count, or do not quote the count.
   builds_clean: true
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build (3545 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
+    lake build at commit PIN_ME (3546 jobs, exit 0). Since 2026-08-03 the
+    #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
-    defaultTargets, so `lake build` elaborates it and its 90 audit records are
+    defaultTargets, so `lake build` elaborates it and its 111 audit records are
     build output. The anchor itself was also built from source for the first
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
 
-    The 90 records were re-parsed from the build log on 2026-08-03 and every
-    one is a subset of [propext, Classical.choice, Quot.sound]; the distinct
-    axiom set across all 90 is exactly those three; sorryAx does not appear
-    anywhere in the log. Parsing them is fiddly enough to be worth recording,
-    because the two obvious ways to check are both WRONG: the axiom list wraps
-    across lines (8 records wrap here), so a line-oriented grep under-reads it;
-    and the declaration name is quote-delimited while two names END in an
+    All 118 records were re-parsed from the build log at PIN_ME and every one
+    is a subset of [propext, Classical.choice, Quot.sound]; the distinct axiom
+    set across all 111 is exactly those three; sorryAx does not appear anywhere
+    in the log.
+
+    HOW TO PARSE THIS OUTPUT, because the two obvious ways are both WRONG. The
+    axiom list wraps across lines, so a line-oriented grep under-reads it; and
+    the declaration name is quote-delimited while some names END in an
     apostrophe (NormalizedShift.ext', GLTilde.ext'), so a naive quoted-name
-    regex silently drops exactly those two. A checker that reports 88 of 90 and
-    calls it clean is the failure mode to watch for. This is a symptom, not a
+    regex silently drops exactly those. Both were hit for real on 2026-08-03,
+    when the then-current 90 records parsed as 88 and the missing two were the
+    primed names -- a checker that reports 88 of 90 and calls it clean is the
+    failure mode to watch for. This is a symptom, not a
     quirk: prose output is the wrong interface, which is why the emitter
     (contract-v1-e4) replaces it with JSON.
 
@@ -276,8 +286,19 @@ fidelity:
     pair the autoequivalence with an automorphism of Lambda commuting with v,
     structurally as Compatible does for GLTilde.
 
-    What remains is invariance of strict finite length under an EQUIVALENCE of
-    interval categories -- a different problem from step 3c, where phase
+    Landed 2026-08-03: StrictFiniteLength.lean extracts the general
+    strict-hypothesis transfer lemma (isStrictArtinian_of_faithful_strict and
+    its Noetherian twin) for an ARBITRARY full faithful strict-mono-preserving
+    functor -- the anchor's own two interval lemmas are instances of it -- plus
+    mapEquiv_intervalProp_iff, recording that under Aut the interval endpoints
+    do NOT move. The anchor's own helpers are private, so they were replicated.
+    What remains is only assembly: the induced interval functor, its
+    strict-mono preservation (via the cokernel-triangle route, as
+    intervalInclusion_map_strictMono does), and rebuilding IsLocallyFinite with
+    the same eta.
+
+    Formerly described as invariance of strict finite length under an
+    EQUIVALENCE of interval categories -- a different problem from step 3c, where phase
     windows do not move and the anchor's
     interval_thinFiniteLength_of_inclusion_strict applies. The anchor's general
     transfer lemma isStrictArtinianObject_of_faithful_map_strictMono wants

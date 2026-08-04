@@ -1,72 +1,129 @@
 # ADR-0007 — Where the contract package lives
 
-- **Status:** **OPEN — needs an owner decision (Chris Dare)**
-- **Date raised:** 2026-08-04
-- **Blocks:** every epic in milestone M1. Nothing downstream can start until this
-  is settled, because it decides where the schemas and fixtures are committed.
-- **Tracked as:** `gate:owner` issue in the M1 milestone.
+- **Status:** accepted — **Option B, `arXMCP/contract/`**
+- **Date raised:** 2026-08-04 (UTC) · **Decided:** 2026-08-04 (UTC)
+- **Deciders:** Chris Dare (delegated), on the reading below
+- **Supersedes:** the Option A recommendation this ADR carried when first
+  written. That recommendation was **wrong**, and the correction is the point
+  of this record — see "Why the first recommendation was wrong".
 
-## Context
+## Decision
 
-The contract needs a home for: seven JSON Schemas, the language-neutral
-adversarial fixture corpus, the `mfc` CLI, a zero-dependency Lake package
-(`@[cites]` attribute + emitter library), and the copier template.
+The contract's schemas, fixtures, and CLI live in **`arXMCP/contract/`**, and
+topic repos **vendor pinned copies** with a checksum-drift test.
 
-The recommended architecture says a **third repo, `math-formal-contract`**.
-**This contradicts a recorded verdict.** `arXMCP/_pipeline/stage-1-discovery/synthesis/target-architecture.md:113-126`
-says **"NOT NOW — create on trigger"**, rejecting a third repo on the grounds it
-*"would be nearly empty (a handful of schemas)"*, and assigns contract custody to
-`math-research-orchestrator` on that repo's creation.
+The third repo (`math-research-orchestrator`) is **not** created now. It is
+created when the ecosystem's own recorded trigger fires — see "When this
+reverses", which is a real dated condition, not an aspiration.
 
-## The two options
+## Why the first recommendation was wrong
 
-### A. Third repo, `math-formal-contract` (the architecture's recommendation)
+The first draft of this ADR recommended a third repo, on the ground that a
+conformance fixture corpus cannot referee two implementations from inside one
+of them. It cited the recorded verdict as *"NOT NOW — create on trigger"* and
+argued for overriding it.
 
-**For.** The conformance corpus **must** live outside both implementations, or
-neither side can be prevented from drifting the tests toward its own behaviour —
-this is the Bowtie / JSON-Schema-Test-Suite model, and it is the only reason
-cross-repo contract tests work at all. With N topic repos the corpus cannot live
-in any one of them. The Lake package must be a shared dependency rather than
-vendored, because `@[cites]` is a `SimplePersistentEnvExtension` and **duplicate
-attribute registration is an import-time error** — two vendored topic repos could
-never coexist in one Lean environment.
+Reading the verdict in full — `_pipeline/stage-1-discovery/synthesis/target-architecture.md`
+**§4.2** (note: `_pipeline/` is at the *Source Code* root, **not** inside
+arXMCP; the audit's path was wrong) — dissolves the argument three ways:
 
-**Against.** It overrides a recorded architecture verdict. It is a fourth thing
-to pin, version, and keep alive. At N=1 adopter it really is nearly empty.
+1. **The referee argument is thin here, because there is only one
+   implementation.** The Bowtie / JSON-Schema-Test-Suite model works because
+   ~20 independent implementations run the corpus. `mfc` was designed to run on
+   both sides, which the red team already flagged (gap 16) as removing the
+   check the corpus exists to provide. A corpus cannot referee one
+   implementation from anywhere. The fix is gap 16's — hand-computed expected
+   digests checked into the fixtures — and it works regardless of location.
+2. **The drift problem already has a working, precedented solution in this
+   ecosystem.** §4.1: `personal-website` vendors pinned copies of the bridge
+   contracts under `.claude/references/bridge/<major>/` **with a checksum-drift
+   test**, mirroring the `EXPECTED_TOOL_SCHEMA_SHA256` idiom. That is the
+   practical failure — producer silently changes the contract — and it is
+   solved without a third repo.
+3. **The verdict already considered and rejected this exact argument, as to
+   timing.** Verbatim: *"starting it as an arXMCP `.claude/` pipeline with
+   envelope-wrapped outputs costs nothing to move later (prompts + scripts
+   relocate cheaply), whereas standing up the repo first pays the
+   third-constitution tax before any code exists."* With N=1 adopter that
+   reasoning holds exactly.
 
-### B. `arXMCP/contract/`, vendored by topic repos
+The override was argued from the audit's one-line summary of §4.2. The full
+section is a four-trigger decision procedure with a documented losing option,
+not a preference. **Do not override a recorded verdict from a summary of it.**
 
-**For.** No new repo. Defensible under Pact, where the *consumer* writes the
-contract. Zero override of the recorded verdict.
+## The larger finding: there is already a bridge contract, and this must join it
 
-**Against.** Adopter #2 needs commit rights on the shared server repo or must
-fork it, in order to add fixtures about their own topic. And the fixture corpus
-then lives inside one of the two implementations it is supposed to referee.
+§5 of the same document specifies a versioned bridge-contract system that this
+design independently re-derived. Composing with it is not optional politeness;
+duplicating it would be the failure mode this whole track exists to prevent.
 
-## What is identical either way
+- **§5.1 — "Written-artifact contracts over live coupling … The bridge never
+  crosses the network."** This is ADR-0001's cold seam, already adopted
+  ecosystem-wide. ADR-0001 is *conformance*, not innovation.
+- **§5.2 — a common envelope** every bridge artifact carries:
+  `bridge.{artifact, version, producer, produced_at, substrate{server,
+  corpus_version, notebook{slug,uri}, filter_echo, retrieval_mode,
+  tool_schema_sha256}}` + `payload`. **Our artifacts must use this envelope**,
+  not a parallel one.
+- **§5.3 — an artifact-type registry that already contains our artifacts.**
+  `verdict-record` is *"lean_verify wrapper / panel agents → domain-tagged
+  verdict, per-domain vocabulary, **statement hash, toolchain/env versions**"*
+  — substantially the attestation bundle. `notebook-ref` already carries the
+  `corpus_version` pin. Register new types there; do not mint a private
+  namespace.
+- **§5.4 rule 7 — "no shared Python package imported by both repos."** This
+  **kills `mfc`-as-shared-dependency** as designed. Each side validates with
+  its own machinery against vendored schemas.
+- **§5.4 rule 4 — registry + handshake:** `GET /bridge/contracts` → type→version
+  map + schema SHA-256s, with vendored pins compared in a preflight that halts
+  on mismatch. That is where a topic repo checks it is pinned to a live
+  contract version.
+- **§5.4 rule 6 — verdict vocabularies do not unify.** SP2 measured exactly
+  `["VERIFIED"]` overlap across pipelines. Our seven axes are the
+  *formalization-domain* vocabulary, not a global enum — which is also
+  ADR-0005 restated.
 
-The seven schemas, the fixture corpus contents, `mfc`'s command surface, the
-emitter's behaviour, and every other ADR here. Only the import path, the pin
-count, and who can push change.
+## Consequences
 
-## Recommendation
+**Good.** No third constitution, no third `.claude/` world, no new pin for a
+solo operator. The contract inherits an existing versioning discipline,
+handshake endpoint, and vendoring precedent rather than inventing three.
+ADR-0001 through ADR-0006 are unaffected — every one of them is about *what*
+the contract says, and none about where the schemas are committed.
 
-**Option A**, on the narrow ground that the fixture corpus cannot referee two
-implementations from inside one of them — which is a correctness argument, not a
-tidiness one. The "nearly empty" objection is answered by what it actually
-contains: 7 schemas + ~15 adversarial fixtures + a CLI + a Lake package +
-a copier template is not a handful of schemas.
+**Costs, accepted.**
 
-If Option B is chosen, add a compensating rule: the fixture corpus is
-append-only and PR-gated, and arXMCP's own CI is forbidden from modifying a
-fixture in the same commit as a behaviour change.
+- **Adopter #2 needs commit rights on arXMCP, or a fork, to add fixtures about
+  their own topic.** This is the real price. It is also precisely the condition
+  that fires the third-repo trigger, so it is self-limiting rather than
+  permanent.
+- **The fixture corpus lives inside one of the implementations it referees.**
+  Compensating rule, adopted: the corpus is **append-only and PR-gated**, and
+  arXMCP CI may not modify a fixture in the same commit as a behaviour change.
+  Plus gap 16's hand-computed digests, which pin canonicalization by data.
+- **`mfc` is no longer a shared package.** It ships as an arXMCP-side CLI. The
+  topic repo's half is its Lean emitter plus schema validation against vendored
+  copies — no cross-repo Python import.
 
-## Related open question
+**Unaffected.** The `@[cites]` attribute and the Lean emitter library are a
+*Lean* dependency, not a Python one, so §5.4 rule 7 does not reach them. Where
+that Lake package lives is a separate question — see `open-questions.md` Q3,
+still open.
 
-ADR-0007 does not settle whether the Lake package is a **shared `[[require]]`**
-or **vendored**. That is a separate call against this repo's `CLAUDE.md` §1
-("a second pin is a second thing to drift"). The recommendation is the shared
-dependency, on the grounds that it is a leaf package with **zero** transitive
-dependencies — core Lean only, no Mathlib — making it the least drift-prone pin
-in the tree. But §1 is the standing rule and this is an exception to it, so it
-is the owner's call. See `open-questions.md` Q3.
+## When this reverses
+
+§4.2 names four triggers. **Trigger 3 — "bridge contracts gain consumers
+outside the two repos" — is the one that governs here**, and it fires when a
+*second topic repo* adopts the contract.
+
+That is the same event as the M3 generalization gate (GitHub #56). So the
+sequencing is settled rather than judged: build in `arXMCP/contract/` now; when
+adopter #2 is real, the trigger has fired and contracts move to
+`math-research-orchestrator`, which §4.2 says *"on creation takes contracts
+custody (both repos then vendor)"* — the vendoring pattern is already what we
+are doing, so the move is a path change, not a redesign.
+
+Note `bridgeland-stab-lean` is arguably already a consumer outside "the two
+repos" (arXMCP + personal-website), so trigger 3 is defensibly already met. It
+is not being called met, on the same timing logic the verdict used: one
+consumer does not need a registry to be shared.

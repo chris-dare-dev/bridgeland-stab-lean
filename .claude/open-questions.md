@@ -31,19 +31,30 @@ change, not the two the architecture budgeted.
 
 ---
 
-## Q2 — Third repo (`math-formal-contract`), or `arXMCP/contract/`?
+## Q2 — Third repo (`math-formal-contract`), or `arXMCP/contract/`? — **ANSWERED**
 
-**Blocks:** every M1 epic. **See ADR-0007 for the full argument.**
+**Answered 2026-08-04 (UTC): `arXMCP/contract/`.** Full reasoning and the
+correction of the earlier recommendation are in
+[`decisions/ADR-0007`](decisions/ADR-0007-contract-package-location.md).
 
-Recommendation: **third repo**, because the conformance fixture corpus cannot
-referee two implementations from inside one of them. This **overrides a recorded
-verdict** (`arXMCP/_pipeline/stage-1-discovery/synthesis/target-architecture.md:113-126`,
-"NOT NOW — create on trigger"), which is why it needs an explicit decision
-rather than a default.
+Short version: the recorded verdict was read in full rather than in summary,
+and it dissolves the case for overriding it. There is only one `mfc`
+implementation, so a fixture corpus cannot referee "two implementations"
+wherever it lives; the drift problem already has a precedented fix in this
+ecosystem (`personal-website` vendors pinned bridge contracts with a
+checksum-drift test); and the verdict explicitly rejected "create it now" as to
+*timing*, on reasoning that holds exactly at N=1 adopter.
 
-**Consequence either way:** schemas, fixtures, and CLI surface are identical.
-Only the import path, the pin count, and who can push change. Option B costs
-adopter #2 commit rights or a fork.
+**The larger finding:** a versioned bridge-contract system already exists
+(§5 of the same document) — a common envelope, an artifact-type registry that
+already contains `verdict-record` with *"statement hash, toolchain/env
+versions"*, per-type MAJOR.MINOR versioning, and a `GET /bridge/contracts`
+handshake. Our artifacts join it. Its rule 7 — *"no shared Python package
+imported by both repos"* — also kills `mfc`-as-shared-dependency.
+
+**Reverses when** the ecosystem's own trigger 3 fires ("bridge contracts gain
+consumers outside the two repos"), which is the same event as the M3
+generalization gate. Sequencing is therefore settled, not judged.
 
 ---
 

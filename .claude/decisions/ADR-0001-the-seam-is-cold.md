@@ -32,6 +32,17 @@ inherits none of it.
 **The two repos never call each other.** The contract is a set of versioned,
 schema-validated files, exchanged at release time via git tags.
 
+**This is conformance, not innovation** (established while deciding ADR-0007).
+The ecosystem already adopted the same principle:
+`_pipeline/stage-1-discovery/synthesis/target-architecture.md` §5.1 —
+*"Written-artifact contracts over live coupling … Live RPC stays confined to
+the MCP surface … Everything persisted, replayed, or audited across the repo
+boundary is a file with an envelope. The bridge never crosses the network."*
+The reasoning below was derived independently and arrives at the same place,
+which is reassuring rather than novel. **Our artifacts must therefore ride that
+system's common envelope (§5.2) and its artifact-type registry (§5.3), not a
+parallel format of our own** — see ADR-0007.
+
 - This repo publishes an attestation bundle under `attest/` at each tag.
 - arXMCP consumes it offline, via an ingest CLI, on the same plane as any other
   corpus artifact — never at request time, never over a socket.

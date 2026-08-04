@@ -438,8 +438,50 @@ Structurally the same move `Compatible` makes for `GLTilde`, and now that
 `K₀.mapF` exists there is nothing missing — only the decision about how to
 bundle it.
 
-**3. Strict finite length under an equivalence — the real remaining work.**
-Moderate, not trivial. Two sub-parts:
+**3. Strict finite length under an equivalence — centrepiece DONE, assembly
+remains.** `GroupAction/StrictFiniteLength.lean` (2026-08-03) extracts the
+general lemma:
+
+```lean
+isStrictArtinian_of_faithful_strict
+    (F : A ⥤ D) [F.Full] [F.Faithful]
+    (hF   : ∀ f, IsStrictMono f → IsStrictMono (F.map f))
+    (harr : ∀ f [Mono f], IsStrictMono f → IsStrictMono (Subobject.mk f).arrow)
+    {E} [IsStrictArtinianObject (F.obj E)] : IsStrictArtinianObject E
+```
+
+plus the Noetherian twin, for an **arbitrary** functor — the anchor's own two
+interval lemmas are instances. Also landed: `mapEquiv_intervalProp_iff`, which
+records that under `Aut` the interval endpoints do **not** move.
+
+The `harr` hypothesis cannot be dropped. It needs strict monos closed under
+composition, and strict-mono composition is **not** available in general — the
+anchor proves it only for interval categories
+(`Slicing.IntervalCat.comp_strictMono`, `IntervalCategory/FiniteLength.lean:189`).
+Callers with an interval target discharge it via
+`intervalSubobject_arrow_strictMono_of_strictMono`.
+
+Two API notes: the anchor's own helpers (`strictSubobjectImageOfFaithful` and
+friends, `QuasiAbelian/Basic.lean:638-684`) are `private`, so they had to be
+replicated rather than reused; and a theorem whose *statement* does not mention
+`hF`/`harr` needs an explicit `include hF harr in`, placed **before** the
+docstring.
+
+**Still to assemble** for the `Aut` action on stability conditions:
+
+- The induced functor `(Φ • s).IntervalCat C a b ⥤ s.IntervalCat C a b`
+  (objects: `E ↦ Φ⁻¹ E`, well-typed by `mapEquiv_intervalProp_iff`),
+  full and faithful because `Φ⁻¹` is.
+- That it preserves strict monos. **Use the cone route, not the heart route**:
+  take the cokernel triangle of a strict mono
+  (`exists_distTriang_of_strictShortExact`), push it through `Φ⁻¹` — which is
+  triangulated, so the triangle stays distinguished and all three vertices stay
+  in the target window — then apply `strictMono_strictEpi_of_distTriang`. This
+  is exactly how the anchor's `intervalInclusion_map_strictMono` works.
+- Feed both into the lemma above, then rebuild `IsLocallyFinite` with the
+  **same** `η` (no `exists_radius` needed here).
+
+### Original assessment, for the record
 
 - The anchor's general transfer lemma
   `isStrictArtinianObject_of_faithful_map_strictMono`
