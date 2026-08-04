@@ -5,6 +5,7 @@ Released under Apache 2.0 license.
 import BridgelandStabLean.Lattice.Basic
 import BridgelandStabLean.Lattice.NumericalK
 import BridgelandStabLean.GroupAction.NormalizedShift
+import BridgelandStabLean.GroupAction.GLTilde
 
 /-!
 # BridgelandStabLean

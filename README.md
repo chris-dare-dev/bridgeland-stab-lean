@@ -45,9 +45,17 @@ Current state: the phase-relabelling half (`NormalizedShift` — order
 isomorphisms of `ℝ` commuting with `φ ↦ φ + 1`) is defined and **proved to be
 a group under composition**, with no dependency on the anchor's API.
 
-That group is a real component of `G̃L⁺(2, ℝ)`, but it is not yet the §8
-action. Remaining: pair it with `T ∈ GL⁺(2, ℝ)` under the shared-map-on-`S¹`
-condition, then define the action on the anchor's `Slicing` — in that order.
+`GLTilde` then pairs it with `T ∈ GL⁺(2, ℝ)` under Bridgeland's
+same-map-on-the-circle condition — the circle being `ℝ/2ℤ` embedded by
+`φ ↦ (cos πφ, sin πφ)`, with the `π` (not `2π`) making `φ ↦ φ + 1` the
+antipodal map, i.e. the shift functor `[1]`. That pair type is **proved to be
+a group**, with both projections group homs.
+
+Two things that are deliberately *not* proved. `GLTilde` is not shown to be
+the universal cover — the projection is not shown surjective, the fibre is
+not shown to be `ℤ`, simple connectedness is untouched. And there is still no
+action on a stability condition. That is step 3, and it is the first thing
+here that will import the anchor.
 
 ### Lane 2 — `Lattice/` (closable today)
 

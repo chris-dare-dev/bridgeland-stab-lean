@@ -75,12 +75,14 @@ fidelity:
     standing rule stays -- a result that is not yet proved is left undeclared
     with a TODO, never declared with sorry, because a sorry-backed instance
     typechecks, gets imported, and launders an unproved claim downstream.
-    Currently undeclared under that rule: the GL+(2,R) pairing (lane-1 step 2)
-    and the action on the anchor's Slicing (lane-1 step 3).
+    Currently undeclared under that rule: the action on the anchor's Slicing
+    (lane-1 step 3), and the covering-space facts about GLTilde -- surjectivity
+    of the projection to GL+(2,R), fibre Z, simple connectedness. The GL+(2,R)
+    pairing (lane-1 step 2) closed on 2026-08-03.
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 15 declarations this project
+    `lake env lean scripts/Audit.lean` over all 39 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -97,18 +99,27 @@ fidelity:
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
     numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
-    and the autoequivalence action). It currently contains the
-    phase-relabelling factor only -- the group of +1-equivariant order
-    isomorphisms of R -- proved to be a group under composition. That factor
-    is a genuine component of GL+(2,R)-tilde, but it is NOT the section 8
-    action: neither the pairing with GL+(2,R) nor any action on a slicing is
-    formalized, and nothing here touches the anchor's API yet.
+    and the autoequivalence action). It now contains: NormalizedShift, the
+    group of +1-equivariant order isomorphisms of R (step 1); and GLTilde,
+    Bridgeland's concrete presentation of GL+(2,R)-tilde as pairs (T, f) of a
+    positive-determinant matrix and a normalized shift agreeing on the circle
+    of phases, proved to be a group under componentwise multiplication with
+    both projections group homs (step 2). NOT the section 8 action: no action
+    on a slicing exists, and nothing here touches the anchor's API yet.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair
+    presentation of GL+(2,R)-tilde and proves it is a GROUP. It does NOT
+    prove that group is the universal cover: the projection to GL+(2,R) is
+    not shown surjective, the fibre is not shown to be Z, and simple
+    connectedness is not addressed. The name states the intended object; the
+    proved content is strictly the group law plus nonemptiness. Do not cite
+    GLTilde as a formalized universal cover.
 
 self_assessment:
   source_detail_level: skeleton

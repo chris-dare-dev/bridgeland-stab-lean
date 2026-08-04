@@ -30,7 +30,7 @@ open BridgelandStabLean
 #print axioms Lattice.ne_zero_of_apply_ne_zero
 #print axioms Lattice.eq_zero_of_two_zsmul_eq_zero_num
 
-/-! ## GroupAction lane -/
+/-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift
 #print axioms GroupAction.NormalizedShift.toOrderIso_injective
@@ -40,6 +40,33 @@ open BridgelandStabLean
 #print axioms GroupAction.NormalizedShift.mul_apply
 #print axioms GroupAction.NormalizedShift.one_apply
 #print axioms GroupAction.NormalizedShift.inv_apply
+
+/-! ## GroupAction lane — GLTilde (step 2) -/
+
+#print axioms GroupAction.rayVec
+#print axioms GroupAction.rayVec_add_one
+#print axioms GroupAction.rayVec_ne_zero
+#print axioms GroupAction.OnRay
+#print axioms GroupAction.OnRay.refl
+#print axioms GroupAction.OnRay.trans
+#print axioms GroupAction.toMat
+#print axioms GroupAction.toMat_mul
+#print axioms GroupAction.toMat_one
+#print axioms GroupAction.Compatible
+#print axioms GroupAction.compat_one
+#print axioms GroupAction.compat_mul
+#print axioms GroupAction.compat_inv
+#print axioms GroupAction.GLTilde
+#print axioms GroupAction.GLTilde.ext'
+#print axioms GroupAction.GLTilde.group
+#print axioms GroupAction.GLTilde.mul_mat
+#print axioms GroupAction.GLTilde.mul_shift
+#print axioms GroupAction.GLTilde.one_mat
+#print axioms GroupAction.GLTilde.one_shift
+#print axioms GroupAction.GLTilde.inv_mat
+#print axioms GroupAction.GLTilde.inv_shift
+#print axioms GroupAction.GLTilde.toMatHom
+#print axioms GroupAction.GLTilde.toShiftHom
 
 /-! ## Group-law spot checks
 
@@ -59,5 +86,22 @@ example (φ : ℝ) : (1 : NormalizedShift).toOrderIso φ = φ := rfl
 
 example (f : NormalizedShift) (φ : ℝ) :
     (f⁻¹ * f).toOrderIso φ = φ := by simp
+
+/-- `GLTilde` multiplication must compose the shift factors in the SAME order
+as `NormalizedShift` does. An order flip here would typecheck and be wrong. -/
+example (x y : GLTilde) (φ : ℝ) :
+    (x * y).shift.toOrderIso φ = x.shift.toOrderIso (y.shift.toOrderIso φ) :=
+  rfl
+
+/-- The projections agree with the field accessors. -/
+example (x : GLTilde) : GLTilde.toMatHom x = x.mat := rfl
+example (x : GLTilde) : GLTilde.toShiftHom x = x.shift := rfl
+
+/-- The identity really is a compatible pair, so `GLTilde` is inhabited and
+the group is not vacuous. -/
+example : (1 : GLTilde).mat = 1 ∧ (1 : GLTilde).shift = 1 := ⟨rfl, rfl⟩
+
+/-- Phase `+1` is the antipodal ray — the shift functor `[1]`. -/
+example (φ : ℝ) : rayVec (φ + 1) = -rayVec φ := rayVec_add_one φ
 
 end SpotChecks

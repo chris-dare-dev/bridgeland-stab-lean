@@ -54,13 +54,19 @@ axiomatizing the gap.
    `toOrderIso_injective` + the `@[ext]` lemma `ext'`. Note `ext'`, not `ext`:
    Lean auto-generates `NormalizedShift.ext` for the structure, so the
    pointwise lemma needs a distinct name.
-2. Pair with `T ∈ GL⁺(2, ℝ)` under the shared-map-on-`S¹` condition to get
-   `G̃L⁺(2, ℝ)`.
+2. ~~Pair with `T ∈ GL⁺(2, ℝ)` under the shared-map-on-`S¹` condition.~~
+   **Done** (2026-08-03) — `GLTilde`. The `Group` instance must be
+   `noncomputable`: `GLPos` membership is a `0 < det` condition and `ℝ`'s
+   `LinearOrder` is noncomputable. Invert via group multiplication
+   (`inv_mul_cancel` on `GLPos`), never via `Matrix.inv` — the nonsingular
+   inverse then never has to appear.
 3. The action on the anchor's `Slicing`.
 
-Do not describe the current state as "the §8 action is formalized". A group
-of phase relabellings is a *factor* of `G̃L⁺(2, ℝ)`; steps 2 and 3 are what
-make it an action on stability conditions.
+Two claims to keep off the page. Do not describe the current state as "the §8
+action is formalized" — there is no action on a stability condition until
+step 3. And do not call `GLTilde` a formalized universal cover: only the
+group law and nonemptiness are proved. Surjectivity of the projection, the
+`ℤ` fibre, and simple connectedness are all untouched.
 
 Step 3 is the first declaration here that touches the anchor's API. **Read
 `BridgelandStability/Slicing/` and `BridgelandStability/StabilityCondition/`
