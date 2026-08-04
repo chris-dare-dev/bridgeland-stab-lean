@@ -1,0 +1,108 @@
+name: CI
+
+# The first CI in this repo's history.
+#
+# What it buys, in the language of `formalization.yaml`: `builds_clean` and
+# `axiom_count: 0` stop being unreproducible assertions about one workstation.
+# Update `machine_review` in the same commit that changes this file, per
+# CLAUDE.md §6.
+#
+# SCOPE. Issue #29 specifies seven steps. Steps 2-7 all require `mfc` (#21) and
+# the emitter wired into this repo, neither of which exists yet, so they are
+# NOT here:
+#
+#   2. lake exe mfc-emit --out attest/
+#   3. mfc bundle | lint | conformance
+#   4. mfc check-ilean-coverage            (the vacuous-pass guard, #31)
+#   5. mfc check-resolution
+#   6. emitter reproducibility, byte-identity modulo emitted_at
+#   7. git diff --exit-code attest/        (#33 says this can never pass as specified)
+#
+# Step 1 is here, and so is the axiom gate, which #29 did not list separately
+# because it assumed `mfc` would carry it. It cannot wait for `mfc`: it is the
+# check that makes `axiom_count: 0` mean something.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # The anchor is NOT covered by `lake exe cache get` (CLAUDE.md §5), so it
+    # compiles from source on every run. Measured locally: Mathlib cache ~2 min,
+    # anchor ~80 modules at a few seconds each, this repo ~15 modules.
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: leanprover/lean-action@v1
+        with:
+          build: true
+          use-mathlib-cache: true
+          # nanoda: false, and NOT because the axis does not matter.
+          #
+          # Measured while standing up CI for the sibling repo
+          # `math-formal-contract-lean`, so this is recorded rather than
+          # rediscovered: `nanoda: true` cannot run at this toolchain.
+          #
+          #  - lean-action's run_nanoda.sh detects the module name with
+          #    `grep -A5 '^\[package\]' lakefile.toml`, and Lake REJECTS the
+          #    `[package]` table that grep wants (`missing required key: name`).
+          #    The form the action requires is not a form Lake accepts.
+          #  - Past that, `leanprover/lean4export` master emits NDJSON 3.1.0
+          #    while nanoda 0.3.2 expects the older space-separated format;
+          #    both its `debug` and `v2025` branches abort with
+          #    "invalid digit found in string".
+          #  - The exporter that does emit that format,
+          #    `ammkrn/lean4export@format2024`, is pinned to v4.20.0-rc5 and
+          #    will not compile at v4.29.0.
+          #
+          # So the Rust-kernel axis reads not_run, not pass.
+          nanoda: false
+
+      # `Audit.lean` is a build target, so the step above already elaborated it
+      # and it cannot silently fall behind the source tree. But elaborating is
+      # not gating: `#print axioms` prints `[sorryAx]` and exits 0. This is the
+      # step that fails.
+      - name: axiom gate
+        run: |
+          set -euo pipefail
+          lake env lean scripts/Audit.lean > audit.txt 2>&1 || {
+            echo "::error::scripts/Audit.lean failed to elaborate"; cat audit.txt; exit 1; }
+          python3 scripts/check_audit.py audit.txt
+
+      # Belt and braces. The axiom gate above already fails on `sorryAx`, which
+      # cannot be evaded by declaration syntax the way a source grep can — but a
+      # `sorry` that somehow reached the build without reaching the audit's
+      # hand-maintained name list would still show up here.
+      - name: no sorry in the build log
+        run: |
+          set -euo pipefail
+          lake build > build.txt 2>&1
+          if grep -q "declaration uses 'sorry'" build.txt; then
+            echo "::error::the build emitted a sorry warning"
+            grep -n "declaration uses 'sorry'" build.txt
+            exit 1
+          fi
+          echo "ok: no sorry warnings"
+
+      - name: upload audit output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit
+          path: audit.txt
+          if-no-files-found: warn
+
+# What this job is evidence FOR, and what it is not.
+#
+#   builds_clean   observed, on a machine nobody owns
+#   axiom_count    gated, not merely printed
+#
+# It is NOT evidence about the CONTENT of any statement, about faithfulness to
+# Bridgeland 2007, or about the assumption frontier. Those are human axes and
+# no CI job can write them. See CLAUDE.md §6 and ADR-0005 -- a green check here
+# must never be quoted as if it were a trust verdict.

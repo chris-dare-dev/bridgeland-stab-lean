@@ -192,11 +192,20 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-04 at commit
-    HEAD-of-PolarDecomposition via `lake env lean scripts/Audit.lean` over 184
-    declarations this project introduces: every one depends on a subset of
-    [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
-    Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11,
-    GLTildeFibre.lean 10, GLTildeSurj.lean 29, ForMathlib/PolarDecomposition.lean 10.)
+    HEAD-of-CI via `scripts/check_audit.py` over 189 declarations this project
+    introduces: every one depends on a subset of [propext, Classical.choice,
+    Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
+
+    COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
+    then 184. Both undercounted, and the cause is worth recording because it is
+    the failure mode this whole file exists to catch. The ad-hoc parser used to
+    read the audit captured declaration names with `'([^']+)'`, which silently
+    DROPS every name ending in an apostrophe -- NormalizedShift.ext' and
+    GLTilde.ext'. Two declarations were never checked, and a gate that skips a
+    declaration is indistinguishable from a gate that passes it. The parser is
+    now scripts/check_audit.py, it uses a lazy match, and it cross-checks its
+    entry count against an independent count of the marker phrase, failing on
+    disagreement rather than reporting the lower number.
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.
@@ -217,8 +226,20 @@ fidelity:
     still describes observations rather than a gate.
   human_review: none
   machine_review: >
-    lake build at commit 5b40d5a (3547 jobs, exit 0). Since 2026-08-03 the
-    #print axioms pass is
+    CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
+    history. lean-action build with the Mathlib cache, then scripts/Audit.lean
+    re-run and GATED by scripts/check_audit.py, then a no-sorry check over the
+    build log. builds_clean and axiom_count are therefore observed on a machine
+    nobody owns rather than asserted about a workstation.
+
+    What CI does NOT cover, and #29 lists: the emitter, mfc bundle/lint/
+    conformance, ilean coverage, resolution freshness, emitter reproducibility,
+    and `git diff --exit-code attest/`. All six need mfc (#21), which does not
+    exist. nanoda is off with the reason recorded inline -- it cannot run at
+    this toolchain, measured.
+
+    Earlier: lake build at commit 5b40d5a (3547 jobs, exit 0). Since 2026-08-03
+    the #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
     defaultTargets, so `lake build` elaborates it and its 111 audit records are
