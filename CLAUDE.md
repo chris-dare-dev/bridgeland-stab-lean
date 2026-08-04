@@ -61,9 +61,19 @@ Current contents:
 
 | file | upstream | status |
 |---|---|---|
-| `PolarDecomposition.lean` | [mathlib4#42449](https://github.com/leanprover-community/mathlib4/pull/42449) | **open** — delete this file if it merges and the pin passes it |
+| `PolarDecomposition.lean` | [mathlib4#42449](https://github.com/leanprover-community/mathlib4/pull/42449) | **closed, not merged** — keep. A maintainer is upstreaming a *more general* version (not matrix-specific); delete this file only once that lands and the pin passes it. |
 
-The two already differ, which is the point of the rule. The upstream version is
+Two lessons from #42449 being closed, recorded so they are not repeated.
+**Ask on Zulip before writing an upstream PR** — check not only whether Mathlib
+*has* a result but whether anyone is *working* on it, and whether the
+generality is right. The reviewer's point was that polar decomposition is not
+matrix-specific, which the file's own implementation note had already
+half-stated: the proof uses `CFC.sqrt_mul_sqrt_self` and nothing about
+matrices. **And run the environment linters, not just `lake build` and
+`lake exe lint-style`** — CI rejected an `@[simp]` on
+`polarUnitary_mul_polarFactor` via `simpNF`, which neither local check runs.
+
+The two versions already differ, which is the point of the rule. The upstream version is
 in master's **module system** (`module` / `public import` /
 `@[expose] public section`, none of which exist at v4.29.0) and needs
 `Matrix.star_eq_conjTranspose` spelled out, because `star` on matrices no
