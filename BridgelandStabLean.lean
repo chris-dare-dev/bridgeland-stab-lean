@@ -11,6 +11,7 @@ import BridgelandStabLean.GroupAction.ComplexBridge
 import BridgelandStabLean.GroupAction.SlicingAction
 import BridgelandStabLean.GroupAction.PreStabilityAction
 import BridgelandStabLean.GroupAction.StabilityAction
+import BridgelandStabLean.GroupAction.AutAction
 
 /-!
 # BridgelandStabLean

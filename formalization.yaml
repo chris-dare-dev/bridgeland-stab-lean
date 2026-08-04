@@ -77,8 +77,15 @@ fidelity:
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: the covering-space facts about
     GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
-    connectedness -- and the autoequivalence (Aut) half of Bridgeland section
-    8, which this track has not begun.
+    connectedness -- and the autoequivalence (Aut) action on stability
+    conditions. The Aut track's transport groundwork IS landed (AutAction.lean:
+    PostnikovTower.mapF, HNFiltration.mapF, Slicing.mapEquiv, all proved); what
+    is undeclared is the action on WithClassMap, which needs K0 functoriality,
+    a class-map compatibility datum, and invariance of strict finite length
+    under an equivalence of interval categories. Note also that the acting
+    object is NOT a group in Lean -- C equiv C is associative only up to
+    natural isomorphism -- so MulAction is the wrong target for Aut and the
+    packaging question is open. See notes/anchor-api-map.md section 7.
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
@@ -95,7 +102,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 73 declarations this project
+    `lake env lean scripts/Audit.lean` over all 77 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -105,7 +112,7 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build BridgelandStabLean (3538 jobs, exit 0) plus a #print axioms
+    lake build BridgelandStabLean (3540 jobs, exit 0) plus a #print axioms
     pass over every introduced declaration. The anchor itself was also built
     from source for the first time (74 files, exit 0) -- it is not covered by
     Mathlib's cache and nothing had imported it until the step-3 API read.
@@ -141,9 +148,18 @@ fidelity:
     (StabilityCondition.WithClassMap C v), both laws proved (step 3c).
 
     The GL+(2,R)-tilde half of Bridgeland section 8 is therefore complete on
-    stability conditions. NOT covered: the autoequivalence (Aut) action, which
-    this track has not begun, and the covering-space identification of GLTilde
-    (see known_divergences). API mapped in notes/anchor-api-map.md.
+    stability conditions.
+
+    AutAction covers the other half's groundwork: PostnikovTower.mapF and
+    HNFiltration.mapF push a tower / filtration through a triangulated functor,
+    and Slicing.mapEquiv transports a slicing along a triangulated
+    auto-equivalence -- (Phi . s).P phi X = s.P phi (Phi-inverse X), dual to
+    relabel, which moves phases and fixes objects. The anchor has NO functor
+    transport of its own, only HNFiltration.ofIso along an object isomorphism,
+    so these are built from scratch. The Aut action on stability conditions
+    itself is NOT declared (see sorry_details). Also not covered: the
+    covering-space identification of GLTilde (see known_divergences). API
+    mapped in notes/anchor-api-map.md.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free

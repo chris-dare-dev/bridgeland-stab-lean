@@ -79,10 +79,21 @@ shows interval subcategories are reindexed on the nose, and the anchor's own
 **So the `G̃L⁺(2, ℝ)` action of Bridgeland §8 is complete on stability
 conditions.**
 
-Two things that are deliberately *not* proved. `GLTilde` is not shown to be
-the universal cover — the projection is not shown surjective, the fibre is not
-shown to be `ℤ`, simple connectedness is untouched. And §8's *other* half, the
-autoequivalence (`Aut`) action, has not been started.
+`AutAction` starts §8's *other* half. `G̃L⁺(2, ℝ)` moves phases and fixes
+objects; an autoequivalence does the opposite. The anchor has **no** functor
+transport at all, so `PostnikovTower.mapF`, `HNFiltration.mapF` and
+`Slicing.mapEquiv` are built from scratch — the last giving
+`(Φ • s).P φ X = s.P φ (Φ⁻¹ X)`.
+
+The `Aut` action on stability conditions is **not** declared. It needs `K₀`
+functoriality, a class-map compatibility datum, and invariance of strict finite
+length under an equivalence — and, first, a decision about packaging: `C ≌ C`
+is associative only up to natural isomorphism, so it has no `Group` instance
+and `MulAction` is the wrong target.
+
+Also not proved: `GLTilde` is not shown to be the universal cover — the
+projection is not shown surjective, the fibre is not shown to be `ℤ`, simple
+connectedness is untouched.
 
 ### Lane 2 — `Lattice/` (closable today)
 

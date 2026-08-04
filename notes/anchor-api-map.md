@@ -324,10 +324,59 @@ Do not attempt step 3 as one milestone.
 
    It was briefly recorded here as blocked; see the correction in §4.
 
-**The §8 group action is complete.** What is still absent is the covering-space
-identification of `GLTilde` (§ `known_divergences` in `formalization.yaml`) and
-the autoequivalence half of Bridgeland §8 — the `Aut` action — which this
-track has not begun.
+**The §8 `G̃L⁺(2, ℝ)` action is complete.** Still absent: the covering-space
+identification of `GLTilde` (see `known_divergences` in `formalization.yaml`),
+and the `Aut` half — begun, see below.
+
+---
+
+## 7. The `Aut` track
+
+`G̃L⁺(2, ℝ)` moves phases and fixes objects; an autoequivalence does the
+opposite. The anchor has **no functor-transport machinery whatsoever** — only
+`HNFiltration.ofIso`, along an isomorphism of the filtered *object*. So this
+track is built from scratch.
+
+**Landed** (`GroupAction/AutAction.lean`, 2026-08-03):
+
+- `PostnikovTower.mapF` — push a tower through a triangulated functor. Went
+  through unchanged on the first attempt: `ComposableArrows C n` is a functor
+  category, so the transported chain is literally `chain ⋙ F`, every
+  `obj'`/`left`/`right` projection commutes definitionally, and
+  `Functor.IsTriangulated.map_distinguished` carries distinguishedness.
+- `HNFiltration.mapF` — tower plus untouched phases; only `semistable` argues.
+- `Slicing.mapEquiv` — `(Φ • s).P φ X = s.P φ (Φ⁻¹ X)`.
+
+Three API notes that cost build cycles:
+
+- `Functor.IsTriangulated` needs `import Mathlib.CategoryTheory.Triangulated.Functor`
+  and `Equivalence.CommShift` needs `Mathlib.CategoryTheory.Shift.Adjunction`.
+- `Equivalence.CommShift ℤ` does **not** yield `Φ.functor.CommShift ℤ` by
+  instance search. Require the two functor-level instances directly.
+- `ObjectProperty.prop_of_iso` takes the property **explicitly**
+  (`prop_of_iso _ e h`), and `HNFiltration.ofIso` takes `C` explicitly.
+
+**Not done, and the packaging question comes first.** Unlike `GLTilde`, the
+acting object is not a group in Lean: `C ≌ C` under composition is associative
+only up to natural isomorphism, so it has no `Group` instance and `MulAction`
+is the wrong target. "`Aut(D)` acts" is a statement about isomorphism classes;
+a strict formalisation needs a quotient or a strictified group. **Decide that
+before writing more.**
+
+Then three pieces:
+
+1. `K₀` functoriality — `K₀.map Φ` via `K₀.lift` plus an `IsTriangleAdditive`
+   proof. The anchor has `K₀.lift` (`GrothendieckGroup/Basic.lean:162`) but no
+   functor action.
+2. Class-map compatibility: an autoequivalence acts on `WithClassMap C v` only
+   paired with `λ : Λ ≃+ Λ` satisfying `v ∘ K₀.map Φ = λ ∘ v`. Forced when
+   `v = id`; extra data otherwise — structurally the same move as `Compatible`.
+3. Local finiteness under `mapEquiv`. **A different problem from 3c**: phase
+   windows do not move here at all, so no uniform-continuity argument is
+   needed. What is needed is invariance of strict finite length under an
+   *equivalence* of interval categories, and
+   `interval_thinFiniteLength_of_inclusion_strict` does **not** apply — it
+   compares two `intervalProp`s on the same object.
 
 Prove the `MulAction` laws (`one_smul`, `mul_smul`) at each stage rather than
 at the end — 3a's are cheap and will catch a wrong `f` vs `f⁻¹` convention

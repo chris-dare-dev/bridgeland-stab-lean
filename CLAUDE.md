@@ -73,8 +73,19 @@ axiomatizing the gap.
      `GroupAction/StabilityAction.lean`. **The §8 `G̃L⁺(2, ℝ)` action is
      complete.**
 
-   Remaining on this track: the autoequivalence (`Aut`) half of §8, not begun;
-   and the covering-space identification of `GLTilde`.
+   Remaining on this track: the covering-space identification of `GLTilde`,
+   and the autoequivalence (`Aut`) half of §8 — **groundwork landed**
+   (`GroupAction/AutAction.lean`: `PostnikovTower.mapF`, `HNFiltration.mapF`,
+   `Slicing.mapEquiv`), the action on `WithClassMap` not.
+
+   **Before writing more `Aut` code, settle the packaging question.** `C ≌ C`
+   is associative only up to natural isomorphism, so it has **no `Group`
+   instance** and `MulAction` is the wrong target — unlike `GLTilde`. Then:
+   `K₀` functoriality, a class-map compatibility datum, and invariance of
+   strict finite length under an *equivalence* of interval categories (a
+   different problem from 3c — phase windows do not move here, so
+   `interval_thinFiniteLength_of_inclusion_strict` does not apply).
+   [`notes/anchor-api-map.md`](notes/anchor-api-map.md) §7.
 
    Facts worth having up front:
 

@@ -117,6 +117,15 @@ open BridgelandStabLean
 #print axioms GroupAction.smul_stab_slicing
 #print axioms GroupAction.smul_stab_Z
 
+/-! ## AutAction — transport along a triangulated auto-equivalence
+
+These extend the anchor's own namespace, since they are API for its types. -/
+
+#print axioms CategoryTheory.Triangulated.PostnikovTower.mapF
+#print axioms CategoryTheory.Triangulated.HNFiltration.mapF
+#print axioms CategoryTheory.Triangulated.Slicing.mapEquiv
+#print axioms CategoryTheory.Triangulated.Slicing.mapEquiv_P
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually
