@@ -29,7 +29,7 @@ artifact:
   date: 2026-08-03
   authors:
     - Chris Dare
-  license: Apache-2.0
+  license: MIT
   organization: personal
   funding: none
   contribution_target: none
@@ -142,7 +142,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 at commit
-    at commit eeff895 via `lake build` over all 118 declarations this project introduces:
+    eeff895 via `lake build` over all 118 declarations this project introduces:
     every one depends on exactly [propext, Classical.choice, Quot.sound] and
     nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
