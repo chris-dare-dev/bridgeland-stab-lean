@@ -41,6 +41,35 @@ Do **not** add a `[[require]]` on arXMCP to get this package. That repo's
 `CLAUDE.md` §4.10 states the relationship is *"Sibling, never a subdirectory,
 never a dependency"*, and a Lake require would make that false.
 
+### Bumping the Mathlib pin: check `ForMathlib/` first
+
+`BridgelandStabLean/ForMathlib/` holds results **Mathlib does not have at the
+pin**. Every file in it is a shadow of something that may land upstream, so a
+pin bump is the moment each one can become a duplicate.
+
+Before bumping, for each file in `ForMathlib/`: check whether the upstream
+version now exists, and if it does, **delete the local file in the same
+commit** rather than keeping both. Two copies of `Matrix.polarFactor` in one
+environment is an ambiguous name at best and a silent divergence at worst — and
+the divergence is not hypothetical, see below.
+
+Do **not** "sync" a local file from its upstream counterpart. They are written
+against different Mathlib generations and the differences are real, not
+cosmetic. Delete and use upstream, or keep the local one and don't bump.
+
+Current contents:
+
+| file | upstream | status |
+|---|---|---|
+| `PolarDecomposition.lean` | [mathlib4#42449](https://github.com/leanprover-community/mathlib4/pull/42449) | **open** — delete this file if it merges and the pin passes it |
+
+The two already differ, which is the point of the rule. The upstream version is
+in master's **module system** (`module` / `public import` /
+`@[expose] public section`, none of which exist at v4.29.0) and needs
+`Matrix.star_eq_conjTranspose` spelled out, because `star` on matrices no
+longer simp-normalises to `ᴴ` there. Neither change can be back-ported to the
+pin, and neither local form is valid upstream.
+
 ## 2. No `sorry`. Absent beats sorry-backed.
 
 `fidelity.sorry_count` is `0` and should stay there.
