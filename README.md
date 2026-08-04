@@ -120,13 +120,26 @@ objects, not phases, so the interval endpoints do not move and no
 uniform-continuity argument is needed. `compat'` likewise costs nothing: the
 witness `m` is unchanged, where `G̃L⁺(2, ℝ)` replaced it by `m * r`.
 
-What is **not** done is a `MulAction`: the acting object is a *pair*
-`(Φ, lam)`, and `AutQuot` groups the `Φ`s alone. So this is the action as a
-well-defined map plus its defining property, not a group action.
+`AutPairAction` closes it as a group action. The acting object is a *pair*
+`(Φ, lam)`, which `AutQuot` cannot group because it carries only the `Φ`s, so
+`AutPair v` bundles both and `AutPairQuot v` — the quotient by natural
+isomorphism of `Φ`, with `lam` fixed on the nose — is a `Group` acting on
+`StabilityCondition.WithClassMap C v`.
+
+Two things that fall out of demanding a group rather than a map. `lam` has to
+be an `AddEquiv`: a group needs `lam⁻¹` and nothing produces one, since `v` is
+arbitrary — so `actStabAut`, which takes a bare `→+`, remains strictly the more
+general statement. And `lam` must **not** be quotiented, because two `lam`s
+over one `Φ` give different `σ.Z ∘ lam` whenever `v` is not surjective.
+
+**`AutPairQuot v` is not `Aut(D)`**, and is further from it than `AutQuot` is.
+Its elements are pairs, and the forgetful map to `AutQuot C` is neither
+injective nor surjective in general — both failures are about `v`.
 
 Also not proved: `GLTilde` is not shown to be the universal cover — the
 projection is not shown surjective, the fibre is not shown to be `ℤ`, simple
-connectedness is untouched.
+connectedness is untouched. Nothing anywhere defines a topology on the space of
+stability conditions, so no statement here is about `Stab(D)` as a manifold.
 
 ### Lane 2 — `Lattice/` (closable today)
 

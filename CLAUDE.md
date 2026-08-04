@@ -122,10 +122,23 @@ axiomatizing the gap.
    `η`** (`mapEquiv_isLocallyFinite`); the endpoints do not move, so no
    `exists_radius`.
 
-   **Still not a `MulAction`**: the acting object is a *pair* `(Φ, lam)`, and
-   `AutQuot` groups the `Φ`s alone. Say "the `Aut` action is a well-defined map
-   on stability conditions", never "the `Aut` action is formalized as a group
-   action".
+   **`GroupAction/AutPairAction.lean` makes it a `MulAction`** (2026-08-04,
+   later). The acting object is a *pair* `(Φ, lam)`, which `AutQuot` cannot
+   group because it carries only the `Φ`s; `AutPair v` bundles both and
+   `AutPairQuot v` is the quotient by natural isomorphism of `Φ` **with `lam`
+   fixed on the nose**. Quotienting `lam` too would be wrong: two `lam`s over
+   one `Φ` give genuinely different `σ.Z ∘ lam` whenever `v` is not surjective.
+
+   Two consequences worth carrying:
+
+   - **`lam` must be an `AddEquiv`, not an `AddMonoidHom`.** A group needs
+     `lam⁻¹` and nothing produces one, since `v` is arbitrary. `actStabAut`
+     still takes a bare `→+` and still applies to non-invertible data — that
+     map is strictly more general than the group action.
+   - The inverse's `compat` is the only place `Φ` being an *equivalence*
+     matters: `unitIso` gives `Φ.functor ⋙ Φ.inverse ≅ 𝟭 C`, and
+     `K₀.mapF_congr` promotes that isomorphism to an **equality** of maps on
+     `K₀`. Without that upgrade `compat` cannot cross to `Φ⁻¹`.
 
    All three prerequisites are done: `K₀` functoriality (`K0Functor.lean`), the
    class-lattice datum, and strict finite length under an *equivalence* of
@@ -154,12 +167,20 @@ axiomatizing the gap.
      and `QuasiAbelian/` once produced a false "the anchor lacks this" finding.
      **Search the whole anchor before concluding something is missing.**
 
-Three claims to keep off the page.
+Four claims to keep off the page.
 
-- **"The §8 action is formalized"** — half of it is. The `G̃L⁺(2, ℝ)` half is
-  complete on stability conditions (steps 1–3c). The autoequivalence half is
-  landed on **slicings only**; the action on `WithClassMap` is not declared.
-  Say which half.
+- **"The §8 action is formalized"** — both halves now act on stability
+  conditions as `MulAction`s: `G̃L⁺(2, ℝ)` (steps 1–3c, `StabilityAction.lean`)
+  and `AutPairQuot v` (`AutPairAction.lean`). What is *not* formalized is that
+  they generate anything, that the two commute, or that either is the full
+  symmetry group of `Stab`. Neither is a claim about `Stab(D)` being a manifold
+  — no topology on the space of stability conditions is defined anywhere here.
+- **"`AutPairQuot v` is `Aut(D)`"** — no, and it is further from it than
+  `AutQuot` is. Its elements are *pairs*, and the forgetful map to `AutQuot C`
+  is proved to be neither injective (different `lam` over one `Φ`, whenever `v`
+  is not surjective) nor surjective (a `Φ` with no compatible `lam` has no
+  preimage). Both failures are about `v`, which is arbitrary. Say "the group of
+  autoequivalences carrying a compatible class-lattice automorphism".
 - **"`GLTilde` is a formalized universal cover"** — no. Only the group law and
   nonemptiness are proved. Surjectivity of the projection, the `ℤ` fibre, and
   simple connectedness are all untouched.
@@ -167,7 +188,8 @@ Three claims to keep off the page.
   *and* the inverses to be naturally isomorphic; adjoint uniqueness would make
   the second redundant, but that is not imported here, so the relation is a
   priori finer and `AutQuot` a priori larger. Everything proved about
-  `AutQuot` holds; that it *equals* `Aut(D)` does not.
+  `AutQuot` holds; that it *equals* `Aut(D)` does not. This is inherited
+  wholesale by `AutPairQuot` through its `Φ` component.
 
 Related: do not cite `StrictAut` as the `Aut` action either. Its `F g` are
 isomorphisms of categories, not equivalences, so Serre functors and spherical

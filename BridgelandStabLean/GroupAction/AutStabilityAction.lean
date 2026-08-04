@@ -51,12 +51,20 @@ With it, `compat'` costs nothing: the witness `m` is *unchanged*, because `Φ`
 moves the object but not its phase. Contrast the `G̃L⁺(2, ℝ)` case, where the
 matrix rescales the ray and `m` becomes `m * r`.
 
-## What this is NOT
+## What this is NOT — and what became of that
 
-A `MulAction`. The acting object here is a **pair** `(Φ, lam)`, and bundling
-those into a group is a further step — `AutQuot` groups the `Φ`s alone, which
-suffices for slicings but not once a class lattice is in play. So this is the
-action as a well-defined map plus its defining property, not a group action.
+This file gives the action as a well-defined **map** plus its defining
+property, not a group action. The acting object is a *pair* `(Φ, lam)`, and
+`AutQuot` groups the `Φ`s alone — enough for slicings, not once a class lattice
+is in play.
+
+`AutPairAction.lean` bundles the pair and supplies the `MulAction`. **Nothing
+here is superseded by it**, and the split is worth keeping: that file needs
+`lam : Λ ≃+ Λ`, because a group needs `lam⁻¹` and nothing produces one, while
+`actStabAut` below asks only for `lam : Λ →+ Λ`. A non-invertible compatible
+datum still acts as a map and is simply not a member of that group, so this
+statement is strictly the more general of the two.
+
 See `notes/anchor-api-map.md` §7.
 -/
 
@@ -64,7 +72,7 @@ open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
 
 namespace CategoryTheory.Triangulated
 
-universe w u
+universe w u u'
 
 variable {C : Type u} [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
   [Preadditive C] [∀ n : ℤ, (shiftFunctor C n).Additive] [Pretriangulated C]
@@ -140,7 +148,10 @@ theorem mapEquiv_isLocallyFinite (s : Slicing C) (hs : s.IsLocallyFinite C) :
 
 section ClassMap
 
-variable {Λ : Type u} [AddCommGroup Λ] (v : K₀ C →+ Λ)
+-- `Λ` gets its own universe, as in `StabilityAction.lean`: nothing here
+-- relates the class lattice to the category's universe, and tying them
+-- together would make this track strictly less general than the `GL⁺` one.
+variable {Λ : Type u'} [AddCommGroup Λ] (v : K₀ C →+ Λ)
 
 /-- **The `Aut` action on stability conditions.**
 

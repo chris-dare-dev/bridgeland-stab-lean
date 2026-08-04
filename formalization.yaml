@@ -107,9 +107,8 @@ fidelity:
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: the covering-space facts about
     GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
-    connectedness -- and a GROUP action (MulAction) of autoequivalences on
-    stability conditions, as opposed to the well-defined map that IS declared;
-    see the 2026-08-04 entry below.
+    connectedness. The MulAction gap listed here previously is CLOSED; see the
+    second 2026-08-04 entry below.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -130,12 +129,31 @@ fidelity:
     equivalence (mapEquiv_isLocallyFinite, resting on the general
     isStrictArtinian_of_faithful_strict in StrictFiniteLength.lean).
 
-    STILL NOT a MulAction, and this is the honest remaining gap: the acting
-    object is a PAIR (Phi, lam). AutQuot groups the Phi's alone, which suffices
-    for slicings but not once a class lattice is in play. Bundling pairs into a
-    group is packaging, not mathematics, and is not done. So actStabAut is the
-    action as a well-defined map plus its defining property, NOT a group action.
-    See notes/anchor-api-map.md section 7.
+    CLOSED 2026-08-04 (later): the Aut action IS a MulAction --
+    AutPairAction.lean. AutPair v bundles the pair (Phi, lam) with its
+    compatibility; AutPairQuot v is the quotient by natural isomorphism of Phi
+    with lam fixed on the nose, and it is a Group with
+    MulAction (AutPairQuot v) (StabilityCondition.WithClassMap C v). Both laws
+    proved.
+
+    An earlier revision of this field called that step "packaging, not
+    mathematics". That was wrong twice over, and the corrections are the useful
+    part. (a) A group needs lam-inverse, and nothing produces one because v is
+    arbitrary -- so AutPairQuot requires lam : Lambda ~=+ Lambda where
+    actStabAut needs only Lambda ->+ Lambda. That is a STRICTLY STRONGER
+    hypothesis, so actStabAut remains the more general statement and is not
+    superseded. (b) The inverse's compat needs Phi.functor comp Phi.inverse to
+    be the identity ON K0 as an EQUALITY of maps, not merely a natural
+    isomorphism; K0.mapF_congr supplies that upgrade. Neither point is
+    packaging.
+
+    lam is deliberately NOT quotiented: two lam's over one Phi give different
+    charges sigma.Z comp lam whenever v is not surjective, so identifying them
+    would make the action ill defined.
+
+    AutPairQuot v is NOT Aut(D), and is further from it than AutQuot: its
+    elements are pairs, and toAutQuot is neither injective nor surjective in
+    general. See notes/anchor-api-map.md section 7.
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
@@ -151,10 +169,11 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-03 at commit
-    5b40d5a via `lake build` over all 124 declarations this project introduces:
-    every one depends on exactly [propext, Classical.choice, Quot.sound] and
-    nothing else. No sorryAx. Allowlist verdict: pass.
+    No axiom declarations. Transitive closure enumerated 2026-08-04 at commit
+    HEAD-of-AutPairAction via `lake env lean scripts/Audit.lean` over all 135
+    declarations this project introduces: every one depends on a subset of
+    [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
+    Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11.)
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.
@@ -165,7 +184,14 @@ fidelity:
     and two fields quoting different bare numbers is the normal failure, not an
     unlucky one. Quote the commit with the count, or do not quote the count.
   builds_clean: true
-  builds_clean_date: 2026-08-03
+  builds_clean_date: 2026-08-04
+  builds_clean_note: >
+    Observed on a SECOND machine on 2026-08-04 -- macOS/aarch64, toolchain
+    installed from scratch, Mathlib from `lake exe cache get`, the anchor
+    compiled from source -- at 3548 jobs, exit 0, zero errors and zero sorry
+    warnings. The 2026-08-03 observation was on the Windows 11 workstation
+    recorded under environment.hardware. Two machines is not CI, and this field
+    still describes observations rather than a gate.
   human_review: none
   machine_review: >
     lake build at commit 5b40d5a (3547 jobs, exit 0). Since 2026-08-03 the
@@ -294,7 +320,10 @@ fidelity:
 
     The class-map compatibility datum is a design choice, not a difficulty:
     pair the autoequivalence with an automorphism of Lambda commuting with v,
-    structurally as Compatible does for GLTilde.
+    structurally as Compatible does for GLTilde. Landed 2026-08-04 as
+    AutPairAction.lean's AutPair/AutPairQuot; note the datum must be an
+    AddEquiv there rather than the AddMonoidHom actStabAut takes, because a
+    group needs its inverse and v supplies none.
 
     Landed 2026-08-03: StrictFiniteLength.lean extracts the general
     strict-hypothesis transfer lemma (isStrictArtinian_of_faithful_strict and

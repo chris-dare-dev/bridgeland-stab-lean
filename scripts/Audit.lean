@@ -195,6 +195,22 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.actStabAut_slicing
 #print axioms CategoryTheory.Triangulated.actStabAut_Z
 
+/-! ## AutPairAction — the same action, as a genuine `MulAction` -/
+
+#print axioms BridgelandStabLean.GroupAction.AutPair
+#print axioms BridgelandStabLean.GroupAction.AutPair.id
+#print axioms BridgelandStabLean.GroupAction.AutPair.mul
+#print axioms BridgelandStabLean.GroupAction.AutPair.inv
+#print axioms BridgelandStabLean.GroupAction.AutPair.setoid
+#print axioms BridgelandStabLean.GroupAction.AutPair.act
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_id
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_mul
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_congr
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.group
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.mulAction
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.toAutQuot
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually
@@ -286,5 +302,34 @@ example (x : GLTilde) (σ : StabilityCondition.WithClassMap C v) (a : Λ) :
     (x • σ).Z a = actC x.mat (σ.Z a) := rfl
 
 end StabChecks
+
+/-! The `Aut` half, now a `MulAction`.
+
+Both components reverse under `*`, and they reverse in *opposite* syntactic
+directions — the auto-equivalences compose contravariantly, the lattice maps
+covariantly. Getting one of the two backwards typechecks and is wrong, so both
+are pinned by `rfl` here. -/
+
+section AutPairChecks
+
+variable [IsTriangulated C]
+
+/-- `a * b` applies `b`'s lattice automorphism FIRST. -/
+example (a b : AutPair v) (σ : StabilityCondition.WithClassMap C v) (x : Λ) :
+    ((AutPairQuot.mk a * AutPairQuot.mk b) • σ).Z x = σ.Z (b.lam (a.lam x)) := rfl
+
+/-- ...and correspondingly applies `a`'s inverse equivalence first on objects. -/
+example (a b : AutPair v) (σ : StabilityCondition.WithClassMap C v) (φ : ℝ) (X : C) :
+    ((AutPairQuot.mk a * AutPairQuot.mk b) • σ).slicing.P φ X
+      = σ.slicing.P φ (b.Φ.e.inverse.obj (a.Φ.e.inverse.obj X)) := rfl
+
+/-- The identity acts as the identity, definitionally on both components. -/
+example (σ : StabilityCondition.WithClassMap C v) (x : Λ) :
+    ((1 : AutPairQuot v) • σ).Z x = σ.Z x := rfl
+
+/-- The forgetful map really does forget only the lattice datum. -/
+example (a : AutPair v) : AutPairQuot.toAutQuot (AutPairQuot.mk a) = AutQuot.mk a.Φ := rfl
+
+end AutPairChecks
 
 end SlicingChecks

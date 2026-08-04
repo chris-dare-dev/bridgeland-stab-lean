@@ -489,10 +489,26 @@ The `compat'` obligation costs nothing here: the witness `m` is **unchanged**,
 because an autoequivalence moves an object without moving its phase. Contrast
 `G̃L⁺(2, ℝ)`, where the matrix rescales the ray and `m` becomes `m * r`.
 
-**Not a `MulAction`.** The acting object is a pair `(Φ, lam)`; `AutQuot` groups
-the `Φ`s alone, which suffices for slicings but not once a class lattice is in
-play. Bundling pairs into a group is the remaining step, and it is packaging,
-not mathematics.
+**Not a `MulAction` — done in `AutPairAction.lean` (2026-08-04).** The acting
+object is a pair `(Φ, lam)`; `AutQuot` groups the `Φ`s alone, which suffices
+for slicings but not once a class lattice is in play. `AutPair v` bundles both
+and `AutPairQuot v` acts.
+
+This paragraph used to end "and it is packaging, not mathematics". Kept,
+because the correction is the useful part — it was wrong on two counts.
+
+1. **A group forces `lam : Λ ≃+ Λ`.** `actStabAut` needs only `Λ →+ Λ`;
+   `lam⁻¹` has no source, because `v` is arbitrary. So the group action rests
+   on a *strictly stronger* hypothesis and `actStabAut` is not superseded by
+   it — a non-invertible compatible datum still acts as a map.
+2. **The inverse's `compat` needs an equality, not an isomorphism.**
+   `Φ.functor ⋙ Φ.inverse ≅ 𝟭 C` is only a natural isomorphism;
+   `K₀.mapF_congr` is what promotes it to an equality of maps on `K₀`, and
+   without that the datum cannot cross to `Φ⁻¹`. This is the one step in the
+   file that uses `Φ` being an equivalence at all.
+
+Also settled there: `lam` is **not** quotiented, since two `lam`s over one `Φ`
+give different `σ.Z ∘ lam` whenever `v` is not surjective.
 
 ### Original assessment, for the record
 
