@@ -6,6 +6,7 @@ import BridgelandStabLean.Lattice.Basic
 import BridgelandStabLean.Lattice.NumericalK
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
+import BridgelandStabLean.GroupAction.GLTildeFibre
 import BridgelandStabLean.GroupAction.ShiftAnalysis
 import BridgelandStabLean.GroupAction.ComplexBridge
 import BridgelandStabLean.GroupAction.SlicingAction

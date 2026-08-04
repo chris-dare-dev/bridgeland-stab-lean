@@ -105,10 +105,19 @@ fidelity:
     standing rule stays -- a result that is not yet proved is left undeclared
     with a TODO, never declared with sorry, because a sorry-backed instance
     typechecks, gets imported, and launders an unproved claim downstream.
-    Currently undeclared under that rule: the covering-space facts about
-    GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
-    connectedness. The MulAction gap listed here previously is CLOSED; see the
-    second 2026-08-04 entry below.
+    Currently undeclared under that rule, and now itemised because they are in
+    different states: surjectivity of the projection GLTilde -> GL+(2,R) (open;
+    the lifting statement, whose content is positivity of the angular velocity
+    pi * det T / norm(T *v rayVec phi)^2) and simple connectedness (open, and
+    blocked on prerequisites rather than effort -- no topology on GLTilde
+    exists here, and pi_1(S^1) = Z is not in Mathlib at the pin 8a178386). The
+    THIRD covering-space fact, the Z fibre, is CLOSED 2026-08-04 in
+    GLTildeFibre.lean. The MulAction gap listed here previously is also CLOSED;
+    see the second 2026-08-04 entry below.
+
+    Note what the fibre result does NOT give: a group with the expected kernel
+    over a base is not thereby a cover of it. GLTilde is still not shown to be
+    the universal cover, and kerEquiv must not be cited as if it were.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -170,10 +179,11 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-04 at commit
-    HEAD-of-AutPairAction via `lake env lean scripts/Audit.lean` over all 135
+    HEAD-of-GLTildeFibre via `lake env lean scripts/Audit.lean` over all 145
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
-    Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11.)
+    Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11,
+    GLTildeFibre.lean added 10.)
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.

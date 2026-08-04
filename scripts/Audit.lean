@@ -195,6 +195,19 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.actStabAut_slicing
 #print axioms CategoryTheory.Triangulated.actStabAut_Z
 
+/-! ## GLTildeFibre — the fibre of the projection is Z -/
+
+#print axioms BridgelandStabLean.GroupAction.rayVec_eq_iff
+#print axioms BridgelandStabLean.GroupAction.rayVec_eq_of_onRay
+#print axioms BridgelandStabLean.GroupAction.deckShift
+#print axioms BridgelandStabLean.GroupAction.compat_one_deckShift
+#print axioms BridgelandStabLean.GroupAction.deck
+#print axioms BridgelandStabLean.GroupAction.exists_deckShift_of_mat_eq_one
+#print axioms BridgelandStabLean.GroupAction.deckHom
+#print axioms BridgelandStabLean.GroupAction.deckHom_injective
+#print axioms BridgelandStabLean.GroupAction.range_deckHom_eq_ker
+#print axioms BridgelandStabLean.GroupAction.kerEquiv
+
 /-! ## AutPairAction — the same action, as a genuine `MulAction` -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair

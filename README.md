@@ -136,10 +136,25 @@ over one `Φ` give different `σ.Z ∘ lam` whenever `v` is not surjective.
 Its elements are pairs, and the forgetful map to `AutQuot C` is neither
 injective nor surjective in general — both failures are about `v`.
 
-Also not proved: `GLTilde` is not shown to be the universal cover — the
-projection is not shown surjective, the fibre is not shown to be `ℤ`, simple
-connectedness is untouched. Nothing anywhere defines a topology on the space of
-stability conditions, so no statement here is about `Stab(D)` as a manifold.
+`GLTildeFibre` proves one of the three covering-space facts: the **fibre is
+`ℤ`**. Everything lying over the identity matrix is a deck transformation
+`φ ↦ φ + 2n`, and `kerEquiv` packages that as `Multiplicative ℤ ≃* ker`. The
+factor of two is Bridgeland's phase convention showing through — `rayVec φ` is
+the ray at angle `πφ`, so `φ ↦ φ + 1` is the antipodal map and only an even
+shift returns every ray to itself.
+
+The other two remain open. **Surjectivity of the projection** is the lifting
+statement; its content is that the angular velocity
+`π · det T / ‖T ·ᵥ rayVec φ‖²` is positive, which is where `det T > 0` earns
+its keep. **Simple connectedness** is blocked on prerequisites rather than
+effort: nothing here puts a topology on `GLTilde`, and `π₁(S¹) ≅ ℤ` is not in
+Mathlib at the pinned revision.
+
+So `GLTilde` is still **not** shown to be the universal cover, and the fact
+that is proved does not imply it — a group with the expected kernel over a base
+is not thereby a cover of it. Nothing anywhere defines a topology on the space
+of stability conditions either, so no statement here is about `Stab(D)` as a
+manifold.
 
 ### Lane 2 — `Lattice/` (closable today)
 

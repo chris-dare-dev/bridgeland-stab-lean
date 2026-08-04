@@ -31,10 +31,22 @@ ray through `rayVec (f φ)`.
 Proved: these pairs form a group under componentwise multiplication, and the
 type is nonempty (`compat_one` is the witness).
 
-**Not** proved: that this group *is* the universal cover — i.e. that the
-projection to `GL⁺(2, ℝ)` is surjective with fibre `ℤ`, or that the space is
-simply connected. Those are the covering-space facts; nothing here establishes
-them, and no declaration in this file should be read as doing so.
+**Not** proved: that this group *is* the universal cover. Three facts are
+needed and they are in different states:
+
+* **Fibre `ℤ`** — **proved**, in `GLTildeFibre.lean`. The kernel of the
+  projection is exactly the deck transformations `φ ↦ φ + 2n`.
+* **Surjectivity of the projection** — open. This is the lifting statement, and
+  its content is the angular velocity `π · det T / ‖T ·ᵥ rayVec φ‖²` being
+  positive.
+* **Simple connectedness** — open, and blocked on prerequisites rather than
+  effort: nothing in this repo puts a topology on `GLTilde`, and `π₁(S¹) ≅ ℤ`
+  is not in Mathlib at the pinned revision.
+
+Two of three are therefore still open, and **the one that is proved does not on
+its own imply anything about covering spaces** — a group with the expected
+kernel over a base is not thereby a cover of it. No declaration in this file or
+in `GLTildeFibre.lean` should be read as establishing that.
 
 Also not proved, and not attempted: any action on a stability condition. That
 is step 3, and it is the first thing here that will touch the anchor's API.

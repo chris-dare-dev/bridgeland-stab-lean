@@ -99,12 +99,17 @@ axiomatizing the gap.
      `GroupAction/StabilityAction.lean`. **The §8 `G̃L⁺(2, ℝ)` action is
      complete.**
 
-   Remaining on this track: the covering-space identification of `GLTilde`,
-   and the autoequivalence (`Aut`) half of §8 — **groundwork landed**
-   (`GroupAction/AutAction.lean`: `PostnikovTower.mapF`, `HNFiltration.mapF`,
-   `Slicing.mapEquiv`), the action on `WithClassMap` not.
+   Remaining on this track, as of 2026-08-04: **only two of the three
+   covering-space facts about `GLTilde`** — surjectivity of the projection, and
+   simple connectedness. The `ℤ` fibre is done (`GLTildeFibre.lean`), and the
+   autoequivalence half of §8 is done all the way to a `MulAction`
+   (`AutPairAction.lean`). Neither of the two open items is packaging; see the
+   claims list at the end of this section for what each actually needs.
 
-   Two packagings exist, both on **slicings only**:
+   The `Aut` groundwork is in `GroupAction/AutAction.lean`
+   (`PostnikovTower.mapF`, `HNFiltration.mapF`, `Slicing.mapEquiv`). Two
+   packagings of it exist **on slicings only** — the stability-condition action
+   is `AutPairAction.lean`, below:
 
    - `GroupAction/QuotAutAction.lean` — **the general one.** `AutQuot C` is
      triangulated auto-equivalences modulo natural isomorphism, a genuine
@@ -181,9 +186,18 @@ Four claims to keep off the page.
   is not surjective) nor surjective (a `Φ` with no compatible `lam` has no
   preimage). Both failures are about `v`, which is arbitrary. Say "the group of
   autoequivalences carrying a compatible class-lattice automorphism".
-- **"`GLTilde` is a formalized universal cover"** — no. Only the group law and
-  nonemptiness are proved. Surjectivity of the projection, the `ℤ` fibre, and
-  simple connectedness are all untouched.
+- **"`GLTilde` is a formalized universal cover"** — no, and it is worth being
+  exact now that one third of it is done. The **`ℤ` fibre is proved**
+  (`GLTildeFibre.lean`: `kerEquiv`, the kernel of `toMatHom` is the deck
+  transformations `φ ↦ φ + 2n`). **Surjectivity of the projection** is open —
+  it is the lifting statement, and its content is that the angular velocity
+  `π · det T / ‖T ·ᵥ rayVec φ‖²` is positive. **Simple connectedness** is open
+  and blocked on prerequisites, not effort: no topology on `GLTilde` exists
+  anywhere here, and `π₁(S¹) ≅ ℤ` is not in Mathlib at the pin.
+
+  The trap to avoid: having the expected kernel over a base **does not** make a
+  group a cover of it. Cite `kerEquiv` for what it says — the fibre — never for
+  "the universal cover is formalized".
 - **"`AutQuot` is `Aut(D)`"** — not proved. Its setoid asks for the functors
   *and* the inverses to be naturally isomorphic; adjoint uniqueness would make
   the second redundant, but that is not imported here, so the relation is a
