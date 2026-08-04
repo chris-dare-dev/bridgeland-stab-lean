@@ -68,6 +68,12 @@ open BridgelandStabLean
 #print axioms GroupAction.GLTilde.toMatHom
 #print axioms GroupAction.GLTilde.toShiftHom
 
+/-! ## GroupAction lane — ComplexBridge (step 3 groundwork) -/
+
+#print axioms GroupAction.cplxCoord
+#print axioms GroupAction.cplxCoord_exp
+#print axioms GroupAction.compat_exp
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

@@ -60,7 +60,16 @@ axiomatizing the gap.
    `LinearOrder` is noncomputable. Invert via group multiplication
    (`inv_mul_cancel` on `GLPos`), never via `Matrix.inv` — the nonsingular
    inverse then never has to appear.
-3. The action on the anchor's `Slicing`.
+3. The action on the anchor's `Slicing`. **Read
+   [`notes/anchor-api-map.md`](notes/anchor-api-map.md) first** — it maps every
+   anchor type step 3 touches, straight from the pinned checkout, and stages
+   the step as 3a (slicing) / 3b (prestability) / 3c (local finiteness).
+   Groundwork already landed: `GroupAction/ComplexBridge.lean` reconciles the
+   anchor's `Z : Λ →+ ℂ` with `GLTilde`'s action on `Fin 2 → ℝ`.
+
+   Two facts from that read worth having up front. A non-`module` file imports
+   the anchor fine — no migration needed. And the anchor is **not** covered by
+   `lake exe cache get`; it is built now, but keep it that way.
 
 Two claims to keep off the page. Do not describe the current state as "the §8
 action is formalized" — there is no action on a stability condition until

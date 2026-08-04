@@ -82,7 +82,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 39 declarations this project
+    `lake env lean scripts/Audit.lean` over all 42 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -92,9 +92,11 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build (3289 jobs, exit 0) plus a #print axioms pass over every
-    introduced declaration. No human has reviewed any statement for
-    faithfulness to a source.
+    lake build BridgelandStabLean (3291 jobs, exit 0) plus a #print axioms
+    pass over every introduced declaration. The anchor itself was also built
+    from source for the first time (74 files, exit 0) -- it is not covered by
+    Mathlib's cache and nothing had imported it until the step-3 API read.
+    No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
@@ -104,8 +106,11 @@ fidelity:
     Bridgeland's concrete presentation of GL+(2,R)-tilde as pairs (T, f) of a
     positive-determinant matrix and a normalized shift agreeing on the circle
     of phases, proved to be a group under componentwise multiplication with
-    both projections group homs (step 2). NOT the section 8 action: no action
-    on a slicing exists, and nothing here touches the anchor's API yet.
+    both projections group homs (step 2); and ComplexBridge, reconciling the
+    anchor's C-valued central charge with GLTilde's action on Fin 2 -> R
+    (step 3 groundwork). NOT the section 8 action: no action on a slicing
+    exists, and no file here imports the anchor yet -- ComplexBridge depends
+    only on Mathlib. The anchor API is mapped in notes/anchor-api-map.md.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
