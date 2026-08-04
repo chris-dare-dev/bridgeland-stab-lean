@@ -4,6 +4,18 @@ Ground truth: the audit, plus locally re-verified facts. Repo HEAD moved again d
 
 **Three corrections to the architecture brief, applied throughout.** (a) The brief's `resolution.json` used a property named `status`, which its own `mfc lint-schemas` rule forbids — renamed to `resolution`. (b) The brief's `build.json` used `independent_checkers[].result`, also forbidden — the four-valued token is spelled **`value`** in every schema, without exception. (c) `type_pp` from the real toolchain **contains hard line breaks at the pretty-printer's wrap width** (measured below), so every digest normalizes whitespace before hashing; a raw `type_pp` hash would rotate on a `format.width` change.
 
+**A fourth correction, 2026-08-04 (later): `relation_claimed` has FIVE values, not six. `reformulation` is struck.** Applied throughout — the emission schema, the review schema, the Lean sketch in §2.2, and the `mfc lint` frontier rule that named it.
+
+This document listed `exact | equivalent | specialization | one_way | reformulation | no_claim` and **never said what `reformulation` meant** — the note defines no per-value semantics anywhere, and the only property it ever attached to the value was that an empty frontier is rejected for it, which is equally true of `specialization` and `one_way`. The shipped attribute (`MathFormalContract/Cites.lean`, and the table in that repo's README) defines five values precisely and omits it.
+
+Struck rather than defined, for three reasons.
+
+1. **An undefined value in a trust vocabulary is the failure this contract exists to prevent.** `relation` is mandatory precisely because "a missing relation that defaulted to anything would be a trust axis inferred from silence." A value whose meaning nobody can state is worse than a missing one: it is silence wearing a label, and it is *recorded* rather than absent.
+2. **Its only plausible reading overlaps `equivalent`, with no stated boundary.** Two values a reviewer cannot tell apart make the recorded value carry no information, which is what an enum is for.
+3. **The asymmetry runs one way.** Adding an enum value later is a MINOR bump. Removing one after registry entries already claim it is breaking, and those entries cannot be re-derived — the claim was a human's. Ship the five that are defined; `reformulation` can be added by whoever can define it and draw its boundary against `equivalent`.
+
+`review/1.0`'s `relation_confirmed` keeps **`disputed`**, which is review-only and does have a meaning: a named human read the claim and rejected it. That is not the same kind of value and is not struck.
+
 ---
 
 # PART 0 — Canonical primitives
@@ -294,7 +306,7 @@ entries:
 
     # REQUIRED, MAY be empty, MUST be present.  `mfc lint` rejects an empty
     # frontier when any binding to this entry claims
-    # relation_claimed in {specialization, one_way, reformulation}.
+    # relation_claimed in {specialization, one_way}.
     frontier:
       - id: gltilde-universal-cover
         kind_class: open-problem     # closed-lane|missing-library|open-problem|interface
@@ -697,7 +709,7 @@ entries:
       "required": ["key","relation_claimed","frontier","note"],
       "properties": {
         "key": { "type": "string", "pattern": "^stmt:[0-9a-f]{12}:[a-z][a-z0-9._-]{0,63}$" },
-        "relation_claimed": { "enum": ["exact","equivalent","specialization","one_way","reformulation","no_claim"],
+        "relation_claimed": { "enum": ["exact","equivalent","specialization","one_way","no_claim"],
           "$comment": "ALWAYS spelled `relation_claimed` in machine artifacts. `relation_confirmed` exists ONLY inside review/1.0. An agent reading this field reads the word 'claimed'." },
         "frontier": { "type": "array", "items": {"type":"string"}, "uniqueItems": true },
         "note": { "type": ["string","null"] }
@@ -925,7 +937,7 @@ reviews:
 
     faithfulness: adequate        # adequate | divergent | inadequate | inconclusive
     relation_confirmed: one_way   # exact|equivalent|specialization|one_way|
-                                  # reformulation|no_claim|disputed
+                                  # no_claim|disputed
                                   # `relation_confirmed` appears ONLY in this file.
 
     divergences:
@@ -971,7 +983,7 @@ reviews:
         "reviewed_env_digest":{"type":"string","pattern":"^[0-9a-f]{64}$"},
         "faithfulness":{"enum":["adequate","divergent","inadequate","inconclusive"]},
         "relation_confirmed":{"enum":["exact","equivalent","specialization","one_way",
-                                      "reformulation","no_claim","disputed"]},
+                                      "no_claim","disputed"]},
         "divergences":{"type":"array","items":{"type":"string"}},
         "note":{"type":["string","null"]}
       },
@@ -1359,18 +1371,18 @@ open Lean
 statement.  ALWAYS "claimed": confirming it is a human review's job, and the
 confirmed value lives only in `attest/review.yaml`. -/
 inductive Relation where
-  | exact | equivalent | specialization | one_way | reformulation | no_claim
+  | exact | equivalent | specialization | one_way | no_claim
   deriving Inhabited, DecidableEq, Repr
 
 def Relation.toString : Relation → String
   | .exact => "exact" | .equivalent => "equivalent"
   | .specialization => "specialization" | .one_way => "one_way"
-  | .reformulation => "reformulation" | .no_claim => "no_claim"
+  | .no_claim => "no_claim"
 
 def Relation.ofString? : String → Option Relation
   | "exact" => some .exact | "equivalent" => some .equivalent
   | "specialization" => some .specialization | "one_way" => some .one_way
-  | "reformulation" => some .reformulation | "no_claim" => some .no_claim
+  | "no_claim" => some .no_claim
   | _ => none
 
 structure CiteEntry where
@@ -1431,7 +1443,7 @@ initialize registerBuiltinAttribute {
           match Relation.ofString? i.getId.toString with
           | some v => pure v
           | none   => throwError "@[cites]: unknown relation {i.getId}; expected one of \
-                        exact|equivalent|specialization|one_way|reformulation|no_claim"
+                        exact|equivalent|specialization|one_way|no_claim"
       let front : Array String :=
         match fs with
         | none => #[]
