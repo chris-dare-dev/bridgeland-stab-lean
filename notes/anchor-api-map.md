@@ -380,9 +380,39 @@ field discharges automatically), so all of `Slicing.mapEquiv` is reused.
 of functors*, so `F g ⋙ F g⁻¹ = 𝟭 C` on the nose: each `F g` is an
 **isomorphism of categories**, not merely an equivalence. Serre functors and
 spherical twists satisfy that only up to natural isomorphism and are therefore
-**out of scope**. This buys a strict `MulAction` today at the cost of the cases
-one actually cares about downstream; the general `Aut(D)` action still wants
-the quotient. Do not cite it as "the `Aut` action is formalized".
+**out of scope for `StrictAut`**.
+
+### Superseded: the quotient landed too
+
+`GroupAction/QuotAutAction.lean` (2026-08-03) does the general construction, so
+`StrictAut` is now the cheap special case rather than the only option.
+`AutQuot C` — triangulated auto-equivalences modulo natural isomorphism — is a
+genuine `Group` with `MulAction (AutQuot C) (Slicing C)`, and **excludes
+nothing**.
+
+The mathematical content is one short lemma, `TriEquiv.act_congr`: if
+`Φ⁻¹ ≅ Ψ⁻¹` then `Φ⁻¹ X ≅ Ψ⁻¹ X` for every `X`, so `s.P φ (Φ⁻¹ X)` and
+`s.P φ (Ψ⁻¹ X)` are equivalent propositions — because `Slicing.closedUnderIso`
+says so — and `propext` upgrades that to *equality*. So the two slicings are
+equal on the nose. **`closedUnderIso`, which reads like bookkeeping in the
+`Slicing` axioms, is exactly what makes the quotient action well defined.**
+
+The group laws split revealingly: `mul_assoc`, `one_mul`, `mul_one` are all
+`Iso.refl`, because functor composition is strictly associative with `𝟭` a
+strict unit. Only `inv_mul_cancel` needs a real natural isomorphism
+(`unitIso.symm`) — which is precisely the one place strictness fails, and
+precisely what quotienting fixes.
+
+**One honest caveat.** The setoid asks for `functor ≅ functor` **and**
+`inverse ≅ inverse`. The second follows from the first since adjoints are
+unique up to isomorphism, but that is **not proved here**, so as stated the
+relation is a priori finer than natural isomorphism of the functors and
+`AutQuot` a priori larger than the usual `Aut(D)`. Carrying both keeps
+`comp`/`symm` compatibility trivial; closing it means importing
+adjoint-uniqueness and dropping the second component.
+
+Also: `AutQuot` is a plain `def`, so `Quotient.mk` alone does not carry enough
+type information for `•` to find its instance — use `AutQuot.mk`.
 
 Two implementation notes: the instance `letI`s in `actSlicing` must state each
 instance at the `(ρ.equiv g).functor` form (search will not unfold it to

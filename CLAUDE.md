@@ -78,15 +78,20 @@ axiomatizing the gap.
    (`GroupAction/AutAction.lean`: `PostnikovTower.mapF`, `HNFiltration.mapF`,
    `Slicing.mapEquiv`), the action on `WithClassMap` not.
 
-   The packaging question is settled by **restriction** (owner decision,
-   2026-08-03): `GroupAction/StrictAutAction.lean` takes a group mapping
-   *strictly* into `C ⥤ C`, which is an honest monoid under `⋙`, giving a real
-   `MulAction G (Slicing C)`.
+   Two packagings exist, both on **slicings only**:
 
-   **Do not over-claim it.** `StrictAut.map_one`/`map_mul` are equalities of
-   functors, so each `F g` is an **isomorphism of categories**, not merely an
-   equivalence — Serre functors and spherical twists are *out of scope*. Never
-   write "the `Aut` action is formalized".
+   - `GroupAction/QuotAutAction.lean` — **the general one.** `AutQuot C` is
+     triangulated auto-equivalences modulo natural isomorphism, a genuine
+     `Group` with `MulAction (AutQuot C) (Slicing C)`. Excludes nothing.
+     Prefer this. Note `AutQuot` is a plain `def`, so use `AutQuot.mk` — a
+     bare `Quotient.mk` leaves `•` unable to find its instance.
+   - `GroupAction/StrictAutAction.lean` — the cheap special case, a group
+     mapping *strictly* into `C ⥤ C`. Its `map_one`/`map_mul` are equalities
+     of functors, so each `F g` is an **isomorphism of categories** and Serre
+     functors and spherical twists are out of its scope.
+
+   **Do not write "the `Aut` action is formalized" for either.** Neither acts
+   on stability conditions, so neither is §8's `Aut` action.
 
    Still needed for stability conditions: `K₀` functoriality, a class-map
    compatibility datum, and invariance of strict finite length under an
@@ -114,11 +119,24 @@ axiomatizing the gap.
      and `QuasiAbelian/` once produced a false "the anchor lacks this" finding.
      **Search the whole anchor before concluding something is missing.**
 
-Two claims to keep off the page. Do not describe the current state as "the §8
-action is formalized" — there is no action on a stability condition until
-step 3. And do not call `GLTilde` a formalized universal cover: only the
-group law and nonemptiness are proved. Surjectivity of the projection, the
-`ℤ` fibre, and simple connectedness are all untouched.
+Three claims to keep off the page.
+
+- **"The §8 action is formalized"** — half of it is. The `G̃L⁺(2, ℝ)` half is
+  complete on stability conditions (steps 1–3c). The autoequivalence half is
+  landed on **slicings only**; the action on `WithClassMap` is not declared.
+  Say which half.
+- **"`GLTilde` is a formalized universal cover"** — no. Only the group law and
+  nonemptiness are proved. Surjectivity of the projection, the `ℤ` fibre, and
+  simple connectedness are all untouched.
+- **"`AutQuot` is `Aut(D)`"** — not proved. Its setoid asks for the functors
+  *and* the inverses to be naturally isomorphic; adjoint uniqueness would make
+  the second redundant, but that is not imported here, so the relation is a
+  priori finer and `AutQuot` a priori larger. Everything proved about
+  `AutQuot` holds; that it *equals* `Aut(D)` does not.
+
+Related: do not cite `StrictAut` as the `Aut` action either. Its `F g` are
+isomorphisms of categories, not equivalences, so Serre functors and spherical
+twists are outside it. `QuotAutAction` supersedes it for slicings.
 
 Step 3 is the first declaration here that touches the anchor's API. **Read
 `BridgelandStability/Slicing/` and `BridgelandStability/StabilityCondition/`
@@ -146,7 +164,53 @@ compiling Mathlib from source — hours, not minutes.
 
 ## 8. Relationship to arXMCP
 
-Sibling repo, never a subdirectory. arXMCP is a read-only retrieval data
-plane whose R5 track pins *released* formalizations and serves their trust
-records; it does not host formalization work, and its CLAUDE.md §4.8
-data-plane boundary forbids it. `formalization.yaml` is the entire interface.
+Sibling repo, never a subdirectory. Never a `require`, never a submodule.
+Nothing here imports anything from it, and nothing here runs while it does.
+
+arXMCP is a local-first, loopback-only, **read-only** retrieval server over a
+LanceDB corpus of parsed arXiv papers, organized into per-topic notebooks. The
+`bridgeland-stability` notebook is the corpus behind this repo's sources.
+
+### Three things this section used to assert that are false
+
+Kept, because the corrections are the useful part.
+
+- **Its R5 track does not pin released formalizations or serve trust records.**
+  R5 is a brief with no `plans/` entry; `get_formal_targets` / `formal_targets`
+  return zero hits in `server/`; and `find -iname "*formaliz*"` across arXMCP
+  returns zero files. There is no parser.
+- **arXMCP's `CLAUDE.md` §4.8 does not forbid hosting formalization work.** Its
+  three rules are: the server never runs agents; writes enter only via offline
+  ingest CLIs or operator-gated `/ui/` actions; the orchestrator loop lives in
+  a separate repo. The prohibition on hosting formalization is in
+  `.claude/roadmap-briefs/R5-formal-target-registry.md` — an unroadmapped
+  brief, topic-scoped to geometry. Cite the brief, not §4.8.
+- **`formalization.yaml` is not "the entire interface."** It has no reader, on
+  either side.
+
+### The rules that do bind
+
+1. arXMCP is a read-only data plane. Nothing here may ask it to write, to run
+   an agent, or to hold formalization source.
+2. **An arXMCP Lean verdict is not evidence about this environment.** Its REPL
+   runs v4.31.0 from a directory outside that repo; we pin v4.29.0. Its axiom
+   audit fails open on `set_option … in theorem` and on `open … in theorem`.
+   Do not quote a `lean_verify` result here as if it were a build result.
+3. **No bare "verified."** arXMCP's §4.9 forbids any single token collapsing
+   distinct trust questions, and no axis may be inferred from another. That
+   binds anything this repo publishes for it to serve — see §2, which is the
+   same rule pointed the other way.
+
+### The contract that replaces the prose
+
+Designed 2026-08-03; **not yet built.** A cold seam of versioned files
+exchanged at git tags, with statement identity minted *here* and containing
+zero corpus-derived bytes. Read [`.claude/decisions/`](.claude/decisions/) in
+numeric order before touching anything that crosses the boundary — the ADRs
+are short and they are the whole design. Work is tracked in
+[`.claude/roadmap/contract-v1.yaml`](.claude/roadmap/contract-v1.yaml) and on
+the GitHub issue tracker.
+
+Until it ships the boundary is **unilateral**: arXMCP contains zero documents
+mentioning this repo. Do not write text here that assumes otherwise, and do
+not describe the contract in the present tense.

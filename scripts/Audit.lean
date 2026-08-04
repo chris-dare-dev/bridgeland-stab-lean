@@ -149,6 +149,24 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms GroupAction.StrictAut.actSlicing_P
 #print axioms GroupAction.StrictAut.mulActionSlicing
 
+/-! ## QuotAutAction — Aut(D) as an honest group, by quotienting -/
+
+#print axioms GroupAction.TriEquiv
+#print axioms GroupAction.TriEquiv.id
+#print axioms GroupAction.TriEquiv.comp
+#print axioms GroupAction.TriEquiv.symm
+#print axioms GroupAction.TriEquiv.act
+#print axioms GroupAction.TriEquiv.act_P
+#print axioms GroupAction.TriEquiv.act_id
+#print axioms GroupAction.TriEquiv.act_comp
+#print axioms GroupAction.TriEquiv.act_congr
+#print axioms GroupAction.TriEquiv.setoid
+#print axioms GroupAction.AutQuot
+#print axioms GroupAction.AutQuot.group
+#print axioms GroupAction.AutQuot.mulActionSlicing
+#print axioms GroupAction.AutQuot.mk
+#print axioms GroupAction.AutQuot.mk_smul_P
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

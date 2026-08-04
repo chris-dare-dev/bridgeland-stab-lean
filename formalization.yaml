@@ -41,17 +41,24 @@ source:
     - Tom Bridgeland
   # Versioned deliberately. An unversioned arXiv id resolves to whatever is
   # latest at fetch time, which makes every downstream quote hash a claim about
-  # an unidentified document. Confirmed by the owner on 2026-08-04, not
+  # an unidentified document. Confirmed by the owner on 2026-08-03, not
   # inferred: the arXMCP corpus records `arxiv_version = ''` for every row in
   # every notebook, so nothing on this machine knows which version it holds.
   #
-  # UNRESOLVED, and it matters: arxiv.org/abs/math/0212237 lists THREE versions
-  # -- v1 (2002-12-17), v2 (2003-05-02), v3 (2006-02-08) -- and v3 is latest.
-  # The corpus fetches ar5iv for the bare id, i.e. latest, so it most likely
-  # holds v3 while this record pins v2. Until that is reconciled, treat any
-  # quote match against the corpus as a match against an unknown version.
-  # Tracked as GitHub #12 / #44.
-  id: math/0212237v2
+  # arxiv.org/abs/math/0212237 has three versions -- v1 (2002-12-17),
+  # v2 (2003-05-02), v3 (2006-02-08). v3 is both the latest and the one the
+  # corpus almost certainly holds, since notebook_fetch pulls ar5iv for the
+  # bare id. It is also the version closest to the published Annals paper
+  # (2007), which is where section 8's identity as the group-action section
+  # comes from.
+  #
+  # STILL UNVERIFIED, and it is the corpus's fault, not this record's: nothing
+  # on this machine can confirm which version the ingested chunks came from,
+  # because the column that would say is empty for every row. Until GitHub #44
+  # backfills arxiv_version, a quote match against the corpus is a match
+  # against a probable-but-unconfirmed v3. Do not upgrade that to "confirmed"
+  # on the strength of a hash match alone.
+  id: math/0212237v3
   type: arXiv
   license: arXiv perpetual non-exclusive
   author_contacted: false
@@ -100,23 +107,25 @@ fidelity:
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: the covering-space facts about
     GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
-    connectedness -- and the autoequivalence (Aut) action on stability
-    conditions. The Aut track's groundwork IS landed: AutAction.lean
-    (PostnikovTower.mapF, HNFiltration.mapF, Slicing.mapEquiv) and
-    StrictAutAction.lean, which gives a genuine MulAction G (Slicing C) for a
-    group mapping STRICTLY into endofunctors. What is undeclared is the action
-    on WithClassMap, which needs K0 functoriality, a class-map compatibility
-    datum, and invariance of strict finite length under an equivalence of
-    interval categories. See notes/anchor-api-map.md section 7.
+    connectedness -- and the autoequivalence (Aut) action on STABILITY
+    CONDITIONS.
 
-    SCOPE WARNING on StrictAut. Its map_one and map_mul are EQUALITIES of
-    functors, so F g composed with F g-inverse is the identity on the nose:
-    each F g is an isomorphism of categories, not merely an equivalence. Serre
-    functors and spherical twists satisfy that only up to natural isomorphism
-    and are therefore OUT OF SCOPE. This was an explicit owner decision
-    (2026-08-03) to take a strict subgroup rather than quotient C equiv C to
-    isomorphism classes, and it is a real restriction. Do not cite it as "the
-    Aut action is formalized".
+    The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
+    transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
+    Slicing.mapEquiv), and QuotAutAction.lean quotients triangulated
+    auto-equivalences by natural isomorphism to get an honest Group AutQuot C
+    with MulAction (AutQuot C) (Slicing C), both laws proved and nothing
+    excluded. StrictAutAction.lean remains as the cheaper strict route; it is
+    SUPERSEDED for slicings and carries a scope restriction recorded in
+    source_mapping -- its F g are isomorphisms of categories, not merely
+    equivalences, so Serre functors and spherical twists are outside it. Do not
+    cite StrictAut as "the Aut action is formalized"; cite AutQuot, subject to
+    the setoid gap in known_divergences.
+
+    What is undeclared is the action on WithClassMap, which needs K0
+    functoriality, a class-map compatibility datum, and invariance of strict
+    finite length under an equivalence of interval categories. See
+    notes/anchor-api-map.md section 7.
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
@@ -133,7 +142,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 90 declarations this project
+    `lake env lean scripts/Audit.lean` over all 105 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -143,13 +152,26 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build (3542 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
+    lake build (3544 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
-    defaultTargets, so `lake build` elaborates it and its 77 audit lines are
+    defaultTargets, so `lake build` elaborates it and its 90 audit records are
     build output. The anchor itself was also built from source for the first
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
+
+    The 90 records were re-parsed from the build log on 2026-08-03 and every
+    one is a subset of [propext, Classical.choice, Quot.sound]; the distinct
+    axiom set across all 90 is exactly those three; sorryAx does not appear
+    anywhere in the log. Parsing them is fiddly enough to be worth recording,
+    because the two obvious ways to check are both WRONG: the axiom list wraps
+    across lines (8 records wrap here), so a line-oriented grep under-reads it;
+    and the declaration name is quote-delimited while two names END in an
+    apostrophe (NormalizedShift.ext', GLTilde.ext'), so a naive quoted-name
+    regex silently drops exactly those two. A checker that reports 88 of 90 and
+    calls it clean is the failure mode to watch for. This is a symptom, not a
+    quirk: prose output is the wrong interface, which is why the emitter
+    (contract-v1-e4) replaces it with JSON.
 
     Bringing the audit into the build immediately caught rot the manual
     workflow could not: the SlicingChecks section did not compile under this
@@ -198,16 +220,54 @@ fidelity:
     The GL+(2,R)-tilde half of Bridgeland section 8 is therefore complete on
     stability conditions.
 
-    AutAction covers the other half's groundwork: PostnikovTower.mapF and
-    HNFiltration.mapF push a tower / filtration through a triangulated functor,
-    and Slicing.mapEquiv transports a slicing along a triangulated
-    auto-equivalence -- (Phi . s).P phi X = s.P phi (Phi-inverse X), dual to
-    relabel, which moves phases and fixes objects. The anchor has NO functor
-    transport of its own, only HNFiltration.ofIso along an object isomorphism,
-    so these are built from scratch. The Aut action on stability conditions
-    itself is NOT declared (see sorry_details). Also not covered: the
-    covering-space identification of GLTilde (see known_divergences). API
-    mapped in notes/anchor-api-map.md.
+    AutAction, StrictAutAction, and QuotAutAction cover the other half of
+    section 8 -- the autoequivalence action -- on SLICINGS only.
+
+    AutAction is the groundwork: PostnikovTower.mapF and HNFiltration.mapF push
+    a tower / filtration through a triangulated functor, and Slicing.mapEquiv
+    transports a slicing along a triangulated auto-equivalence --
+    (Phi . s).P phi X = s.P phi (Phi-inverse X), dual to relabel, which moves
+    phases and fixes objects. The anchor has NO functor transport of its own,
+    only HNFiltration.ofIso along an object isomorphism, so these are built
+    from scratch.
+
+    The packaging problem is that Aut(D) is not a group in Lean: C equiv C is
+    associative only up to natural isomorphism, so it carries no Group instance
+    and MulAction is unavailable. TWO answers are declared, and they are NOT
+    interchangeable -- the difference is a scope claim, not a style choice.
+
+    StrictAutAction takes a group mapping STRICTLY into endofunctors (functor
+    composition in Lean is honestly associative, so C functor C is a monoid
+    under composition), giving MulAction G (Slicing C) with no coherence
+    bookkeeping. RESTRICTION, and it is a real one: map_one and map_mul are
+    EQUALITIES of functors, so F g composed with F g-inverse is the identity on
+    the nose -- each F g is an isomorphism of categories, not merely an
+    equivalence. Serre functors and spherical twists satisfy that only up to
+    natural isomorphism and are therefore OUT OF SCOPE, which is most of the
+    autoequivalences one actually wants downstream. This was an explicit owner
+    decision (2026-08-03) to take a strict subgroup rather than quotient. Do
+    not cite StrictAut as "the Aut action is formalized".
+
+    QuotAutAction does the general thing instead: TriEquiv bundles a
+    triangulated auto-equivalence with its instances, and AutQuot C is the
+    quotient by natural isomorphism -- a genuine Group, with
+    MulAction (AutQuot C) (Slicing C) and both laws proved. NOTHING is
+    excluded; every triangulated auto-equivalence has a class in it, Serre
+    functors and spherical twists included. The action descends by act_congr:
+    if Phi-inverse is naturally isomorphic to Psi-inverse then s.P phi
+    (Phi-inverse X) and s.P phi (Psi-inverse X) are equivalent PROPOSITIONS,
+    because a slicing's P is closed under isomorphism, and propext makes them
+    equal. So closedUnderIso -- an axiom of Slicing that reads like bookkeeping
+    -- is exactly what makes the quotient action well defined. One gap in the
+    setoid is recorded in known_divergences.
+
+    NOT declared on either route: the Aut action on STABILITY CONDITIONS. That
+    needs K0 functoriality, a class-map compatibility datum, and invariance of
+    strict finite length under an EQUIVALENCE of interval categories -- a
+    different problem from step 3c, where phase windows do not move and the
+    anchor's interval_thinFiniteLength_of_inclusion_strict applies. Also not
+    covered: the covering-space identification of GLTilde (see
+    known_divergences). API mapped in notes/anchor-api-map.md.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
@@ -222,6 +282,20 @@ fidelity:
     connectedness is not addressed. The name states the intended object; the
     proved content is strictly the group law plus nonemptiness. Do not cite
     GLTilde as a formalized universal cover.
+
+    GroupAction/QuotAutAction.lean defines AutQuot C as the quotient of
+    triangulated auto-equivalences by a setoid asking for Phi.functor iso
+    Psi.functor AND Phi.inverse iso Psi.inverse. Mathematically the second
+    follows from the first, since adjoints are unique up to natural
+    isomorphism -- but that is NOT proved here. So as stated the relation is a
+    priori FINER than "the functors are naturally isomorphic", and AutQuot C is
+    a priori LARGER than the usual Aut(D). Carrying both components keeps the
+    comp/symm compatibility proofs trivial; closing the gap means importing
+    adjoint uniqueness and dropping the second component. Until then, read
+    AutQuot as "triangulated auto-equivalences modulo a relation at least as
+    fine as natural isomorphism" -- not as literally Aut(D). Every statement
+    proved about AutQuot holds; what is unproved is that AutQuot equals the
+    object the name suggests.
 
 self_assessment:
   source_detail_level: skeleton

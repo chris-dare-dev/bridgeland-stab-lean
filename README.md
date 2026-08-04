@@ -91,13 +91,27 @@ instance — composition is associative only up to natural isomorphism — but
 honest monoid under `⋙`. A group mapping *strictly* into it therefore gets a
 real `MulAction G (Slicing C)`, with `(g • s).P φ X = s.P φ (g⁻¹ X)`.
 
-**That restriction is real.** `map_one`/`map_mul` are equalities of functors,
-so each `F g` is an *isomorphism of categories*, not merely an equivalence —
-Serre functors and spherical twists are out of scope. It is a deliberate
-trade: a strict `MulAction` now, instead of quotienting to isomorphism
-classes. The `Aut` action on *stability conditions* is not declared at all; it
-would also need `K₀` functoriality, a class-map compatibility datum, and
-invariance of strict finite length under an equivalence.
+That restriction is real: `map_one`/`map_mul` are equalities of functors, so
+each `F g` is an *isomorphism of categories*, and Serre functors and spherical
+twists fall outside it.
+
+`QuotAutAction` therefore does the general construction, and it is the one to
+prefer. `AutQuot C` — triangulated auto-equivalences modulo natural
+isomorphism — is a genuine `Group` acting on slicings, and **excludes
+nothing**.
+
+The whole content is one lemma. If `Φ⁻¹ ≅ Ψ⁻¹` then `Φ⁻¹ X ≅ Ψ⁻¹ X` for every
+`X`, so `s.P φ (Φ⁻¹ X)` and `s.P φ (Ψ⁻¹ X)` are equivalent propositions —
+because a slicing's `P` is closed under isomorphism — and `propext` upgrades
+that to *equality*. So `closedUnderIso`, which reads like bookkeeping among the
+`Slicing` axioms, is exactly what makes the quotient well defined. The group
+laws split the same way: associativity and the unit laws are `Iso.refl`, and
+only `inv_mul_cancel` needs a real natural isomorphism — precisely the one
+place strictness fails.
+
+Neither packaging acts on *stability conditions*; that would also need `K₀`
+functoriality, a class-map compatibility datum, and invariance of strict finite
+length under an equivalence. So §8's `Aut` action is not formalized.
 
 Also not proved: `GLTilde` is not shown to be the universal cover — the
 projection is not shown surjective, the fibre is not shown to be `ℤ`, simple
