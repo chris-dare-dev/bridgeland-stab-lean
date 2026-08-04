@@ -467,19 +467,32 @@ replicated rather than reused; and a theorem whose *statement* does not mention
 `hF`/`harr` needs an explicit `include hF harr in`, placed **before** the
 docstring.
 
-**Still to assemble** for the `Aut` action on stability conditions:
+**ASSEMBLED** (2026-08-04) — `GroupAction/AutStabilityAction.lean`. All three
+predicted steps went through as written:
 
-- The induced functor `(Φ • s).IntervalCat C a b ⥤ s.IntervalCat C a b`
-  (objects: `E ↦ Φ⁻¹ E`, well-typed by `mapEquiv_intervalProp_iff`),
-  full and faithful because `Φ⁻¹` is.
-- That it preserves strict monos. **Use the cone route, not the heart route**:
-  take the cokernel triangle of a strict mono
-  (`exists_distTriang_of_strictShortExact`), push it through `Φ⁻¹` — which is
-  triangulated, so the triangle stays distinguished and all three vertices stay
-  in the target window — then apply `strictMono_strictEpi_of_distTriang`. This
-  is exactly how the anchor's `intervalInclusion_map_strictMono` works.
-- Feed both into the lemma above, then rebuild `IsLocallyFinite` with the
-  **same** `η` (no `exists_radius` needed here).
+- `autIntervalFunctor` — `Φ⁻¹` restricted, via `ObjectProperty.lift`. Declared
+  `abbrev`, not `def`: instance search must see through it to reach the
+  underlying lift's `Full`/`Faithful` instances.
+- `autFunctor_strictMono` — the cone route, exactly as predicted. `simpa`
+  against `Φ.inverse.map_distinguished` closed it first try, with
+  `δ := Φ.inverse.map δ ≫ (Φ.inverse.commShiftIso 1).hom.app _`.
+- `mapEquiv_isLocallyFinite` — same `η`, no `exists_radius`.
+- `actStabAut` — the action itself, with the class-lattice datum.
+
+Two gotchas worth keeping. The anchor's `exists_distTriang_of_strictShortExact`
+and `strictMono_strictEpi_of_distTriang` take the **slicing explicitly**, and
+the source-side one wants `s.mapEquiv Φ`, not `s`. And `IsLocallyFinite`'s
+statement carries its own `let a := t - η` bindings, so a bare `intro E` after
+`intro t` consumes the *let* rather than the object — `show` past them.
+
+The `compat'` obligation costs nothing here: the witness `m` is **unchanged**,
+because an autoequivalence moves an object without moving its phase. Contrast
+`G̃L⁺(2, ℝ)`, where the matrix rescales the ray and `m` becomes `m * r`.
+
+**Not a `MulAction`.** The acting object is a pair `(Φ, lam)`; `AutQuot` groups
+the `Φ`s alone, which suffices for slicings but not once a class lattice is in
+play. Bundling pairs into a group is the remaining step, and it is packaging,
+not mathematics.
 
 ### Original assessment, for the record
 
@@ -503,20 +516,12 @@ docstring.
 Estimate: ~150+ lines. This is the piece to budget for; the other two are done
 or decided.
 
-Still to do for stability conditions:
+Done for stability conditions (2026-08-04), all three:
 
-1. `K₀` functoriality — `K₀.map Φ` via `K₀.lift` plus an `IsTriangleAdditive`
-   proof. The anchor has `K₀.lift` (`GrothendieckGroup/Basic.lean:162`) but no
-   functor action.
-2. Class-map compatibility: an autoequivalence acts on `WithClassMap C v` only
-   paired with `λ : Λ ≃+ Λ` satisfying `v ∘ K₀.map Φ = λ ∘ v`. Forced when
-   `v = id`; extra data otherwise — structurally the same move as `Compatible`.
-3. Local finiteness under `mapEquiv`. **A different problem from 3c**: phase
-   windows do not move here at all, so no uniform-continuity argument is
-   needed. What is needed is invariance of strict finite length under an
-   *equivalence* of interval categories, and
-   `interval_thinFiniteLength_of_inclusion_strict` does **not** apply — it
-   compares two `intervalProp`s on the same object.
+1. `K₀` functoriality — `K₀.mapF` (`K0Functor.lean`).
+2. Class-map compatibility — `actStabAut`'s `lam` + `hlam` arguments.
+3. Strict finite length under an equivalence — `mapEquiv_isLocallyFinite`,
+   resting on the general `isStrictArtinian_of_faithful_strict`.
 
 Prove the `MulAction` laws (`one_smul`, `mul_smul`) at each stage rather than
 at the end — 3a's are cheap and will catch a wrong `f` vs `f⁻¹` convention

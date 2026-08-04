@@ -109,9 +109,20 @@ laws split the same way: associativity and the unit laws are `Iso.refl`, and
 only `inv_mul_cancel` needs a real natural isomorphism — precisely the one
 place strictness fails.
 
-Neither packaging acts on *stability conditions*; that would also need `K₀`
-functoriality, a class-map compatibility datum, and invariance of strict finite
-length under an equivalence. So §8's `Aut` action is not formalized.
+`AutStabilityAction` then carries it to *stability conditions*. All three
+prerequisites landed: `K₀` functoriality (`K0Functor`), the class-lattice datum
+(`actStabAut`'s `lam`), and invariance of strict finite length under an
+equivalence (`mapEquiv_isLocallyFinite`, on the general
+`isStrictArtinian_of_faithful_strict`).
+
+Local finiteness survives with the **same `η`** — an autoequivalence moves
+objects, not phases, so the interval endpoints do not move and no
+uniform-continuity argument is needed. `compat'` likewise costs nothing: the
+witness `m` is unchanged, where `G̃L⁺(2, ℝ)` replaced it by `m * r`.
+
+What is **not** done is a `MulAction`: the acting object is a *pair*
+`(Φ, lam)`, and `AutQuot` groups the `Φ`s alone. So this is the action as a
+well-defined map plus its defining property, not a group action.
 
 Also not proved: `GLTilde` is not shown to be the universal cover — the
 projection is not shown surjective, the fibre is not shown to be `ℤ`, simple

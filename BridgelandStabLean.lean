@@ -16,6 +16,7 @@ import BridgelandStabLean.GroupAction.StrictAutAction
 import BridgelandStabLean.GroupAction.QuotAutAction
 import BridgelandStabLean.GroupAction.K0Functor
 import BridgelandStabLean.GroupAction.StrictFiniteLength
+import BridgelandStabLean.GroupAction.AutStabilityAction
 
 /-!
 # BridgelandStabLean

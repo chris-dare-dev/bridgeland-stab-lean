@@ -116,14 +116,23 @@ axiomatizing the gap.
      of functors, so each `F g` is an **isomorphism of categories** and Serre
      functors and spherical twists are out of its scope.
 
-   **Do not write "the `Aut` action is formalized" for either.** Neither acts
-   on stability conditions, so neither is §8's `Aut` action.
+   **`GroupAction/AutStabilityAction.lean` now carries the action on stability
+   conditions** (`actStabAut`, 2026-08-04) — `Φ` moves objects, a class-lattice
+   datum `lam` carries it on `Λ`. Local finiteness survives with the **same
+   `η`** (`mapEquiv_isLocallyFinite`); the endpoints do not move, so no
+   `exists_radius`.
 
-   Still needed for stability conditions: `K₀` functoriality, a class-map
-   compatibility datum, and invariance of strict finite length under an
-   *equivalence* of interval categories (a different problem from 3c — phase
-   windows do not move here, so
-   `interval_thinFiniteLength_of_inclusion_strict` does not apply).
+   **Still not a `MulAction`**: the acting object is a *pair* `(Φ, lam)`, and
+   `AutQuot` groups the `Φ`s alone. Say "the `Aut` action is a well-defined map
+   on stability conditions", never "the `Aut` action is formalized as a group
+   action".
+
+   All three prerequisites are done: `K₀` functoriality (`K0Functor.lean`), the
+   class-lattice datum, and strict finite length under an *equivalence* of
+   interval categories (`mapEquiv_isLocallyFinite`, on the general
+   `isStrictArtinian_of_faithful_strict` in `StrictFiniteLength.lean` — the
+   anchor's `interval_thinFiniteLength_of_inclusion_strict` does **not** apply
+   here, since it compares two `intervalProp`s on the same object).
    [`notes/anchor-api-map.md`](notes/anchor-api-map.md) §7.
 
    Facts worth having up front:

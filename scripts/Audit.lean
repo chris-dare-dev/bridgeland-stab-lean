@@ -186,6 +186,15 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.isStrictNoetherian_of_faithful_strict
 #print axioms CategoryTheory.Triangulated.mapEquiv_intervalProp_iff
 
+/-! ## AutStabilityAction — the Aut action on stability conditions -/
+
+#print axioms CategoryTheory.Triangulated.autIntervalFunctor
+#print axioms CategoryTheory.Triangulated.autFunctor_strictMono
+#print axioms CategoryTheory.Triangulated.mapEquiv_isLocallyFinite
+#print axioms CategoryTheory.Triangulated.actStabAut
+#print axioms CategoryTheory.Triangulated.actStabAut_slicing
+#print axioms CategoryTheory.Triangulated.actStabAut_Z
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

@@ -107,8 +107,9 @@ fidelity:
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: the covering-space facts about
     GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
-    connectedness -- and the autoequivalence (Aut) action on STABILITY
-    CONDITIONS.
+    connectedness -- and a GROUP action (MulAction) of autoequivalences on
+    stability conditions, as opposed to the well-defined map that IS declared;
+    see the 2026-08-04 entry below.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -122,10 +123,19 @@ fidelity:
     cite StrictAut as "the Aut action is formalized"; cite AutQuot, subject to
     the setoid gap in known_divergences.
 
-    What is undeclared is the action on WithClassMap, which needs K0
-    functoriality, a class-map compatibility datum, and invariance of strict
-    finite length under an equivalence of interval categories. See
-    notes/anchor-api-map.md section 7.
+    CLOSED 2026-08-04: the Aut action on STABILITY CONDITIONS is declared --
+    AutStabilityAction.lean's actStabAut. All three prerequisites landed: K0
+    functoriality (K0Functor.lean), the class-map compatibility datum (actStabAut's
+    lam + hlam arguments), and invariance of strict finite length under an
+    equivalence (mapEquiv_isLocallyFinite, resting on the general
+    isStrictArtinian_of_faithful_strict in StrictFiniteLength.lean).
+
+    STILL NOT a MulAction, and this is the honest remaining gap: the acting
+    object is a PAIR (Phi, lam). AutQuot groups the Phi's alone, which suffices
+    for slicings but not once a class lattice is in play. Bundling pairs into a
+    group is packaging, not mathematics, and is not done. So actStabAut is the
+    action as a well-defined map plus its defining property, NOT a group action.
+    See notes/anchor-api-map.md section 7.
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
@@ -142,7 +152,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 at commit
-    eeff895 via `lake build` over all 118 declarations this project introduces:
+    PIN_ME via `lake build` over all 124 declarations this project introduces:
     every one depends on exactly [propext, Classical.choice, Quot.sound] and
     nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -150,7 +160,7 @@ fidelity:
     typechecks. Re-run it before editing this block.
 
     COUNTS ARE PINNED TO A COMMIT, deliberately. This repo moved five times on
-    2026-08-03 alone (58359e1 -> eeff895) and the count went 15 -> 43 -> 77 ->
+    2026-08-03 alone (58359e1 -> PIN_ME) and the count went 15 -> 43 -> 77 ->
     90 -> 105 -> 111 in that span, so a bare number here is stale on arrival
     and two fields quoting different bare numbers is the normal failure, not an
     unlucky one. Quote the commit with the count, or do not quote the count.
@@ -158,7 +168,7 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build at commit eeff895 (3546 jobs, exit 0). Since 2026-08-03 the
+    lake build at commit PIN_ME (3547 jobs, exit 0). Since 2026-08-03 the
     #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
@@ -167,7 +177,7 @@ fidelity:
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
 
-    All 118 records were re-parsed from the build log at eeff895 and every one
+    All 118 records were re-parsed from the build log at PIN_ME and every one
     is a subset of [propext, Classical.choice, Quot.sound]; the distinct axiom
     set across all 111 is exactly those three; sorryAx does not appear anywhere
     in the log.
