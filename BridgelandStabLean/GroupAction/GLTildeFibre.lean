@@ -17,22 +17,19 @@ identity matrix is one of these, and distinct `n` give distinct elements.
 
 **Not proved here, and not attempted:**
 
-* **Surjectivity of `toMatHom`.** That is the lifting statement — every
-  `T ∈ GL⁺(2, ℝ)` admits a compatible phase relabelling — and it needs a
-  continuous lift of the induced circle map together with strict monotonicity.
-  The monotonicity is not formal: it comes from the angular velocity
-  `θ'(φ) = π · det T / ‖T ·ᵥ rayVec φ‖²`, which is positive *precisely
-  because* `det T > 0`. That computation is the whole content, and it is a
-  genuine analysis task rather than packaging.
+* **Surjectivity of `toMatHom`.** Not proved *here* — landed separately in
+  `GLTildeSurj.lean`, which writes the lift down in closed form rather than
+  invoking covering-space machinery.
 * **Simple connectedness.** Blocked on prerequisites, not on effort: `GLTilde`
   carries no topology anywhere in this repo, and `π₁(S¹) ≅ ℤ` is **not in
   Mathlib at the pinned revision** (`8a178386`). Without the latter, "universal
   cover" is not expressible here, let alone provable.
 
 So this file narrows the disclaimer by one item. `GLTilde` is still **not**
-shown to be the universal cover, and no declaration here should be read that
-way — a group with the right kernel over a base is not thereby a covering
-space of it.
+shown to be the universal cover — with `GLTildeSurj.lean` the two group-theoretic
+facts hold and the topological one does not — and no declaration here should be
+read that way. A group with the right kernel over a base is not thereby a
+covering space of it.
 
 ## Why the kernel is exactly `2ℤ` and not `ℤ`
 

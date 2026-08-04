@@ -36,17 +36,22 @@ needed and they are in different states:
 
 * **Fibre `ℤ`** — **proved**, in `GLTildeFibre.lean`. The kernel of the
   projection is exactly the deck transformations `φ ↦ φ + 2n`.
-* **Surjectivity of the projection** — open. This is the lifting statement, and
-  its content is the angular velocity `π · det T / ‖T ·ᵥ rayVec φ‖²` being
-  positive.
-* **Simple connectedness** — open, and blocked on prerequisites rather than
+* **Surjectivity of the projection** — **proved**, in `GLTildeSurj.lean`. Every
+  `T` of positive determinant carries a compatible phase relabelling.
+* **Simple connectedness** — **open**, and blocked on prerequisites rather than
   effort: nothing in this repo puts a topology on `GLTilde`, and `π₁(S¹) ≅ ℤ`
   is not in Mathlib at the pinned revision.
 
-Two of three are therefore still open, and **the one that is proved does not on
-its own imply anything about covering spaces** — a group with the expected
-kernel over a base is not thereby a cover of it. No declaration in this file or
-in `GLTildeFibre.lean` should be read as establishing that.
+So the two *group-theoretic* facts hold — `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1`
+is exact (`exact_deckHom_toMatHom`) — and the one *topological* fact does not.
+
+**That is not enough to say "universal cover", and the gap is not a
+formality.** Being a central extension of `GL⁺(2, ℝ)` by `ℤ` is a statement
+about groups; being the universal cover is a statement about spaces. Many
+non-isomorphic topological groups share an abstract group presentation, and
+nothing here even names a topology. Cite these results for the extension; no
+declaration in this file, in `GLTildeFibre.lean`, or in `GLTildeSurj.lean`
+establishes the cover.
 
 Also not proved, and not attempted: any action on a stability condition. That
 is step 3, and it is the first thing here that will touch the anchor's API.

@@ -208,6 +208,34 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.range_deckHom_eq_ker
 #print axioms BridgelandStabLean.GroupAction.kerEquiv
 
+/-! ## GLTildeSurj — the projection is surjective -/
+
+#print axioms BridgelandStabLean.GroupAction.cexpI
+#print axioms BridgelandStabLean.GroupAction.cplxCoord_apply
+#print axioms BridgelandStabLean.GroupAction.cA
+#print axioms BridgelandStabLean.GroupAction.cB
+#print axioms BridgelandStabLean.GroupAction.mulVec_rayVec_eq
+#print axioms BridgelandStabLean.GroupAction.normSq_cA_sub_normSq_cB
+#print axioms BridgelandStabLean.GroupAction.norm_cB_lt_norm_cA
+#print axioms BridgelandStabLean.GroupAction.Wmap
+#print axioms BridgelandStabLean.GroupAction.Wmap_re_pos
+#print axioms BridgelandStabLean.GroupAction.Wmap_add_one
+#print axioms BridgelandStabLean.GroupAction.lift
+#print axioms BridgelandStabLean.GroupAction.mulVec_rayVec_lift
+#print axioms BridgelandStabLean.GroupAction.compatible_lift
+#print axioms BridgelandStabLean.GroupAction.lift_add_one
+#print axioms BridgelandStabLean.GroupAction.cross
+#print axioms BridgelandStabLean.GroupAction.cross_rayVec
+#print axioms BridgelandStabLean.GroupAction.cross_mulVec
+#print axioms BridgelandStabLean.GroupAction.lift_lt_lift_of_lt_of_sub_lt_one
+#print axioms BridgelandStabLean.GroupAction.lift_strictMono
+#print axioms BridgelandStabLean.GroupAction.lift_continuous
+#print axioms BridgelandStabLean.GroupAction.lift_surjective
+#print axioms BridgelandStabLean.GroupAction.liftShift
+#print axioms BridgelandStabLean.GroupAction.compatible_liftShift
+#print axioms BridgelandStabLean.GroupAction.toMatHom_surjective
+#print axioms BridgelandStabLean.GroupAction.exact_deckHom_toMatHom
+
 /-! ## AutPairAction — the same action, as a genuine `MulAction` -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair

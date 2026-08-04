@@ -143,18 +143,41 @@ factor of two is Bridgeland's phase convention showing through — `rayVec φ` i
 the ray at angle `πφ`, so `φ ↦ φ + 1` is the antipodal map and only an even
 shift returns every ray to itself.
 
-The other two remain open. **Surjectivity of the projection** is the lifting
-statement; its content is that the angular velocity
-`π · det T / ‖T ·ᵥ rayVec φ‖²` is positive, which is where `det T > 0` earns
-its keep. **Simple connectedness** is blocked on prerequisites rather than
-effort: nothing here puts a topology on `GLTilde`, and `π₁(S¹) ≅ ℤ` is not in
-Mathlib at the pinned revision.
+`GLTildeSurj` proves the second: **the projection is surjective**. Every `T`
+of positive determinant carries a compatible phase relabelling, so `toMatHom`
+is onto.
 
-So `GLTilde` is still **not** shown to be the universal cover, and the fact
-that is proved does not imply it — a group with the expected kernel over a base
-is not thereby a cover of it. Nothing anywhere defines a topology on the space
-of stability conditions either, so no statement here is about `Stab(D)` as a
-manifold.
+The construction avoids covering-space machinery entirely by writing the lift
+down. A real-linear map of `ℂ` is `z ↦ a z + b z̄`, and its determinant is
+`‖a‖² − ‖b‖²` — so `det T > 0` says exactly `‖b‖ < ‖a‖`. Then
+
+```
+T(e^{iπφ}) = e^{iπφ} · a · (1 + (b/a) e^{-2iπφ})
+```
+
+and the last factor has real part at least `1 − ‖b/a‖ > 0`. It never leaves the
+right half-plane, so its `arg` is continuous with no branch cut to work around,
+and `lift φ = φ + arg a/π + arg(W φ)/π` is the relabelling.
+
+Monotonicity comes from the 2×2 cross product rather than a derivative:
+`(M *ᵥ v) × (M *ᵥ w) = det M · (v × w)` and
+`rayVec φ × rayVec ψ = sin(π(ψ−φ))`, so `det T > 0` forces
+`sin(π(lift ψ − lift φ)) > 0`; the `arg` bound then traps the difference in
+`(−1, 2)`, where that has the unique solution set `(0,1)`. Positivity of `det`
+is used twice, differently — once for the half-plane, once for the sign.
+
+Together these give an exact sequence `1 → ℤ → G̃L⁺(2,ℝ) → GL⁺(2,ℝ) → 1`
+(`exact_deckHom_toMatHom`).
+
+**Simple connectedness remains open**, and it is blocked on prerequisites
+rather than effort: nothing here puts a topology on `GLTilde`, and
+`π₁(S¹) ≅ ℤ` is not in Mathlib at the pinned revision.
+
+So `GLTilde` is still **not** shown to be the universal cover, and the gap is
+now a change of category rather than a missing lemma — a central extension by
+`ℤ` is a statement about groups, being the universal cover is a statement about
+spaces. Nothing anywhere defines a topology on the space of stability
+conditions either, so no statement here is about `Stab(D)` as a manifold.
 
 ### Lane 2 — `Lattice/` (closable today)
 

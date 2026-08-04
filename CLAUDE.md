@@ -99,12 +99,14 @@ axiomatizing the gap.
      `GroupAction/StabilityAction.lean`. **The §8 `G̃L⁺(2, ℝ)` action is
      complete.**
 
-   Remaining on this track, as of 2026-08-04: **only two of the three
-   covering-space facts about `GLTilde`** — surjectivity of the projection, and
-   simple connectedness. The `ℤ` fibre is done (`GLTildeFibre.lean`), and the
-   autoequivalence half of §8 is done all the way to a `MulAction`
-   (`AutPairAction.lean`). Neither of the two open items is packaging; see the
-   claims list at the end of this section for what each actually needs.
+   Remaining on this track, as of 2026-08-04: **one item — simple connectedness
+   of `GLTilde`**, and it is blocked on prerequisites rather than effort (no
+   topology on `GLTilde` here; `π₁(S¹) ≅ ℤ` not in Mathlib at the pin). The
+   other two covering-space facts are done — the `ℤ` fibre in
+   `GLTildeFibre.lean`, surjectivity of the projection in `GLTildeSurj.lean` —
+   and so is the autoequivalence half of §8, all the way to a `MulAction`
+   (`AutPairAction.lean`). See the claims list at the end of this section for
+   why the last item is a change of category rather than a missing lemma.
 
    The `Aut` groundwork is in `GroupAction/AutAction.lean`
    (`PostnikovTower.mapF`, `HNFiltration.mapF`, `Slicing.mapEquiv`). Two
@@ -186,18 +188,21 @@ Four claims to keep off the page.
   is not surjective) nor surjective (a `Φ` with no compatible `lam` has no
   preimage). Both failures are about `v`, which is arbitrary. Say "the group of
   autoequivalences carrying a compatible class-lattice automorphism".
-- **"`GLTilde` is a formalized universal cover"** — no, and it is worth being
-  exact now that one third of it is done. The **`ℤ` fibre is proved**
-  (`GLTildeFibre.lean`: `kerEquiv`, the kernel of `toMatHom` is the deck
-  transformations `φ ↦ φ + 2n`). **Surjectivity of the projection** is open —
-  it is the lifting statement, and its content is that the angular velocity
-  `π · det T / ‖T ·ᵥ rayVec φ‖²` is positive. **Simple connectedness** is open
-  and blocked on prerequisites, not effort: no topology on `GLTilde` exists
-  anywhere here, and `π₁(S¹) ≅ ℤ` is not in Mathlib at the pin.
+- **"`GLTilde` is a formalized universal cover"** — still no, and the remaining
+  gap is now exactly one thing. **Fibre `ℤ`: proved** (`GLTildeFibre.lean`,
+  `kerEquiv`). **Surjectivity of the projection: proved** (`GLTildeSurj.lean`,
+  `toMatHom_surjective`). So `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1` is exact —
+  `exact_deckHom_toMatHom` bundles all three exactness facts.
 
-  The trap to avoid: having the expected kernel over a base **does not** make a
-  group a cover of it. Cite `kerEquiv` for what it says — the fibre — never for
-  "the universal cover is formalized".
+  **Simple connectedness: open**, and blocked on prerequisites rather than
+  effort. No topology on `GLTilde` exists anywhere here, and `π₁(S¹) ≅ ℤ` is
+  not in Mathlib at the pin.
+
+  The trap, and it is sharper now that the algebra is done: **a central
+  extension of `GL⁺(2, ℝ)` by `ℤ` is a statement about groups; the universal
+  cover is a statement about spaces.** Nothing here names a topology, so the
+  remaining gap is a change of category, not a missing lemma. Cite
+  `exact_deckHom_toMatHom` for the extension; never for the cover.
 - **"`AutQuot` is `Aut(D)`"** — not proved. Its setoid asks for the functors
   *and* the inverses to be naturally isomorphic; adjoint uniqueness would make
   the second redundant, but that is not imported here, so the relation is a
