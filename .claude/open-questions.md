@@ -31,11 +31,61 @@ change, not the two the architecture budgeted.
 
 ---
 
-## Q2 — Third repo (`math-formal-contract`), or `arXMCP/contract/`? — **ANSWERED**
+## Q2 — Where does the contract package live? — **REOPENED**
 
-**Answered 2026-08-04 (UTC): `arXMCP/contract/`.** Full reasoning and the
-correction of the earlier recommendation are in
-[`decisions/ADR-0007`](decisions/ADR-0007-contract-package-location.md).
+**Answered 2026-08-04 as `arXMCP/contract/`; WITHDRAWN the same day.** The
+answer rested on `_pipeline/stage-1-discovery/synthesis/target-architecture.md`,
+which **does not exist** — not in arXMCP, not anywhere under
+`~/Personal/SourceCode`, never in arXMCP's git history — and neither do the
+things it was cited as specifying (no artifact-type registry, no
+`GET /bridge/contracts`, and no `.claude/references/bridge/` in
+`personal-website`, the repo named as the vendoring precedent). Independently,
+none of the seven filled instances carry the `bridge.*` envelope §5.2 says they
+must. Full evidence and a survives/falsified table in the amendment at the foot
+of [`decisions/ADR-0007`](decisions/ADR-0007-contract-package-location.md).
+
+**Exactly one of ADR-0007's arguments survives**, and it is negative: with one
+`mfc` implementation a fixture corpus cannot referee anything wherever it
+lives. Nothing that positively chose `arXMCP/contract/` survives — including
+"rule 7", which is the only reason `mfc` was made arXMCP-side rather than
+shared.
+
+**Blocks:** the contract package (#19-22, epic #3). The milestone that would
+have created `arXMCP/contract/` stopped at `research-complete` on this finding;
+no code was written against the withdrawn decision.
+
+**The question is not the one it was.** Q2 was framed on the premise that no
+third repo existed. **One does now** — `math-formal-contract-lean`, created
+hours later by ADR-0008 for an adjacent reason, already carrying CI, the
+`@[cites]` attribute and the emitter. ADR-0008 also declined to put that
+package in `arXMCP/contract/`, because a Lake require on arXMCP would falsify
+that repo's `CLAUDE.md` §4.10 *"Sibling, never a subdirectory, never a
+dependency"* — and arXMCP's §4.10 also states plainly that **arXMCP does not
+host formalization work**.
+
+So the live options are:
+
+1. **`math-formal-contract-lean`** — consolidate the contract in the repo
+   already named for it, next to the emitter it describes. Its zero-dependency
+   invariant is about the *Lake* package and is enforced by a grep of
+   `lakefile.toml`, so JSON schemas and a Python CLI do not touch it; it would
+   become polyglot and need a second CI job. `mfc` can then be shared again,
+   since rule 7 is gone.
+2. **`arXMCP/contract/` anyway** — recording that the envelope premise is
+   unverified and the artifacts are flat. Cheapest in motion, but it keeps a
+   decision whose stated reasons are gone and sits against §4.10.
+3. **Find the missing document** — it may exist on the PC this work started
+   on. If it does, ADR-0007 may be reinstated wholesale; if it does not, option
+   1 or 2 stands.
+
+**Nothing downstream should assume `arXMCP/contract/`.** Prose that already
+does is corrected in the roadmap and in this file.
+
+### The historical note worth keeping
+
+ADR-0007's own closing rule was *"do not override a recorded verdict from a
+summary of it."* That rule was right. But the verdict it deferred to could not
+be read then either — the ADR quotes it, and the quotes are all anyone has.
 
 Short version: the recorded verdict was read in full rather than in summary,
 and it dissolves the case for overriding it. There is only one `mfc`
@@ -45,16 +95,12 @@ ecosystem (`personal-website` vendors pinned bridge contracts with a
 checksum-drift test); and the verdict explicitly rejected "create it now" as to
 *timing*, on reasoning that holds exactly at N=1 adopter.
 
-**The larger finding:** a versioned bridge-contract system already exists
-(§5 of the same document) — a common envelope, an artifact-type registry that
-already contains `verdict-record` with *"statement hash, toolchain/env
-versions"*, per-type MAJOR.MINOR versioning, and a `GET /bridge/contracts`
-handshake. Our artifacts join it. Its rule 7 — *"no shared Python package
-imported by both repos"* — also kills `mfc`-as-shared-dependency.
-
-**Reverses when** the ecosystem's own trigger 3 fires ("bridge contracts gain
-consumers outside the two repos"), which is the same event as the M3
-generalization gate. Sequencing is therefore settled, not judged.
+**The "larger finding" that used to sit here — that a versioned
+bridge-contract system already exists, with an envelope, an artifact-type
+registry and a `GET /bridge/contracts` handshake — is struck.** Every part of
+it was sourced from the missing document, and none of it is present in either
+repo said to implement it. It is kept in ADR-0007 as part of the withdrawn
+record, not repeated here as if it were a finding.
 
 ---
 
