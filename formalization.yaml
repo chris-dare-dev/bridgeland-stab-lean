@@ -142,7 +142,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 at commit
-    at commit PIN_ME via `lake build` over all 118 declarations this project introduces:
+    at commit eeff895 via `lake build` over all 118 declarations this project introduces:
     every one depends on exactly [propext, Classical.choice, Quot.sound] and
     nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -150,7 +150,7 @@ fidelity:
     typechecks. Re-run it before editing this block.
 
     COUNTS ARE PINNED TO A COMMIT, deliberately. This repo moved five times on
-    2026-08-03 alone (58359e1 -> PIN_ME) and the count went 15 -> 43 -> 77 ->
+    2026-08-03 alone (58359e1 -> eeff895) and the count went 15 -> 43 -> 77 ->
     90 -> 105 -> 111 in that span, so a bare number here is stale on arrival
     and two fields quoting different bare numbers is the normal failure, not an
     unlucky one. Quote the commit with the count, or do not quote the count.
@@ -158,7 +158,7 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build at commit PIN_ME (3546 jobs, exit 0). Since 2026-08-03 the
+    lake build at commit eeff895 (3546 jobs, exit 0). Since 2026-08-03 the
     #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
@@ -167,7 +167,7 @@ fidelity:
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
 
-    All 118 records were re-parsed from the build log at PIN_ME and every one
+    All 118 records were re-parsed from the build log at eeff895 and every one
     is a subset of [propext, Classical.choice, Quot.sound]; the distinct axiom
     set across all 111 is exactly those three; sorryAx does not appear anywhere
     in the log.
