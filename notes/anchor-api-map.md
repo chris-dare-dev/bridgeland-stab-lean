@@ -222,8 +222,15 @@ Budget it separately; do not discover it mid-step.
 
 Do not attempt step 3 as one milestone.
 
-1. **3a — action on `Slicing`.** Needs only step 1 plus the table in §2. No
-   `ℂ`, no matrices, no local finiteness. Should land in one sitting.
+1. ~~**3a — action on `Slicing`.**~~ **Done** (2026-08-03) —
+   `GroupAction/SlicingAction.lean`. `MulAction NormalizedShift (Slicing C)`
+   with `one_smul` and `mul_smul` proved, and `MulAction GLTilde (Slicing C)`
+   through `MulAction.compHom GLTilde.toShiftHom`. The §2 table held exactly:
+   only `shift_iff` and `hn_exists` had content.
+
+   One gotcha: inside the `MulAction` instance's own elaboration `•` stays
+   opaque, so `relabel_P` cannot match and `simp` reports "no progress". Add
+   `show (relabel C … ).P φ = …` before the `simp` in `one_smul`/`mul_smul`.
 2. **3b — action on `PreStabilityCondition.WithClassMap`.** Needs the §3
    bridge and the `compat'` computation. Medium.
 3. **3c — action on `StabilityCondition.WithClassMap`.** Needs §4's uniform

@@ -7,6 +7,7 @@ import BridgelandStabLean.Lattice.NumericalK
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.ComplexBridge
+import BridgelandStabLean.GroupAction.SlicingAction
 
 /-!
 # BridgelandStabLean

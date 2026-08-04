@@ -60,16 +60,24 @@ axiomatizing the gap.
    `LinearOrder` is noncomputable. Invert via group multiplication
    (`inv_mul_cancel` on `GLPos`), never via `Matrix.inv` — the nonsingular
    inverse then never has to appear.
-3. The action on the anchor's `Slicing`. **Read
+3. The action on stability conditions. **Read
    [`notes/anchor-api-map.md`](notes/anchor-api-map.md) first** — it maps every
-   anchor type step 3 touches, straight from the pinned checkout, and stages
-   the step as 3a (slicing) / 3b (prestability) / 3c (local finiteness).
-   Groundwork already landed: `GroupAction/ComplexBridge.lean` reconciles the
-   anchor's `Z : Λ →+ ℂ` with `GLTilde`'s action on `Fin 2 → ℝ`.
+   anchor type this step touches, straight from the pinned checkout, and
+   stages it 3a / 3b / 3c.
+   - **3a — action on `Slicing`. Done** (2026-08-03),
+     `GroupAction/SlicingAction.lean`.
+   - **3b — action on `PreStabilityCondition.WithClassMap`.** Next. The
+     groundwork is in `GroupAction/ComplexBridge.lean`; `compat_exp` is the
+     form to consume.
+   - **3c — action on `StabilityCondition.WithClassMap`.** Needs local
+     finiteness preserved, which needs uniform continuity of `f⁻¹`. Schedule
+     alone.
 
-   Two facts from that read worth having up front. A non-`module` file imports
-   the anchor fine — no migration needed. And the anchor is **not** covered by
-   `lake exe cache get`; it is built now, but keep it that way.
+   Three facts worth having up front. A non-`module` file imports the anchor
+   fine — no migration needed. The anchor is **not** covered by
+   `lake exe cache get`; it is built now, keep it that way. And inside a
+   `MulAction` instance's own elaboration `•` is opaque, so `simp` needs a
+   `show` to see through it.
 
 Two claims to keep off the page. Do not describe the current state as "the §8
 action is formalized" — there is no action on a stability condition until

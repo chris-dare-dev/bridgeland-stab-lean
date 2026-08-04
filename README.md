@@ -51,11 +51,18 @@ same-map-on-the-circle condition — the circle being `ℝ/2ℤ` embedded by
 antipodal map, i.e. the shift functor `[1]`. That pair type is **proved to be
 a group**, with both projections group homs.
 
+`SlicingAction` then makes this act: `NormalizedShift` — and hence `GLTilde`,
+through `toShiftHom` — acts on the anchor's `Slicing C` by relabelling phases,
+`(f • s).P φ = s.P (f⁻¹ φ)`, with the `MulAction` laws proved. This is the
+first and only file here that imports the anchor.
+
 Two things that are deliberately *not* proved. `GLTilde` is not shown to be
 the universal cover — the projection is not shown surjective, the fibre is
-not shown to be `ℤ`, simple connectedness is untouched. And there is still no
-action on a stability condition. That is step 3, and it is the first thing
-here that will import the anchor.
+not shown to be `ℤ`, simple connectedness is untouched. And nothing yet acts
+on a *stability condition*: the central charge is untouched, so the full §8
+action still needs 3b (prestability, groundwork in `ComplexBridge`) and 3c
+(local finiteness, which needs uniform continuity of `f⁻¹`). See
+[`notes/anchor-api-map.md`](notes/anchor-api-map.md).
 
 ### Lane 2 — `Lattice/` (closable today)
 
