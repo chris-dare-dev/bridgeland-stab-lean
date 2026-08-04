@@ -35,10 +35,13 @@ open BridgelandStabLean
 #print axioms Matrix.polarFactor_isHermitian
 #print axioms Matrix.det_polarFactor_ne_zero
 #print axioms Matrix.polarFactor_posDef
-#print axioms Matrix.polarOrthogonal
-#print axioms Matrix.polarOrthogonal_mul_polarFactor
-#print axioms Matrix.polarOrthogonal_mem_orthogonalGroup
+#print axioms Matrix.polarUnitary
+#print axioms Matrix.polarUnitary_mul_polarFactor
+#print axioms Matrix.polarUnitary_mem_unitaryGroup
 #print axioms Matrix.exists_polarDecomposition
+#print axioms Matrix.eq_polarFactor_of_mul
+#print axioms Matrix.eq_polarUnitary_of_mul
+#print axioms Matrix.existsUnique_polarDecomposition
 
 /-! ## Lattice lane -/
 
