@@ -140,10 +140,10 @@ items:
     kind: epic
     parent: contract-v1-m1
     title: "The emitter — evidence from Environment.constants, never from source"
-    summary: "A zero-dependency Lake package: the @[cites] attribute (a SimplePersistentEnvExtension modeled on Mathlib/Tactic/StacksAttribute.lean, verified present at the pin) and MathFormalContract.Emit, which sweeps Environment.constants and calls Lean.collectAxioms. It never parses Lean source, which is what makes the set_option-in-theorem evasion structurally impossible rather than merely caught. Two probe-found defects ship fixed: collectAxioms output is unsorted, and emission must be module-scoped rather than name-prefix-scoped."
+    summary: "A zero-dependency Lake package: the @[cites] attribute (a SimplePersistentEnvExtension modeled on Mathlib/Tactic/StacksAttribute.lean, verified present at the pin) and MathFormalContract.Emit, which sweeps Environment.constants and calls Lean.collectAxioms. It never parses Lean source, which is what makes the set_option-in-theorem evasion structurally impossible rather than merely caught. Two probe-found defects ship fixed: collectAxioms output is unsorted, and emission must be module-scoped rather than name-prefix-scoped. HOME AND PINNING settled 2026-08-04 by ADR-0008: it is a SHARED Lake dependency at an exact commit, not vendored -- vendoring is impossible, not merely worse, because duplicate registration of a SimplePersistentEnvExtension is an import-time error and two vendored topic repos could never share a Lean environment. Recorded as the single named exception to CLAUDE.md section 1, bounded by the leaf property (zero transitive deps, core Lean only) and lapsing if that stops holding. It lives in its own minimal Lean-only repo, NOT in arXMCP/contract/ -- a Lake require on arXMCP would falsify that repo's CLAUDE.md 4.10, 'Sibling, never a subdirectory, never a dependency'."
     priority: must
     size: M
-    tags: [enabler, lean, trust]
+    tags: [enabler, lean, trust, named-exception]
 
   - id: contract-v1-e5
     gh_issue: 5

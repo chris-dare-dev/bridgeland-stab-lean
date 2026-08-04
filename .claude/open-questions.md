@@ -58,21 +58,28 @@ generalization gate. Sequencing is therefore settled, not judged.
 
 ---
 
-## Q3 — Shared Lake dependency for `@[cites]`, or vendored?
+## Q3 — Shared Lake dependency for `@[cites]`, or vendored? — **ANSWERED**
 
-**Blocks:** the emitter epic (M1). **Conflicts with a standing rule.**
+**Answered 2026-08-04 (UTC): shared dependency**, recorded as a **named
+exception** in `CLAUDE.md` §1 rather than taken silently. Full record in
+[`decisions/ADR-0008`](decisions/ADR-0008-cites-is-a-shared-lake-dependency.md).
 
-`CLAUDE.md` §1: *"Do not add a direct Mathlib `require`. A second pin is a
-second thing to drift."* A shared contract package is a second pin.
+Vendoring turned out not to be an option rather than a worse option: `@[cites]`
+is a `SimplePersistentEnvExtension`, and duplicate attribute registration is an
+import-time error, so two vendored topic repos could never coexist in one Lean
+environment.
 
-The counter-argument: `@[cites]` is a `SimplePersistentEnvExtension` and
-**duplicate attribute registration is an import-time error**, so two vendored
-topic repos can never coexist in one Lean environment. And the package is a leaf
-with **zero** transitive dependencies — core Lean only, no Mathlib — making it
-the least drift-prone pin in the tree.
+The exception is **bounded and lapses**: it rests on the package being a leaf
+with zero transitive dependencies (core Lean only, no Mathlib, no anchor). If
+that stops being true, the dependency comes out — it is not grandfathered.
 
-Recommendation: **shared dependency**, as a named exception to §1 recorded in
-`CLAUDE.md` rather than a silent violation.
+**One consequence worth knowing:** the package does **not** live in
+`arXMCP/contract/`, despite ADR-0007 putting the schemas there. A
+`[[require]]` on arXMCP would falsify the sentence written into that repo's
+`CLAUDE.md` §4.10 the same day — *"Sibling, never a subdirectory, never a
+dependency."* So the Lean package gets its own minimal Lean-only repo, and a
+topic repo pins two things that move on different clocks. That is deliberate,
+not an oversight; see ADR-0008 for why it does not relitigate ADR-0007.
 
 ---
 

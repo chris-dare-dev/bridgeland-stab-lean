@@ -15,6 +15,32 @@ rules.
 Bumping any pin is a deliberate act with a `formalization.yaml` update in the
 same commit. Never bump one to make a build error go away.
 
+### Named exceptions to the one-pin rule
+
+Exactly one, and it is listed here so a second one cannot be added quietly.
+
+**`MathFormalContract`** — the `@[cites]` attribute and the evidence emitter,
+a `[[require]]` at an exact commit. Decided in
+[`ADR-0008`](.claude/decisions/ADR-0008-cites-is-a-shared-lake-dependency.md).
+
+Vendoring it is not an option rather than a worse option: `@[cites]` is a
+`SimplePersistentEnvExtension`, and **duplicate attribute registration is an
+import-time error**, so two vendored topic repos could never coexist in one
+Lean environment.
+
+The exception is bounded by the property that justifies it — **the package is a
+leaf with zero transitive dependencies**, core Lean only, no Mathlib and no
+anchor. It cannot drag anything else in and cannot disagree with the anchor
+about a Mathlib revision. **If that ever stops being true, the exception
+lapses** and the dependency comes out; it is not grandfathered.
+
+Everything else in §1 applies to it unchanged: exact commit, never a branch,
+bumped deliberately with a `formalization.yaml` update in the same commit.
+
+Do **not** add a `[[require]]` on arXMCP to get this package. That repo's
+`CLAUDE.md` §4.10 states the relationship is *"Sibling, never a subdirectory,
+never a dependency"*, and a Lake require would make that false.
+
 ## 2. No `sorry`. Absent beats sorry-backed.
 
 `fidelity.sorry_count` is `0` and should stay there.
