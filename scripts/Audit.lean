@@ -41,6 +41,14 @@ open BridgelandStabLean
 #print axioms GroupAction.NormalizedShift.one_apply
 #print axioms GroupAction.NormalizedShift.inv_apply
 
+/-! ## GroupAction lane — ShiftAnalysis (step 3c groundwork) -/
+
+#print axioms GroupAction.NormalizedShift.map_add_nat
+#print axioms GroupAction.NormalizedShift.map_sub_nat
+#print axioms GroupAction.NormalizedShift.map_add_int
+#print axioms GroupAction.NormalizedShift.uniformContinuous
+#print axioms GroupAction.NormalizedShift.exists_radius
+
 /-! ## GroupAction lane — GLTilde (step 2) -/
 
 #print axioms GroupAction.rayVec
@@ -87,6 +95,8 @@ open BridgelandStabLean
 #print axioms GroupAction.smul_slicing_P
 #print axioms GroupAction.gltildeSlicingMulAction
 #print axioms GroupAction.gltilde_smul_slicing_P
+#print axioms GroupAction.relabel_intervalProp_iff
+#print axioms GroupAction.relabel_intervalProp
 
 /-! ## GroupAction lane — PreStabilityAction (step 3b) -/
 

@@ -69,9 +69,15 @@ axiomatizing the gap.
    - **3b — action on `PreStabilityCondition.WithClassMap`. Done**
      (2026-08-03), `GroupAction/PreStabilityAction.lean` + `actC` in
      `ComplexBridge.lean`.
-   - **3c — action on `StabilityCondition.WithClassMap`.** Next, and the
-     hardest. Needs local finiteness preserved, which needs uniform
-     continuity of `f⁻¹`. Schedule alone.
+   - **3c — action on `StabilityCondition.WithClassMap`. BLOCKED upstream.**
+     Its two tractable pieces are done (2026-08-03): uniform continuity
+     (`GroupAction/ShiftAnalysis.lean`) and interval reindexing
+     (`relabel_intervalProp`). What remains is a lemma the **anchor** lacks —
+     that strict Artinian/Noetherian restrict along a sub-interval's
+     full-subcategory inclusion. **Do not declare the `MulAction` on
+     `StabilityCondition.WithClassMap` until that lands**, and do not close
+     the gap with `sorry` (§2). Details in
+     [`notes/anchor-api-map.md`](notes/anchor-api-map.md) §4.
 
    Facts worth having up front:
 

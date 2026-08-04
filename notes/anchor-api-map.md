@@ -206,15 +206,55 @@ with `a := t - η`, `b := t + η`.
 
 **A single uniform `η` is quantified over all `t`.** A general normalized shift
 distorts intervals, so `(t-η, t+η)` does not map to a window of any fixed
-width. Preserving this is not bookkeeping.
+width.
 
-It is still true, and the argument is: `f⁻¹` is continuous and satisfies
-`f⁻¹(x+1) = f⁻¹(x)+1`, so its increment function is periodic, hence `f⁻¹` is
-**uniformly** continuous on all of `ℝ` by compactness of `[0,1]`. Pick `η'`
-with `|x - y| < 2η' → |f⁻¹x - f⁻¹y| < 2η`, and shrink below `1/2`.
+### Two of the three pieces are now proved
 
-That is a genuine real-analysis lemma with no existing consumer in this repo.
-Budget it separately; do not discover it mid-step.
+- **Uniform continuity.** `GroupAction/ShiftAnalysis.lean`:
+  `NormalizedShift.uniformContinuous`, and the consumable form
+  `NormalizedShift.exists_radius` — for any target width `w` and ceiling `M`
+  there is a radius `η < M` such that *every* window `(t-η, t+η)` maps to an
+  interval of width `< w`. One `η` for all centres `t`, which is exactly the
+  quantifier shape `IsLocallyFinite` demands. Continuity alone is free
+  (`OrderIso.continuous`); uniformity comes from `map_add_one` via
+  `map_add_int` and a modulus fixed on the compact `[-1, 2]`.
+- **Interval reindexing.** `GroupAction/SlicingAction.lean`:
+  `relabel_intervalProp` proves
+  `(f • s).intervalProp C a b = s.intervalProp C (f⁻¹ a) (f⁻¹ b)` — an
+  equality of `ObjectProperty`, not merely an equivalence. The interval
+  subcategories match on the nose; there is no structure to transport.
+
+### The third piece is a real obstacle, and it is NOT in the anchor
+
+Combining the two above gets you: the objects of
+`(f • s).IntervalCat C (t-η') (t+η')` are the objects of
+`s.IntervalCat C a' b'` where `a' := f⁻¹(t-η')`, `b' := f⁻¹(t+η')` and
+`b' - a' < 2η`. Setting `u := (a'+b')/2` gives `(a', b') ⊆ (u-η, u+η)`.
+
+The hypothesis supplies finite length for `s.IntervalCat C (u-η) (u+η)`. What
+is needed is finite length for `s.IntervalCat C a' b'` — a **full subcategory**
+of it. So 3c reduces to exactly one missing lemma:
+
+> `IsStrictArtinianObject` / `IsStrictNoetherianObject` restrict along the
+> inclusion `s.IntervalCat C a' b' ⥤ s.IntervalCat C a b` for
+> `a ≤ a'`, `b' ≤ b`.
+
+**This does not exist in the anchor, and cannot be assembled from what does.**
+Verified 2026-08-03:
+
+- `Slicing.intervalProp_mono` and `Slicing.IntervalCat.inclusion`
+  (`IntervalCategory/Basic.lean:185`) exist, but they are only the
+  object-property implication and the induced functor. `IsStrictArtinianObject`
+  (`QuasiAbelian/Basic.lean:448`) is ACC/DCC on *strict* subobjects, relative
+  to each interval category's own quasi-abelian structure, and does not
+  transfer along a full-subcategory inclusion for free.
+- `IsLocallyFinite`'s own docstring claims "any Bridgeland witness may be
+  shrunk to such an `η`" — but the anchor **never proves a shrinking lemma**.
+  Its only consumers (`Deformation/Setup.lean:58` and `:101`) just destructure
+  the witness, so it never had to.
+
+That is new quasi-abelian mathematics, not bookkeeping, and it is upstream
+work rather than glue. Budget it as its own milestone.
 
 ---
 
@@ -249,8 +289,13 @@ Do not attempt step 3 as one milestone.
    - **`simp` will not close `↑c * w = c • w`** — it normalises `•` into `*`,
      which is the direction you already have. Finish with
      `exact Complex.real_smul.symm`.
-3. **3c — action on `StabilityCondition.WithClassMap`.** Needs §4's uniform
-   continuity lemma. Hardest; schedule alone.
+3. **3c — action on `StabilityCondition.WithClassMap`. BLOCKED**, and the
+   block is upstream, not here. Its two tractable pieces are **done**
+   (2026-08-03): uniform continuity (`ShiftAnalysis.lean`) and interval
+   reindexing (`relabel_intervalProp`). What remains is the strict-finite-length
+   restriction lemma in §4, which is new quasi-abelian mathematics the anchor
+   does not have. **No `MulAction` on `StabilityCondition.WithClassMap` is
+   declared** — per `CLAUDE.md` §2, absent beats sorry-backed.
 
 Prove the `MulAction` laws (`one_smul`, `mul_smul`) at each stage rather than
 at the end — 3a's are cheap and will catch a wrong `f` vs `f⁻¹` convention

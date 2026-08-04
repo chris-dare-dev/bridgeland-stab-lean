@@ -76,15 +76,26 @@ fidelity:
     with a TODO, never declared with sorry, because a sorry-backed instance
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: the action on
-    StabilityCondition.WithClassMap, which needs local finiteness to be
-    preserved (step 3c); and the covering-space facts about GLTilde --
-    surjectivity of the projection to GL+(2,R), fibre Z, simple connectedness.
+    StabilityCondition.WithClassMap (step 3c), and the covering-space facts
+    about GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z,
+    simple connectedness.
+
+    Step 3c is BLOCKED, and deliberately left undeclared rather than sorried.
+    Its two tractable pieces are done: NormalizedShift.uniformContinuous /
+    exists_radius (ShiftAnalysis.lean) and relabel_intervalProp
+    (SlicingAction.lean). What remains is a lemma the ANCHOR does not have --
+    that IsStrictArtinianObject / IsStrictNoetherianObject restrict along the
+    full-subcategory inclusion of a sub-interval. The anchor's IsLocallyFinite
+    docstring asserts that shrinking a witness is harmless but never proves it,
+    and its only consumers (Deformation/Setup.lean:58,101) merely destructure
+    the witness. See notes/anchor-api-map.md section 4.
+
     Closed on 2026-08-03: the GL+(2,R) pairing (step 2), the action on Slicing
     (step 3a), and the action on PreStabilityCondition.WithClassMap (step 3b).
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 59 declarations this project
+    `lake env lean scripts/Audit.lean` over all 66 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -94,7 +105,7 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build BridgelandStabLean (3524 jobs, exit 0) plus a #print axioms
+    lake build BridgelandStabLean (3525 jobs, exit 0) plus a #print axioms
     pass over every introduced declaration. The anchor itself was also built
     from source for the first time (74 files, exit 0) -- it is not covered by
     Mathlib's cache and nothing had imported it until the step-3 API read.
@@ -119,9 +130,15 @@ fidelity:
     proved (step 3b). The compat' obligation is what forces the two factors to
     agree, and it is discharged by Compatible: a semistable object's charge
     ray moves from phase f-inverse phi to phase phi, with the positive scalar
-    m replaced by m * r. Still NOT the full section 8 action: nothing acts on
-    a StabilityCondition, which additionally carries local finiteness (step
-    3c). API mapped in notes/anchor-api-map.md.
+    m replaced by m * r. ShiftAnalysis proves a normalized shift is UNIFORMLY
+    continuous (not automatic for a continuous bijection of R; it follows from
+    map_add_one via integer translation and a modulus on a compact window),
+    with exists_radius as the consumable form, and SlicingAction adds
+    relabel_intervalProp: interval subcategories are reindexed exactly, as an
+    equality of ObjectProperty. Both are step-3c groundwork. Still NOT the full
+    section 8 action: nothing acts on a StabilityCondition, which additionally
+    carries local finiteness, and step 3c is blocked on an anchor-side lemma
+    (see sorry_details). API mapped in notes/anchor-api-map.md.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free

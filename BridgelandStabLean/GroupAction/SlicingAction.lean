@@ -105,6 +105,52 @@ instance gltildeSlicingMulAction : MulAction GLTilde (Slicing C) :=
 theorem gltilde_smul_slicing_P (x : GLTilde) (s : Slicing C) (φ : ℝ) :
     (x • s).P φ = s.P (x.shift⁻¹.toOrderIso φ) := rfl
 
+/-! ## Interval subcategories are reindexed, not deformed
+
+`Slicing.intervalProp s a b` is "zero, or has an HN filtration with every
+phase in `(a, b)`". Relabelling phases by `f` therefore just moves the window:
+the objects lying in `(a, b)` for `f • s` are exactly those lying in
+`(f⁻¹ a, f⁻¹ b)` for `s`.
+
+This is step 3c's other half. It says the interval subcategories match up on
+the nose — no equivalence to chase, no structure to transport — so the only
+remaining obstacle there is the *shape* of the window, which is what
+`NormalizedShift.exists_radius` addresses. See `notes/anchor-api-map.md` §4.
+-/
+
+theorem relabel_intervalProp_iff (f : NormalizedShift) (s : Slicing C) (a b : ℝ)
+    (E : C) :
+    (relabel C f s).intervalProp C a b E
+      ↔ s.intervalProp C (f⁻¹.toOrderIso a) (f⁻¹.toOrderIso b) E := by
+  constructor
+  · rintro (hz | ⟨F, hF⟩)
+    · exact Or.inl hz
+    · refine Or.inr ⟨{ toPostnikovTower := F.toPostnikovTower
+                       φ := fun i => f⁻¹.toOrderIso (F.φ i)
+                       hφ := fun _ _ h => f⁻¹.toOrderIso.lt_iff_lt.mpr (F.hφ h)
+                       semistable := F.semistable }, fun i => ?_⟩
+      exact ⟨f⁻¹.toOrderIso.lt_iff_lt.mpr (hF i).1,
+             f⁻¹.toOrderIso.lt_iff_lt.mpr (hF i).2⟩
+  · rintro (hz | ⟨G, hG⟩)
+    · exact Or.inl hz
+    · refine Or.inr ⟨{ toPostnikovTower := G.toPostnikovTower
+                       φ := fun i => f.toOrderIso (G.φ i)
+                       hφ := fun _ _ h => f.toOrderIso.lt_iff_lt.mpr (G.hφ h)
+                       semistable := fun i => ?_ }, fun i => ?_⟩
+      · show s.P (f⁻¹.toOrderIso (f.toOrderIso (G.φ i))) _
+        rw [NormalizedShift.inv_apply, OrderIso.symm_apply_apply]
+        exact G.semistable i
+      · refine ⟨?_, ?_⟩
+        · have h := f.toOrderIso.lt_iff_lt.mpr (hG i).1
+          rwa [NormalizedShift.inv_apply, OrderIso.apply_symm_apply] at h
+        · have h := f.toOrderIso.lt_iff_lt.mpr (hG i).2
+          rwa [NormalizedShift.inv_apply, OrderIso.apply_symm_apply] at h
+
+theorem relabel_intervalProp (f : NormalizedShift) (s : Slicing C) (a b : ℝ) :
+    (relabel C f s).intervalProp C a b
+      = s.intervalProp C (f⁻¹.toOrderIso a) (f⁻¹.toOrderIso b) :=
+  funext fun E => propext (relabel_intervalProp_iff C f s a b E)
+
 end
 
 end BridgelandStabLean.GroupAction

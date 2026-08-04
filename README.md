@@ -69,10 +69,19 @@ That is why step 2 defined `Compatible` the way it did.
 
 Two things that are deliberately *not* proved. `GLTilde` is not shown to be
 the universal cover — the projection is not shown surjective, the fibre is
-not shown to be `ℤ`, simple connectedness is untouched. And nothing yet acts
-on a full *stability condition*, which additionally carries local finiteness;
-preserving that needs uniform continuity of `f⁻¹` and is step 3c. See
-[`notes/anchor-api-map.md`](notes/anchor-api-map.md).
+not shown to be `ℤ`, simple connectedness is untouched. And nothing acts on a
+full *stability condition*, which additionally carries local finiteness.
+
+That last step is **blocked upstream**. Its two tractable pieces are done:
+`ShiftAnalysis` proves a normalized shift is *uniformly* continuous — not
+automatic for a continuous bijection of `ℝ`, and what the single-`η`-for-all-`t`
+shape of `IsLocallyFinite` requires — and `relabel_intervalProp` proves the
+interval subcategories are reindexed exactly. What remains is a lemma the
+**anchor** does not have: that strict Artinian/Noetherian restrict along a
+sub-interval's full-subcategory inclusion. The anchor's own docstring calls
+shrinking a witness "harmless" but never proves it. Rather than `sorry` the
+gap, no action on `StabilityCondition` is declared. See
+[`notes/anchor-api-map.md`](notes/anchor-api-map.md) §4.
 
 ### Lane 2 — `Lattice/` (closable today)
 
