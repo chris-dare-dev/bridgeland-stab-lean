@@ -169,9 +169,20 @@ is used twice, differently — once for the half-plane, once for the sign.
 Together these give an exact sequence `1 → ℤ → G̃L⁺(2,ℝ) → GL⁺(2,ℝ) → 1`
 (`exact_deckHom_toMatHom`).
 
-**Simple connectedness remains open**, and it is blocked on prerequisites
-rather than effort: nothing here puts a topology on `GLTilde`, and
-`π₁(S¹) ≅ ℤ` is not in Mathlib at the pinned revision.
+`lift` is canonical rather than chosen, so it is a genuine **section**:
+`existsUnique_deck_mul_sect` says every element factors uniquely as
+`deck n * sect x.mat`, which trivialises the `ℤ`-bundle globally with an
+explicit trivialisation. Note `sect` is *not* a group homomorphism — the
+extension is non-split, which is precisely what makes it interesting.
+
+**Simple connectedness remains open, and is not reachable at the pinned
+Mathlib.** Checked rather than assumed: `SimplyConnectedSpace`'s only instances
+there are `ofContractible` and `Unit`, and no fundamental group of any space is
+computed anywhere in that revision — so `π₁(S¹) ≅ ℤ` is unavailable and the
+covering-space route is closed. The remaining route is contractibility (true —
+`G̃L⁺(2,ℝ) ≅ ℝ⁴`), which needs a polar decomposition of `2 × 2` real matrices
+that Mathlib does not have at this pin. Independently, nothing here puts a
+topology on `GLTilde`, so the statement is not currently expressible.
 
 So `GLTilde` is still **not** shown to be the universal cover, and the gap is
 now a change of category rather than a missing lemma — a central extension by

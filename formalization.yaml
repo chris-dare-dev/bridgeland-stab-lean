@@ -106,9 +106,18 @@ fidelity:
     with a TODO, never declared with sorry, because a sorry-backed instance
     typechecks, gets imported, and launders an unproved claim downstream.
     Currently undeclared under that rule: exactly ONE item, simple
-    connectedness of GLTilde. It is blocked on prerequisites rather than effort
-    -- no topology on GLTilde exists anywhere in this repo, and pi_1(S^1) = Z
-    is not in Mathlib at the pin 8a178386 (checked). The other two
+    connectedness of GLTilde. Not reachable at this pin, and the check was run
+    rather than assumed. (a) SimplyConnectedSpace exists in Mathlib 8a178386
+    but its ONLY instances are ofContractible and Unit; no fundamental group of
+    any space is computed anywhere at this revision, so pi_1(S^1) = Z is
+    unavailable and the covering-space route is closed. (b) The remaining route
+    is contractibility -- true, since GLTilde is homeomorphic to R^4 -- which
+    needs a polar or Iwasawa decomposition of 2x2 real matrices, and Mathlib
+    has NO matrix polar decomposition at this pin (zero files match). (c)
+    Independently, nothing in this repo puts a topology on GLTilde, so the
+    statement is not currently expressible here. This is a
+    missing-prerequisite program in the sense of CLAUDE.md section 4, not a
+    task; it must not be stubbed. The other two
     covering-space facts are both CLOSED 2026-08-04: the Z fibre in
     GLTildeFibre.lean, and surjectivity of the projection in GLTildeSurj.lean.
     The MulAction gap listed here previously is also CLOSED; see the second
@@ -181,11 +190,11 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-04 at commit
-    HEAD-of-GLTildeSurj via `lake env lean scripts/Audit.lean` over all 169
+    HEAD-of-GLTildeSurj via `lake env lean scripts/Audit.lean` over all 174
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass. (Was 124 at 5b40d5a; AutPairAction.lean added 11,
-    GLTildeFibre.lean 10, GLTildeSurj.lean 24.)
+    GLTildeFibre.lean 10, GLTildeSurj.lean 29.)
     The same script carries rfl/simp spot checks that the Group instance
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.

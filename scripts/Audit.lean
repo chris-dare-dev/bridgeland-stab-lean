@@ -234,6 +234,10 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.liftShift
 #print axioms BridgelandStabLean.GroupAction.compatible_liftShift
 #print axioms BridgelandStabLean.GroupAction.toMatHom_surjective
+#print axioms BridgelandStabLean.GroupAction.sect
+#print axioms BridgelandStabLean.GroupAction.toMatHom_comp_sect
+#print axioms BridgelandStabLean.GroupAction.deck_injective
+#print axioms BridgelandStabLean.GroupAction.existsUnique_deck_mul_sect
 #print axioms BridgelandStabLean.GroupAction.exact_deckHom_toMatHom
 
 /-! ## AutPairAction — the same action, as a genuine `MulAction` -/

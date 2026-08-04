@@ -407,6 +407,55 @@ so it lies in the image of the projection. -/
 theorem toMatHom_surjective : Function.Surjective GLTilde.toMatHom :=
   fun T => ⟨⟨T, liftShift T, compatible_liftShift T⟩, rfl⟩
 
+/-! ## The canonical section, and the `ℤ`-torsor structure
+
+What surjectivity gives beyond a bare existence statement: `lift` is *canonical*
+— it is written down, not chosen — so it is a genuine **section** of the
+projection, and every element of `G̃L⁺(2, ℝ)` factors uniquely through it.
+
+This is the concrete content that a covering-map proof would rest on: it
+trivialises the bundle globally, with an explicit trivialisation. What it is
+**not** is a topological statement of any kind; see `exact_deckHom_toMatHom`. -/
+
+/-- The canonical section of the projection, given by the explicit lift. -/
+noncomputable def sect (T : Matrix.GLPos (Fin 2) ℝ) : GLTilde :=
+  ⟨T, liftShift T, compatible_liftShift T⟩
+
+@[simp] theorem sect_mat (T : Matrix.GLPos (Fin 2) ℝ) : (sect T).mat = T := rfl
+
+theorem toMatHom_comp_sect (T : Matrix.GLPos (Fin 2) ℝ) :
+    GLTilde.toMatHom (sect T) = T := rfl
+
+theorem deck_injective : Function.Injective deck := by
+  intro m n h
+  have : deckHom (Multiplicative.ofAdd m) = deckHom (Multiplicative.ofAdd n) := h
+  simpa using deckHom_injective this
+
+/-- **Unique factorisation.** Every element is a deck transformation composed
+with the canonical lift of its own matrix part.
+
+`sect` is not a group homomorphism — `G̃L⁺(2, ℝ)` is a *non-split* central
+extension, which is exactly why it is interesting — so this is a bijection of
+sets with a canonical section, not a semidirect-product decomposition. -/
+theorem existsUnique_deck_mul_sect (x : GLTilde) :
+    ∃! n : ℤ, x = deck n * sect x.mat := by
+  have hker : x * (sect x.mat)⁻¹ ∈ GLTilde.toMatHom.ker := by
+    simp only [MonoidHom.mem_ker, map_mul, map_inv, toMatHom_comp_sect]
+    show x.mat * x.mat⁻¹ = 1
+    exact mul_inv_cancel _
+  rw [← range_deckHom_eq_ker] at hker
+  obtain ⟨m, hm⟩ := hker
+  refine ⟨Multiplicative.toAdd m, ?_, ?_⟩
+  · show x = deck (Multiplicative.toAdd m) * sect x.mat
+    have hd : deck (Multiplicative.toAdd m) = x * (sect x.mat)⁻¹ := hm
+    rw [hd, inv_mul_cancel_right]
+  · intro n hn
+    refine deck_injective ?_
+    -- Rewriting with `hn` directly would also hit the `x` inside `x.mat`.
+    have h1 : x * (sect x.mat)⁻¹ = deck n := mul_inv_eq_iff_eq_mul.mpr hn
+    have h2 : deck (Multiplicative.toAdd m) = x * (sect x.mat)⁻¹ := hm
+    rw [h2, h1]
+
 /-- **The two covering-space facts, together.**
 
 `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1` is exact: `deckHom` is injective, its

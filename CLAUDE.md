@@ -194,9 +194,29 @@ Four claims to keep off the page.
   `toMatHom_surjective`). So `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1` is exact —
   `exact_deckHom_toMatHom` bundles all three exactness facts.
 
-  **Simple connectedness: open**, and blocked on prerequisites rather than
-  effort. No topology on `GLTilde` exists anywhere here, and `π₁(S¹) ≅ ℤ` is
-  not in Mathlib at the pin.
+  **Simple connectedness: open, and not reachable at this pin.** Checked
+  against the pinned Mathlib (`8a178386`), not assumed:
+
+  - `SimplyConnectedSpace` exists, but its **only** instances are
+    `ofContractible` and `Unit`. No fundamental group of any space is computed
+    anywhere in Mathlib at this revision, so `π₁(S¹) ≅ ℤ` is unavailable and
+    the covering-space route is closed.
+  - The one open route is therefore **contractibility** — true, since
+    `G̃L⁺(2, ℝ) ≅ ℝ⁴` — which needs a polar or Iwasawa decomposition of
+    `2 × 2` real matrices. **Mathlib has no matrix polar decomposition at this
+    pin** (zero files match).
+  - Independently, nothing in this repo puts a topology on `GLTilde` at all, so
+    the statement is not currently expressible here, let alone provable.
+
+  Treat this the way §4 treats the geometric lane: a missing-prerequisite
+  program, not a task. Do **not** stub it — §2 is unconditional.
+
+  What *is* done in that direction is `GLTildeSurj.lean`'s
+  `existsUnique_deck_mul_sect`: `lift` is a canonical **section**, and every
+  element factors uniquely as `deck n * sect x.mat`. That globally trivialises
+  the `ℤ`-bundle with an explicit trivialisation, and is what a covering-map
+  proof would be built on — but it is a statement about sets and groups, with
+  no topological content.
 
   The trap, and it is sharper now that the algebra is done: **a central
   extension of `GL⁺(2, ℝ)` by `ℤ` is a statement about groups; the universal
