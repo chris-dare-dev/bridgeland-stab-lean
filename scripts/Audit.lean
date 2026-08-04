@@ -167,6 +167,15 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms GroupAction.AutQuot.mk
 #print axioms GroupAction.AutQuot.mk_smul_P
 
+/-! ## K0Functor — K₀ is functorial in triangulated functors -/
+
+#print axioms CategoryTheory.Triangulated.isTriangleAdditive_of_isTriangulated
+#print axioms CategoryTheory.Triangulated.K₀.mapF
+#print axioms CategoryTheory.Triangulated.K₀.mapF_of
+#print axioms CategoryTheory.Triangulated.K₀.mapF_id
+#print axioms CategoryTheory.Triangulated.K₀.mapF_comp
+#print axioms CategoryTheory.Triangulated.K₀.mapF_congr
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

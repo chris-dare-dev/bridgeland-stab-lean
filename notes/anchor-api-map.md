@@ -419,6 +419,48 @@ instance at the `(ρ.equiv g).functor` form (search will not unfold it to
 `ρ.F g`), and must be `letI` rather than `haveI` — `Functor.IsTriangulated`
 depends on the `CommShift` instance, and an opaque `haveI` breaks the match.
 
+### Scouting the three remaining pieces (2026-08-03)
+
+**1. `K₀` functoriality — DONE, and it was nearly free.**
+`GroupAction/K0Functor.lean`. `K₀.lift` wants an `IsTriangleAdditive` function,
+and `X ↦ [F X]` is one whenever `F` is triangulated: `F.map_distinguished`
+carries the triangle and `(F.mapTriangle.obj T).obj₁` is *definitionally*
+`F.obj T.obj₁`. So the instance is one line and `mapF_id` / `mapF_comp` /
+`mapF_congr` are `ext; simp`. `mapF_congr` — naturally isomorphic functors
+induce the same map, via `K₀.of_iso` — is the `K₀`-level analogue of
+`TriEquiv.act_congr` and is what will make the class-map half descend to
+`AutQuot`.
+
+**2. Class-map compatibility — a design choice, not a difficulty.** An
+autoequivalence acts on `WithClassMap C v` only paired with `λ : Λ ≃+ Λ`
+satisfying `v ∘ K₀.mapF Φ = λ ∘ v`. Forced when `v = id`; extra data otherwise.
+Structurally the same move `Compatible` makes for `GLTilde`, and now that
+`K₀.mapF` exists there is nothing missing — only the decision about how to
+bundle it.
+
+**3. Strict finite length under an equivalence — the real remaining work.**
+Moderate, not trivial. Two sub-parts:
+
+- The anchor's general transfer lemma
+  `isStrictArtinianObject_of_faithful_map_strictMono`
+  (`QuasiAbelian/Basic.lean:691`) applies to any full+faithful strict-mono-preserving
+  functor — but it wants **ordinary** `IsArtinianObject` of the image, which is
+  strictly stronger than what `IsLocallyFinite` supplies. The *strict*-hypothesis
+  versions exist only as the interval-specific
+  `interval_strictArtinianObject_of_inclusion_strict`
+  (`Deformation/IntervalSelection.lean:206`, and the Noetherian twin at `:274`),
+  and each **hand-rolls a ~70-line `StrictSubobject` order-embedding** rather
+  than calling a general helper. Extracting that argument into a general
+  strict-hypothesis lemma is the first sub-part.
+- Then: `Φ` induces a full+faithful functor
+  `(Φ • s).IntervalCat C a b ⥤ s.IntervalCat C a b` — note the endpoints do
+  **not** move, unlike step 3c — and it must be shown to preserve strict monos.
+  Since `IsStrict` is defined by the coimage-image comparison, this needs that
+  comparison to transfer along an equivalence.
+
+Estimate: ~150+ lines. This is the piece to budget for; the other two are done
+or decided.
+
 Still to do for stability conditions:
 
 1. `K₀` functoriality — `K₀.map Φ` via `K₀.lift` plus an `IsTriangleAdditive`

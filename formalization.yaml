@@ -142,7 +142,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 105 declarations this project
+    `lake env lean scripts/Audit.lean` over all 111 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -152,7 +152,7 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build (3544 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
+    lake build (3545 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
     defaultTargets, so `lake build` elaborates it and its 90 audit records are
@@ -261,13 +261,32 @@ fidelity:
     -- is exactly what makes the quotient action well defined. One gap in the
     setoid is recorded in known_divergences.
 
-    NOT declared on either route: the Aut action on STABILITY CONDITIONS. That
-    needs K0 functoriality, a class-map compatibility datum, and invariance of
-    strict finite length under an EQUIVALENCE of interval categories -- a
-    different problem from step 3c, where phase windows do not move and the
-    anchor's interval_thinFiniteLength_of_inclusion_strict applies. Also not
-    covered: the covering-space identification of GLTilde (see
-    known_divergences). API mapped in notes/anchor-api-map.md.
+    NOT declared on either route: the Aut action on STABILITY CONDITIONS. Of
+    the three pieces that needs, one is now DONE and one is only a decision:
+
+    K0Functor.lean supplies K0 functoriality -- K0.mapF for a triangulated
+    functor, with mapF_id, mapF_comp, and mapF_congr (naturally isomorphic
+    functors induce the SAME map, the K0-level analogue of TriEquiv.act_congr
+    and what will let the class-map half descend to AutQuot). It was nearly
+    free: X maps to the class of F X is triangle-additive because
+    F.map_distinguished carries the triangle and mapTriangle's components are
+    definitionally F applied to the originals.
+
+    The class-map compatibility datum is a design choice, not a difficulty:
+    pair the autoequivalence with an automorphism of Lambda commuting with v,
+    structurally as Compatible does for GLTilde.
+
+    What remains is invariance of strict finite length under an EQUIVALENCE of
+    interval categories -- a different problem from step 3c, where phase
+    windows do not move and the anchor's
+    interval_thinFiniteLength_of_inclusion_strict applies. The anchor's general
+    transfer lemma isStrictArtinianObject_of_faithful_map_strictMono wants
+    ORDINARY IsArtinianObject of the image, stronger than IsLocallyFinite
+    gives; the strict-hypothesis versions exist only interval-specifically and
+    each hand-rolls a roughly 70-line StrictSubobject order-embedding.
+    Estimate: 150+ lines. Also not covered: the covering-space identification
+    of GLTilde (see known_divergences). API mapped in
+    notes/anchor-api-map.md.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
