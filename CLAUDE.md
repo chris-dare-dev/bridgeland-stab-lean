@@ -78,12 +78,20 @@ axiomatizing the gap.
    (`GroupAction/AutAction.lean`: `PostnikovTower.mapF`, `HNFiltration.mapF`,
    `Slicing.mapEquiv`), the action on `WithClassMap` not.
 
-   **Before writing more `Aut` code, settle the packaging question.** `C ≌ C`
-   is associative only up to natural isomorphism, so it has **no `Group`
-   instance** and `MulAction` is the wrong target — unlike `GLTilde`. Then:
-   `K₀` functoriality, a class-map compatibility datum, and invariance of
-   strict finite length under an *equivalence* of interval categories (a
-   different problem from 3c — phase windows do not move here, so
+   The packaging question is settled by **restriction** (owner decision,
+   2026-08-03): `GroupAction/StrictAutAction.lean` takes a group mapping
+   *strictly* into `C ⥤ C`, which is an honest monoid under `⋙`, giving a real
+   `MulAction G (Slicing C)`.
+
+   **Do not over-claim it.** `StrictAut.map_one`/`map_mul` are equalities of
+   functors, so each `F g` is an **isomorphism of categories**, not merely an
+   equivalence — Serre functors and spherical twists are *out of scope*. Never
+   write "the `Aut` action is formalized".
+
+   Still needed for stability conditions: `K₀` functoriality, a class-map
+   compatibility datum, and invariance of strict finite length under an
+   *equivalence* of interval categories (a different problem from 3c — phase
+   windows do not move here, so
    `interval_thinFiniteLength_of_inclusion_strict` does not apply).
    [`notes/anchor-api-map.md`](notes/anchor-api-map.md) §7.
 

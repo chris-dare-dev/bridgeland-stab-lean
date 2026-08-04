@@ -85,11 +85,19 @@ transport at all, so `PostnikovTower.mapF`, `HNFiltration.mapF` and
 `Slicing.mapEquiv` are built from scratch — the last giving
 `(Φ • s).P φ X = s.P φ (Φ⁻¹ X)`.
 
-The `Aut` action on stability conditions is **not** declared. It needs `K₀`
-functoriality, a class-map compatibility datum, and invariance of strict finite
-length under an equivalence — and, first, a decision about packaging: `C ≌ C`
-is associative only up to natural isomorphism, so it has no `Group` instance
-and `MulAction` is the wrong target.
+`StrictAutAction` then supplies group packaging. `C ≌ C` has no `Group`
+instance — composition is associative only up to natural isomorphism — but
+**functor composition in Lean is strictly associative**, so `C ⥤ C` is an
+honest monoid under `⋙`. A group mapping *strictly* into it therefore gets a
+real `MulAction G (Slicing C)`, with `(g • s).P φ X = s.P φ (g⁻¹ X)`.
+
+**That restriction is real.** `map_one`/`map_mul` are equalities of functors,
+so each `F g` is an *isomorphism of categories*, not merely an equivalence —
+Serre functors and spherical twists are out of scope. It is a deliberate
+trade: a strict `MulAction` now, instead of quotienting to isomorphism
+classes. The `Aut` action on *stability conditions* is not declared at all; it
+would also need `K₀` functoriality, a class-map compatibility datum, and
+invariance of strict finite length under an equivalence.
 
 Also not proved: `GLTilde` is not shown to be the universal cover — the
 projection is not shown surjective, the fibre is not shown to be `ℤ`, simple

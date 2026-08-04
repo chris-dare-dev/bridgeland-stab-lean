@@ -356,14 +356,40 @@ Three API notes that cost build cycles:
 - `ObjectProperty.prop_of_iso` takes the property **explicitly**
   (`prop_of_iso _ e h`), and `HNFiltration.ofIso` takes `C` explicitly.
 
-**Not done, and the packaging question comes first.** Unlike `GLTilde`, the
-acting object is not a group in Lean: `C ≌ C` under composition is associative
-only up to natural isomorphism, so it has no `Group` instance and `MulAction`
-is the wrong target. "`Aut(D)` acts" is a statement about isomorphism classes;
-a strict formalisation needs a quotient or a strictified group. **Decide that
-before writing more.**
+**Packaging: resolved by restriction** (owner decision, 2026-08-03). `C ≌ C` is
+associative only up to natural isomorphism, so it has no `Group` instance.
+Rather than quotient to isomorphism classes, `GroupAction/StrictAutAction.lean`
+asks for a group that maps into endofunctors **strictly** — which works because
+**functor composition in Lean is strictly associative**, so `C ⥤ C` is an
+honest monoid under `⋙`:
 
-Then three pieces:
+```lean
+structure StrictAut (G) [Group G] (C) … where
+  F : G → (C ⥤ C)
+  map_one : F 1 = 𝟭 C
+  map_mul : ∀ g h, F (g * h) = F h ⋙ F g      -- ⋙ is diagrammatic order
+  additive / commShift / triangulated : ∀ g, …
+```
+
+That yields a genuine `MulAction G (Slicing C)`, with
+`(g • s).P φ X = s.P φ (g⁻¹ X)` — dual to `relabel`. `StrictAut.equiv` turns
+the strict data into an `Equivalence` (unit/counit are `eqToIso`; the coherence
+field discharges automatically), so all of `Slicing.mapEquiv` is reused.
+
+**The restriction is real, not cosmetic.** `map_one`/`map_mul` are *equalities
+of functors*, so `F g ⋙ F g⁻¹ = 𝟭 C` on the nose: each `F g` is an
+**isomorphism of categories**, not merely an equivalence. Serre functors and
+spherical twists satisfy that only up to natural isomorphism and are therefore
+**out of scope**. This buys a strict `MulAction` today at the cost of the cases
+one actually cares about downstream; the general `Aut(D)` action still wants
+the quotient. Do not cite it as "the `Aut` action is formalized".
+
+Two implementation notes: the instance `letI`s in `actSlicing` must state each
+instance at the `(ρ.equiv g).functor` form (search will not unfold it to
+`ρ.F g`), and must be `letI` rather than `haveI` — `Functor.IsTriangulated`
+depends on the `CommShift` instance, and an opaque `haveI` breaks the match.
+
+Still to do for stability conditions:
 
 1. `K₀` functoriality — `K₀.map Φ` via `K₀.lift` plus an `IsTriangleAdditive`
    proof. The anchor has `K₀.lift` (`GrothendieckGroup/Basic.lean:162`) but no

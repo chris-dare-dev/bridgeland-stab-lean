@@ -1,8 +1,19 @@
 # Trust record for BridgelandStabLean.
 #
-# Schema deliberately mirrors mattrobball/BridgelandStability's
-# formalization.yaml key-for-key, so a single parser can pin both the anchor
-# and this extension. Do not rename keys to taste.
+# Schema FOLLOWS mattrobball/BridgelandStability's formalization.yaml: same
+# top-level blocks, same key names, same intent. It is NOT a key-for-key
+# mirror, and a single parser does NOT read both without a shim. The known
+# divergences, as of 2026-08-04:
+#
+#   - the anchor's first key, `schema_version`, is absent here;
+#   - `dependencies` is a list of mappings here, a list of strings there;
+#   - `human_review` is a scalar here, a list of mappings there;
+#   - `machine_review` and `source_mapping` are scalars here, mappings there;
+#   - `funding`, `sorry_in_definitions`, and `upstream_prs`/`reviews` differ
+#     in type or presence.
+#
+# Do not rename keys to taste. Closing these divergences is tracked as
+# .claude/roadmap/contract-v1.yaml -> contract-v1-e1 (GitHub #13).
 #
 # Every field is a claim. If a field cannot be filled honestly, it says
 # "none" or "pending" -- never a flattering guess.
@@ -28,7 +39,19 @@ source:
   title: "Stability conditions on triangulated categories (section 8)"
   authors:
     - Tom Bridgeland
-  id: math/0212237
+  # Versioned deliberately. An unversioned arXiv id resolves to whatever is
+  # latest at fetch time, which makes every downstream quote hash a claim about
+  # an unidentified document. Confirmed by the owner on 2026-08-04, not
+  # inferred: the arXMCP corpus records `arxiv_version = ''` for every row in
+  # every notebook, so nothing on this machine knows which version it holds.
+  #
+  # UNRESOLVED, and it matters: arxiv.org/abs/math/0212237 lists THREE versions
+  # -- v1 (2002-12-17), v2 (2003-05-02), v3 (2006-02-08) -- and v3 is latest.
+  # The corpus fetches ar5iv for the bare id, i.e. latest, so it most likely
+  # holds v3 while this record pins v2. Until that is reconciled, treat any
+  # quote match against the corpus as a match against an unknown version.
+  # Tracked as GitHub #12 / #44.
+  id: math/0212237v2
   type: arXiv
   license: arXiv perpetual non-exclusive
   author_contacted: false
@@ -78,14 +101,22 @@ fidelity:
     Currently undeclared under that rule: the covering-space facts about
     GLTilde -- surjectivity of the projection to GL+(2,R), fibre Z, simple
     connectedness -- and the autoequivalence (Aut) action on stability
-    conditions. The Aut track's transport groundwork IS landed (AutAction.lean:
-    PostnikovTower.mapF, HNFiltration.mapF, Slicing.mapEquiv, all proved); what
-    is undeclared is the action on WithClassMap, which needs K0 functoriality,
-    a class-map compatibility datum, and invariance of strict finite length
-    under an equivalence of interval categories. Note also that the acting
-    object is NOT a group in Lean -- C equiv C is associative only up to
-    natural isomorphism -- so MulAction is the wrong target for Aut and the
-    packaging question is open. See notes/anchor-api-map.md section 7.
+    conditions. The Aut track's groundwork IS landed: AutAction.lean
+    (PostnikovTower.mapF, HNFiltration.mapF, Slicing.mapEquiv) and
+    StrictAutAction.lean, which gives a genuine MulAction G (Slicing C) for a
+    group mapping STRICTLY into endofunctors. What is undeclared is the action
+    on WithClassMap, which needs K0 functoriality, a class-map compatibility
+    datum, and invariance of strict finite length under an equivalence of
+    interval categories. See notes/anchor-api-map.md section 7.
+
+    SCOPE WARNING on StrictAut. Its map_one and map_mul are EQUALITIES of
+    functors, so F g composed with F g-inverse is the identity on the nose:
+    each F g is an isomorphism of categories, not merely an equivalence. Serre
+    functors and spherical twists satisfy that only up to natural isomorphism
+    and are therefore OUT OF SCOPE. This was an explicit owner decision
+    (2026-08-03) to take a strict subgroup rather than quotient C equiv C to
+    isomorphism classes, and it is a real restriction. Do not cite it as "the
+    Aut action is formalized".
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
@@ -102,7 +133,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-03 via
-    `lake env lean scripts/Audit.lean` over all 77 declarations this project
+    `lake env lean scripts/Audit.lean` over all 90 declarations this project
     introduces: every one depends on exactly [propext, Classical.choice,
     Quot.sound] and nothing else. No sorryAx. Allowlist verdict: pass.
     The same script carries rfl/simp spot checks that the Group instance
@@ -112,10 +143,27 @@ fidelity:
   builds_clean_date: 2026-08-03
   human_review: none
   machine_review: >
-    lake build BridgelandStabLean (3540 jobs, exit 0) plus a #print axioms
-    pass over every introduced declaration. The anchor itself was also built
-    from source for the first time (74 files, exit 0) -- it is not covered by
-    Mathlib's cache and nothing had imported it until the step-3 API read.
+    lake build (3542 jobs, exit 0). Since 2026-08-03 the #print axioms pass is
+    a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
+    by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
+    defaultTargets, so `lake build` elaborates it and its 77 audit lines are
+    build output. The anchor itself was also built from source for the first
+    time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
+    had imported it until the step-3 API read.
+
+    Bringing the audit into the build immediately caught rot the manual
+    workflow could not: the SlicingChecks section did not compile under this
+    package's own `[leanOptions] autoImplicit = false`. It had only ever been
+    run via `lake env lean`, which does not apply the package's leanOptions, so
+    the universe variables `u` and `v` were auto-bound and the section
+    elaborated by accident. Fixed by an explicit `universe u v`.
+
+    Being in the build is still NOT a gate. `#print axioms` prints its result
+    and exits 0, so a sorryAx-backed declaration would build green here; the
+    allowlist verdict above comes from reading the output, not from the exit
+    code. A real gate requires an emitter that sweeps Environment.constants
+    (.claude/roadmap/contract-v1.yaml -> contract-v1-e4).
+
     No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free

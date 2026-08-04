@@ -1,6 +1,6 @@
 name = "BridgelandStabLean"
 version = "0.1.0"
-defaultTargets = ["BridgelandStabLean"]
+defaultTargets = ["BridgelandStabLean", "Audit"]
 keywords = ["math"]
 
 [leanOptions]
@@ -20,3 +20,16 @@ rev = "9e48f23a382ba117b63076a33e0e775389fef1ba"
 
 [[lean_lib]]
 name = "BridgelandStabLean"
+
+# The axiom audit, as a build target rather than a file someone remembers to
+# run. Covered by no lean_lib until 2026-08-03, so `lake build` never touched
+# it and it could fall behind the source tree silently.
+#
+# This makes it fail to BUILD when a name it prints no longer exists. It does
+# NOT make it a gate: `#print axioms` prints `[sorryAx]` and exits 0, so a
+# sorry-backed declaration still builds green here. The gate is the emitter
+# (contract-v1-e4), which sweeps `Environment.constants` instead of listing
+# names by hand.
+[[lean_lib]]
+name = "Audit"
+srcDir = "scripts"

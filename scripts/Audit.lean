@@ -1,11 +1,18 @@
 /-
 Axiom + sorry audit over every declaration this project introduces.
 
-Run: `lake env lean scripts/Audit.lean`
+Run: `lake env lean scripts/Audit.lean` (to read the output), or `lake build`
+(to check it still elaborates).
 
-Not part of the library build (no `lean_lib` covers `scripts/`); it is a
-manual gate whose output backs the `fidelity` block of `formalization.yaml`.
-Re-run it before editing that block, and paste what it actually prints.
+Part of the library build since 2026-08-04: `[[lean_lib]] name = "Audit"` with
+`srcDir = "scripts"`, in `defaultTargets`. Its output backs the `fidelity`
+block of `formalization.yaml`; re-run it before editing that block, and paste
+what it actually prints.
+
+Being in the build is not the same as being a gate. `#print axioms` prints
+`[sorryAx]` and exits 0, so a sorry-backed declaration builds green here. What
+the build now catches is this file falling behind the source tree in one
+direction only -- see below.
 
 Reading the output: a declaration is clean iff its axiom list is a subset of
 [propext, Classical.choice, Quot.sound]. Any other name -- above all
@@ -126,6 +133,22 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.Slicing.mapEquiv
 #print axioms CategoryTheory.Triangulated.Slicing.mapEquiv_P
 
+/-! ## StrictAutAction — a strict subgroup of autoequivalences -/
+
+#print axioms GroupAction.StrictAut
+#print axioms GroupAction.StrictAut.comp_inv
+#print axioms GroupAction.StrictAut.inv_comp
+#print axioms GroupAction.StrictAut.obj_inv
+#print axioms GroupAction.StrictAut.obj_self
+#print axioms GroupAction.StrictAut.F_inv_one
+#print axioms GroupAction.StrictAut.F_inv_mul
+#print axioms GroupAction.StrictAut.equiv
+#print axioms GroupAction.StrictAut.equiv_functor
+#print axioms GroupAction.StrictAut.equiv_inverse
+#print axioms GroupAction.StrictAut.actSlicing
+#print axioms GroupAction.StrictAut.actSlicing_P
+#print axioms GroupAction.StrictAut.mulActionSlicing
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually
@@ -175,6 +198,13 @@ section SlicingChecks
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
 open CategoryTheory.Triangulated GroupAction
+
+-- Declared explicitly. `lake env lean` does not apply the package's
+-- `[leanOptions]`, so under a bare `lean` invocation `u` and `v` were
+-- auto-bound and this section elaborated by accident. Under the repo's actual
+-- settings (`autoImplicit = false`) it did not compile at all -- which is
+-- exactly the rot that covering this file with a `lean_lib` is meant to catch.
+universe u v
 
 variable (C : Type u) [Category.{v} C] [Limits.HasZeroObject C] [HasShift C ℤ]
   [Preadditive C] [∀ n : ℤ, (shiftFunctor C n).Additive] [Pretriangulated C]

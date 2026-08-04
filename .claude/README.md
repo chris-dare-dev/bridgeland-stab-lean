@@ -36,6 +36,14 @@ second agent instructed to default to REFUTED when it could not confirm.
 3. `notes/2026-08-04-contract-red-team.md` (what is wrong with the design)
 4. Only then the architecture and schema docs, which are long.
 
+## Dates in this directory are UTC
+
+Everything under `.claude/` is dated **UTC**. The rest of the repo —
+`formalization.yaml`, git commits, `notes/` at the top level — is dated
+**local (America/New_York)**. So an ADR reading `2026-08-04` and a trust-record
+field reading `2026-08-03` can describe the same evening. Do not "fix" one to
+match the other.
+
 ## Line numbers in `notes/` are snapshots
 
 The audit's citations into **this** repo are valid at commit `fb47a38` only —
