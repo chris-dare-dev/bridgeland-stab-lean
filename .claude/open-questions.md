@@ -31,7 +31,7 @@ change, not the two the architecture budgeted.
 
 ---
 
-## Q2 — Where does the contract package live? — **REOPENED**
+## Q2 — Where does the contract package live? — **ANSWERED (again)**
 
 **Answered 2026-08-04 as `arXMCP/contract/`; WITHDRAWN the same day.** The
 answer rested on `_pipeline/stage-1-discovery/synthesis/target-architecture.md`,
@@ -63,7 +63,16 @@ that repo's `CLAUDE.md` §4.10 *"Sibling, never a subdirectory, never a
 dependency"* — and arXMCP's §4.10 also states plainly that **arXMCP does not
 host formalization work**.
 
-So the live options are:
+**Answered 2026-08-04 (later): `math-formal-contract-lean`**, alongside the
+emitter. Recorded in
+[`decisions/ADR-0009`](decisions/ADR-0009-contract-package-lives-with-the-emitter.md),
+which replaces ADR-0007 and — unlike it — carries a reversal condition that can
+be checked with a command rather than a citation.
+
+`mfc` is a **shared** tool again: "rule 7", the only thing that made it
+arXMCP-side-only, came from the missing document.
+
+The options as they stood when the question was reopened:
 
 1. **`math-formal-contract-lean`** — consolidate the contract in the repo
    already named for it, next to the emitter it describes. Its zero-dependency
