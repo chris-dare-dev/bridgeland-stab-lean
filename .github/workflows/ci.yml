@@ -7,11 +7,10 @@ name: CI
 # Update `machine_review` in the same commit that changes this file, per
 # CLAUDE.md §6.
 #
-# SCOPE. Issue #29 specifies seven steps. Steps 2-7 all require `mfc` (#21) and
-# the emitter wired into this repo, neither of which exists yet, so they are
-# NOT here:
+# SCOPE. Issue #29 specifies seven steps. Both preconditions it named have since
+# landed -- `mfc` (#21) and the emitter wired into this repo -- so step 2 is now
+# here. Steps 3-7 are not:
 #
-#   2. lake exe mfc-emit --out attest/
 #   3. mfc bundle | lint | conformance
 #   4. mfc check-ilean-coverage            (the vacuous-pass guard, #31)
 #   5. mfc check-resolution
@@ -88,6 +87,47 @@ jobs:
             exit 1
           fi
           echo "ok: no sorry warnings"
+
+      # #29 step 2. This is the ONLY place the emitter exe is ever LINKED.
+      #
+      # It is not in `defaultTargets` -- `lake build` should stay a statement
+      # about whether the library compiles -- so nothing above builds it, and
+      # without this step its linkability would be an assumption rather than an
+      # observation. That distinction is not hypothetical here: the exe CANNOT
+      # be linked on Windows, where `supportInterpreter = true` pushes a
+      # Mathlib-scale environment past the PE export table
+      # (`ld.lld: too many exported symbols (got 134112, max 65535)`). ELF has
+      # no such cap, which is why this is expected to work here and does not
+      # there. If this step ever goes red, that asymmetry is what to check.
+      #
+      # The exit code is the gate: `emitMain` returns non-zero when any
+      # constant's axiom closure contains `sorryAx`, and writes the artifact
+      # either way, because the record is most useful when the build is not
+      # clean. `set -e` therefore makes this a second, independent sorry gate
+      # -- one that reads the environment rather than a hand-maintained list of
+      # names, so a declaration the audit never heard of cannot slip past it.
+      - name: emit, and fail on sorryAx
+        run: |
+          set -euo pipefail
+          lake build emit
+          lake exe emit --out attest/lean-emission.json
+          python3 - <<'PY'
+          import json
+          d = json.load(open("attest/lean-emission.json", encoding="utf-8"))
+          n = len(d["constants"])
+          if n == 0:
+              raise SystemExit("::error::empty emission -- the vacuous pass")
+          print(f"ok: {n} constants, {d['counts']['in_scope']} in scope, "
+                f"{sum(1 for c in d['constants'] if c['cites'])} cited")
+          PY
+
+      - name: upload the emission
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-emission
+          path: attest/lean-emission.json
+          if-no-files-found: warn
 
       - name: upload audit output
         if: always()
