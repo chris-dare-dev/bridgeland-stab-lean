@@ -6,9 +6,23 @@ filled in by an agent. `faithfulness` is the one human-only axis
 human-only"*), and `faithfulness: agent_drafted` was deliberately rejected there.
 This file exists so the reviewer reads and judges instead of gathering.
 
-Prepared 2026-08-05 against `bcd6939`, from the built environment — every Lean
-type below is the ELABORATED type as Lean sees it, not a transcription of the
-source.
+Prepared from the built environment — every Lean type below is the ELABORATED
+type as Lean sees it, `pp.proofs true`, not a transcription of the source.
+
+Two passes, both 2026-08-05:
+
+| pass | commit | entries |
+|---|---|---|
+| first | `bcd6939` | the four then-existing bindings |
+| second | `6ce0d0f` | the three `AutIsometry.lean` bindings, below |
+
+The second pass also **rewrote `actStabAut`'s author note in place**, because
+the note the first pass quoted has since been corrected in the source. It said
+*"no metric is constructed here, so isometry is not proved"*; the anchor has
+carried `slicingDist` all along. A worksheet quoting a superseded note would
+put the reviewer's judgement against a claim its author no longer makes. The
+Lean type of `actStabAut` is byte-identical across both passes — only the note
+moved.
 
 ## The question, per entry
 
@@ -178,8 +192,8 @@ measurement, and confirming it is half of this review.
 **cites** `bridgeland2007.lem-8.2` — claimed **`oneWay`** (the cited statement implies this one, not conversely)
 **frontier:** none declared
 
-**Author's note on the binding:**
-> The Aut half of Lemma 8.2, and weaker than it in two stated ways. The paper says Aut(D) acts by ISOMETRIES; no metric is constructed here, so isometry is not proved. And the acting object is a PAIR (Phi, lam) rather than an autoequivalence, so this is not a MulAction -- AutQuot groups the Phi's alone, which suffices for slicings but not once a class lattice is in play.
+**Author's note on the binding** *(rewritten at `6ce0d0f`; see the header)*:
+> The Aut half of Lemma 8.2, and weaker than it in two stated ways. The paper says Aut(D) acts by ISOMETRIES; that clause is not proved. What IS proved is actStabAut_slicingDist (AutIsometry.lean): this map preserves the anchor's slicingDist, which carries the two phase discrepancies of Bridgeland's d and omits the mass ratio |log(m2/m1)|. That omission is not closable at this pin -- the anchor defines no mass function. And the acting object is a PAIR (Phi, lam) rather than an autoequivalence, so this is not a MulAction -- AutQuot groups the Phi's alone, which suffices for slicings but not once a class lattice is in play.
 
 ### The paper says
 
@@ -229,6 +243,185 @@ measurement, and confirming it is half of this review.
 
 ---
 
+## The three `AutIsometry.lean` bindings — read this first
+
+All three cite the same sentence, and the same question decides all three, so
+it is stated once here rather than three times below.
+
+Each proves that the action preserves **`slicingDist`**, which is the *anchor's*
+function, not the paper's. Bridgeland's `d` is a supremum of **three**
+quantities per nonzero object:
+
+```
+d(σ₁,σ₂) = sup_{0≠E} { |φ⁻₂(E) − φ⁻₁(E)| , |φ⁺₂(E) − φ⁺₁(E)| , |log(m₂(E)/m₁(E))| }
+```
+
+`slicingDist` is the first two and drops the third. The dropped term is the
+only one that reads the central charge, hence the only one an autoequivalence
+could move — `actStabAut` sends `Z` to `Z ∘ lam`. **The anchor defines no mass
+function**, so the third term is not expressible at this pin and no proof here
+touches it.
+
+**The question for the reviewer is therefore not "is the proof right".** It is
+whether binding a theorem about a *two-term* distance to a sentence about a
+*three-term* one is `no_claim` (the author's call) or `disputed`. The author's
+argument for `no_claim`: a supremum of three being preserved does not give that
+each term is, so the paper does not imply this — and this plainly does not
+imply the paper. Both directions fail, which is what `no_claim` means.
+
+The counter-argument the reviewer should weigh: a binding is a pointer, and a
+reader who follows this one lands on a sentence containing the word
+*isometries* while the Lean says something materially weaker. Whether the
+author's note is sufficient mitigation is a judgement, and it is exactly the
+kind ADR-0005 reserves for a human.
+
+---
+
+## `CategoryTheory.Triangulated.mapEquiv_slicingDist`
+
+**cites** `bridgeland2007.lem-8.2` — claimed **`noClaim`** (related, but no implication claimed)
+**frontier:** none declared
+
+**Author's note on the binding:**
+> The ISOMETRY clause of Lemma 8.2, for a DIFFERENT distance, so neither statement implies the other. The paper's d is a sup of THREE quantities; the anchor's slicingDist carries the two phase discrepancies and omits |log(m2/m1)|, the mass ratio -- the only term that sees the central charge, hence the only one Z-composed-with-lam could move. A sup of three being preserved does not give that each term is, so isometry for d does NOT imply this; and preserving slicingDist plainly does not imply isometry for d. Separately, slicingDist is a distance on Slicing C, not on Stab(D). The anchor defines no mass function, so the omitted term is not expressible at this pin.
+
+### The paper says
+
+> Lemma 8.2. The generalised metric space $\operatorname{Stab}(\operatorname{\mathcal{D}})$ carries a right action of the group ${\tilde{\operatorname{GL^{+}}}}(2,\mathbb{R})$, the universal covering space of $\operatorname{GL^{+}}(2,\mathbb{R})$, and a left action by isometries of the group $\operatorname{Aut}(\operatorname{\mathcal{D}})$ of exact autoequivalences of $\operatorname{\mathcal{D}}$. These two actions commute.
+
+`reviewed_quote_sha256` = `a82c3230040fd724ffad1d6655c190b00b99321d3fc1ab5eb74dafdfe8c38d1f`
+
+### Lean says
+
+```lean
+∀ {C : Type u} [inst : CategoryTheory.Category.{w, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObject C]
+  [inst_2 : CategoryTheory.HasShift C ℤ] [inst_3 : CategoryTheory.Preadditive C]
+  [inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive] [inst_5 : CategoryTheory.Pretriangulated C]
+  (Φ : C ≌ C) [inst_6 : Φ.functor.Additive] [inst_7 : Φ.inverse.Additive] [inst_8 : Φ.functor.CommShift ℤ]
+  [inst_9 : Φ.inverse.CommShift ℤ] [inst_10 : Φ.functor.IsTriangulated] [inst_11 : Φ.inverse.IsTriangulated]
+  (s₁ s₂ : CategoryTheory.Triangulated.Slicing C),
+  CategoryTheory.Triangulated.slicingDist C (s₁.mapEquiv Φ) (s₂.mapEquiv Φ) =
+    CategoryTheory.Triangulated.slicingDist C s₁ s₂
+```
+
+**Second divergence, independent of the distance:** the carrier is
+`Slicing C`, not `Stab(D)`. The paper's sentence is about the space of
+stability conditions; this one is about bare slicings, with no central charge
+in the statement at all.
+
+### Reviewer
+
+| field | value |
+|---|---|
+| `faithfulness` | ☐ adequate ☐ divergent ☐ inadequate ☐ inconclusive |
+| `relation_confirmed` | ☐ exact ☐ equivalent ☐ specialization ☐ one_way ☐ no_claim ☐ disputed |
+| `divergences[]` | *(required if divergent/inadequate)* |
+| `reviewer` / `reviewed_at` | |
+
+**Is the author's claimed relation `noClaim` right?** It is a claim, not a
+measurement, and confirming it is half of this review.
+
+---
+
+## `CategoryTheory.Triangulated.actStabAut_slicingDist`
+
+**cites** `bridgeland2007.lem-8.2` — claimed **`noClaim`** (related, but no implication claimed)
+**frontier:** none declared
+
+**Author's note on the binding:**
+> Same non-implication as mapEquiv_slicingDist: the distance is the anchor's slicingDist, not Bridgeland's d, and d omits nothing while slicingDist omits the mass ratio. What this adds over that theorem is only the carrier -- the statement is now about stability conditions rather than bare slicings, matching the paper's Stab(D). It is still not the paper's isometry claim.
+
+### The paper says
+
+> Lemma 8.2. The generalised metric space $\operatorname{Stab}(\operatorname{\mathcal{D}})$ carries a right action of the group ${\tilde{\operatorname{GL^{+}}}}(2,\mathbb{R})$, the universal covering space of $\operatorname{GL^{+}}(2,\mathbb{R})$, and a left action by isometries of the group $\operatorname{Aut}(\operatorname{\mathcal{D}})$ of exact autoequivalences of $\operatorname{\mathcal{D}}$. These two actions commute.
+
+`reviewed_quote_sha256` = `a82c3230040fd724ffad1d6655c190b00b99321d3fc1ab5eb74dafdfe8c38d1f`
+
+### Lean says
+
+```lean
+∀ {C : Type u} [inst : CategoryTheory.Category.{w, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObject C]
+  [inst_2 : CategoryTheory.HasShift C ℤ] [inst_3 : CategoryTheory.Preadditive C]
+  [inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive] [inst_5 : CategoryTheory.Pretriangulated C]
+  [inst_6 : CategoryTheory.IsTriangulated C] (Φ : C ≌ C) [inst_7 : Φ.functor.Additive] [inst_8 : Φ.inverse.Additive]
+  [inst_9 : Φ.functor.CommShift ℤ] [inst_10 : Φ.inverse.CommShift ℤ] [inst_11 : Φ.functor.IsTriangulated]
+  [inst_12 : Φ.inverse.IsTriangulated] {Λ : Type u'} [inst_13 : AddCommGroup Λ]
+  (v : CategoryTheory.Triangulated.K₀ C →+ Λ) (lam : Λ →+ Λ)
+  (hlam : ∀ (x : CategoryTheory.Triangulated.K₀ C), v ((CategoryTheory.Triangulated.K₀.mapF Φ.inverse) x) = lam (v x))
+  (σ τ : CategoryTheory.Triangulated.StabilityCondition.WithClassMap C v),
+  CategoryTheory.Triangulated.slicingDist C (CategoryTheory.Triangulated.actStabAut Φ v lam hlam σ).slicing
+      (CategoryTheory.Triangulated.actStabAut Φ v lam hlam τ).slicing =
+    CategoryTheory.Triangulated.slicingDist C σ.slicing τ.slicing
+```
+
+**Worth noticing while reading the type:** `lam` appears in the hypotheses and
+in neither side of the conclusion. That is not sloppiness — `lam` moves only
+the central charge, and `slicingDist` does not read the central charge. It is
+the same fact as the missing mass term, visible in the signature.
+
+### Reviewer
+
+| field | value |
+|---|---|
+| `faithfulness` | ☐ adequate ☐ divergent ☐ inadequate ☐ inconclusive |
+| `relation_confirmed` | ☐ exact ☐ equivalent ☐ specialization ☐ one_way ☐ no_claim ☐ disputed |
+| `divergences[]` | *(required if divergent/inadequate)* |
+| `reviewer` / `reviewed_at` | |
+
+**Is the author's claimed relation `noClaim` right?** It is a claim, not a
+measurement, and confirming it is half of this review.
+
+---
+
+## `CategoryTheory.Triangulated.AutPairQuot_smul_slicingDist`
+
+**cites** `bridgeland2007.lem-8.2` — claimed **`noClaim`** (related, but no implication claimed)
+**frontier:** none declared
+
+**Author's note on the binding:**
+> The closest this repo gets to 'Aut(D) acts by isometries', and still not it, for two independent reasons already recorded elsewhere in this repo. (1) The distance is slicingDist, not Bridgeland's d -- see mapEquiv_slicingDist's note; neither statement implies the other. (2) AutPairQuot v is NOT Aut(D): its elements are pairs (Phi, lam), and the forgetful map to AutQuot C is proved neither injective nor surjective. Cite this as 'the group of autoequivalences carrying a compatible class-lattice automorphism preserves the phase distance'.
+
+### The paper says
+
+> Lemma 8.2. The generalised metric space $\operatorname{Stab}(\operatorname{\mathcal{D}})$ carries a right action of the group ${\tilde{\operatorname{GL^{+}}}}(2,\mathbb{R})$, the universal covering space of $\operatorname{GL^{+}}(2,\mathbb{R})$, and a left action by isometries of the group $\operatorname{Aut}(\operatorname{\mathcal{D}})$ of exact autoequivalences of $\operatorname{\mathcal{D}}$. These two actions commute.
+
+`reviewed_quote_sha256` = `a82c3230040fd724ffad1d6655c190b00b99321d3fc1ab5eb74dafdfe8c38d1f`
+
+### Lean says
+
+```lean
+∀ {C : Type u} [inst : CategoryTheory.Category.{w, u} C] [inst_1 : CategoryTheory.Limits.HasZeroObject C]
+  [inst_2 : CategoryTheory.HasShift C ℤ] [inst_3 : CategoryTheory.Preadditive C]
+  [inst_4 : ∀ (n : ℤ), (CategoryTheory.shiftFunctor C n).Additive] [inst_5 : CategoryTheory.Pretriangulated C]
+  [inst_6 : CategoryTheory.IsTriangulated C] {Λ : Type u'} [inst_7 : AddCommGroup Λ]
+  (v : CategoryTheory.Triangulated.K₀ C →+ Λ) (g : BridgelandStabLean.GroupAction.AutPairQuot v)
+  (σ τ : CategoryTheory.Triangulated.StabilityCondition.WithClassMap C v),
+  CategoryTheory.Triangulated.slicingDist C (g • σ).slicing (g • τ).slicing =
+    CategoryTheory.Triangulated.slicingDist C σ.slicing τ.slicing
+```
+
+**This entry carries a second divergence the other two do not.** The paper's
+acting group is `Aut(D)`; the Lean's is `AutPairQuot v`, whose elements are
+pairs. The repo's own `CLAUDE.md` and `formalization.yaml` both state that
+`AutPairQuot v` is not `Aut(D)`, and that the forgetful map to `AutQuot C` is
+proved neither injective nor surjective. A reviewer judging *this* entry is
+judging two gaps at once, and may want to record them as separate
+`divergences[]` items rather than one.
+
+### Reviewer
+
+| field | value |
+|---|---|
+| `faithfulness` | ☐ adequate ☐ divergent ☐ inadequate ☐ inconclusive |
+| `relation_confirmed` | ☐ exact ☐ equivalent ☐ specialization ☐ one_way ☐ no_claim ☐ disputed |
+| `divergences[]` | *(required if divergent/inadequate)* |
+| `reviewer` / `reviewed_at` | |
+
+**Is the author's claimed relation `noClaim` right?** It is a claim, not a
+measurement, and confirming it is half of this review.
+
+---
+
 ## When the emitter lands
 
 ```sh
@@ -247,6 +440,25 @@ disagree.
 ## Coverage, stated rather than implied
 
 Reviewing these entries makes `human_review` non-`none` **for these entries
-only**. The repo carries 189 audited declarations and the registry 8 entries
-against a notebook of 146 papers / 15,280 chunks. A repo-level `human_review`
-reading anything but `none` while that is true is the collapse ADR-0005 forbids.
+only**. At `6ce0d0f` the repo carries **198** audited declarations and the
+registry 8 entries, against a notebook of 146 papers / 15,280 chunks. **7** of
+the 198 carry a `@[cites]` binding at all, and those 7 are what this worksheet
+covers. A repo-level `human_review` reading anything but `none` while that is
+true is the collapse ADR-0005 forbids.
+
+**Six of the seven point at the same registry entry, `lem-8.2`** — everything
+except `mapEquiv_isLocallyFinite`. That is not duplication to be trimmed. The
+sentence makes four separate assertions, and the six split across three of
+them:
+
+| assertion in Lemma 8.2 | bound by |
+|---|---|
+| `Stab(D)` carries a right `G̃L⁺(2,ℝ)` action | `gltildeSlicingMulAction`, `stabMulAction` |
+| `Aut(D)` acts on the left | `actStabAut` |
+| that left action is **by isometries** | `mapEquiv_slicingDist`, `actStabAut_slicingDist`, `AutPairQuot_smul_slicingDist` |
+| the two actions **commute** | *nothing* |
+
+**Nothing in this repo binds to the fourth.** The actions are not proved to
+commute and no declaration claims they are. A reviewer working entry by entry
+will not notice that, because an absent binding has no worksheet section — so
+it is stated here.
