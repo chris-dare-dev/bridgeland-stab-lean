@@ -18,6 +18,27 @@ name = "BridgelandStability"
 git = "https://github.com/mattrobball/BridgelandStability"
 rev = "9e48f23a382ba117b63076a33e0e775389fef1ba"
 
+# The SECOND pin, and the comment above says a second pin is a second thing to
+# drift. It is here as the NAMED EXCEPTION recorded in .claude/decisions/
+# ADR-0008, not as a change of mind, and the exception is argued from one
+# property: this package is a LEAF. Its lakefile carries the line "NO
+# `[[require]]` BLOCKS. NOT ONE. EVER.", enforced by a `no-dependencies` CI job
+# on that side, and it pins the same toolchain we do (v4.29.0). It therefore
+# cannot drag anything into this environment and cannot disagree with the
+# anchor about a Mathlib revision.
+#
+# Vendoring was not the safer option; it was not an option. `@[cites]` is a
+# `SimplePersistentEnvExtension` and duplicate attribute registration is an
+# import-time error, so two vendored topic repos could never coexist in one
+# Lean environment.
+#
+# IF IT EVER GROWS A DEPENDENCY, THE EXCEPTION LAPSES and this block comes out.
+# It is not grandfathered.
+[[require]]
+name = "MathFormalContract"
+git = "https://github.com/chris-dare-dev/math-formal-contract-lean"
+rev = "2d9c2d1cbba88f65ed29705492ac017bd8ad4b68"
+
 [[lean_lib]]
 name = "BridgelandStabLean"
 
