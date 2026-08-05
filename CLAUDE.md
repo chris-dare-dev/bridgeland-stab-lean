@@ -226,7 +226,7 @@ axiomatizing the gap.
      and `QuasiAbelian/` once produced a false "the anchor lacks this" finding.
      **Search the whole anchor before concluding something is missing.**
 
-Four claims to keep off the page.
+Five claims to keep off the page.
 
 - **"The §8 action is formalized"** — both halves now act on stability
   conditions as `MulAction`s: `G̃L⁺(2, ℝ)` (steps 1–3c, `StabilityAction.lean`)
@@ -234,6 +234,34 @@ Four claims to keep off the page.
   they generate anything, that the two commute, or that either is the full
   symmetry group of `Stab`. Neither is a claim about `Stab(D)` being a manifold
   — no topology on the space of stability conditions is defined anywhere here.
+- **"`Aut(D)` acts by isometries"** — not proved, and the shortfall is a
+  missing *definition*, not a missing proof. What is proved, in
+  `GroupAction/AutIsometry.lean` (2026-08-05), is that the action preserves
+  the **anchor's** `slicingDist` — `mapEquiv_slicingDist`, carried to stability
+  conditions by `actStabAut_slicingDist` and to the `MulAction` by
+  `AutPairQuot_smul_slicingDist`.
+
+  `slicingDist` is **not** Bridgeland's `d`. `d` is a supremum of *three*
+  quantities per nonzero object; `slicingDist` carries the `φ⁺` and `φ⁻`
+  discrepancies and omits `|log (m₂(E)/m₁(E))|`, the mass ratio — the only term
+  that sees the central charge, hence the only one `Z ∘ lam` could move. **The
+  anchor defines no mass function**, so that term is not expressible at this
+  pin; supplying it is separate work, and until it exists this is not the
+  paper's claim.
+
+  The registry relation is `no_claim`, not `one_way`, and that is a real
+  non-implication both ways: a supremum of three terms being preserved does not
+  give that each term is. Say "the action preserves the phase distance between
+  slicings".
+
+  Two things this cost that are worth reusing. The anchor had carried
+  `slicingDist` since before this repo existed
+  (`StabilityCondition/Defs.lean`), written for §7's deformation theory and
+  never connected to §8 — the *third* time the "search the whole anchor" rule
+  above has paid. And `Slicing.phiPlus_congr` / `phiMinus_congr`,
+  iso-invariance of the intrinsic phases, had to be stated here: the anchor
+  inlines that argument at four sites in `Deformation/DeformedGtLe.lean`
+  without ever naming it.
 - **"`AutPairQuot v` is `Aut(D)`"** — no, and it is further from it than
   `AutQuot` is. Its elements are *pairs*, and the forgetful map to `AutQuot C`
   is proved to be neither injective (different `lam` over one `Φ`, whenever `v`
