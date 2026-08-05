@@ -170,6 +170,49 @@ Recommendation: **1 + 2 together.** The census is required by arXMCP `CLAUDE.md`
 §4.9 anyway ("novelty claims are dated censuses"), so it is policy-compliant
 rather than new.
 
+### Status 2026-08-05 — DEFERRED, and no longer blocking anything
+
+**Decision: defer.** Revisit when there is a real second topic to test
+generalization against, rather than deciding the lane question in the abstract
+against one repository.
+
+**If a ceiling ships it will be documentary, not structural** — the dated
+census carries the honesty, and there will be no `maxProperties` in the schema.
+"Permanently ten" is a judgement that will want revisiting, and a validation
+error on entry eleven is a bad way to reopen it. This is the one sub-question
+that *is* settled.
+
+**What changed, and why deferring is now cheap.** This question used to gate
+the registry itself. It no longer does — the decision-independent half is
+built and green:
+
+| | state |
+|---|---|
+| `registry-1.0.schema.json` | **exists**, transcribed from the design note |
+| `R-01`..`R-09` + 10 rejection fixtures | **exist**, `mfc registry validate` |
+| `mfc registry init` | **exists** — mints the 12-hex id |
+| `E-04`, `E-05` registry half, `J-06` | **run today** against a hand-written registry |
+
+The open decision adds a `kind` enum member (a MINOR bump, flowing through
+`kind` untouched) and a policy. Neither moves `entries{}` or `frontier[]`, so
+nothing above has to be rewritten when it lands.
+
+**Two corrections to this question's own framing**, found while building:
+
+* **Option 3 needs no code.** `mfc join`'s `J-03` already refuses to merge two
+  reviews of one statement that disagree — deduping would pick a winner, and
+  the point is that a person must. A second reviewer is purely a social step.
+* **Options 1 and 2 do not move the human axis at all, by construction.**
+  Option 3 is the only one that increases the number of entries carrying a real
+  `faithfulness` verdict — the axis ADR-0005 calls the bottleneck and "the only
+  one that catches the thing this repo most fears". That is the argument for
+  preferring **1 + 3** over the recommended 1 + 2 whenever this is reopened.
+
+**Cross-reference errors in the tracker, for whoever picks this up:** #50 cites
+"#41" for the coverage census — that is **#52**; #41 is `@[discharges]`. #52
+cites "#39" for the sketch lane — that is `external_decls[]`, and no
+sketch-lane issue exists yet.
+
 ---
 
 ## Q5 — `quote_mode`: `verbatim` or `digest_only` by default?
