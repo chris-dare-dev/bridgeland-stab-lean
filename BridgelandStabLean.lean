@@ -21,6 +21,7 @@ import BridgelandStabLean.GroupAction.K0Functor
 import BridgelandStabLean.GroupAction.StrictFiniteLength
 import BridgelandStabLean.GroupAction.AutStabilityAction
 import BridgelandStabLean.GroupAction.AutPairAction
+import BridgelandStabLean.GroupAction.AutIsometry
 
 /-!
 # BridgelandStabLean
