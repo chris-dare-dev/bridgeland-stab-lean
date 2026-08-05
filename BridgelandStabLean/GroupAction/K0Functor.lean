@@ -35,7 +35,14 @@ universe w u
 variable {C : Type u} [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
   [Preadditive C] [∀ n : ℤ, (shiftFunctor C n).Additive] [Pretriangulated C]
 
-/-- `X ↦ [F X]` is triangle-additive when `F` is triangulated. -/
+/-- `X ↦ [F X]` is triangle-additive when `F` is triangulated.
+
+`[F.Additive]` is unused by this term. It is kept so that this instance and
+`K₀.mapF` — its only consumer, one line below — ask for the same thing;
+deleting it here just re-flags `K₀.mapF`, measured 2026-08-05. The reasoning is
+`AutAction.lean`'s module docstring, which owns the argument for all three
+sites. -/
+@[nolint unusedArguments]
 instance isTriangleAdditive_of_isTriangulated
     (F : C ⥤ C) [F.Additive] [F.CommShift ℤ] [F.IsTriangulated] :
     IsTriangleAdditive (fun X => K₀.of C (F.obj X)) where

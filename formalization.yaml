@@ -399,20 +399,68 @@ fidelity:
     are local verification of the committed theorem state, not a remote CI
     verdict and not a source-faithfulness review.
     `lake exe lint-style` completed with only the repository's existing
-    missing-nolints-file warning. `lake exe runLinter` is NOT clean: it reports
-    six known errors in modules unchanged by the topology extension (two in
-    StrictAutAction, one in ComplexBridge, two in AutAction, and one in
-    K0Functor). The unusable `[simp]` attribute on `stabilityMass_eq_mass` was
-    removed, clearing the only finding in the full-metric chain; the new
-    StabilityDistanceTopology declarations have no linter findings. This
-    theorem state does not claim to have repaired the remaining inherited
-    declaration-linter debt.
+    missing-nolints-file warning. `lake exe runLinter` was NOT clean at
+    56c7531: it reported six errors in modules unchanged by the topology
+    extension (two in StrictAutAction, one in ComplexBridge, two in AutAction,
+    and one in K0Functor). The unusable `[simp]` attribute on
+    `stabilityMass_eq_mass` was removed, clearing the only finding in the
+    full-metric chain; the new StabilityDistanceTopology declarations have no
+    linter findings. That paragraph closed by saying the topology work did not
+    claim to have repaired the remaining inherited declaration-linter debt.
+
+    SUPERSEDED, and the tense is the point: those six are exactly the six this
+    commit repairs, and the block below records how. The sentence above is kept
+    in the past tense rather than deleted because it is the measurement that
+    motivated the repair -- two independent sessions found the same six on the
+    same day, from different directions, which is the evidence that the set was
+    stable and not an artefact of one tree.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
-    re-run and GATED by scripts/check_audit.py, then a no-sorry check over the
-    build log. builds_clean and axiom_count are therefore observed on a machine
-    nobody owns rather than asserted about a workstation.
+    re-run and GATED by scripts/check_audit.py, then the environment linters,
+    then a no-sorry check over the build log. builds_clean and axiom_count are
+    therefore observed on a machine nobody owns rather than asserted about a
+    workstation.
+
+    ADDED 2026-08-05: `lake exe runLinter BridgelandStabLean`, the 16
+    environment linters, as a fourth step. They had never been run against this
+    library at all before that date. CLAUDE.md had carried the lesson since
+    mathlib4#42449 was rejected by Mathlib CI over a simpNF failure that
+    neither `lake build` nor `lake exe lint-style` can see -- but the lesson
+    had only ever been applied to the upstream PR, never turned back on this
+    repo's own declarations. The first run -- 2026-08-05, against the
+    then-current 20-module tree -- reported 6 errors over 252 declarations: one
+    docBlame, one impossibleInstance, one simpNF, three unusedArguments. All
+    six are fixed and the step exits non-zero on any finding, so it is a gate
+    rather than a report.
+
+    THAT COUNT IS DATED, DELIBERATELY, and is not a census of this tree. This
+    commit was rebased onto 6259180 on 2026-08-06, by which point the library
+    had grown to 36 modules and roughly 560 declarations -- the sixteen added
+    in between were never linted before the rebase. Re-running the linters
+    across all of them, still 6 errors and the same 6: the new modules
+    contribute none. That is what makes this commit's fix set complete rather
+    than merely current as of when it was written, and it is why the count
+    above is left at what was actually observed instead of being restamped to
+    look fresh.
+
+    What that axis is, precisely. It is HYGIENE -- simp-normal form,
+    documentation coverage, whether an instance is reachable by instance
+    search. One of the six was a genuine defect and not a style nit:
+    StrictAut.mulActionSlicing took `rho` as an explicit argument appearing in
+    neither the return type nor any instance-implicit argument, so instance
+    search could never have inferred it and the instance could never have
+    fired. It is now a `def`, brought into scope with `letI`. The three
+    unusedArguments findings were kept and nolint-ed rather than fixed by
+    deletion, on measurement: deleting the hypothesis does not remove the
+    finding, it moves it to the next caller up (HNFiltration.mapF,
+    Slicing.mapEquiv_P, K0.mapF respectively), and the chase ends at
+    TriEquiv's bundled instance fields. The reasoning is recorded in
+    AutAction.lean's module docstring.
+
+    Nothing a linter reports can make a proof unsound, and nothing it passes
+    makes a statement faithful. A green lint step must not be quoted for
+    either.
 
     What CI does NOT cover, and #29 lists: the emitter, mfc bundle/lint/
     conformance, ilean coverage, resolution freshness, emitter reproducibility,
@@ -538,7 +586,9 @@ fidelity:
     StrictAutAction takes a group mapping STRICTLY into endofunctors (functor
     composition in Lean is honestly associative, so C functor C is a monoid
     under composition), giving MulAction G (Slicing C) with no coherence
-    bookkeeping. RESTRICTION, and it is a real one: map_one and map_mul are
+    bookkeeping -- as a `def` since 2026-08-05, not a registered instance,
+    because rho is explicit data instance search cannot infer; bring it into
+    scope with letI. RESTRICTION, and it is a real one: map_one and map_mul are
     EQUALITIES of functors, so F g composed with F g-inverse is the identity on
     the nose -- each F g is an isomorphism of categories, not merely an
     equivalence. Serre functors and spherical twists satisfy that only up to

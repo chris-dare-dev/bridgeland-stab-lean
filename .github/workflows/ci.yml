@@ -20,6 +20,13 @@ name: CI
 # Step 1 is here, and so is the axiom gate, which #29 did not list separately
 # because it assumed `mfc` would carry it. It cannot wait for `mfc`: it is the
 # check that makes `axiom_count: 0` mean something.
+#
+# The environment linters are here too, and also not from #29. They are the
+# lesson of mathlib4#42449 pointed at this repo rather than at an upstream PR
+# (CLAUDE.md §1): that PR was rejected by Mathlib CI over a `simpNF` failure
+# neither `lake build` nor `lake exe lint-style` can see. The same blind spot
+# applied here -- the linters had never been run against this library at all
+# until 2026-08-05, when the first run reported 6 errors.
 
 on:
   push:
@@ -72,6 +79,24 @@ jobs:
           lake env lean scripts/Audit.lean > audit.txt 2>&1 || {
             echo "::error::scripts/Audit.lean failed to elaborate"; cat audit.txt; exit 1; }
           python3 scripts/check_audit.py audit.txt
+
+      # The 16 environment linters -- `simpNF`, `docBlame`, `unusedArguments`,
+      # `impossibleInstance` and the rest. These read the elaborated
+      # environment, so they see things no source-level check can: `simpNF`
+      # replays the simp set, `impossibleInstance` checks that an instance can
+      # actually be found by instance search.
+      #
+      # `runLinter` is Batteries' executable, reached transitively through the
+      # anchor; it is not a Mathlib target at this pin. It exits non-zero on any
+      # finding, so this is a gate and not a report. `--no-build` is deliberately
+      # NOT passed: the step should build what it needs rather than fail on a
+      # cold cache.
+      #
+      # A finding here is a hygiene defect, not a false theorem. Nothing this
+      # step reports can make a proof unsound, and nothing it passes makes a
+      # statement faithful -- see the closing note.
+      - name: environment linters
+        run: lake exe runLinter BridgelandStabLean
 
       # Belt and braces. The axiom gate above already fails on `sorryAx`, which
       # cannot be evaded by declaration syntax the way a source grep can — but a
@@ -141,6 +166,7 @@ jobs:
 #
 #   builds_clean   observed, on a machine nobody owns
 #   axiom_count    gated, not merely printed
+#   lint_clean     gated -- a HYGIENE axis, and only that
 #
 # It is NOT evidence about the CONTENT of any statement, about faithfulness to
 # Bridgeland 2007, or about the assumption frontier. Those are human axes and
