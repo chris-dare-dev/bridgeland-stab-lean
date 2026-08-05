@@ -1,0 +1,268 @@
+{
+  "schema_version": "registry/1.0",
+  "registry_id": "a520a8d4f877",
+  "notebook_hint": "bridgeland-stability",
+  "entries": {
+    "stmt:a520a8d4f877:bridgeland2007.def-1.1": {
+      "kind": "definition",
+      "title": "Stability condition on a triangulated category (introduction form)",
+      "informal": "The paper's introductory definition: a central charge Z on K(D) together with full additive subcategories P(phi) of semistable objects of phase phi, satisfying the shift, Hom-vanishing and Harder-Narasimhan axioms.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "1.1"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Definition 1.1. A stability condition $(Z,\\mathcal{P})$ on a triangulated category $\\operatorname{\\mathcal{D}}$ consists of a group homomorphism $Z\\colon{{K}}(\\operatorname{\\mathcal{D}})\\to\\mathbb{C}$ called the central charge, and full additive subcategories $\\mathcal{P}(\\phi)\\subset\\operatorname{\\mathcal{D}}$ for each $\\phi\\in\\mathbb{R}$, satisfying the following axioms: (a) if $E\\in\\mathcal{P}(\\phi)$ then $Z(E)=m(E)\\exp(i\\pi\\phi)$ for some $m(E)\\in\\mathbb{R}_{>0}$, (b) for all $\\phi\\in\\mathbb{R}$, $\\mathcal{P}(\\phi+1)=\\mathcal{P}(\\phi)[1]$, (c) if $\\phi_{1}>\\phi_{2}$ and $A_{j}\\in\\mathcal{P}(\\phi_{j})$ then $\\operatorname{Hom}_{\\operatorname{\\mathcal{D}}}(A_{1},A_{2})=0$, (d) for each nonzero object $E\\in\\operatorname{\\mathcal{D}}$ there is a finite sequence of real numbers $\\phi_{1}>\\phi_{2}>\\cdots>\\phi_{n}$ and a collection of triangles $\\textstyle{0_{\\ }\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{0}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{2}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{\\ldots\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{n-1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{n}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{\\ }}$$\\textstyle{A_{1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{A_{2}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{A_{n}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$ with $A_{j}\\in\\mathcal{P}(\\phi_{j})$ for all $j$.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "95e9c21fa95eee05e8ff20bea56468d32c9e5bf2a16a4aada8840cdfed13ae98",
+      "mint_resolution": null,
+      "depends_on": [],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.def-3.3": {
+      "kind": "definition",
+      "title": "Slicing of a triangulated category",
+      "informal": "A slicing is the P-half of a stability condition on its own: full additive subcategories P(phi) closed under the shift axiom P(phi + 1) = P(phi)[1], Hom-vanishing for decreasing phases, and existence of Harder-Narasimhan filtrations.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "3.3"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Definition 3.3. A slicing $\\mathcal{P}$ of a triangulated category $\\operatorname{\\mathcal{D}}$ consists of full additive subcategories $\\mathcal{P}(\\phi)\\subset\\operatorname{\\mathcal{D}}$ for each $\\phi\\in\\mathbb{R}$ satisfying the following axioms: (a) for all $\\phi\\in\\mathbb{R}$, $\\mathcal{P}(\\phi+1)=\\mathcal{P}(\\phi)[1]$, (b) if $\\phi_{1}>\\phi_{2}$ and $A_{j}\\in\\mathcal{P}(\\phi_{j})$ then $\\operatorname{Hom}_{\\operatorname{\\mathcal{D}}}(A_{1},A_{2})=0$, (c) for each nonzero object $E\\in\\operatorname{\\mathcal{D}}$ there is a finite sequence of real numbers $\\phi_{1}>\\phi_{2}>\\cdots>\\phi_{n}$ and a collection of triangles $\\textstyle{0_{\\ }\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{0}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{2}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{\\ldots\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{n-1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{n}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E_{\\ }}$$\\textstyle{A_{1}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{A_{2}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{A_{n}\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$ with $A_{j}\\in\\mathcal{P}(\\phi_{j})$ for all $j$.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "f6cf1e17f6b9d2ce025d7b8c41ec592b6de453904edde6ee95cebb9f2219b62a",
+      "mint_resolution": null,
+      "depends_on": [],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.lem-3.4": {
+      "kind": "lemma",
+      "title": "Objects of a slicing over an interval of length at most one",
+      "informal": "For an interval I of length at most one, the subcategory P(I) is quasi-abelian and its strict short exact sequences are exactly the distinguished triangles with all three vertices in P(I). This is the lemma the repo's interval-subcategory machinery rests on.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "3.4"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Lemma 3.4. Let $\\mathcal{P}$ be a slicing of a triangulated category $\\operatorname{\\mathcal{D}}$ and let $I\\subset\\mathbb{R}$ be an interval of length at most one. Suppose $\\textstyle{A\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{E\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$$\\textstyle{B\\ignorespaces\\ignorespaces\\ignorespaces\\ignorespaces}$ is a triangle in $\\operatorname{\\mathcal{D}}$, all of whose vertices are nonzero objects of $\\mathcal{P}(I)$. Then there are inequalities $\\phi^{+}(A)\\leqslant\\phi^{+}(E)$ and $\\phi^{-}(E)\\leqslant\\phi^{-}(B)$.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "1f983383fbf380dd53b6ac65d21f0d813271215d12e646af98afb0d62650595d",
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.def-3.3"
+      ],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.def-5.1": {
+      "kind": "definition",
+      "title": "Stability condition as a central charge plus a slicing",
+      "informal": "The form this repo formalizes against: a group homomorphism Z on K(D) together with a slicing P, compatible via Z(E) = m(E) exp(i pi phi) for nonzero E in P(phi).",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "5.1"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Definition 5.1. A stability condition $\\sigma=(Z,\\mathcal{P})$ on a triangulated category $\\operatorname{\\mathcal{D}}$ consists of a group homomorphism $Z\\colon{{K}}(\\operatorname{\\mathcal{D}})\\to\\mathbb{C}$ and a slicing $\\mathcal{P}$ of $\\operatorname{\\mathcal{D}}$ such that if $0\\neq E\\in\\mathcal{P}(\\phi)$ then $Z(E)=m(E)\\exp(i\\pi\\phi)$ for some $m(E)\\in\\mathbb{R}_{>0}$.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "b73358d87de6b1612653e60932ce58e742ad8e033246e988254f4f19e181a495",
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.def-3.3"
+      ],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.def-5.7": {
+      "kind": "definition",
+      "title": "Locally-finite slicing and locally-finite stability condition",
+      "informal": "A slicing is locally-finite when some eta > 0 makes every P((t - eta, t + eta)) of finite length. This is the axiom the repo transports along an autoequivalence, and the one whose eta survives unchanged under Aut but not under a phase relabelling.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "5.7"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Definition 5.7. A slicing $\\mathcal{P}$ of a triangulated category $\\operatorname{\\mathcal{D}}$ is locally-finite if there exists a real number $\\eta>0$ such that for all $t\\in\\mathbb{R}$ the quasi-abelian category $\\mathcal{P}((t-\\eta,t+\\eta))\\subset\\operatorname{\\mathcal{D}}$ is of finite length. A stability condition $(Z,\\mathcal{P})$ is locally-finite if the corresponding slicing $\\mathcal{P}$ is.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "829028bbb714a19f051deb50c8034eb77bda316b29f11f7811d0abecb4f9aa46",
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.def-3.3"
+      ],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.prop-8.1": {
+      "kind": "proposition",
+      "title": "The generalised metric on the space of stability conditions",
+      "informal": "Stab(D) carries a generalised metric d built from the sup over nonzero objects of the phase and mass discrepancies between two stability conditions.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "8.1"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Proposition 8.1. Let $\\operatorname{\\mathcal{D}}$ be a triangulated category. The function $d(\\sigma_{1},\\sigma_{2})=\\sup_{0\\neq E\\in\\operatorname{\\mathcal{D}}}\\bigg{\\{}|\\phi^{-}_{\\sigma_{2}}(E)-\\phi^{-}_{\\sigma_{1}}(E)|,|\\phi^{+}_{\\sigma_{2}}(E)-\\phi^{+}_{\\sigma_{1}}(E)|,|\\log\\frac{m_{\\sigma_{2}}(E)}{m_{\\sigma_{1}}(E)}|\\bigg{\\}}\\in[0,\\infty]$ defines a generalised metric on $\\operatorname{Stab}(\\operatorname{\\mathcal{D}})$. The induced topology is the same as that defined in Section 6.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "3d821c479c6f091d32ac1828a4e00fa18dbb21b4727a5db3e4c1b2c4992a54ff",
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.def-5.1"
+      ],
+      "frontier": [],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:bridgeland2007.lem-8.2": {
+      "kind": "lemma",
+      "title": "GL+(2,R)~ acts on the right of Stab(D); Aut(D) acts on the left",
+      "informal": "THE statement this repo's lane 1 exists for. Stab(D) carries a right action of GL+(2,R)~ -- which the paper names as the universal covering space of GL+(2,R) -- and a left action by isometries of Aut(D), and the two actions commute.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": "8.2"
+      },
+      "quote_mode": "verbatim",
+      "quote": "Lemma 8.2. The generalised metric space $\\operatorname{Stab}(\\operatorname{\\mathcal{D}})$ carries a right action of the group ${\\tilde{\\operatorname{GL^{+}}}}(2,\\mathbb{R})$, the universal covering space of $\\operatorname{GL^{+}}(2,\\mathbb{R})$, and a left action by isometries of the group $\\operatorname{Aut}(\\operatorname{\\mathcal{D}})$ of exact autoequivalences of $\\operatorname{\\mathcal{D}}$. These two actions commute.",
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": "a82c3230040fd724ffad1d6655c190b00b99321d3fc1ab5eb74dafdfe8c38d1f",
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.prop-8.1",
+        "stmt:a520a8d4f877:bridgeland2007.def-5.1"
+      ],
+      "frontier": [
+        {
+          "id": "gltilde-universal-cover",
+          "kind_class": "missing-library",
+          "kind_label": "mathlib-gap",
+          "statement": "GL+(2,R)~ is defined here as a group of compatible pairs, NOT as a universal covering space. The covering-space facts the paper's phrase asserts -- projection surjective, fibre Z, simple connectedness -- are absent from Mathlib at the pinned revision and unproved here. The NAME asserts more than the proved content.",
+          "discharged_by": null
+        }
+      ],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": null,
+      "mint_unresolved_reason": "No resolver has been run. tools/statement_resolve.py (GitHub #43) does not exist yet, so no mint-time match against a live chunk has been recorded. Separately, arxiv_version is '' for every row in the corpus (#44), so even a hash match would be a match against a probable-but-unconfirmed v3."
+    },
+    "stmt:a520a8d4f877:obl-gltilde-universal-cover": {
+      "kind": "obligation",
+      "title": "Establish GL+(2,R)~ as the universal cover of GL+(2,R)",
+      "informal": "Owed work, not a paper statement. Lemma 8.2 names GL+(2,R)~ as the universal covering space; this repo defines it as a group of compatible pairs and proves only that it is a group.",
+      "source": {
+        "scheme": "arxiv",
+        "id": "math/0212237",
+        "version": "v3",
+        "locator": null,
+        "title": "Stability conditions on triangulated categories",
+        "authors": [
+          "Tom Bridgeland"
+        ],
+        "printed_number": null
+      },
+      "quote_mode": "digest_only",
+      "quote": null,
+      "quote_norm": "nfc-ws-collapse/1",
+      "quote_sha256": null,
+      "mint_resolution": null,
+      "depends_on": [
+        "stmt:a520a8d4f877:bridgeland2007.lem-8.2"
+      ],
+      "frontier": [
+        {
+          "id": "gltilde-universal-cover",
+          "kind_class": "missing-library",
+          "kind_label": "mathlib-gap",
+          "statement": "GL+(2,R)~ is defined here as a group of compatible pairs, NOT as a universal covering space. The covering-space facts the paper's phrase asserts -- projection surjective, fibre Z, simple connectedness -- are absent from Mathlib at the pinned revision and unproved here. The NAME asserts more than the proved content.",
+          "discharged_by": null
+        }
+      ],
+      "minted_at": "2026-08-05",
+      "minted_by": "Chris Dare",
+      "supersedes": null,
+      "superseded_by": null,
+      "note": "Owed: no declaration asserts the covering-space facts, and the audit found them absent and disclaimed in three places. Blocked on Mathlib, which has neither the universal cover of a Lie group nor pi_1(S^1) = Z at the pinned revision. Until this is discharged, no citation of Lemma 8.2 may claim relation exact.",
+      "mint_unresolved_reason": "An obligation names work that is owed; there is no printed statement in the paper for it to match."
+    }
+  }
+}
