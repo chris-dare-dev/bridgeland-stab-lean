@@ -494,6 +494,133 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.actStabAut_slicingDist
 #print axioms CategoryTheory.Triangulated.AutPairQuot_smul_slicingDist
 
+/-! ## StabilityMass — choice-free HN mass envelope -/
+
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_ne_zero_of_semistable
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_pos
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_ofIso
+#print axioms CategoryTheory.Triangulated.stabilityMass
+#print axioms CategoryTheory.Triangulated.stabilityMass_pos
+#print axioms CategoryTheory.Triangulated.stabilityMass_congr
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_eq_zero_of_isZero
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_eq_mass
+#print axioms CategoryTheory.Triangulated.stabilityMass_eq_mass
+#print axioms CategoryTheory.Triangulated.stabilityMass_ne_top
+#print axioms CategoryTheory.Triangulated.stabilityMass_lt_top
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_sum
+#print axioms CategoryTheory.Triangulated.stabilityMass_eq_zero_iff
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_pos
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_charge
+#print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_inverse
+#print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_functor
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass_functor_obj
+
+/-! ## StabilityDistance — the three-coordinate extended pseudodistance -/
+
+#print axioms CategoryTheory.Triangulated.logMassDist
+#print axioms CategoryTheory.Triangulated.logMassDist_self
+#print axioms CategoryTheory.Triangulated.logMassDist_comm
+#print axioms CategoryTheory.Triangulated.logMassDist_triangle
+#print axioms CategoryTheory.Triangulated.logMassDist_eq_of_ne_top
+#print axioms CategoryTheory.Triangulated.phiPlusDist
+#print axioms CategoryTheory.Triangulated.phiMinusDist
+#print axioms CategoryTheory.Triangulated.massDist
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm
+#print axioms CategoryTheory.Triangulated.stabilityDist
+#print axioms CategoryTheory.Triangulated.phiPlusDist_self
+#print axioms CategoryTheory.Triangulated.phiMinusDist_self
+#print axioms CategoryTheory.Triangulated.massDist_self
+#print axioms CategoryTheory.Triangulated.phiPlusDist_comm
+#print axioms CategoryTheory.Triangulated.phiMinusDist_comm
+#print axioms CategoryTheory.Triangulated.massDist_comm
+#print axioms CategoryTheory.Triangulated.phiPlusDist_triangle
+#print axioms CategoryTheory.Triangulated.phiMinusDist_triangle
+#print axioms CategoryTheory.Triangulated.massDist_triangle
+#print axioms CategoryTheory.Triangulated.massDist_eq_abs_log
+#print axioms CategoryTheory.Triangulated.massDist_eq_abs_log_ratio
+#print axioms CategoryTheory.Triangulated.stabilityDist_self
+#print axioms CategoryTheory.Triangulated.stabilityDist_comm
+#print axioms CategoryTheory.Triangulated.stabilityDist_triangle
+#print axioms CategoryTheory.Triangulated.slicingDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.phiPlusDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.phiMinusDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.massDist_le_stabilityDist
+
+/-! ## StabilityDistanceSeparation — identity of indiscernibles -/
+
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm_eq_zero_of_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_norm_charge
+#print axioms CategoryTheory.Triangulated.phiPlus_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.phiMinus_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.slicing_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.charge_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.charge_comp_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityDist_eq_zero_iff
+#print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero_iff
+
+/-! ## StabilityDistanceTopology — Proposition 8.1 topology comparison -/
+
+#print axioms CategoryTheory.Triangulated.abs_phiPlus_sub_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.abs_phiMinus_sub_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.abs_log_mass_ratio_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.exp_neg_lt_mass_ratio_and_lt_exp_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_lt_exp_mul_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_lt_exp_mul_of_stabilityDist'
+#print axioms CategoryTheory.Triangulated.norm_phaseExp_sub_phaseExp_le
+#print axioms CategoryTheory.Triangulated.norm_sum_phaseExp_sub_centralRay_le
+#print axioms CategoryTheory.Triangulated.charge_eq_stabilityMass_mul_phaseExp
+#print axioms CategoryTheory.Triangulated.norm_charge_sub_mass_phaseExp_le_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.cos_mul_stabilityMass_le_norm_charge_of_width
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd_of_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd_of_semistable'
+#print axioms CategoryTheory.Triangulated.StabilityMassTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_congr
+#print axioms CategoryTheory.Triangulated.stabilityMass_chain_le_partial_sum
+#print axioms CategoryTheory.Triangulated.stabilityMass_le_sum_postnikov_factors
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd'
+#print axioms CategoryTheory.Triangulated.basisForwardMassFactor
+#print axioms CategoryTheory.Triangulated.basisReverseMassFactor
+#print axioms CategoryTheory.Triangulated.basisMassControl
+#print axioms CategoryTheory.Triangulated.basisForwardMassFactor_zero
+#print axioms CategoryTheory.Triangulated.basisReverseMassFactor_zero
+#print axioms CategoryTheory.Triangulated.basisMassControl_zero
+#print axioms CategoryTheory.Triangulated.abs_log_mass_ratio_le_of_mem_basisNhd
+#print axioms CategoryTheory.Triangulated.exists_basisMassControl_lt
+#print axioms CategoryTheory.Triangulated.exists_basisNhd_subset_stabilityDist_ball
+#print axioms CategoryTheory.Triangulated.stabilityChargeControl
+#print axioms CategoryTheory.Triangulated.stabilityChargeControl_zero
+#print axioms CategoryTheory.Triangulated.norm_charge_sub_charge_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabSeminorm_le_of_stabilityDist_lt
+#print axioms CategoryTheory.Triangulated.exists_stabilityChargeControl_lt
+#print axioms CategoryTheory.Triangulated.exists_stabilityDist_ball_subset_basisNhd
+#print axioms CategoryTheory.Triangulated.nhds_hasBasis_basisNhd
+#print axioms CategoryTheory.Triangulated.StabilityDistanceTopologyCompatible
+#print axioms CategoryTheory.Triangulated.stabilityDistanceTopologyCompatible_of_mass_triangle
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace_toTopologicalSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace_edist
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpace
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpace_toTopologicalSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpaceOfMassTriangle
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpaceOfMassTriangle
+
+/-! ## AutFullIsometry — invariance of all three coordinates -/
+
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_phiPlusDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_phiMinusDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_massDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDistTerm
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDistTerm_functor_obj
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDist
+#print axioms CategoryTheory.Triangulated.AutPairQuot_smul_stabilityDist
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

@@ -181,6 +181,35 @@ construction. The explicit deck/double-shift pair is proved to lie in that
 kernel. No claim is made that this one pair generates the entire kernel in an
 arbitrary category.
 
+The full-metric chain is now implemented as well. `StabilityMass` defines the
+finite charge-norm sum for one HN filtration and an initially choice-free mass
+envelope over all HN filtrations. `HNMassUniqueness` constructs head--tail
+triangles by octahedral induction and uses the slicing-induced t-structure to
+prove that every HN filtration has the same mass. Consequently
+`stabilityMass` equals every finite HN mass sum, is never `⊤`, and vanishes
+exactly on zero objects; its `toReal` is the literal sum of factor-charge
+norms. `StabilityDistance` combines the two intrinsic phase
+discrepancies with the ordinary logarithmic mass discrepancy; the resulting
+`ℝ≥0∞`-valued distance is reflexive, symmetric, satisfies the triangle
+inequality, and dominates the anchor's `slicingDist`. `AutFullIsometry` proves
+that compatible autoequivalence representatives and `AutPairQuot v` preserve
+all three coordinates exactly. `StabilityDistanceSeparation` reconstructs the
+slicing and the observable charge `Z.comp v` from distance zero. It proves
+literal identity of stability conditions when `v` is surjective, including
+unconditionally for ordinary stability conditions over `K₀ C`.
+
+`StabilityDistanceTopology` now proves the analytic estimates and both local
+cofinality directions needed to identify full-distance balls with the Section
+6 neighborhoods.  It packages the comparison conditionally on the one
+remaining categorical input, HN-mass subadditivity across distinguished
+triangles.  The compatible `PseudoEMetricSpace`/`EMetricSpace` constructors use
+Mathlib's `ofEDistOfTopology`; regression theorems check that their topology is
+definitionally the pre-existing Section 6 topology, and no competing global
+instance is installed.  Proposition 8.1 is therefore still `no_claim` until
+the explicit mass-triangle proposition is proved.  Independently,
+`AutPairQuot v` carries compatible class-lattice data and is not identified
+with bare `Aut(D)`.
+
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation
 `φ ↦ φ + 2n`, and `kerEquiv` packages that as `Multiplicative ℤ ≃* ker`. The

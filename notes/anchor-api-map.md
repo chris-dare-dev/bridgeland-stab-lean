@@ -610,6 +610,69 @@ The three-milestone chain following the joint action is complete.
 
 ---
 
+## 10. HN mass, the three-coordinate distance, and full invariance (2026-08-06)
+
+The anchor supplies `HNFiltration`, intrinsic `phiPlus`/`phiMinus`, and the
+phase-only `slicingDist`, but no mass definition and no exposed factorwise
+uniqueness theorem for complete HN filtrations. The metric chain begins with a
+choice-free envelope rather than choosing a filtration non-functorially.
+
+1. `StabilityMass.lean`
+   - `HNFiltration.mass σ F = ∑ i, ofReal ‖σ.charge (F.factor i)‖`;
+   - `stabilityMass σ E = ⨆ F, F.mass σ` over every HN filtration of `E`;
+   - positivity on nonzero objects and invariance under object isomorphism;
+   - exact backward/forward filtration-mass transport and
+     `AutPair.act_stabilityMass`.
+2. `HNMassUniqueness.lean`
+   - constructs the head-factor/tail triangle by octahedral induction;
+   - uses the half-open t-structure at the common leading phase to identify
+     the head and tail objects of two filtrations;
+   - proves `HNFiltration.mass_eq_mass`, `stabilityMass_eq_mass`, finiteness,
+     the literal real finite-sum formula, and vanishing exactly on zero objects.
+3. `StabilityDistance.lean`
+   - `logMassDist` agrees with the ordinary absolute log difference on finite
+     masses and treats `⊤` as infinitely far from finite values;
+   - `stabilityDistTerm` is the maximum of the `φ⁺`, `φ⁻`, and mass
+     discrepancies;
+   - `massDist_eq_abs_log_ratio` identifies the mass coordinate with the
+     paper's literal absolute log-ratio on nonzero objects;
+   - `stabilityDist` is the supremum over nonzero objects;
+   - reflexivity, symmetry, triangle inequality, and
+     `slicingDist_le_stabilityDist` are proved.
+4. `AutFullIsometry.lean`
+   - transports each coordinate through `Φ⁻¹`;
+   - proves `AutPair.act_stabilityDist` by the two pointwise supremum bounds;
+   - descends to `AutPairQuot_smul_stabilityDist`.
+5. `StabilityDistanceSeparation.lean`
+   - extracts equality of intrinsic phases and real masses from distance zero;
+   - reconstructs the slicing and every object charge;
+   - proves equality of `Z.comp v` without assumptions and literal separation
+     when `v` is surjective;
+   - specializes to unconditional separation for ordinary stability
+     conditions over `K₀ C`.
+6. `StabilityDistanceTopology.lean`
+   - proves strict full-distance control of phases, mass ratios, and the
+     central charge, plus the sector estimates needed in the reverse
+     comparison;
+   - proves that full-distance balls refine Section 6 neighborhoods
+     unconditionally;
+   - derives the reverse refinement, equality of neighborhood bases, and the
+     compatible extended-metric constructors from the single explicit
+     proposition `StabilityMassTriangleInequality`;
+   - constructs through `PseudoEMetricSpace.ofEDistOfTopology` and proves by
+     `rfl` that the inherited topology is the existing Section 6 topology, so
+     no topology/typeclass diamond is introduced.
+
+The mass bridge, separation clause, analytic topology estimates, and safe
+metric-space construction are now closed.  The remaining Proposition 8.1
+work is the filtration-assembly proof of HN-mass subadditivity across every
+distinguished triangle; all topology comparison results are explicitly
+conditional on that proposition.  The citation to Proposition 8.1 therefore
+remains `no_claim`. The Lemma 8.2 citation also remains `no_claim`
+independently, because `AutPairQuot v` is not identified with bare `Aut(D)`.
+
+---
+
 ## 6. Open risks
 
 - ~~**Module system.**~~ **RESOLVED.** The anchor uses Lean's new module

@@ -248,25 +248,31 @@ Six claims to keep off the page.
   is that these factors generate all symmetries. The `AutPairQuot v` factor is
   equipped with the discrete topology for this statement; no moduli topology
   on autoequivalences is being asserted.
-- **"`Aut(D)` acts by isometries"** — not proved, and the shortfall is a
-  missing *definition*, not a missing proof. What is proved, in
-  `GroupAction/AutIsometry.lean` (2026-08-05), is that the action preserves
-  the **anchor's** `slicingDist` — `mapEquiv_slicingDist`, carried to stability
-  conditions by `actStabAut_slicingDist` and to the `MulAction` by
-  `AutPairQuot_smul_slicingDist`.
+- **"`Aut(D)` acts by isometries"** — still not literally the theorem proved
+  here. `GroupAction/StabilityMass.lean` defines the finite HN-factor mass sum
+  and a choice-free `stabilityMass` envelope. `HNMassUniqueness.lean` proves
+  equality of all HN mass sums by head--tail octahedral induction and
+  t-structure uniqueness, so the envelope equals every finite filtration mass
+  and is never `⊤`. `StabilityDistance.lean` adds the ordinary logarithmic
+  discrepancy to `φ⁺` and `φ⁻`, proving reflexivity, symmetry, the triangle
+  inequality, and `slicingDist ≤ stabilityDist`. `AutFullIsometry.lean` proves
+  exact preservation by `AutPair` representatives and `AutPairQuot v`.
+  `StabilityDistanceSeparation.lean` proves that distance zero identifies the
+  slicing and `Z.comp v`, hence the full stability condition when `v` is
+  surjective; the ordinary `K₀ C` specialization is unconditional.
 
-  `slicingDist` is **not** Bridgeland's `d`. `d` is a supremum of *three*
-  quantities per nonzero object; `slicingDist` carries the `φ⁺` and `φ⁻`
-  discrepancies and omits `|log (m₂(E)/m₁(E))|`, the mass ratio — the only term
-  that sees the central charge, hence the only one `Z ∘ lam` could move. **The
-  anchor defines no mass function**, so that term is not expressible at this
-  pin; supplying it is separate work, and until it exists this is not the
-  paper's claim.
-
-  The registry relation is `no_claim`, not `one_way`, and that is a real
-  non-implication both ways: a supremum of three terms being preserved does not
-  give that each term is. Say "the action preserves the phase distance between
-  slicings".
+  `StabilityDistanceTopology.lean` proves the analytic charge/mass estimates,
+  the full-distance-to-Section-6 cofinality direction, and the reverse
+  direction conditional on the explicit proposition
+  `StabilityMassTriangleInequality`. Its named `PseudoEMetricSpace` and
+  `EMetricSpace` constructors go through `ofEDistOfTopology`, with regression
+  theorems showing the inherited topology is definitionally the existing one;
+  do not replace them with a raw global metric instance. Proposition 8.1
+  remains `no_claim` until the mass-triangle proposition is discharged.
+  Independently, `AutPairQuot v` carries a compatible lattice automorphism and
+  is not identified with bare `Aut(D)`. Say "the compatible
+  autoequivalence group preserves the three-coordinate HN-mass distance" and
+  state the remaining group-level distinction.
 
   Two things this cost that are worth reusing. The anchor had carried
   `slicingDist` since before this repo existed

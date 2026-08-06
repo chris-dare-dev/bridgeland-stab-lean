@@ -185,24 +185,50 @@ fidelity:
     quotient by the full kernel acts faithfully; no claim says this explicit
     overlap generates the full kernel in every category.
 
-    CLOSED IN PART 2026-08-05: the ISOMETRY clause of Lemma 8.2, for the phase
-    discrepancies only -- AutIsometry.lean. mapEquiv_slicingDist proves the Aut
-    action preserves the ANCHOR's slicingDist exactly, with no finiteness
-    hypothesis, and actStabAut_slicingDist / AutPairQuot_smul_slicingDist carry
-    that to stability conditions and to the MulAction. See known_divergences
-    for why this is NOT Bridgeland's d and must not be cited as the isometry
-    claim: the anchor defines no mass function, and nothing here supplies one.
+    CLOSED IN PART 2026-08-06: the full-coordinate metric and isometry track.
+    AutIsometry.lean first proved exact preservation of the anchor's
+    phase-only slicingDist. StabilityMass.lean now defines the finite charge-
+    norm sum of an HN filtration and a choice-free mass envelope as the
+    supremum over all HN filtrations; it proves positivity, isomorphism
+    invariance, and exact transport by a compatible autoequivalence.
+    StabilityDistance.lean adds the logarithmic mass coordinate to phi-plus
+    and phi-minus, then proves reflexivity, symmetry, the triangle inequality,
+    and slicingDist <= stabilityDist. AutFullIsometry.lean proves exact
+    preservation by representatives and by AutPairQuot v.
 
-    Worth recording as a process point, because it is the same failure mode the
-    count corrections below describe. The obstruction previously written into
-    actStabAut's own @[cites] note -- "no metric is constructed here, so
-    isometry is not proved" -- was literally true and practically misleading.
-    Nothing in THIS repo constructs a metric and nothing does now; the anchor
-    had carried slicingDist since before this repo existed, in
-    StabilityCondition/Defs.lean, written for the section 7 deformation theory
-    and never connected to section 8. CLAUDE.md section 5 already warns to
-    search the whole anchor before concluding something is missing. That
-    warning was written about Deformation/ and applies here unchanged.
+    HNMassUniqueness.lean now closes the mass-identification gap without an
+    added axiom. It constructs the highest-factor/tail triangle of an HN
+    filtration by octahedral induction, uses the half-open t-structure at the
+    common leading phase to identify the decompositions from two filtrations,
+    and recurses on the tails. HNFiltration.mass_eq_mass proves equality of all
+    HN mass sums. stabilityMass_eq_mass identifies the envelope with every
+    finite sum; stabilityMass_ne_top and stabilityMass_eq_zero_iff prove
+    finiteness and vanishing exactly on zero objects.
+
+    StabilityDistanceSeparation.lean closes identity of indiscernibles. From
+    distance zero it first reconstructs the slicing, then the charge of every
+    object and the observable homomorphism Z.comp v. For a surjective class
+    map it reconstructs Z itself and hence the complete stability condition.
+    The ordinary K0-valued specialization is unconditional because its class
+    map is the identity.
+
+    StabilityDistanceTopology.lean closes the analytic and instance-design
+    parts of the topology comparison. It proves strict full-distance control
+    of phases, masses, and charges; both semistable sector estimates; and the
+    unconditional refinement of Section 6 neighborhoods by distance balls.
+    From the single explicit proposition StabilityMassTriangleInequality it
+    derives the reverse refinement, equality of neighborhood bases, and named
+    PseudoEMetricSpace/EMetricSpace structures. Those structures are built by
+    PseudoEMetricSpace.ofEDistOfTopology, and rfl regression theorems verify
+    that their inherited topology is definitionally the already-installed
+    Section 6 topology. No competing global metric instance is installed.
+
+    This still is NOT a completed formalization of Proposition 8.1 or the
+    literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
+    conditional on the still-unproved distinguished-triangle HN-mass
+    inequality, and AutPairQuot v carries extra compatible lattice data. The
+    relevant @[cites] records stay no_claim and known_divergences states the
+    boundary precisely.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -265,7 +291,8 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-06 in the
-    merged working tree via `scripts/check_audit.py` over 385
+    stability-distance-separation working tree via `scripts/check_audit.py`
+    over 448
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass.
@@ -304,6 +331,33 @@ fidelity:
     objects by an equivalence, phase transport, and preservation of the
     anchor's slicingDist through the bare and quotient autoequivalence actions.
 
+    COUNT UPDATE (full metric chain), 2026-08-06. The 41 additional records
+    comprise 12 for HN filtration mass, the choice-free mass envelope, and
+    autoequivalence transport; 22 for the extended logarithmic discrepancy,
+    the three objectwise coordinates, the supremal stability distance, and its
+    reflexive/symmetric/triangle laws; and 7 for representative and quotient
+    full-distance invariance.
+
+    COUNT UPDATE (HN mass uniqueness), 2026-08-06. The 11 additional records
+    comprise 8 for zero-object mass, equality of arbitrary HN mass sums,
+    identification and finiteness of stabilityMass, its literal real finite
+    sum, zero-object characterization, and positive real value on nonzero
+    objects; plus 3 for the finite logarithmic and literal log-ratio branches
+    used by logMassDist and massDist.
+
+    COUNT UPDATE (distance separation), 2026-08-06. The 11 additional records
+    cover extraction of the three zero coordinates, reconstruction of the
+    slicing, all object charges, and Z.comp v, separation for surjective class
+    maps, and the unconditional ordinary K0-valued separation corollaries.
+
+    COUNT UPDATE (Proposition 8.1 topology infrastructure), 2026-08-06. The
+    49 additional records comprise 4 coordinate-to-full-distance bounds, 1
+    public semistable mass/charge ray identity, and 44 declarations for the
+    analytic estimates, conditional HN-mass propagation, both neighborhood
+    cofinality directions, topology compatibility, and the named compatible
+    pseudo/extended metric structures. The manual audit now covers 497
+    declarations.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -327,27 +381,29 @@ fidelity:
   builds_clean_date: 2026-08-06
   builds_clean_note: >
     Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
-    present, `lake build` completed at 3774 jobs with
-    exit 0, and `scripts/check_audit.py` accepted all 385 records with no
-    sorryAx. The earlier committed tree was independently observed on Windows,
-    macOS, and CI; the new uncommitted universal-cover, combined-action, and
-    topological-action, joint-action, component-transport, period-equivariance,
-    and effective-quotient work have only this local observation so far.
+    present, `lake build` completed at 3780 jobs with exit 0. The strict parser
+    accepted all 497 records with no sorryAx after the Proposition 8.1
+    topology-infrastructure update, and `lake exe emit` completed successfully
+    with `mfc-emit: wrote attest/lean-emission.json`. PR #66 independently
+    carried the preceding universal-cover and symmetry work through its local
+    gates and was merged at 326d72b; PR #67 contains the full-metric chain,
+    with this topology extension observed locally before push.
   human_review: none
   machine_review: >
-    Current 2026-08-06 working tree: local build plus the audit gate passed at
-    385 declarations. CI has not run against the merged universal-cover,
-    normalized-quotient, combined-action, topological-action, and joint-action
-    changes, so the statements below describe the committed automation and
-    must not be read as a remote verdict on this working tree.
-    `lake exe lint-style` completed with only the
-    repository's existing missing-nolints-file warning. `lake exe runLinter`
-    is NOT clean:
-    it reports six pre-existing errors in unchanged modules (StrictAutAction,
-    ComplexBridge, AutAction, and K0Functor), and reports none in the new
-    universal-cover, topological-action, joint-action, component-transport,
-    period-equivariance, or effective-quotient modules. This working tree does
-    not claim to have repaired that inherited declaration-linter debt.
+    Current 2026-08-06 working tree: local build, the manual audit gate at 497
+    declarations, and the environment-wide contract emitter all passed. PR
+    #66 is merged; CI for the mass/distance/isometry branch has not run on this
+    topology extension, so the statements below describe the committed
+    automation and must not be read as a remote verdict on this working tree.
+    `lake exe lint-style` completed with only the repository's existing
+    missing-nolints-file warning. `lake exe runLinter` is NOT clean: it reports
+    six known errors in modules unchanged by the topology extension (two in
+    StrictAutAction, one in ComplexBridge, two in AutAction, and one in
+    K0Functor). The unusable `[simp]` attribute on `stabilityMass_eq_mass` was
+    removed, clearing the only finding in the full-metric chain; the new
+    StabilityDistanceTopology declarations have no linter findings. This
+    working tree does not claim to have repaired the remaining inherited
+    declaration-linter debt.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -563,6 +619,21 @@ fidelity:
     to rewrite along. Each side dominates the other pointwise instead, which is
     what forced phiPlus_congr into existence.
 
+    StabilityMass.lean, HNMassUniqueness.lean, StabilityDistance.lean, and
+    AutFullIsometry.lean form the subsequent full-metric chain.
+    HNFiltration.mass is the finite sum of charge norms for one filtration.
+    stabilityMass initially takes the supremum of those sums over every HN
+    filtration, avoiding a non-functorial Classical.choice.
+    HNFiltration.mass_eq_mass proves the sums are independent of the
+    filtration, and stabilityMass_eq_mass identifies the envelope with any of
+    them. The mass is finite, positive on nonzero objects, invariant under
+    object isomorphism, and transported exactly by AutPair.act. stabilityDist
+    is the supremum over nonzero objects of the maximum of phi-plus, phi-minus,
+    and the ordinary absolute logarithmic mass discrepancy. It is reflexive,
+    symmetric, satisfies the triangle inequality, and dominates slicingDist.
+    AutPair.act_stabilityDist and AutPairQuot_smul_stabilityDist prove exact
+    invariance of all three coordinates.
+
     What this is NOT is in known_divergences and must be read before citing it.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
@@ -583,32 +654,40 @@ fidelity:
     universal-cover predicate at this pin, so these exact declarations are the
     public trust surface rather than an inferred larger API.
 
-    GroupAction/AutIsometry.lean proves the Aut action preserves the anchor's
-    slicingDist. That is NOT Bridgeland's generalised metric d, and the gap is
-    not a technicality. d is a sup of THREE quantities per nonzero object; the
-    anchor's slicingDist carries two of them, the phi-plus and phi-minus
-    discrepancies, and omits |log(m_2(E)/m_1(E))|, the mass ratio. The omitted
-    term is the ONLY one that sees the central charge, and therefore the only
-    one that could move under an autoequivalence at all, since actStabAut
-    replaces Z by Z composed with lam.
+    GroupAction/AutIsometry.lean proves preservation of the anchor's phase-only
+    slicingDist. StabilityMass.lean, HNMassUniqueness.lean, and
+    StabilityDistance.lean now supply a literal finite HN-mass coordinate and
+    AutFullIsometry.lean proves that AutPairQuot v preserves the resulting
+    stabilityDist exactly.
 
-    The relation to Lemma 8.2 is recorded as no_claim, not one_way, and that is
-    a genuine non-implication in both directions rather than modesty: a sup of
-    three terms being preserved does not give that each term is preserved, so
-    the paper's isometry claim does not imply this one; and this one does not
-    imply the paper's. The same call, for the same reason, as
-    gltildeSlicingMulAction.
+    The mass coordinate is now Bridgeland's ordinary HN mass:
+    HNFiltration.mass_eq_mass proves independence of the filtration, and
+    stabilityMass_eq_mass plus stabilityMass_ne_top identify the choice-free
+    envelope with the expected finite sum. logMassDist retains a total
+    definition on ENNReal, but massDist_eq_abs_log proves that stability
+    conditions always use its ordinary finite absolute-logarithmic branch.
 
-    Nothing here closes the gap and nothing here can. The anchor defines NO
-    mass function -- m_sigma(E) as a sum of |Z| over HN factors does not appear
-    in it -- so the omitted term is not currently expressible. Supplying it is
-    separate work. Do not cite mapEquiv_slicingDist, actStabAut_slicingDist or
-    AutPairQuot_smul_slicingDist as "Aut(D) acts by isometries"; say "the
-    action preserves the phase distance between slicings".
+    Proposition 8.1 also asserts separation and equality of the induced
+    topology with Section 6. StabilityDistanceSeparation.lean proves
+    separation for the ordinary K0-valued space and, more generally, for a
+    surjective class map. Without surjectivity it proves precisely the
+    observable conclusion: equality of the slicing and Z.comp v.
+    StabilityDistanceTopology.lean proves the analytic estimates and forward
+    cofinality direction, and proves reverse cofinality plus the compatible
+    EMetricSpace construction conditional on StabilityMassTriangleInequality.
+    Its ofEDistOfTopology route retains the Section 6 topology definitionally,
+    so no raw metric instance or topology diamond is present. The remaining
+    filtration-assembly theorem is not assumed and is not hidden in an
+    instance; hence the registry relation to Proposition 8.1 is still
+    no_claim. The relation of the full-distance isometry to Lemma 8.2 also
+    remains no_claim because the acting group has not been identified with
+    bare Aut(D).
 
-    A second, independent reason AutPairQuot_smul_slicingDist is not the
-    paper's claim: AutPairQuot v is not Aut(D). See the AutPairQuot paragraph
-    above and notes/anchor-api-map.md section 7.
+    Independently, AutPairQuot v is not Aut(D): it includes a compatible
+    lattice automorphism and is not proved equivalent to the external group of
+    exact autoequivalences. Do not cite AutPairQuot_smul_stabilityDist as the
+    literal paper theorem; call it full-distance invariance for the compatible
+    autoequivalence group and state the remaining group-level boundary.
 
     GroupAction/QuotAutAction.lean defines AutQuot C as the quotient of
     triangulated auto-equivalences by natural isomorphism of the forward

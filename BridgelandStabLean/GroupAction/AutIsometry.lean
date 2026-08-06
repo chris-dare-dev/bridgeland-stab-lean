@@ -36,10 +36,12 @@ them — the `φ⁺` and `φ⁻` discrepancies — and omits
 one that sees the central charge, and therefore the only one that could move
 under `Φ` at all, since `actStabAut` replaces `Z` by `Z ∘ lam`.
 
-Nothing here closes it, and nothing here can: **the anchor has no mass
-function** — `m_σ(E) = Σ|Z(A_i)|` over the HN factors is not defined anywhere
-in it, and a search for one returns nothing. Supplying it is a separate piece
-of work, not a missing `rw`.
+This module itself does not close it: **the anchor has no mass function** —
+`m_σ(E) = Σ|Z(A_i)|` over the HN factors is not defined anywhere in it.
+The downstream `StabilityMass`, `HNMassUniqueness`, `StabilityDistance`, and
+`AutFullIsometry` modules define the HN mass, prove independence from the
+chosen filtration and finiteness, and prove preservation of the resulting
+three-coordinate distance.
 
 So the relation to Lemma 8.2 is `no_claim`, not `one_way`, and the reason is a
 genuine non-implication rather than modesty. A sup of three terms being
@@ -185,7 +187,7 @@ isometry clause.
 No finiteness hypothesis: both sides live in `ℝ≥0∞` and the equality holds when
 they are `⊤`. -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := no_claim)
-        (note := "The ISOMETRY clause of Lemma 8.2, for a DIFFERENT distance, so neither statement implies the other. The paper's d is a sup of THREE quantities; the anchor's slicingDist carries the two phase discrepancies and omits |log(m2/m1)|, the mass ratio -- the only term that sees the central charge, hence the only one Z-composed-with-lam could move. A sup of three being preserved does not give that each term is, so isometry for d does NOT imply this; and preserving slicingDist plainly does not imply isometry for d. Separately, slicingDist is a distance on Slicing C, not on Stab(D). The anchor defines no mass function, so the omitted term is not expressible at this pin.")]
+        (note := "The ISOMETRY clause of Lemma 8.2, for a DIFFERENT distance, so neither statement implies the other. The paper's d is a sup of THREE quantities; the anchor's slicingDist carries the two phase discrepancies and omits |log(m2/m1)|, the mass ratio -- the only term that sees the central charge, hence the only one Z-composed-with-lam could move. A sup of three being preserved does not give that each term is, so isometry for d does NOT imply this; and preserving slicingDist plainly does not imply isometry for d. Separately, slicingDist is a distance on Slicing C, not on Stab(D). Downstream files construct a three-coordinate envelope distance, but this phase-only theorem remains distinct.")]
 theorem mapEquiv_slicingDist (s₁ s₂ : Slicing C) :
     slicingDist C (s₁.mapEquiv Φ) (s₂.mapEquiv Φ) = slicingDist C s₁ s₂ := by
   apply le_antisymm
