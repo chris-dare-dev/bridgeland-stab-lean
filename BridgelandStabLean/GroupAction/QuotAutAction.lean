@@ -3,6 +3,7 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.GroupAction.AutAction
+import Mathlib.CategoryTheory.Adjunction.Unique
 
 /-!
 # `Aut(D)` as an honest group, by quotienting
@@ -26,15 +27,13 @@ then makes them **equal**, so the two slicings are equal on the nose and
 So `closedUnderIso`, an axiom of `Slicing` that looks like bookkeeping, is
 exactly what makes the quotient action well defined.
 
-## One honest caveat about the relation
+## Why the forward functor is enough
 
-The setoid asks for `Φ.functor ≅ Ψ.functor` **and** `Φ.inverse ≅ Ψ.inverse`.
-Mathematically the second follows from the first, since adjoints are unique up
-to natural isomorphism — but that is **not proved here**, so as stated the
-relation is a priori finer than "the functors are naturally isomorphic", and
-`AutQuot` a priori larger than the usual `Aut(D)`. Carrying both components
-keeps `comp`/`symm` compatibility trivial; closing the gap means importing the
-adjoint-uniqueness lemma and dropping the second component.
+The quotient relation asks only for `Φ.functor ≅ Ψ.functor`, as the usual
+definition of `Aut(D)` does. The chosen inverses are right adjoints to those
+functors. Transporting one adjunction across the given natural isomorphism and
+applying uniqueness of right adjoints gives `Φ.inverse ≅ Ψ.inverse`. Thus no
+extra choice of inverse isomorphism is part of the relation.
 
 ## Scope
 
@@ -117,24 +116,32 @@ theorem act_comp (Φ Ψ : TriEquiv C) (s : Slicing C) :
     (Φ.comp Ψ).act s = Ψ.act (Φ.act s) := by
   refine Slicing.ext C ?_; funext φ; funext X; rfl
 
+/-- Naturally isomorphic equivalences have naturally isomorphic chosen
+inverses, by uniqueness of right adjoints. -/
+def inverseIsoOfFunctorIso {Φ Ψ : TriEquiv C} (h : Φ.e.functor ≅ Ψ.e.functor) :
+    Φ.e.inverse ≅ Ψ.e.inverse :=
+  Adjunction.rightAdjointUniq Φ.e.toAdjunction
+    (Adjunction.ofNatIsoLeft Ψ.e.toAdjunction h.symm)
+
 /-- **Descent.** Naturally isomorphic auto-equivalences act identically — not
 merely up to isomorphism of slicings, but equally, because `Slicing.P` is
 closed under isomorphism and `propext` upgrades the resulting `Iff` to `Eq`. -/
-theorem act_congr {Φ Ψ : TriEquiv C} (h : Φ.e.inverse ≅ Ψ.e.inverse) (s : Slicing C) :
+theorem act_congr {Φ Ψ : TriEquiv C} (h : Φ.e.functor ≅ Ψ.e.functor) (s : Slicing C) :
     Φ.act s = Ψ.act s := by
+  let hInv := inverseIsoOfFunctorIso h
   refine Slicing.ext C ?_; funext φ; funext X
   simp only [act_P]
-  exact propext ⟨fun hX => ObjectProperty.prop_of_iso _ (h.app X) hX,
-                 fun hX => ObjectProperty.prop_of_iso _ (h.app X).symm hX⟩
+  exact propext ⟨fun hX => ObjectProperty.prop_of_iso _ (hInv.app X) hX,
+                 fun hX => ObjectProperty.prop_of_iso _ (hInv.app X).symm hX⟩
 
-/-- Isomorphism of auto-equivalences. See the module docstring on why both
-components are carried. -/
+/-- Isomorphism of triangulated auto-equivalences, expressed by a natural
+isomorphism of their forward functors. -/
 instance setoid : Setoid (TriEquiv C) where
-  r Φ Ψ := Nonempty (Φ.e.functor ≅ Ψ.e.functor) ∧ Nonempty (Φ.e.inverse ≅ Ψ.e.inverse)
+  r Φ Ψ := Nonempty (Φ.e.functor ≅ Ψ.e.functor)
   iseqv :=
-    { refl := fun _ => ⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩
-      symm := fun ⟨⟨a⟩, ⟨b⟩⟩ => ⟨⟨a.symm⟩, ⟨b.symm⟩⟩
-      trans := fun ⟨⟨a⟩, ⟨b⟩⟩ ⟨⟨c⟩, ⟨d⟩⟩ => ⟨⟨a.trans c⟩, ⟨b.trans d⟩⟩ }
+    { refl := fun _ => ⟨Iso.refl _⟩
+      symm := fun ⟨a⟩ => ⟨a.symm⟩
+      trans := fun ⟨a⟩ ⟨b⟩ => ⟨a.trans b⟩ }
 
 end TriEquiv
 
@@ -150,25 +157,25 @@ namespace AutQuot
 /-- `a * b` composes `b` first, matching `(a * b) • s = a • (b • s)`. -/
 instance group : Group (AutQuot C) where
   mul := Quotient.map₂ (fun A B => B.comp A)
-    (by rintro A A' ⟨⟨p⟩, ⟨q⟩⟩ B B' ⟨⟨r⟩, ⟨t⟩⟩
-        exact ⟨⟨NatIso.hcomp r p⟩, ⟨NatIso.hcomp q t⟩⟩)
+    (by rintro A A' ⟨p⟩ B B' ⟨r⟩
+        exact ⟨NatIso.hcomp r p⟩)
   one := Quotient.mk _ TriEquiv.id
   inv := Quotient.map TriEquiv.symm
-    (by rintro A A' ⟨⟨p⟩, ⟨q⟩⟩; exact ⟨⟨q⟩, ⟨p⟩⟩)
+    (by rintro A A' ⟨p⟩; exact ⟨TriEquiv.inverseIsoOfFunctorIso p⟩)
   -- Associativity and the unit laws are `Iso.refl` because functor composition
   -- is strictly associative and `𝟭` is a strict unit; only inversion needs a
   -- genuine natural isomorphism, which is exactly the point of quotienting.
   mul_assoc := by
-    rintro ⟨A⟩ ⟨B⟩ ⟨D⟩; exact Quotient.sound ⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩
-  one_mul := by rintro ⟨A⟩; exact Quotient.sound ⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩
-  mul_one := by rintro ⟨A⟩; exact Quotient.sound ⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩
+    rintro ⟨A⟩ ⟨B⟩ ⟨D⟩; exact Quotient.sound ⟨Iso.refl _⟩
+  one_mul := by rintro ⟨A⟩; exact Quotient.sound ⟨Iso.refl _⟩
+  mul_one := by rintro ⟨A⟩; exact Quotient.sound ⟨Iso.refl _⟩
   inv_mul_cancel := by
-    rintro ⟨A⟩; exact Quotient.sound ⟨⟨A.e.unitIso.symm⟩, ⟨A.e.unitIso.symm⟩⟩
+    rintro ⟨A⟩; exact Quotient.sound ⟨A.e.unitIso.symm⟩
 
 /-- **`Aut(D)` acts on slicings.** Well defined by `TriEquiv.act_congr`. -/
 noncomputable instance mulActionSlicing : MulAction (AutQuot C) (Slicing C) where
   smul a s := Quotient.liftOn a (fun Φ => Φ.act s)
-    (fun _ _ h => TriEquiv.act_congr h.2.some s)
+    (fun _ _ h => TriEquiv.act_congr h.some s)
   one_smul s := TriEquiv.act_id s
   mul_smul a b s := by
     induction a using Quotient.inductionOn with | _ A =>

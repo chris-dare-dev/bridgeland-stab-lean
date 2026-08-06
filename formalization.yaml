@@ -84,9 +84,10 @@ toolchain:
 
 automation:
   method: AI-assisted
-  framework: Claude Code
+  framework: Claude Code and Codex
   models:
     - claude-opus-5
+    - GPT-5
 
 cost:
   wall_time: pending
@@ -105,25 +106,84 @@ fidelity:
     standing rule stays -- a result that is not yet proved is left undeclared
     with a TODO, never declared with sorry, because a sorry-backed instance
     typechecks, gets imported, and launders an unproved claim downstream.
-    Currently undeclared under that rule: exactly ONE item, simple
-    connectedness of GLTilde. Not reachable at this pin, and the check was run
-    rather than assumed. (a) SimplyConnectedSpace exists in Mathlib 8a178386
-    but its ONLY instances are ofContractible and Unit; no fundamental group of
-    any space is computed anywhere at this revision, so pi_1(S^1) = Z is
-    unavailable and the covering-space route is closed. (b) The remaining route
-    is contractibility -- true, since GLTilde is homeomorphic to R^4. It needs
-    a polar decomposition, which Mathlib does NOT have at this pin (zero files
-    match); that prerequisite is now supplied locally by
-    ForMathlib/PolarDecomposition.lean, for general n over R. It is ONE of
-    several missing pieces, not the whole gap -- see (c). (c)
-    Independently, nothing in this repo puts a topology on GLTilde, so the
-    statement is not currently expressible here. This is a
-    missing-prerequisite program in the sense of CLAUDE.md section 4, not a
-    task; it must not be stubbed. The other two
-    covering-space facts are both CLOSED 2026-08-04: the Z fibre in
-    GLTildeFibre.lean, and surjectivity of the projection in GLTildeSurj.lean.
-    The MulAction gap listed here previously is also CLOSED; see the second
-    2026-08-04 entry below.
+    CLOSED 2026-08-05: simple connectedness of GLTilde. GLTildeTopology.lean
+    gives global coordinates
+    R x (0,infinity) x R x (0,infinity): rotate the first column back through
+    the lifted phase f(0), leaving an upper-triangular matrix with two positive
+    diagonal entries. The inverse construction normalizes the canonical lift
+    of that upper-triangular matrix at zero. The coordinate map is proved
+    bijective, the product topology is transported through the resulting
+    homeomorphism, and ContractibleSpace GLTilde and SimplyConnectedSpace
+    GLTilde are declared. GLTilde.mat is also proved continuous. This proof
+    does NOT need a computation of pi_1(S^1), and it does not use the polar
+    decomposition; ForMathlib/PolarDecomposition.lean remains an independent,
+    more general matrix result.
+
+    The other two group-theoretic facts were CLOSED 2026-08-04: the Z fibre in
+    GLTildeFibre.lean and surjectivity of the projection in
+    GLTildeSurj.lean. Together they give the exact sequence
+    1 -> Z -> GLTilde -> GL+(2,R) -> 1.
+
+    CLOSED 2026-08-05: the covering-map property. GLTildeCover.lean gives
+    GL+(2,R) global coordinates S^1 x (0,infinity) x R x (0,infinity) and
+    proves that GLTilde.mat is conjugate, through the source and base
+    coordinate homeomorphisms, to (theta |-> exp(pi theta)) x id. Mathlib's
+    standard circle exponential cover, stability under products with an
+    identity, and stability under coordinate homeomorphisms yield
+    GLTilde.isCoveringMap_toMat. GLTilde.universalCoverData packages
+    IsCoveringMap GLTilde.mat, surjectivity, and SimplyConnectedSpace GLTilde;
+    the earlier exact_deckHom_toMatHom separately records the Z fibre as part
+    of the algebraic exact sequence.
+
+    CLOSED 2026-08-06: topological-group compatibility.
+    GLTildeTopologicalGroup.lean proves joint continuity of phase evaluation
+    (x,phi) |-> x.shift(phi). In global coordinates the possibly
+    branch-sensitive arg(cA) term cancels, leaving only arg(W(phi)) -
+    arg(W(0)); every W lies in the open right half-plane where arg is
+    continuous. Matrix multiplication and joint phase evaluation then give
+    continuous multiplication. Inversion is handled by the explicit inverse
+    positive-diagonal upper-triangular coordinates. The resulting declaration
+    is IsTopologicalGroup GLTilde.
+
+    CLOSED 2026-08-06: normalized quotient and combined symmetry action.
+    QuotAutAction.lean now imports right-adjoint uniqueness and proves
+    TriEquiv.inverseIsoOfFunctorIso, so AutQuot and AutPairQuot quotient only
+    by natural isomorphism of the forward functors. CombinedAction.lean proves
+    the GLTilde and AutPairQuot actions commute and supplies
+    MulAction (GLTilde x AutPairQuot v) (StabilityCondition.WithClassMap C v).
+
+    CLOSED 2026-08-06: fixed-element topological action layer.
+    TopologicalAction.lean proves forward control of slicingDist and
+    stabSeminorm under a compatible autoequivalence pair, giving
+    ContinuousConstSMul for AutPairQuot and a homeomorphism for each class.
+    GLTildeContinuousAction.lean combines uniform continuity of the normalized
+    phase lift with operator-norm bounds for actC and actC-inverse, giving the
+    corresponding ContinuousConstSMul and homeomorphisms for GLTilde and for
+    the direct-product action.
+
+    CLOSED 2026-08-06: jointly continuous symmetry actions.
+    GLTildeJointContinuousAction.lean proves that phase displacement is
+    uniformly small on all of R near the identity (compactness on [0,1] plus
+    integer equivariance), that the central-charge operator varies
+    continuously in operator norm, and that these estimates control one
+    Bridgeland basic neighborhood uniformly in the nearby group element.
+    Translation from the identity gives ContinuousSMul GLTilde on the
+    stability space. AutPairQuot carries the standard discrete topology, so
+    its action and the combined GLTilde x AutPairQuot action also have
+    ContinuousSMul instances.
+
+    CLOSED 2026-08-06: component transport, equivariant period coordinates,
+    and the effective symmetry quotient. ComponentAction.lean transports
+    connected-component labels, restricts symmetries to homeomorphisms between
+    component subtypes, and equips each component stabilizer with an action on
+    that component. PeriodMapEquivariance.lean packages the additive action on
+    the charge space and proves equivariance of the full central-charge map and
+    the canonical component local-model chart. EffectiveAction.lean constructs
+    the categorical double shift as a triangulated autoequivalence, proves it
+    is trivial on K0, and fixes the convention `[2] = deck (-1)` at the level
+    of actions. Thus `(deck 1, [2])` is in the combined action kernel. The
+    quotient by the full kernel acts faithfully; no claim says this explicit
+    overlap generates the full kernel in every category.
 
     CLOSED IN PART 2026-08-05: the ISOMETRY clause of Lemma 8.2, for the phase
     discrepancies only -- AutIsometry.lean. mapEquiv_slicingDist proves the Aut
@@ -144,13 +204,6 @@ fidelity:
     search the whole anchor before concluding something is missing. That
     warning was written about Deformation/ and applies here unchanged.
 
-    Note what the two closed facts do NOT give. Together they say
-    1 -> Z -> GLTilde -> GL+(2,R) -> 1 is exact (exact_deckHom_toMatHom), which
-    is a statement about GROUPS. Being the universal cover is a statement about
-    SPACES and needs a topology plus simple connectedness. The remaining gap is
-    therefore a change of category, not a missing lemma, and
-    exact_deckHom_toMatHom must not be cited as if it closed it.
-
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
     Slicing.mapEquiv), and QuotAutAction.lean quotients triangulated
@@ -160,8 +213,9 @@ fidelity:
     SUPERSEDED for slicings and carries a scope restriction recorded in
     source_mapping -- its F g are isomorphisms of categories, not merely
     equivalences, so Serre functors and spherical twists are outside it. Do not
-    cite StrictAut as "the Aut action is formalized"; cite AutQuot, subject to
-    the setoid gap in known_divergences.
+    cite StrictAut as "the Aut action is formalized"; cite AutQuot. The setoid
+    is exactly forward-functor natural isomorphism; inverse isomorphisms are
+    derived from uniqueness of right adjoints.
 
     CLOSED 2026-08-04: the Aut action on STABILITY CONDITIONS is declared --
     AutStabilityAction.lean's actStabAut. All three prerequisites landed: K0
@@ -210,13 +264,45 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-05 at the
-    commit introducing GroupAction/AutIsometry.lean, via
-    `scripts/check_audit.py` over 198 declarations this project introduces:
-    every one depends on a subset of [propext, Classical.choice, Quot.sound]
-    and nothing else. No sorryAx. Allowlist verdict: pass. The previous
-    enumeration, 2026-08-04, covered 189; the nine added are the AutIsometry
-    block, and they are listed in scripts/Audit.lean under that heading.
+    No axiom declarations. Transitive closure enumerated 2026-08-06 in the
+    merged working tree via `scripts/check_audit.py` over 385
+    declarations this project introduces: every one depends on a subset of
+    [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
+    Allowlist verdict: pass.
+
+    COUNT UPDATE (components/periods/effective quotient), 2026-08-06. The 44
+    additional records comprise 9 for connected-component transport and
+    stabilizer actions; 14 for charge-space equivalences and period-map/chart
+    equivariance; and 21 for coherent even shifts, the deck/[2] overlap, the
+    full action kernel, and its faithful effective quotient.
+
+    COUNT UPDATE (later), 2026-08-06. The 31 additional audit records comprise
+    1 for right-adjoint uniqueness normalizing the quotient relation; 6 for
+    the commuting/direct-product action; 8 for autoequivalence phase,
+    distance, seminorm, continuity, and homeomorphism results; and 16 for the
+    fixed-GLTilde analytic bounds, continuity instances, and homeomorphisms.
+
+    COUNT UPDATE (joint action), 2026-08-06. The 18 additional records cover
+    uniform identity-neighborhood phase control, operator-norm continuity and
+    seminorm estimates, the identity and translated joint-continuity proofs,
+    the discrete topology on AutPairQuot, and ContinuousSMul instances for
+    both factors and their direct product.
+
+    COUNT UPDATE, 2026-08-06. The 94 new audit records comprise 51 for
+    GLTildeTopology.lean's rotations, upper-triangular coordinates, coordinate
+    equivalence/homeomorphism, topology, continuous projection,
+    contractibility, and simple-connectedness instances; 38 for
+    GLTildeCover.lean's base coordinates, coordinate homeomorphism, standard
+    product cover, conjugacy calculation, covering-map theorem, and packaged
+    universal-cover data; and 5 for GLTildeTopologicalGroup.lean's normalized
+    phase formula, joint phase evaluation, and topological-group instance.
+    This observation is working-tree-pinned rather than commit-pinned because
+    the new files are not yet committed.
+
+    COUNT UPDATE (AutIsometry), 2026-08-06. The 9 additional records cover
+    iso-invariance of intrinsic phases, preservation and reflection of zero
+    objects by an equivalence, phase transport, and preservation of the
+    anchor's slicingDist through the bare and quotient autoequivalence actions.
 
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
@@ -238,23 +324,31 @@ fidelity:
     and two fields quoting different bare numbers is the normal failure, not an
     unlucky one. Quote the commit with the count, or do not quote the count.
   builds_clean: true
-  builds_clean_date: 2026-08-04
+  builds_clean_date: 2026-08-06
   builds_clean_note: >
-    Observed on a SECOND machine on 2026-08-04 -- macOS/aarch64, toolchain
-    installed from scratch, Mathlib from `lake exe cache get`, the anchor
-    compiled from source -- at 3548 jobs, exit 0, zero errors and zero sorry
-    warnings. The 2026-08-03 observation was on the Windows 11 workstation
-    recorded under environment.hardware. Two machines is not CI, and this field
-    still describes observations rather than a gate.
-
-    The date above is deliberately NOT advanced to 2026-08-05. The tree at the
-    AutIsometry commit does build clean -- 3663 jobs, exit 0, no errors, no
-    sorry warnings, check_audit.py green over 198 declarations -- but that was
-    observed on the Windows workstation only. Restamping the field with a
-    one-machine observation would replace a stronger claim with a weaker one
-    while looking like an update.
+    Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
+    present, `lake build` completed at 3774 jobs with
+    exit 0, and `scripts/check_audit.py` accepted all 385 records with no
+    sorryAx. The earlier committed tree was independently observed on Windows,
+    macOS, and CI; the new uncommitted universal-cover, combined-action, and
+    topological-action, joint-action, component-transport, period-equivariance,
+    and effective-quotient work have only this local observation so far.
   human_review: none
   machine_review: >
+    Current 2026-08-06 working tree: local build plus the audit gate passed at
+    385 declarations. CI has not run against the merged universal-cover,
+    normalized-quotient, combined-action, topological-action, and joint-action
+    changes, so the statements below describe the committed automation and
+    must not be read as a remote verdict on this working tree.
+    `lake exe lint-style` completed with only the
+    repository's existing missing-nolints-file warning. `lake exe runLinter`
+    is NOT clean:
+    it reports six pre-existing errors in unchanged modules (StrictAutAction,
+    ComplexBridge, AutAction, and K0Functor), and reports none in the new
+    universal-cover, topological-action, joint-action, component-transport,
+    period-equivariance, or effective-quotient modules. This working tree does
+    not claim to have repaired that inherited declaration-linter debt.
+
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
     re-run and GATED by scripts/check_audit.py, then a no-sorry check over the
@@ -339,8 +433,35 @@ fidelity:
     The GL+(2,R)-tilde half of Bridgeland section 8 is therefore complete on
     stability conditions.
 
-    AutAction, StrictAutAction, and QuotAutAction cover the other half of
-    section 8 -- the autoequivalence action -- on SLICINGS only.
+    GLTildeFibre and GLTildeSurj close the algebraic covering data: deckHom is
+    injective with range ker(toMatHom), kerEquiv identifies the kernel with Z,
+    toMatHom is surjective, and exact_deckHom_toMatHom packages the exact
+    sequence. GLTildeSurj also supplies the explicit canonical lift/section
+    and unique deck-times-section factorization. These are group statements,
+    not by themselves a covering-space theorem.
+
+    GLTildeTopology (landed in the working tree 2026-08-05) adds the source
+    topology. Its global coordinates are
+    R x (0,infinity) x R x (0,infinity), obtained by rotating the first column
+    back through f(0) and reading the resulting positive-diagonal
+    upper-triangular matrix. The coordinate equivalence is upgraded to a
+    homeomorphism; its transported topology makes GLTilde contractible and
+    simply connected, and the matrix projection is continuous. GLTildeCover
+    adds S^1 x (0,infinity) x R x (0,infinity) coordinates on GL+(2,R), proves
+    the projection is the standard exponential cover times an identity in
+    those coordinates, and packages the covering-map, surjectivity, and
+    simply-connected source properties in GLTilde.universalCoverData.
+    GLTildeTopologicalGroup proves joint phase evaluation, multiplication, and
+    inversion continuous, yielding IsTopologicalGroup GLTilde.
+
+    ForMathlib/PolarDecomposition proves existence and uniqueness of the polar
+    decomposition A = Q P for invertible matrices over RCLike scalars. It was
+    added while investigating the topological route, but the final global
+    coordinate proof above does not depend on it.
+
+    AutAction, StrictAutAction, QuotAutAction, AutStabilityAction, and
+    AutPairAction cover the other half of section 8 -- the autoequivalence
+    action -- through full stability conditions.
 
     AutAction is the groundwork: PostnikovTower.mapF and HNFiltration.mapF push
     a tower / filtration through a triangulated functor, and Slicing.mapEquiv
@@ -350,10 +471,10 @@ fidelity:
     only HNFiltration.ofIso along an object isomorphism, so these are built
     from scratch.
 
-    The packaging problem is that Aut(D) is not a group in Lean: C equiv C is
-    associative only up to natural isomorphism, so it carries no Group instance
-    and MulAction is unavailable. TWO answers are declared, and they are NOT
-    interchangeable -- the difference is a scope claim, not a style choice.
+    The packaging problem is that C equiv C is associative only up to natural
+    isomorphism, so it carries no Group instance. TWO answers are declared,
+    and they are NOT interchangeable -- the difference is a scope claim, not
+    a style choice.
 
     StrictAutAction takes a group mapping STRICTLY into endofunctors (functor
     composition in Lean is honestly associative, so C functor C is a monoid
@@ -369,7 +490,7 @@ fidelity:
 
     QuotAutAction does the general thing instead: TriEquiv bundles a
     triangulated auto-equivalence with its instances, and AutQuot C is the
-    quotient by natural isomorphism -- a genuine Group, with
+    quotient by natural isomorphism of the forward functors -- a genuine Group, with
     MulAction (AutQuot C) (Slicing C) and both laws proved. NOTHING is
     excluded; every triangulated auto-equivalence has a class in it, Serre
     functors and spherical twists included. The action descends by act_congr:
@@ -377,16 +498,14 @@ fidelity:
     (Phi-inverse X) and s.P phi (Psi-inverse X) are equivalent PROPOSITIONS,
     because a slicing's P is closed under isomorphism, and propext makes them
     equal. So closedUnderIso -- an axiom of Slicing that reads like bookkeeping
-    -- is exactly what makes the quotient action well defined. One gap in the
-    setoid is recorded in known_divergences.
-
-    NOT declared on either route: the Aut action on STABILITY CONDITIONS. Of
-    the three pieces that needs, one is now DONE and one is only a decision:
+    -- is exactly what makes the quotient action well defined. The inverse
+    natural isomorphism is derived from the forward one by uniqueness of right
+    adjoints (`TriEquiv.inverseIsoOfFunctorIso`).
 
     K0Functor.lean supplies K0 functoriality -- K0.mapF for a triangulated
     functor, with mapF_id, mapF_comp, and mapF_congr (naturally isomorphic
     functors induce the SAME map, the K0-level analogue of TriEquiv.act_congr
-    and what will let the class-map half descend to AutQuot). It was nearly
+    and what lets the class-map half descend to the quotient). It was nearly
     free: X maps to the class of F X is triangle-additive because
     F.map_distinguished carries the triangle and mapTriangle's components are
     definitionally F applied to the originals.
@@ -398,28 +517,32 @@ fidelity:
     AddEquiv there rather than the AddMonoidHom actStabAut takes, because a
     group needs its inverse and v supplies none.
 
-    Landed 2026-08-03: StrictFiniteLength.lean extracts the general
+    StrictFiniteLength.lean extracts the general
     strict-hypothesis transfer lemma (isStrictArtinian_of_faithful_strict and
     its Noetherian twin) for an ARBITRARY full faithful strict-mono-preserving
     functor -- the anchor's own two interval lemmas are instances of it -- plus
     mapEquiv_intervalProp_iff, recording that under Aut the interval endpoints
-    do NOT move. The anchor's own helpers are private, so they were replicated.
-    What remains is only assembly: the induced interval functor, its
-    strict-mono preservation (via the cokernel-triangle route, as
-    intervalInclusion_map_strictMono does), and rebuilding IsLocallyFinite with
-    the same eta.
+    do NOT move. AutStabilityAction assembles the induced interval functor,
+    strict-mono preservation, local finiteness with the same eta, and the
+    central-charge compatibility datum. AutPairAction packages this as
+    MulAction (AutPairQuot v) (StabilityCondition.WithClassMap C v); the
+    lattice datum is an AddEquiv because the acting object is a group.
 
-    Formerly described as invariance of strict finite length under an
-    EQUIVALENCE of interval categories -- a different problem from step 3c, where phase
-    windows do not move and the anchor's
-    interval_thinFiniteLength_of_inclusion_strict applies. The anchor's general
-    transfer lemma isStrictArtinianObject_of_faithful_map_strictMono wants
-    ORDINARY IsArtinianObject of the image, stronger than IsLocallyFinite
-    gives; the strict-hypothesis versions exist only interval-specifically and
-    each hand-rolls a roughly 70-line StrictSubobject order-embedding.
-    Estimate: 150+ lines. Also not covered: the covering-space identification
-    of GLTilde (see known_divergences). API mapped in
-    notes/anchor-api-map.md.
+    CombinedAction proves commutation with GLTilde and supplies the product
+    action. TopologicalAction and GLTildeContinuousAction then prove fixed
+    elements of both factors and their product act by homeomorphisms.
+    GLTildeJointContinuousAction proves the GLTilde action jointly continuous,
+    gives AutPairQuot its standard discrete symmetry-group topology, and
+    supplies ContinuousSMul for both factors and their product. API details
+    are mapped in notes/anchor-api-map.md.
+
+    ComponentAction adds the induced action on connected-component labels,
+    component-to-component homeomorphisms, and component-stabilizer actions.
+    PeriodMapEquivariance records the induced additive charge transformations
+    and equivariance of the global and component-local period coordinates.
+    EffectiveAction identifies the categorical `[2]` action with `deck (-1)`,
+    proves `(deck 1, [2])` ineffective, and defines the faithful quotient by
+    the complete action kernel.
 
     AutIsometry.lean (2026-08-05) targets the ISOMETRY clause of Lemma 8.2,
     partially. mapEquiv_slicingDist proves the Aut action preserves the
@@ -448,13 +571,17 @@ fidelity:
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
 
-    GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair
-    presentation of GL+(2,R)-tilde and proves it is a GROUP. It does NOT
-    prove that group is the universal cover: the projection to GL+(2,R) is
-    not shown surjective, the fibre is not shown to be Z, and simple
-    connectedness is not addressed. The name states the intended object; the
-    proved content is strictly the group law plus nonemptiness. Do not cite
-    GLTilde as a formalized universal cover.
+    GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair presentation
+    of GL+(2,R)-tilde. The group, surjective projection, Z fibre, explicit
+    section, global topology, continuity of the projection, contractibility,
+    simple connectedness, covering-map property, and topological-group
+    compatibility are now proved.
+    GLTilde.universalCoverData packages the covering-map, surjectivity, and
+    simply-connected source properties; exact_deckHom_toMatHom separately
+    supplies the deck group. GLTilde.isTopologicalGroup packages continuous
+    multiplication and inversion. Mathlib has no single bundled
+    universal-cover predicate at this pin, so these exact declarations are the
+    public trust surface rather than an inferred larger API.
 
     GroupAction/AutIsometry.lean proves the Aut action preserves the anchor's
     slicingDist. That is NOT Bridgeland's generalised metric d, and the gap is
@@ -484,24 +611,30 @@ fidelity:
     above and notes/anchor-api-map.md section 7.
 
     GroupAction/QuotAutAction.lean defines AutQuot C as the quotient of
-    triangulated auto-equivalences by a setoid asking for Phi.functor iso
-    Psi.functor AND Phi.inverse iso Psi.inverse. Mathematically the second
-    follows from the first, since adjoints are unique up to natural
-    isomorphism -- but that is NOT proved here. So as stated the relation is a
-    priori FINER than "the functors are naturally isomorphic", and AutQuot C is
-    a priori LARGER than the usual Aut(D). Carrying both components keeps the
-    comp/symm compatibility proofs trivial; closing the gap means importing
-    adjoint uniqueness and dropping the second component. Until then, read
-    AutQuot as "triangulated auto-equivalences modulo a relation at least as
-    fine as natural isomorphism" -- not as literally Aut(D). Every statement
-    proved about AutQuot holds; what is unproved is that AutQuot equals the
-    object the name suggests.
+    triangulated auto-equivalences by natural isomorphism of the forward
+    functors. Inverse natural isomorphisms are derived from uniqueness of right
+    adjoints. No separate external object named Aut(D) is identified with this
+    quotient, so citations should still name AutQuot C rather than silently
+    substitute an external definition.
+
+    The topological action result now includes both levels: each fixed
+    GLTilde, AutPairQuot, or direct-product element acts by a homeomorphism,
+    and the action maps are jointly continuous. The AutPairQuot factor uses
+    the discrete topology; this does not identify it with any independently
+    topologized external group of autoequivalences.
+
+    EffectiveCombinedSymmetry is the quotient by the full kernel of the
+    combined action, not by a subgroup merely asserted to be generated by the
+    deck/double-shift overlap. The explicit pair `(deck 1, [2])` is proved to
+    lie in that kernel, with `[2]` acting as `deck (-1)` under this project's
+    left-action conventions. Equality of the full kernel with the cyclic
+    subgroup it generates is not claimed.
 
 self_assessment:
-  source_detail_level: skeleton
-  math_sophistication: low
+  source_detail_level: standard
+  math_sophistication: research
   dependency_distance: near
-  formalization_quality: skeleton
+  formalization_quality: draft
 
 community:
   related_projects:

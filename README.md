@@ -136,6 +136,51 @@ over one `Φ` give different `σ.Z ∘ lam` whenever `v` is not surjective.
 Its elements are pairs, and the forgetful map to `AutQuot C` is neither
 injective nor surjective in general — both failures are about `v`.
 
+The quotient relation itself is now the standard one: natural isomorphism of
+the **forward** functors. `TriEquiv.inverseIsoOfFunctorIso` derives the inverse
+natural isomorphism from uniqueness of right adjoints, so neither `AutQuot`
+nor `AutPairQuot` carries the earlier, artificially finer two-component
+relation.
+
+`CombinedAction` proves that the two §8 actions commute and packages the
+direct-product action
+
+```
+MulAction (GLTilde × AutPairQuot v)
+  (StabilityCondition.WithClassMap C v).
+```
+
+The topological action layer is also present. `TopologicalAction` proves that
+each compatible autoequivalence class acts by a homeomorphism.
+`GLTildeContinuousAction` obtains the analogous result for each fixed lifted
+matrix from uniform phase control and a condition-number estimate on `actC`.
+`GLTildeJointContinuousAction` strengthens this to genuine joint continuity.
+Near the identity, integer equivariance makes `x.shift φ - φ` uniformly
+small on all phases after checking the compact interval `[0,1]`, while
+`actCCLM x.mat - id` is small in operator norm. Translation by a fixed group
+element gives the result at every pair. Autoequivalence classes carry their
+standard discrete topology, so `GLTilde`, `AutPairQuot v`, and their direct
+product all have `ContinuousSMul` on the stability space.
+
+The next three symmetry milestones are also complete. `ComponentAction`
+functorially transports connected-component labels, restricts each symmetry
+to a homeomorphism between component subtypes, and lets the stabilizer of a
+component act on that component. `PeriodMapEquivariance` packages the induced
+additive equivalences of the charge space and proves equivariance of both the
+global central-charge map and the anchor's componentwise local-model chart.
+Finally, `EffectiveAction` constructs the categorical double shift as a
+triangulated autoequivalence and checks the convention-sensitive identity
+
+```
+[2] acts as deck (-1), so (deck 1, [2]) acts trivially.
+```
+
+The effective combined symmetry group is the direct-product symmetry group
+quotiented by its full action kernel; its induced action is faithful by
+construction. The explicit deck/double-shift pair is proved to lie in that
+kernel. No claim is made that this one pair generates the entire kernel in an
+arbitrary category.
+
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation
 `φ ↦ φ + 2n`, and `kerEquiv` packages that as `Multiplicative ℤ ≃* ker`. The
@@ -172,23 +217,36 @@ Together these give an exact sequence `1 → ℤ → G̃L⁺(2,ℝ) → GL⁺(2,
 `lift` is canonical rather than chosen, so it is a genuine **section**:
 `existsUnique_deck_mul_sect` says every element factors uniquely as
 `deck n * sect x.mat`, which trivialises the `ℤ`-bundle globally with an
-explicit trivialisation. Note `sect` is *not* a group homomorphism — the
-extension is non-split, which is precisely what makes it interesting.
+explicit set-level trivialisation. No group-homomorphism property is claimed
+for `sect`, so this is not asserted to be a semidirect-product decomposition.
 
-**Simple connectedness remains open, and is not reachable at the pinned
-Mathlib.** Checked rather than assumed: `SimplyConnectedSpace`'s only instances
-there are `ofContractible` and `Unit`, and no fundamental group of any space is
-computed anywhere in that revision — so `π₁(S¹) ≅ ℤ` is unavailable and the
-covering-space route is closed. The remaining route is contractibility (true —
-`G̃L⁺(2,ℝ) ≅ ℝ⁴`), which needs a polar decomposition of `2 × 2` real matrices
-that Mathlib does not have at this pin. Independently, nothing here puts a
-topology on `GLTilde`, so the statement is not currently expressible.
+`GLTildeTopology` now proves **simple connectedness**. Rotating a matrix's
+first column backwards through the lifted phase `f(0)` leaves a unique matrix
+`!![r,b;0,d]` with `r,d > 0`. This gives global coordinates
+`ℝ × (0,∞) × ℝ × (0,∞)`, a homeomorphism with a contractible space, and
+hence `ContractibleSpace GLTilde` and `SimplyConnectedSpace GLTilde`. The
+matrix projection is also continuous.
 
-So `GLTilde` is still **not** shown to be the universal cover, and the gap is
-now a change of category rather than a missing lemma — a central extension by
-`ℤ` is a statement about groups, being the universal cover is a statement about
-spaces. Nothing anywhere defines a topology on the space of stability
-conditions either, so no statement here is about `Stab(D)` as a manifold.
+`GLTildeCover` completes the covering-space theorem. It gives
+`GL⁺(2,ℝ)` global coordinates `S¹ × (0,∞) × ℝ × (0,∞)` and identifies
+the matrix projection, in the source and target coordinates, with
+`(θ ↦ exp(πθ)) × id`. Mathlib's standard exponential cover and stability
+of covering maps under products and homeomorphisms then yield
+`GLTilde.isCoveringMap_toMat`. Together with the instance above,
+`GLTilde.universalCoverData` packages the covering-map, surjectivity, and
+simply-connected source properties. The deck group `ℤ` remains recorded by
+`exact_deckHom_toMatHom`.
+
+`GLTildeTopologicalGroup` proves the compatibility between the group and this
+topology. The key joint evaluation map `(x,φ) ↦ x.shift φ` is continuous: in
+global coordinates the potentially branch-sensitive `arg(cA)` term cancels,
+leaving arguments only of points in the open right half-plane. Multiplication
+then follows from joint phase evaluation and continuous matrix multiplication;
+inversion uses the explicit inverse positive-diagonal upper-triangular
+coordinates. The resulting instance is `IsTopologicalGroup GLTilde`.
+
+Together with `GLTildeContinuousAction`, every fixed element of this
+topological group acts on the Bridgeland stability space by a homeomorphism.
 
 ### Lane 2 — `Lattice/` (closable today)
 

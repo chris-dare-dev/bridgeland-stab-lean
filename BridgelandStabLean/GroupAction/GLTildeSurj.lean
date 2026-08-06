@@ -8,12 +8,12 @@ import BridgelandStabLean.GroupAction.GLTildeFibre
 /-!
 # The projection `G̃L⁺(2, ℝ) → GL⁺(2, ℝ)` is surjective
 
-The second of the three covering-space facts `GLTilde.lean` disclaims. Every
-`T ∈ GL⁺(2, ℝ)` admits a compatible phase relabelling, so `toMatHom` is onto.
+Every `T ∈ GL⁺(2, ℝ)` admits a compatible phase relabelling, so `toMatHom`
+is onto.
 
-Together with `GLTildeFibre.lean` this leaves exactly one open: simple
-connectedness, which is blocked on prerequisites (`π₁(S¹) ≅ ℤ` is not in
-Mathlib at the pin, and nothing here puts a topology on `GLTilde`).
+Together with `GLTildeFibre.lean` this closes the algebraic exact sequence.
+`GLTildeTopology.lean` now supplies a topology, continuity of the projection,
+and simple connectedness; `GLTildeCover.lean` proves the covering-map property.
 
 ## The construction, and why it needs no branch cut
 
@@ -413,9 +413,9 @@ What surjectivity gives beyond a bare existence statement: `lift` is *canonical*
 — it is written down, not chosen — so it is a genuine **section** of the
 projection, and every element of `G̃L⁺(2, ℝ)` factors uniquely through it.
 
-This is the concrete content that a covering-map proof would rest on: it
-trivialises the bundle globally, with an explicit trivialisation. What it is
-**not** is a topological statement of any kind; see `exact_deckHom_toMatHom`. -/
+This is concrete algebraic data supporting the later covering-map proof. What
+it is **not** by itself is a topological statement; see
+`exact_deckHom_toMatHom`. -/
 
 /-- The canonical section of the projection, given by the explicit lift. -/
 noncomputable def sect (T : Matrix.GLPos (Fin 2) ℝ) : GLTilde :=
@@ -434,9 +434,9 @@ theorem deck_injective : Function.Injective deck := by
 /-- **Unique factorisation.** Every element is a deck transformation composed
 with the canonical lift of its own matrix part.
 
-`sect` is not a group homomorphism — `G̃L⁺(2, ℝ)` is a *non-split* central
-extension, which is exactly why it is interesting — so this is a bijection of
-sets with a canonical section, not a semidirect-product decomposition. -/
+No group-homomorphism property is claimed for `sect`, so this is a bijection
+of sets with a canonical section, not a claimed semidirect-product
+decomposition. -/
 theorem existsUnique_deck_mul_sect (x : GLTilde) :
     ∃! n : ℤ, x = deck n * sect x.mat := by
   have hker : x * (sect x.mat)⁻¹ ∈ GLTilde.toMatHom.ker := by
@@ -456,17 +456,14 @@ theorem existsUnique_deck_mul_sect (x : GLTilde) :
     have h2 : deck (Multiplicative.toAdd m) = x * (sect x.mat)⁻¹ := hm
     rw [h2, h1]
 
-/-- **The two covering-space facts, together.**
+/-- **The algebraic covering-space facts, together.**
 
 `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1` is exact: `deckHom` is injective, its
 range is exactly the kernel of the projection, and the projection is onto.
 
-**This is still not the universal-cover statement.** A central extension of
-`GL⁺(2, ℝ)` by `ℤ` is a statement about *groups*; being the universal cover is
-a statement about *spaces*, and needs a topology on `G̃L⁺(2, ℝ)` (which does not
-exist anywhere in this repo) plus simple connectedness (which needs
-`π₁(S¹) ≅ ℤ`, absent from Mathlib at the pin). Cite this for the extension, not
-for the cover. -/
+This theorem packages the extension, not the topology.  The covering-map and
+simple-connectedness properties are packaged separately by
+`GLTilde.universalCoverData` in `GLTildeCover.lean`. -/
 theorem exact_deckHom_toMatHom :
     Function.Injective deckHom
       ∧ deckHom.range = GLTilde.toMatHom.ker

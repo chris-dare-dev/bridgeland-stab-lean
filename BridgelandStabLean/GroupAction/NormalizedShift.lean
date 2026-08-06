@@ -105,16 +105,6 @@ theorem one_apply (φ : ℝ) : (1 : NormalizedShift).toOrderIso φ = φ := rfl
 theorem inv_apply (f : NormalizedShift) (φ : ℝ) :
     f⁻¹.toOrderIso φ = f.toOrderIso.symm φ := rfl
 
-/-
-TODO (lane-1, step 2): pair with `T ∈ GL⁺(2, ℝ)` under the "same map on `S¹`"
-compatibility to obtain `G̃L⁺(2, ℝ)` proper.
-
-TODO (lane-1, step 3): the action on the anchor's `Slicing`. This is the first
-declaration in this repo that touches `BridgelandStability`'s API, and it
-should not be attempted before reading `BridgelandStability/Slicing/` and
-`BridgelandStability/StabilityCondition/` end to end.
--/
-
 end NormalizedShift
 
 end BridgelandStabLean.GroupAction
