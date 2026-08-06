@@ -212,11 +212,23 @@ fidelity:
     The ordinary K0-valued specialization is unconditional because its class
     map is the identity.
 
+    StabilityDistanceTopology.lean closes the analytic and instance-design
+    parts of the topology comparison. It proves strict full-distance control
+    of phases, masses, and charges; both semistable sector estimates; and the
+    unconditional refinement of Section 6 neighborhoods by distance balls.
+    From the single explicit proposition StabilityMassTriangleInequality it
+    derives the reverse refinement, equality of neighborhood bases, and named
+    PseudoEMetricSpace/EMetricSpace structures. Those structures are built by
+    PseudoEMetricSpace.ofEDistOfTopology, and rfl regression theorems verify
+    that their inherited topology is definitionally the already-installed
+    Section 6 topology. No competing global metric instance is installed.
+
     This still is NOT a completed formalization of Proposition 8.1 or the
-    literal Aut(D)-isometry clause of Lemma 8.2. Equality of the induced
-    topology with Section 6 is unproved, and AutPairQuot v carries extra
-    compatible lattice data. The relevant @[cites] records stay no_claim and
-    known_divergences states the boundary precisely.
+    literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
+    conditional on the still-unproved distinguished-triangle HN-mass
+    inequality, and AutPairQuot v carries extra compatible lattice data. The
+    relevant @[cites] records stay no_claim and known_divergences states the
+    boundary precisely.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -338,6 +350,14 @@ fidelity:
     slicing, all object charges, and Z.comp v, separation for surjective class
     maps, and the unconditional ordinary K0-valued separation corollaries.
 
+    COUNT UPDATE (Proposition 8.1 topology infrastructure), 2026-08-06. The
+    49 additional records comprise 4 coordinate-to-full-distance bounds, 1
+    public semistable mass/charge ray identity, and 44 declarations for the
+    analytic estimates, conditional HN-mass propagation, both neighborhood
+    cofinality directions, topology compatibility, and the named compatible
+    pseudo/extended metric structures. The manual audit now covers 497
+    declarations.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -361,27 +381,29 @@ fidelity:
   builds_clean_date: 2026-08-06
   builds_clean_note: >
     Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
-    present, `lake build` completed at 3779 jobs with exit 0. The strict parser
-    accepted all 448 records with no sorryAx after the distance-separation
-    update. PR #66 independently carried the preceding universal-cover and
-    symmetry work through its local gates and was merged at 326d72b; PR #67
-    contains the full-metric chain, with this separation extension observed
-    locally before push.
+    present, `lake build` completed at 3780 jobs with exit 0. The strict parser
+    accepted all 497 records with no sorryAx after the Proposition 8.1
+    topology-infrastructure update, and `lake exe emit` completed successfully
+    with `mfc-emit: wrote attest/lean-emission.json`. PR #66 independently
+    carried the preceding universal-cover and symmetry work through its local
+    gates and was merged at 326d72b; PR #67 contains the full-metric chain,
+    with this topology extension observed locally before push.
   human_review: none
   machine_review: >
-    Current 2026-08-06 working tree: local build plus the audit gate passed at
-    448 declarations. PR #66 is merged; CI for the mass/distance/isometry
-    branch has not run on this separation extension, so the statements below
-    describe the committed automation and must not be read as a remote verdict
-    on this working tree.
-    `lake exe lint-style` completed with only the
-    repository's existing missing-nolints-file warning. `lake exe runLinter`
-    is NOT clean:
-    it reports six pre-existing errors in unchanged modules (StrictAutAction,
-    ComplexBridge, AutAction, and K0Functor), and reports none in the new
-    universal-cover, topological-action, joint-action, component-transport,
-    period-equivariance, or effective-quotient modules. This working tree does
-    not claim to have repaired that inherited declaration-linter debt.
+    Current 2026-08-06 working tree: local build, the manual audit gate at 497
+    declarations, and the environment-wide contract emitter all passed. PR
+    #66 is merged; CI for the mass/distance/isometry branch has not run on this
+    topology extension, so the statements below describe the committed
+    automation and must not be read as a remote verdict on this working tree.
+    `lake exe lint-style` completed with only the repository's existing
+    missing-nolints-file warning. `lake exe runLinter` is NOT clean: it reports
+    six known errors in modules unchanged by the topology extension (two in
+    StrictAutAction, one in ComplexBridge, two in AutAction, and one in
+    K0Functor). The unusable `[simp]` attribute on `stabilityMass_eq_mass` was
+    removed, clearing the only finding in the full-metric chain; the new
+    StabilityDistanceTopology declarations have no linter findings. This
+    working tree does not claim to have repaired the remaining inherited
+    declaration-linter debt.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -649,11 +671,17 @@ fidelity:
     topology with Section 6. StabilityDistanceSeparation.lean proves
     separation for the ordinary K0-valued space and, more generally, for a
     surjective class map. Without surjectivity it proves precisely the
-    observable conclusion: equality of the slicing and Z.comp v. The topology
-    comparison remains open, so the registry relation to Proposition 8.1 is
-    still no_claim. The relation of the full-distance isometry to Lemma 8.2
-    also remains no_claim because the acting group has not been identified
-    with bare Aut(D).
+    observable conclusion: equality of the slicing and Z.comp v.
+    StabilityDistanceTopology.lean proves the analytic estimates and forward
+    cofinality direction, and proves reverse cofinality plus the compatible
+    EMetricSpace construction conditional on StabilityMassTriangleInequality.
+    Its ofEDistOfTopology route retains the Section 6 topology definitionally,
+    so no raw metric instance or topology diamond is present. The remaining
+    filtration-assembly theorem is not assumed and is not hidden in an
+    instance; hence the registry relation to Proposition 8.1 is still
+    no_claim. The relation of the full-distance isometry to Lemma 8.2 also
+    remains no_claim because the acting group has not been identified with
+    bare Aut(D).
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of

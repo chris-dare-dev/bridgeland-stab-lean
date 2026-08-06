@@ -198,10 +198,17 @@ slicing and the observable charge `Z.comp v` from distance zero. It proves
 literal identity of stability conditions when `v` is surjective, including
 unconditionally for ordinary stability conditions over `K₀ C`.
 
-This is still not advertised as the complete Proposition 8.1: equality of the
-distance-induced topology with the Section 6 topology remains open. In
-addition, `AutPairQuot v` carries compatible class-lattice data and is not
-identified with bare `Aut(D)`.
+`StabilityDistanceTopology` now proves the analytic estimates and both local
+cofinality directions needed to identify full-distance balls with the Section
+6 neighborhoods.  It packages the comparison conditionally on the one
+remaining categorical input, HN-mass subadditivity across distinguished
+triangles.  The compatible `PseudoEMetricSpace`/`EMetricSpace` constructors use
+Mathlib's `ofEDistOfTopology`; regression theorems check that their topology is
+definitionally the pre-existing Section 6 topology, and no competing global
+instance is installed.  Proposition 8.1 is therefore still `no_claim` until
+the explicit mass-triangle proposition is proved.  Independently,
+`AutPairQuot v` carries compatible class-lattice data and is not identified
+with bare `Aut(D)`.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation

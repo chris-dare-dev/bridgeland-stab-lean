@@ -261,10 +261,16 @@ Six claims to keep off the page.
   slicing and `Z.comp v`, hence the full stability condition when `v` is
   surjective; the ordinary `K₀ C` specialization is unconditional.
 
-  Proposition 8.1's topology-comparison clause is still open. Independently,
-  `AutPairQuot v` carries a compatible lattice automorphism and is not
-  identified with bare `Aut(D)`. The registry relations therefore remain
-  `no_claim`. Say "the compatible
+  `StabilityDistanceTopology.lean` proves the analytic charge/mass estimates,
+  the full-distance-to-Section-6 cofinality direction, and the reverse
+  direction conditional on the explicit proposition
+  `StabilityMassTriangleInequality`. Its named `PseudoEMetricSpace` and
+  `EMetricSpace` constructors go through `ofEDistOfTopology`, with regression
+  theorems showing the inherited topology is definitionally the existing one;
+  do not replace them with a raw global metric instance. Proposition 8.1
+  remains `no_claim` until the mass-triangle proposition is discharged.
+  Independently, `AutPairQuot v` carries a compatible lattice automorphism and
+  is not identified with bare `Aut(D)`. Say "the compatible
   autoequivalence group preserves the three-coordinate HN-mass distance" and
   state the remaining group-level distinction.
 

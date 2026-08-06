@@ -250,6 +250,39 @@ theorem stabilityDist_triangle (σ τ υ : StabilityCondition.WithClassMap C v) 
     _ ≤ stabilityDist σ τ + stabilityDist τ υ :=
       add_le_add hστ hτυ
 
+/-- Every objectwise three-coordinate term is bounded by the full stability
+distance.  This is the basic elimination rule for the supremum defining
+`stabilityDist`. -/
+theorem stabilityDistTerm_le_stabilityDist
+    (σ τ : StabilityCondition.WithClassMap C v) (E : C) (hE : ¬IsZero E) :
+    stabilityDistTerm σ τ E hE ≤ stabilityDist σ τ := by
+  unfold stabilityDist
+  exact le_iSup₂ (f := fun (X : C) (hX : ¬IsZero X) ↦
+    stabilityDistTerm σ τ X hX) E hE
+
+/-- The positive-phase coordinate of an object is bounded by the full
+stability distance. -/
+theorem phiPlusDist_le_stabilityDist
+    (σ τ : StabilityCondition.WithClassMap C v) (E : C) (hE : ¬IsZero E) :
+    phiPlusDist σ τ E hE ≤ stabilityDist σ τ :=
+  (le_max_left _ _).trans (stabilityDistTerm_le_stabilityDist σ τ E hE)
+
+/-- The negative-phase coordinate of an object is bounded by the full
+stability distance. -/
+theorem phiMinusDist_le_stabilityDist
+    (σ τ : StabilityCondition.WithClassMap C v) (E : C) (hE : ¬IsZero E) :
+    phiMinusDist σ τ E hE ≤ stabilityDist σ τ :=
+  (le_max_left _ _).trans (le_max_right _ _ |>.trans
+    (stabilityDistTerm_le_stabilityDist σ τ E hE))
+
+/-- The mass coordinate of an object is bounded by the full stability
+distance. -/
+theorem massDist_le_stabilityDist
+    (σ τ : StabilityCondition.WithClassMap C v) (E : C) (hE : ¬IsZero E) :
+    massDist σ τ E ≤ stabilityDist σ τ :=
+  (le_max_right _ _).trans (le_max_right _ _ |>.trans
+    (stabilityDistTerm_le_stabilityDist σ τ E hE))
+
 /-- The anchor's phase-only distance is bounded by the full three-coordinate
 distance. -/
 theorem slicingDist_le_stabilityDist (σ τ : StabilityCondition.WithClassMap C v) :

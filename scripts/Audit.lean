@@ -544,10 +544,15 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityDist_comm
 #print axioms CategoryTheory.Triangulated.stabilityDist_triangle
 #print axioms CategoryTheory.Triangulated.slicingDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.phiPlusDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.phiMinusDist_le_stabilityDist
+#print axioms CategoryTheory.Triangulated.massDist_le_stabilityDist
 
 /-! ## StabilityDistanceSeparation — identity of indiscernibles -/
 
 #print axioms CategoryTheory.Triangulated.stabilityDistTerm_eq_zero_of_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_norm_charge
 #print axioms CategoryTheory.Triangulated.phiPlus_eq_of_stabilityDist_eq_zero
 #print axioms CategoryTheory.Triangulated.phiMinus_eq_of_stabilityDist_eq_zero
 #print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_of_stabilityDist_eq_zero
@@ -558,6 +563,53 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityDist_eq_zero_iff
 #print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero
 #print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero_iff
+
+/-! ## StabilityDistanceTopology — Proposition 8.1 topology comparison -/
+
+#print axioms CategoryTheory.Triangulated.abs_phiPlus_sub_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.abs_phiMinus_sub_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.abs_log_mass_ratio_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.exp_neg_lt_mass_ratio_and_lt_exp_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_lt_exp_mul_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_lt_exp_mul_of_stabilityDist'
+#print axioms CategoryTheory.Triangulated.norm_phaseExp_sub_phaseExp_le
+#print axioms CategoryTheory.Triangulated.norm_sum_phaseExp_sub_centralRay_le
+#print axioms CategoryTheory.Triangulated.charge_eq_stabilityMass_mul_phaseExp
+#print axioms CategoryTheory.Triangulated.norm_charge_sub_mass_phaseExp_le_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.cos_mul_stabilityMass_le_norm_charge_of_width
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd_of_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd_of_semistable'
+#print axioms CategoryTheory.Triangulated.StabilityMassTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_congr
+#print axioms CategoryTheory.Triangulated.stabilityMass_chain_le_partial_sum
+#print axioms CategoryTheory.Triangulated.stabilityMass_le_sum_postnikov_factors
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_le_of_mem_basisNhd'
+#print axioms CategoryTheory.Triangulated.basisForwardMassFactor
+#print axioms CategoryTheory.Triangulated.basisReverseMassFactor
+#print axioms CategoryTheory.Triangulated.basisMassControl
+#print axioms CategoryTheory.Triangulated.basisForwardMassFactor_zero
+#print axioms CategoryTheory.Triangulated.basisReverseMassFactor_zero
+#print axioms CategoryTheory.Triangulated.basisMassControl_zero
+#print axioms CategoryTheory.Triangulated.abs_log_mass_ratio_le_of_mem_basisNhd
+#print axioms CategoryTheory.Triangulated.exists_basisMassControl_lt
+#print axioms CategoryTheory.Triangulated.exists_basisNhd_subset_stabilityDist_ball
+#print axioms CategoryTheory.Triangulated.stabilityChargeControl
+#print axioms CategoryTheory.Triangulated.stabilityChargeControl_zero
+#print axioms CategoryTheory.Triangulated.norm_charge_sub_charge_lt_of_stabilityDist
+#print axioms CategoryTheory.Triangulated.stabSeminorm_le_of_stabilityDist_lt
+#print axioms CategoryTheory.Triangulated.exists_stabilityChargeControl_lt
+#print axioms CategoryTheory.Triangulated.exists_stabilityDist_ball_subset_basisNhd
+#print axioms CategoryTheory.Triangulated.nhds_hasBasis_basisNhd
+#print axioms CategoryTheory.Triangulated.StabilityDistanceTopologyCompatible
+#print axioms CategoryTheory.Triangulated.stabilityDistanceTopologyCompatible_of_mass_triangle
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace_toTopologicalSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpace_edist
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpace
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpace_toTopologicalSpace
+#print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpaceOfMassTriangle
+#print axioms CategoryTheory.Triangulated.stabilityEMetricSpaceOfMassTriangle
 
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 

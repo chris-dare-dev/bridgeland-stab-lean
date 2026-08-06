@@ -650,12 +650,26 @@ choice-free envelope rather than choosing a filtration non-functorially.
      when `v` is surjective;
    - specializes to unconditional separation for ordinary stability
      conditions over `K₀ C`.
+6. `StabilityDistanceTopology.lean`
+   - proves strict full-distance control of phases, mass ratios, and the
+     central charge, plus the sector estimates needed in the reverse
+     comparison;
+   - proves that full-distance balls refine Section 6 neighborhoods
+     unconditionally;
+   - derives the reverse refinement, equality of neighborhood bases, and the
+     compatible extended-metric constructors from the single explicit
+     proposition `StabilityMassTriangleInequality`;
+   - constructs through `PseudoEMetricSpace.ofEDistOfTopology` and proves by
+     `rfl` that the inherited topology is the existing Section 6 topology, so
+     no topology/typeclass diamond is introduced.
 
-The mass bridge and separation clause are now closed. The remaining
-Proposition 8.1 work is equality of the distance-induced topology with the
-Section 6 topology. The citation to Proposition 8.1 therefore remains
-`no_claim`. The Lemma 8.2 citation also remains `no_claim` independently,
-because `AutPairQuot v` is not identified with bare `Aut(D)`.
+The mass bridge, separation clause, analytic topology estimates, and safe
+metric-space construction are now closed.  The remaining Proposition 8.1
+work is the filtration-assembly proof of HN-mass subadditivity across every
+distinguished triangle; all topology comparison results are explicitly
+conditional on that proposition.  The citation to Proposition 8.1 therefore
+remains `no_claim`. The Lemma 8.2 citation also remains `no_claim`
+independently, because `AutPairQuot v` is not identified with bare `Aut(D)`.
 
 ---
 

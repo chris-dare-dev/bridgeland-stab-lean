@@ -494,7 +494,6 @@ theorem HNFiltration.mass_eq_mass
         _ = G.mass σ := hmassG.symm
 
 /-- The choice-free mass envelope is the mass sum of every HN filtration. -/
-@[simp]
 theorem stabilityMass_eq_mass
     (σ : StabilityCondition.WithClassMap C v) {E : C}
     (F : HNFiltration C σ.slicing.P E) : stabilityMass σ E = F.mass σ := by

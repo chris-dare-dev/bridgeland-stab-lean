@@ -88,7 +88,7 @@ theorem stabilityMass_toReal_eq_of_stabilityDist_eq_zero
     (stabilityMass_toReal_pos σ hE) (stabilityMass_toReal_pos τ hE) hlog
 
 /-- A semistable object's real mass is the norm of its charge. -/
-private theorem stabilityMass_toReal_eq_norm_charge
+theorem stabilityMass_toReal_eq_norm_charge
     (σ : StabilityCondition.WithClassMap C v) {E : C} {φ : ℝ}
     (hP : σ.slicing.P φ E) :
     (stabilityMass σ E).toReal = ‖σ.charge E‖ := by
