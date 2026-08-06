@@ -223,6 +223,18 @@ fidelity:
     that their inherited topology is definitionally the already-installed
     Section 6 topology. No competing global metric instance is installed.
 
+    OPENED 2026-08-06: the categorical mass-triangle chain.
+    StabilityMassTriangle.lean defines the ordinary observable stability
+    condition with central charge Z.comp v and exposes its induced heart
+    stability function and HN property. It proves the charge lower bound
+    norm(Z(E)) <= m_sigma(E), mass invariance under shifts by 1 and -1,
+    charge additivity on distinguished triangles, and mass subadditivity for
+    a semistable middle object or same-phase semistable endpoints. Both base
+    cases are transported to short exact sequences in the canonical heart.
+    The unrestricted heart short-exact inequality is named as
+    StabilityMassHeartShortExactInequality but is not inhabited; no premise
+    is installed as an instance or hidden axiom.
+
     This still is NOT a completed formalization of Proposition 8.1 or the
     literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
     conditional on the still-unproved distinguished-triangle HN-mass
@@ -359,6 +371,15 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (first mass-triangle milestone), 2026-08-06. The 18
+    additional records cover the observable K0-valued condition and induced
+    heart stability function, its HN property, the charge lower bound,
+    shift-invariance of filtration and object mass for shifts by 1 and -1,
+    triangle charge additivity, the semistable triangle cases, the explicit
+    unrestricted heart target, and its proved restriction/conditional bridge
+    statements. The manual audit now covers 515 declarations, pinned to
+    commit 3d74eae.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -389,7 +410,10 @@ fidelity:
     byte-for-byte unchanged. PR #66 carried the universal-cover and symmetry
     work and was merged at 326d72b. PR #67 carried the full-metric,
     separation, and Proposition 8.1 topology-infrastructure chain and was
-    merged at 56c7531.
+    merged at 56c7531. On branch agent/hn-mass-triangle-chain at 3d74eae,
+    the first mass-triangle module and root library elaborated successfully.
+    The expanded full build against the final 515-entry audit completed at
+    3788 jobs with exit 0, and the strict parser accepted all 515 records.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -407,6 +431,16 @@ fidelity:
     StabilityDistanceTopology declarations have no linter findings. This
     theorem state does not claim to have repaired the remaining inherited
     declaration-linter debt.
+
+    Branch agent/hn-mass-triangle-chain at 3d74eae adds the first categorical
+    mass-triangle base cases. The strict audit covers 515 declarations with
+    the same exact allowlist and no sorryAx. The declaration linter still
+    reports exactly the six inherited findings above and none in
+    StabilityMassTriangle. The unrestricted heart and global triangle
+    propositions remain uninhabited and are not supplied by an instance. The
+    environment-wide attestation was regenerated successfully and remained
+    byte-for-byte unchanged because these declarations add no new formal
+    contract annotations.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -685,6 +719,13 @@ fidelity:
     no_claim. The relation of the full-distance isometry to Lemma 8.2 also
     remains no_claim because the acting group has not been identified with
     bare Aut(D).
+
+    StabilityMassTriangle.lean closes only the norm-theoretic and semistable
+    base cases of that filtration-assembly theorem. In particular, defining
+    StabilityMassHeartShortExactInequality records the next proof target; it
+    does not supply a term of that proposition. The unrestricted heart
+    polygon argument, the semistable-left cohomological reduction, and the
+    arbitrary-left octahedral reduction all remain open.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of
