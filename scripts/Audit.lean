@@ -545,6 +545,20 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityDist_triangle
 #print axioms CategoryTheory.Triangulated.slicingDist_le_stabilityDist
 
+/-! ## StabilityDistanceSeparation — identity of indiscernibles -/
+
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm_eq_zero_of_eq_zero
+#print axioms CategoryTheory.Triangulated.phiPlus_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.phiMinus_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.slicing_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.charge_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.charge_comp_eq_of_stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityDist_eq_zero_iff
+#print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero
+#print axioms CategoryTheory.Triangulated.stabilityConditionDist_eq_zero_iff
+
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_phiPlusDist

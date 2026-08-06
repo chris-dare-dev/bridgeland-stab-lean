@@ -643,10 +643,17 @@ choice-free envelope rather than choosing a filtration non-functorially.
    - transports each coordinate through `Φ⁻¹`;
    - proves `AutPair.act_stabilityDist` by the two pointwise supremum bounds;
    - descends to `AutPairQuot_smul_stabilityDist`.
+5. `StabilityDistanceSeparation.lean`
+   - extracts equality of intrinsic phases and real masses from distance zero;
+   - reconstructs the slicing and every object charge;
+   - proves equality of `Z.comp v` without assumptions and literal separation
+     when `v` is surjective;
+   - specializes to unconditional separation for ordinary stability
+     conditions over `K₀ C`.
 
-The mass bridge to Bridgeland's literal formula is now closed. The remaining
-Proposition 8.1 work is separation and equality of the induced topology with
-the Section 6 topology. The citation to Proposition 8.1 therefore remains
+The mass bridge and separation clause are now closed. The remaining
+Proposition 8.1 work is equality of the distance-induced topology with the
+Section 6 topology. The citation to Proposition 8.1 therefore remains
 `no_claim`. The Lemma 8.2 citation also remains `no_claim` independently,
 because `AutPairQuot v` is not identified with bare `Aut(D)`.
 

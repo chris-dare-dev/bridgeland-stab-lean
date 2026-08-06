@@ -108,7 +108,7 @@ def stabilityDistTerm (σ τ : StabilityCondition.WithClassMap C v) (E : C)
 
 /-- The three-coordinate, `ℝ≥0∞`-valued stability distance. -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.prop-8.1" (relation := no_claim)
-        (note := "The same three-coordinate formula, with stabilityMass now proved equal to the finite mass sum of every HN filtration. Separation and equality with the Section 6 topology are not proved, so this is not yet Proposition 8.1.")]
+        (note := "The same three-coordinate formula, with stabilityMass proved equal to the finite mass sum of every HN filtration. StabilityDistanceSeparation.lean proves separation for ordinary stability conditions and for surjective class maps. Equality with the Section 6 topology is not proved, so this is not yet all of Proposition 8.1.")]
 def stabilityDist (σ τ : StabilityCondition.WithClassMap C v) : ℝ≥0∞ :=
   ⨆ (E : C) (hE : ¬IsZero E), stabilityDistTerm σ τ E hE
 

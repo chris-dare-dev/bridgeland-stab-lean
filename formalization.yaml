@@ -205,11 +205,18 @@ fidelity:
     finite sum; stabilityMass_ne_top and stabilityMass_eq_zero_iff prove
     finiteness and vanishing exactly on zero objects.
 
+    StabilityDistanceSeparation.lean closes identity of indiscernibles. From
+    distance zero it first reconstructs the slicing, then the charge of every
+    object and the observable homomorphism Z.comp v. For a surjective class
+    map it reconstructs Z itself and hence the complete stability condition.
+    The ordinary K0-valued specialization is unconditional because its class
+    map is the identity.
+
     This still is NOT a completed formalization of Proposition 8.1 or the
-    literal Aut(D)-isometry clause of Lemma 8.2. Separation and equality of the
-    induced topology with Section 6 are unproved, and AutPairQuot v carries
-    extra compatible lattice data. The relevant @[cites] records stay
-    no_claim and known_divergences states the boundary precisely.
+    literal Aut(D)-isometry clause of Lemma 8.2. Equality of the induced
+    topology with Section 6 is unproved, and AutPairQuot v carries extra
+    compatible lattice data. The relevant @[cites] records stay no_claim and
+    known_divergences states the boundary precisely.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -272,7 +279,8 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-06 in the
-    HN-mass-uniqueness working tree via `scripts/check_audit.py` over 437
+    stability-distance-separation working tree via `scripts/check_audit.py`
+    over 448
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass.
@@ -325,6 +333,11 @@ fidelity:
     objects; plus 3 for the finite logarithmic and literal log-ratio branches
     used by logMassDist and massDist.
 
+    COUNT UPDATE (distance separation), 2026-08-06. The 11 additional records
+    cover extraction of the three zero coordinates, reconstruction of the
+    slicing, all object charges, and Z.comp v, separation for surjective class
+    maps, and the unconditional ordinary K0-valued separation corollaries.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -348,19 +361,19 @@ fidelity:
   builds_clean_date: 2026-08-06
   builds_clean_note: >
     Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
-    present, `lake build` completed at 3778 jobs with exit 0. The strict parser
-    accepted all 437 records with no sorryAx after the HN-mass-uniqueness
+    present, `lake build` completed at 3779 jobs with exit 0. The strict parser
+    accepted all 448 records with no sorryAx after the distance-separation
     update. PR #66 independently carried the preceding universal-cover and
     symmetry work through its local gates and was merged at 326d72b; PR #67
-    contains the full-metric chain, with this mass-identification extension
-    observed locally before push.
+    contains the full-metric chain, with this separation extension observed
+    locally before push.
   human_review: none
   machine_review: >
     Current 2026-08-06 working tree: local build plus the audit gate passed at
-    437 declarations. PR #66 is merged; CI for the new mass/distance/isometry
-    branch has not run on this extension, so the statements below describe the
-    committed automation and must not be read as a remote verdict on this
-    working tree.
+    448 declarations. PR #66 is merged; CI for the mass/distance/isometry
+    branch has not run on this separation extension, so the statements below
+    describe the committed automation and must not be read as a remote verdict
+    on this working tree.
     `lake exe lint-style` completed with only the
     repository's existing missing-nolints-file warning. `lake exe runLinter`
     is NOT clean:
@@ -633,12 +646,14 @@ fidelity:
     conditions always use its ordinary finite absolute-logarithmic branch.
 
     Proposition 8.1 also asserts separation and equality of the induced
-    topology with Section 6. This repo proves reflexivity, symmetry, and the
-    triangle inequality for stabilityDist, but neither separation nor the
-    topology comparison. Its registry relation to Proposition 8.1 is therefore
-    no_claim. The relation of the full-distance isometry to Lemma 8.2 also
-    remains no_claim because the acting group has not been identified with
-    bare Aut(D).
+    topology with Section 6. StabilityDistanceSeparation.lean proves
+    separation for the ordinary K0-valued space and, more generally, for a
+    surjective class map. Without surjectivity it proves precisely the
+    observable conclusion: equality of the slicing and Z.comp v. The topology
+    comparison remains open, so the registry relation to Proposition 8.1 is
+    still no_claim. The relation of the full-distance isometry to Lemma 8.2
+    also remains no_claim because the acting group has not been identified
+    with bare Aut(D).
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of

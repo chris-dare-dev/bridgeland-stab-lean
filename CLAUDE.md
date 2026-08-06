@@ -257,11 +257,14 @@ Six claims to keep off the page.
   discrepancy to `φ⁺` and `φ⁻`, proving reflexivity, symmetry, the triangle
   inequality, and `slicingDist ≤ stabilityDist`. `AutFullIsometry.lean` proves
   exact preservation by `AutPair` representatives and `AutPairQuot v`.
+  `StabilityDistanceSeparation.lean` proves that distance zero identifies the
+  slicing and `Z.comp v`, hence the full stability condition when `v` is
+  surjective; the ordinary `K₀ C` specialization is unconditional.
 
-  Proposition 8.1's separation and topology-comparison clauses are still
-  open. Independently, `AutPairQuot v` carries a compatible lattice
-  automorphism and is not identified with bare `Aut(D)`. The registry
-  relations therefore remain `no_claim`. Say "the compatible
+  Proposition 8.1's topology-comparison clause is still open. Independently,
+  `AutPairQuot v` carries a compatible lattice automorphism and is not
+  identified with bare `Aut(D)`. The registry relations therefore remain
+  `no_claim`. Say "the compatible
   autoequivalence group preserves the three-coordinate HN-mass distance" and
   state the remaining group-level distinction.
 
