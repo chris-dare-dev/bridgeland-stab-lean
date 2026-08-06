@@ -26,35 +26,29 @@ that statement, and it is the reason `NormalizedShift` demands
 "Same map on the circle" is then: `T` sends the ray through `rayVec φ` to the
 ray through `rayVec (f φ)`.
 
-## What is and is not proved here
+## What is proved across this development
 
-Proved: these pairs form a group under componentwise multiplication, and the
-type is nonempty (`compat_one` is the witness).
-
-**Not** proved: that this group *is* the universal cover. Three facts are
-needed and they are in different states:
+This file proves that the compatible pairs form a group under componentwise
+multiplication, and that the type is nonempty (`compat_one` is the witness).
+The companion files prove the covering-space properties:
 
 * **Fibre `ℤ`** — **proved**, in `GLTildeFibre.lean`. The kernel of the
   projection is exactly the deck transformations `φ ↦ φ + 2n`.
 * **Surjectivity of the projection** — **proved**, in `GLTildeSurj.lean`. Every
   `T` of positive determinant carries a compatible phase relabelling.
-* **Simple connectedness** — **open**, and blocked on prerequisites rather than
-  effort: nothing in this repo puts a topology on `GLTilde`, and `π₁(S¹) ≅ ℤ`
-  is not in Mathlib at the pinned revision.
+* **Simple connectedness** — **proved**, in `GLTildeTopology.lean`, by global
+  coordinates `ℝ × (0,∞) × ℝ × (0,∞)` and contractibility.
+* **Covering-map property** — **proved**, in `GLTildeCover.lean`. Global base
+  coordinates identify the projection with the standard exponential cover
+  `ℝ → S¹` times an identity map.
 
-So the two *group-theoretic* facts hold — `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1`
-is exact (`exact_deckHom_toMatHom`) — and the one *topological* fact does not.
+Thus `GLTilde.universalCoverData` packages the surjective covering-map and
+simple-connectedness properties, while `exact_deckHom_toMatHom` packages the
+extension with fibre `ℤ`. `GLTildeTopologicalGroup.lean` proves continuity of
+multiplication and inversion and installs `IsTopologicalGroup GLTilde`.
 
-**That is not enough to say "universal cover", and the gap is not a
-formality.** Being a central extension of `GL⁺(2, ℝ)` by `ℤ` is a statement
-about groups; being the universal cover is a statement about spaces. Many
-non-isomorphic topological groups share an abstract group presentation, and
-nothing here even names a topology. Cite these results for the extension; no
-declaration in this file, in `GLTildeFibre.lean`, or in `GLTildeSurj.lean`
-establishes the cover.
-
-Also not proved, and not attempted: any action on a stability condition. That
-is step 3, and it is the first thing here that will touch the anchor's API.
+The later `PreStabilityAction.lean` and `StabilityAction.lean` files use this
+group to define and prove the action on stability conditions.
 -/
 
 namespace BridgelandStabLean.GroupAction
@@ -166,8 +160,8 @@ theorem compat_inv {T : Matrix.GLPos (Fin 2) ℝ} {f : NormalizedShift}
 determinant together with a phase relabelling that agrees with it on the
 circle.
 
-See the module docstring for what this does *not* claim — in particular,
-nothing here proves it is the universal cover. -/
+The covering-map and simple-connectedness properties are proved in the
+companion topology files and packaged by `GLTilde.universalCoverData`. -/
 structure GLTilde where
   /-- The linear part, acting on central charges. -/
   mat : Matrix.GLPos (Fin 2) ℝ

@@ -61,10 +61,9 @@ are about `v`, and `v` is arbitrary. Say "the group of autoequivalences
 equipped with a compatible class-lattice automorphism", never "`Aut(D)` acts on
 stability conditions".
 
-Everything `AutQuot`'s docstring says about itself still applies here through
-the `Φ` component — in particular that its setoid carries both the functor and
-the inverse, so it is a priori finer than "naturally isomorphic functors" and
-`AutQuot` a priori larger than the usual `Aut(D)`.
+The `Φ` component uses the usual relation on autoequivalences: natural
+isomorphism of the forward functors. Natural isomorphism of the chosen
+inverses follows from uniqueness of right adjoints.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -149,14 +148,12 @@ the class-lattice automorphisms are **equal**.
 
 `lam` on the nose, deliberately — see the module docstring. -/
 instance setoid (v : K₀ C →+ Λ) : Setoid (AutPair v) where
-  r a b := (Nonempty (a.Φ.e.functor ≅ b.Φ.e.functor)
-              ∧ Nonempty (a.Φ.e.inverse ≅ b.Φ.e.inverse))
-            ∧ a.lam = b.lam
+  r a b := Nonempty (a.Φ.e.functor ≅ b.Φ.e.functor) ∧ a.lam = b.lam
   iseqv :=
-    { refl := fun _ => ⟨⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩, rfl⟩
-      symm := fun ⟨⟨⟨p⟩, ⟨q⟩⟩, hl⟩ => ⟨⟨⟨p.symm⟩, ⟨q.symm⟩⟩, hl.symm⟩
-      trans := fun ⟨⟨⟨p⟩, ⟨q⟩⟩, hl⟩ ⟨⟨⟨r⟩, ⟨t⟩⟩, hl'⟩ =>
-        ⟨⟨⟨p.trans r⟩, ⟨q.trans t⟩⟩, hl.trans hl'⟩ }
+    { refl := fun _ => ⟨⟨Iso.refl _⟩, rfl⟩
+      symm := fun ⟨⟨p⟩, hl⟩ => ⟨⟨p.symm⟩, hl.symm⟩
+      trans := fun ⟨⟨p⟩, hl⟩ ⟨⟨r⟩, hl'⟩ =>
+        ⟨⟨p.trans r⟩, hl.trans hl'⟩ }
 
 /-! ## The action -/
 
@@ -189,7 +186,7 @@ the setoid fixed `lam` on the nose rather than up to anything. -/
 theorem act_congr {a b : AutPair v} (h : a ≈ b)
     (σ : StabilityCondition.WithClassMap C v) : a.act σ = b.act σ := by
   refine StabilityCondition.WithClassMap.ext (C := C) ?_ ?_
-  · exact TriEquiv.act_congr h.1.2.some σ.slicing
+  · exact TriEquiv.act_congr h.1.some σ.slicing
   · ext x; rw [act_Z, act_Z, h.2]
 
 end AutPair
@@ -206,28 +203,29 @@ variable {v : K₀ C →+ Λ}
 
 instance group : Group (AutPairQuot v) where
   mul := Quotient.map₂ AutPair.mul
-    (by rintro a a' ⟨⟨⟨p⟩, ⟨q⟩⟩, hl⟩ b b' ⟨⟨⟨r⟩, ⟨t⟩⟩, hl'⟩
-        exact ⟨⟨⟨NatIso.hcomp r p⟩, ⟨NatIso.hcomp q t⟩⟩,
+    (by rintro a a' ⟨⟨p⟩, hl⟩ b b' ⟨⟨r⟩, hl'⟩
+        exact ⟨⟨NatIso.hcomp r p⟩,
           show a.lam.trans b.lam = a'.lam.trans b'.lam by rw [hl, hl']⟩)
   one := Quotient.mk _ (AutPair.id v)
   inv := Quotient.map AutPair.inv
-    (by rintro a a' ⟨⟨⟨p⟩, ⟨q⟩⟩, hl⟩
-        exact ⟨⟨⟨q⟩, ⟨p⟩⟩, show a.lam.symm = a'.lam.symm by rw [hl]⟩)
+    (by rintro a a' ⟨⟨p⟩, hl⟩
+        exact ⟨⟨TriEquiv.inverseIsoOfFunctorIso p⟩,
+          show a.lam.symm = a'.lam.symm by rw [hl]⟩)
   -- As in `AutQuot`: functor composition is strictly associative and `𝟭` is a
   -- strict unit, so the `Φ` halves need only `Iso.refl`. The `lam` halves are
   -- the corresponding `AddEquiv` laws, and only inversion needs a genuine
   -- natural isomorphism -- which is the whole reason for quotienting.
   mul_assoc := by
     rintro ⟨a⟩ ⟨b⟩ ⟨c⟩
-    exact Quotient.sound ⟨⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩, rfl⟩
+    exact Quotient.sound ⟨⟨Iso.refl _⟩, rfl⟩
   one_mul := by
-    rintro ⟨a⟩; exact Quotient.sound ⟨⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩, by ext x; rfl⟩
+    rintro ⟨a⟩; exact Quotient.sound ⟨⟨Iso.refl _⟩, by ext x; rfl⟩
   mul_one := by
-    rintro ⟨a⟩; exact Quotient.sound ⟨⟨⟨Iso.refl _⟩, ⟨Iso.refl _⟩⟩, by ext x; rfl⟩
+    rintro ⟨a⟩; exact Quotient.sound ⟨⟨Iso.refl _⟩, by ext x; rfl⟩
   inv_mul_cancel := by
     rintro ⟨a⟩
     exact Quotient.sound
-      ⟨⟨⟨a.Φ.e.unitIso.symm⟩, ⟨a.Φ.e.unitIso.symm⟩⟩,
+      ⟨⟨a.Φ.e.unitIso.symm⟩,
         show a.lam.symm.trans a.lam = AddEquiv.refl Λ by
           ext x; exact a.lam.apply_symm_apply x⟩
 
@@ -260,7 +258,10 @@ A group homomorphism, and **neither injective nor surjective** in general —
 both failures are about `v`. Recorded as a `MonoidHom` because it is useful,
 not because it identifies this group with `AutQuot C`. -/
 def toAutQuot : AutPairQuot v →* AutQuot C where
-  toFun := Quotient.map (fun a => a.Φ) (fun _ _ h => h.1)
+  toFun := Quotient.map (fun a => a.Φ) (by
+    intro a b h
+    change Nonempty (a.Φ.e.functor ≅ b.Φ.e.functor)
+    exact h.1)
   map_one' := rfl
   map_mul' := by rintro ⟨a⟩ ⟨b⟩; rfl
 

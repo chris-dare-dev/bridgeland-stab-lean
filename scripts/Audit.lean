@@ -256,6 +256,109 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.existsUnique_deck_mul_sect
 #print axioms BridgelandStabLean.GroupAction.exact_deckHom_toMatHom
 
+/-! ## GLTildeTopology — topology and simple connectedness -/
+
+#print axioms BridgelandStabLean.GroupAction.rotationMatrix
+#print axioms BridgelandStabLean.GroupAction.rotationMatrix_det
+#print axioms BridgelandStabLean.GroupAction.rotationMatrix_mulVec_rayVec
+#print axioms BridgelandStabLean.GroupAction.rotationMatrix_neg_mul
+#print axioms BridgelandStabLean.GroupAction.rotationMatrix_mul_neg
+#print axioms BridgelandStabLean.GroupAction.rotationGLPos
+#print axioms BridgelandStabLean.GroupAction.rotationGLPos_mat
+#print axioms BridgelandStabLean.GroupAction.phaseTranslation
+#print axioms BridgelandStabLean.GroupAction.phaseTranslation_apply
+#print axioms BridgelandStabLean.GroupAction.compatible_rotation
+#print axioms BridgelandStabLean.GroupAction.liftedRotation
+#print axioms BridgelandStabLean.GroupAction.liftedRotation_mat
+#print axioms BridgelandStabLean.GroupAction.liftedRotation_shift_zero
+#print axioms BridgelandStabLean.GroupAction.GLTilde.ext_mat_shift_zero
+#print axioms BridgelandStabLean.GroupAction.PositiveReal
+#print axioms BridgelandStabLean.GroupAction.GLTildeCoordinates
+#print axioms BridgelandStabLean.GroupAction.upperMatrix
+#print axioms BridgelandStabLean.GroupAction.upperMatrix_det
+#print axioms BridgelandStabLean.GroupAction.upperMatrixInv
+#print axioms BridgelandStabLean.GroupAction.upperMatrix_mul_inv
+#print axioms BridgelandStabLean.GroupAction.upperMatrix_inv_mul
+#print axioms BridgelandStabLean.GroupAction.upperGLPos
+#print axioms BridgelandStabLean.GroupAction.upperGLPos_mat
+#print axioms BridgelandStabLean.GroupAction.alignedMatrix
+#print axioms BridgelandStabLean.GroupAction.alignedMatrix_zero_zero_pos
+#print axioms BridgelandStabLean.GroupAction.alignedMatrix_one_zero
+#print axioms BridgelandStabLean.GroupAction.alignedMatrix_one_one_pos
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinates
+#print axioms BridgelandStabLean.GroupAction.matrixOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.matrixOfCoordinates_apply
+#print axioms BridgelandStabLean.GroupAction.upperDeckIndex
+#print axioms BridgelandStabLean.GroupAction.upperDeckIndex_spec
+#print axioms BridgelandStabLean.GroupAction.upperSectionZero
+#print axioms BridgelandStabLean.GroupAction.upperSectionZero_mat
+#print axioms BridgelandStabLean.GroupAction.upperSectionZero_shift_zero
+#print axioms BridgelandStabLean.GroupAction.glTildeOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.glTildeOfCoordinates_shift_zero
+#print axioms BridgelandStabLean.GroupAction.glTildeOfCoordinates_mat
+#print axioms BridgelandStabLean.GroupAction.alignedMatrix_glTildeOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinates_ofCoordinates
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinates_injective
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinates_surjective
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinateEquiv
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinateEquiv_apply
+#print axioms BridgelandStabLean.GroupAction.GLTilde.topologicalSpace
+#print axioms BridgelandStabLean.GroupAction.glTildeCoordinateHomeomorph
+#print axioms BridgelandStabLean.GroupAction.continuous_rotationMatrix
+#print axioms BridgelandStabLean.GroupAction.glTildeOfCoordinates_coordinates
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_toMat
+#print axioms BridgelandStabLean.GroupAction.GLTilde.contractibleSpace
+#print axioms BridgelandStabLean.GroupAction.GLTilde.simplyConnectedSpace
+
+/-! ## GLTildeCover — base coordinates and the universal covering map -/
+
+#print axioms BridgelandStabLean.GroupAction.circleMatrix
+#print axioms BridgelandStabLean.GroupAction.circleMatrixInv
+#print axioms BridgelandStabLean.GroupAction.circleMatrix_det
+#print axioms BridgelandStabLean.GroupAction.circleMatrix_mul_inv
+#print axioms BridgelandStabLean.GroupAction.circleMatrix_inv_mul
+#print axioms BridgelandStabLean.GroupAction.circleGLPos
+#print axioms BridgelandStabLean.GroupAction.circleGLPos_mat
+#print axioms BridgelandStabLean.GroupAction.GLPosCoordinates
+#print axioms BridgelandStabLean.GroupAction.firstColumnComplex
+#print axioms BridgelandStabLean.GroupAction.firstColumnComplex_ne_zero
+#print axioms BridgelandStabLean.GroupAction.firstColumnRadius
+#print axioms BridgelandStabLean.GroupAction.firstColumnDirection
+#print axioms BridgelandStabLean.GroupAction.firstColumnDirection_re
+#print axioms BridgelandStabLean.GroupAction.firstColumnDirection_im
+#print axioms BridgelandStabLean.GroupAction.secondColumnAlong
+#print axioms BridgelandStabLean.GroupAction.secondColumnPerp
+#print axioms BridgelandStabLean.GroupAction.secondColumnPerp_pos
+#print axioms BridgelandStabLean.GroupAction.glPosCoordinates
+#print axioms BridgelandStabLean.GroupAction.glPosOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.glPosOfCoordinates_mat
+#print axioms BridgelandStabLean.GroupAction.firstColumnDirection_glPosOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.secondColumnAlong_glPosOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.secondColumnPerp_glPosOfCoordinates
+#print axioms BridgelandStabLean.GroupAction.glPosCoordinates_ofCoordinates
+#print axioms BridgelandStabLean.GroupAction.glPosOfCoordinates_coordinates
+#print axioms BridgelandStabLean.GroupAction.continuous_toMatGLPos
+#print axioms BridgelandStabLean.GroupAction.glPosCoordinateHomeomorph
+#print axioms BridgelandStabLean.GroupAction.IsCoveringMap.prodMap_id
+#print axioms BridgelandStabLean.GroupAction.phaseCircle
+#print axioms BridgelandStabLean.GroupAction.phaseCircle_isCoveringMap
+#print axioms BridgelandStabLean.GroupAction.coordinateProjection
+#print axioms BridgelandStabLean.GroupAction.coordinateProjection_isCoveringMap
+#print axioms BridgelandStabLean.GroupAction.phaseCircle_coe
+#print axioms BridgelandStabLean.GroupAction.circleMatrix_phaseCircle
+#print axioms BridgelandStabLean.GroupAction.glPosOfCoordinates_coordinateProjection
+#print axioms BridgelandStabLean.GroupAction.coordinateProjection_apply_glTildeCoordinates
+#print axioms BridgelandStabLean.GroupAction.GLTilde.isCoveringMap_toMat
+#print axioms BridgelandStabLean.GroupAction.GLTilde.universalCoverData
+
+/-! ## GLTildeTopologicalGroup — compatibility of topology and group operations -/
+
+#print axioms BridgelandStabLean.GroupAction.upperSectionZero_shift_apply
+#print axioms BridgelandStabLean.GroupAction.coordinateShift
+#print axioms BridgelandStabLean.GroupAction.glTildeOfCoordinates_shift_apply
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_shift_apply
+#print axioms BridgelandStabLean.GroupAction.GLTilde.isTopologicalGroup
+
 /-! ## AutPairAction — the same action, as a genuine `MulAction` -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair
@@ -271,6 +374,113 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.group
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.mulAction
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.toAutQuot
+
+/-! ## Normalized quotient, combined action, and topological action layer -/
+
+#print axioms BridgelandStabLean.GroupAction.TriEquiv.inverseIsoOfFunctorIso
+
+#print axioms BridgelandStabLean.GroupAction.relabel_mapEquiv
+#print axioms BridgelandStabLean.GroupAction.gltilde_autPair_smul_comm
+#print axioms BridgelandStabLean.GroupAction.smulCommClassGLTildeAutPairQuot
+#print axioms BridgelandStabLean.GroupAction.combinedMulAction
+#print axioms BridgelandStabLean.GroupAction.prod_mk_smul_slicing
+#print axioms BridgelandStabLean.GroupAction.prod_mk_smul_Z
+
+#print axioms BridgelandStabLean.GroupAction.Slicing.mapEquiv_phiPlus
+#print axioms BridgelandStabLean.GroupAction.Slicing.mapEquiv_phiMinus
+#print axioms BridgelandStabLean.GroupAction.slicingDist_mapEquiv_le
+#print axioms BridgelandStabLean.GroupAction.stabSeminorm_aut_le
+#print axioms BridgelandStabLean.GroupAction.AutPair.mapsTo_basisNhd
+#print axioms BridgelandStabLean.GroupAction.AutPair.continuous_act
+#print axioms BridgelandStabLean.GroupAction.autPairQuotContinuousConstSMul
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.homeomorph
+
+#print axioms BridgelandStabLean.GroupAction.Slicing.relabel_phiPlus
+#print axioms BridgelandStabLean.GroupAction.Slicing.relabel_phiMinus
+#print axioms BridgelandStabLean.GroupAction.exists_slicingDist_relabel_control
+#print axioms BridgelandStabLean.GroupAction.actCCLM
+#print axioms BridgelandStabLean.GroupAction.actCCLM_apply
+#print axioms BridgelandStabLean.GroupAction.actC_inv_apply
+#print axioms BridgelandStabLean.GroupAction.actCCondition
+#print axioms BridgelandStabLean.GroupAction.actCCondition_pos
+#print axioms BridgelandStabLean.GroupAction.norm_actC_div_norm_actC_le
+#print axioms BridgelandStabLean.GroupAction.stabSeminorm_gltilde_le
+#print axioms BridgelandStabLean.GroupAction.exists_gltilde_basisNhd_control
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_const_smul_stability
+#print axioms BridgelandStabLean.GroupAction.gltildeContinuousConstSMulStability
+#print axioms BridgelandStabLean.GroupAction.combinedContinuousConstSMulStability
+#print axioms BridgelandStabLean.GroupAction.GLTilde.stabilityHomeomorph
+#print axioms BridgelandStabLean.GroupAction.combinedStabilityHomeomorph
+
+/-! ## Jointly continuous symmetry actions -/
+
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_shift_displacement
+#print axioms BridgelandStabLean.GroupAction.GLTilde.eventually_uniform_shift_displacement
+#print axioms BridgelandStabLean.GroupAction.slicingDist_smul_le_of_displacement
+#print axioms BridgelandStabLean.GroupAction.actCCLM_one
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_actCCLM
+#print axioms BridgelandStabLean.GroupAction.norm_actC_sub_div_le
+#print axioms BridgelandStabLean.GroupAction.stabSeminorm_near_identity_le
+#print axioms BridgelandStabLean.GroupAction.exists_identity_basisNhd_control
+#print axioms BridgelandStabLean.GroupAction.continuousAt_smul_identity
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuousAt_smul_stability
+#print axioms BridgelandStabLean.GroupAction.GLTilde.continuous_smul_stability
+#print axioms BridgelandStabLean.GroupAction.gltildeContinuousSMulStability
+#print axioms BridgelandStabLean.GroupAction.autPairQuotTopologicalSpace
+#print axioms BridgelandStabLean.GroupAction.autPairQuotDiscreteTopology
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.continuous_smul_stability
+#print axioms BridgelandStabLean.GroupAction.autPairQuotContinuousSMulStability
+#print axioms BridgelandStabLean.GroupAction.continuous_combined_smul_stability
+#print axioms BridgelandStabLean.GroupAction.combinedContinuousSMulStability
+
+/-! ## Components, equivariant periods, and the effective symmetry quotient -/
+
+#print axioms BridgelandStabLean.GroupAction.componentSmul
+#print axioms BridgelandStabLean.GroupAction.componentSmul_mk
+#print axioms BridgelandStabLean.GroupAction.componentMulAction
+#print axioms BridgelandStabLean.GroupAction.image_connectedComponent_smul
+#print axioms BridgelandStabLean.GroupAction.componentHomeomorph
+#print axioms BridgelandStabLean.GroupAction.componentHomeomorph_apply_coe
+#print axioms BridgelandStabLean.GroupAction.componentStabilizer
+#print axioms BridgelandStabLean.GroupAction.mem_componentStabilizer_iff
+#print axioms BridgelandStabLean.GroupAction.componentStabilizerMulAction
+
+#print axioms BridgelandStabLean.GroupAction.GLTilde.chargeAddEquiv
+#print axioms BridgelandStabLean.GroupAction.GLTilde.chargeAddEquiv_apply
+#print axioms BridgelandStabLean.GroupAction.AutPair.chargeAddEquiv
+#print axioms BridgelandStabLean.GroupAction.AutPair.chargeAddEquiv_apply
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.chargeAddEquiv
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.chargeAddEquiv_mk
+#print axioms BridgelandStabLean.GroupAction.combinedChargeAddEquiv
+#print axioms BridgelandStabLean.GroupAction.combinedChargeAddEquiv_mk_apply
+#print axioms BridgelandStabLean.GroupAction.GLTilde.centralCharge_equivariant
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.centralCharge_equivariant
+#print axioms BridgelandStabLean.GroupAction.combinedCentralCharge_equivariant
+#print axioms BridgelandStabLean.GroupAction.combinedCentralCharge_equivariant_apply
+#print axioms BridgelandStabLean.GroupAction.componentCentralCharge_equivariant
+#print axioms BridgelandStabLean.GroupAction.componentLocalModel_chargeMap_equivariant
+
+#print axioms BridgelandStabLean.GroupAction.shiftFunctorCommShift
+#print axioms BridgelandStabLean.GroupAction.shiftTwoMapTriangleIso
+#print axioms BridgelandStabLean.GroupAction.shiftTwoIsTriangulated
+#print axioms BridgelandStabLean.GroupAction.shiftNegTwoMapTriangleIso
+#print axioms BridgelandStabLean.GroupAction.shiftNegTwoIsTriangulated
+#print axioms BridgelandStabLean.GroupAction.shiftTwoTriEquiv
+#print axioms BridgelandStabLean.GroupAction.K₀.mapF_shift_neg_two
+#print axioms BridgelandStabLean.GroupAction.shiftTwoPair
+#print axioms BridgelandStabLean.GroupAction.deckShift_neg_one_inv_apply
+#print axioms BridgelandStabLean.GroupAction.shiftTwoPair_act_eq_deck_neg_one
+#print axioms BridgelandStabLean.GroupAction.deck_mul_deck
+#print axioms BridgelandStabLean.GroupAction.deck_zero
+#print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_combined_smul
+#print axioms BridgelandStabLean.GroupAction.combinedActionHom
+#print axioms BridgelandStabLean.GroupAction.combinedActionKernel
+#print axioms BridgelandStabLean.GroupAction.EffectiveCombinedSymmetry
+#print axioms BridgelandStabLean.GroupAction.effectiveCombinedPermHom
+#print axioms BridgelandStabLean.GroupAction.effectiveCombinedMulAction
+#print axioms BridgelandStabLean.GroupAction.effectiveCombinedFaithfulSMul
+#print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_mem_combinedActionKernel
+#print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_eq_one_in_effective
 
 /-! ## Group-law spot checks
 
@@ -390,6 +600,42 @@ example (σ : StabilityCondition.WithClassMap C v) (x : Λ) :
 
 /-- The forgetful map really does forget only the lattice datum. -/
 example (a : AutPair v) : AutPairQuot.toAutQuot (AutPairQuot.mk a) = AutQuot.mk a.Φ := rfl
+
+/-- The quotient relation is normalized: only the forward functor is part of
+the relation; inverse isomorphisms are derived from adjoint uniqueness. -/
+example (a b : AutPair v) :
+    a ≈ b ↔ (Nonempty (a.Φ.e.functor ≅ b.Φ.e.functor) ∧ a.lam = b.lam) := Iff.rfl
+
+/-- The two §8 factors commute on stability conditions. -/
+example (x : GLTilde) (a : AutPair v) (σ : StabilityCondition.WithClassMap C v) :
+    x • (AutPairQuot.mk a • σ) = AutPairQuot.mk a • (x • σ) :=
+  gltilde_autPair_smul_comm x a σ
+
+/-- All three fixed-element continuity instances are found by typeclass search. -/
+example (x : GLTilde) :
+    Continuous fun σ : StabilityCondition.WithClassMap C v ↦ x • σ :=
+  continuous_const_smul x
+
+example (q : AutPairQuot v) :
+    Continuous fun σ : StabilityCondition.WithClassMap C v ↦ q • σ :=
+  continuous_const_smul q
+
+example (p : GLTilde × AutPairQuot v) :
+    Continuous fun σ : StabilityCondition.WithClassMap C v ↦ p • σ :=
+  continuous_const_smul p
+
+/-- The corresponding joint-continuity instances are also available. -/
+example : Continuous fun p : GLTilde × StabilityCondition.WithClassMap C v ↦
+    p.1 • p.2 :=
+  continuous_smul
+
+example : Continuous fun p : AutPairQuot v × StabilityCondition.WithClassMap C v ↦
+    p.1 • p.2 :=
+  continuous_smul
+
+example : Continuous fun p : (GLTilde × AutPairQuot v) ×
+    StabilityCondition.WithClassMap C v ↦ p.1 • p.2 :=
+  continuous_smul
 
 end AutPairChecks
 

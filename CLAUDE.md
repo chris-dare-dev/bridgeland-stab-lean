@@ -151,14 +151,28 @@ axiomatizing the gap.
      `GroupAction/StabilityAction.lean`. **The §8 `G̃L⁺(2, ℝ)` action is
      complete.**
 
-   Remaining on this track, as of 2026-08-04: **one item — simple connectedness
-   of `GLTilde`**, and it is blocked on prerequisites rather than effort (no
-   topology on `GLTilde` here; `π₁(S¹) ≅ ℤ` not in Mathlib at the pin). The
-   other two covering-space facts are done — the `ℤ` fibre in
-   `GLTildeFibre.lean`, surjectivity of the projection in `GLTildeSurj.lean` —
-   and so is the autoequivalence half of §8, all the way to a `MulAction`
-   (`AutPairAction.lean`). See the claims list at the end of this section for
-   why the last item is a change of category rather than a missing lemma.
+   The topological track is also complete in the 2026-08-06 working tree.
+   `GLTildeTopology.lean` supplies contractible global coordinates and simple
+   connectedness; `GLTildeCover.lean` proves the surjective covering-map
+   property; and `GLTildeTopologicalGroup.lean` proves continuous
+   multiplication and inversion. `TopologicalAction.lean` and
+   `GLTildeContinuousAction.lean` prove that fixed autoequivalence classes,
+   fixed lifted matrices, and fixed pairs act by homeomorphisms on the
+   Bridgeland stability space (`ContinuousConstSMul`).
+   `GLTildeJointContinuousAction.lean` proves the stronger `ContinuousSMul`
+   instances for `GLTilde`, for discretely topologized `AutPairQuot v`, and
+   for their direct product. The algebraic `ℤ` fibre and exact sequence
+   remain in `GLTildeFibre.lean` and `GLTildeSurj.lean`.
+
+   The three post-topology symmetry milestones are complete as well.
+   `ComponentAction.lean` transports connected components and restricts
+   symmetries to component homeomorphisms; `PeriodMapEquivariance.lean`
+   proves equivariance of the central charge and the canonical component
+   local-model chart; and `EffectiveAction.lean` quotients the combined
+   symmetry group by its full action kernel. The shift convention is now
+   theorem-pinned: `[2]` acts as `deck (-1)`, hence `(deck 1, [2])` is in the
+   kernel. The quotient action is faithful. Do not strengthen this to a claim
+   that the explicit diagonal pair generates the full kernel.
 
    The `Aut` groundwork is in `GroupAction/AutAction.lean`
    (`PostnikovTower.mapF`, `HNFiltration.mapF`, `Slicing.mapEquiv`). Two
@@ -226,65 +240,39 @@ axiomatizing the gap.
      and `QuasiAbelian/` once produced a false "the anchor lacks this" finding.
      **Search the whole anchor before concluding something is missing.**
 
-Four claims to keep off the page.
+Five claims to keep off the page.
 
-- **"The §8 action is formalized"** — both halves now act on stability
-  conditions as `MulAction`s: `G̃L⁺(2, ℝ)` (steps 1–3c, `StabilityAction.lean`)
-  and `AutPairQuot v` (`AutPairAction.lean`). What is *not* formalized is that
-  they generate anything, that the two commute, or that either is the full
-  symmetry group of `Stab`. Neither is a claim about `Stab(D)` being a manifold
-  — no topology on the space of stability conditions is defined anywhere here.
+- **"The formalized §8 symmetries are the full symmetry group"** — both halves
+  act on stability conditions, `CombinedAction.lean` proves that they commute,
+  and the direct product acts jointly continuously. What is *not* formalized
+  is that these factors generate all symmetries. The `AutPairQuot v` factor is
+  equipped with the discrete topology for this statement; no moduli topology
+  on autoequivalences is being asserted.
 - **"`AutPairQuot v` is `Aut(D)`"** — no, and it is further from it than
   `AutQuot` is. Its elements are *pairs*, and the forgetful map to `AutQuot C`
   is proved to be neither injective (different `lam` over one `Φ`, whenever `v`
   is not surjective) nor surjective (a `Φ` with no compatible `lam` has no
   preimage). Both failures are about `v`, which is arbitrary. Say "the group of
   autoequivalences carrying a compatible class-lattice automorphism".
-- **"`GLTilde` is a formalized universal cover"** — still no, and the remaining
-  gap is now exactly one thing. **Fibre `ℤ`: proved** (`GLTildeFibre.lean`,
-  `kerEquiv`). **Surjectivity of the projection: proved** (`GLTildeSurj.lean`,
-  `toMatHom_surjective`). So `1 → ℤ → G̃L⁺(2, ℝ) → GL⁺(2, ℝ) → 1` is exact —
-  `exact_deckHom_toMatHom` bundles all three exactness facts.
-
-  **Simple connectedness: open, and not reachable at this pin.** Checked
-  against the pinned Mathlib (`8a178386`), not assumed:
-
-  - `SimplyConnectedSpace` exists, but its **only** instances are
-    `ofContractible` and `Unit`. No fundamental group of any space is computed
-    anywhere in Mathlib at this revision, so `π₁(S¹) ≅ ℤ` is unavailable and
-    the covering-space route is closed.
-  - The one open route is therefore **contractibility** — true, since
-    `G̃L⁺(2, ℝ) ≅ ℝ⁴` — which needs a polar decomposition. Mathlib has none at
-    this pin (zero files match); **that prerequisite is now supplied** by
-    `ForMathlib/PolarDecomposition.lean` (`Matrix.exists_polarDecomposition`,
-    general `n` over `ℝ`). It was cheap because the continuous functional
-    calculus reaches real matrices once `open scoped MatrixOrder` is in
-    effect, so `CFC.sqrt` is available and no spectral theorem is needed.
-    **This closes one prerequisite, not the gap** — see the next two bullets.
-  - Independently, nothing in this repo puts a topology on `GLTilde` at all, so
-    the statement is not currently expressible here, let alone provable.
-
-  Treat this the way §4 treats the geometric lane: a missing-prerequisite
-  program, not a task. Do **not** stub it — §2 is unconditional.
-
-  What *is* done in that direction is `GLTildeSurj.lean`'s
-  `existsUnique_deck_mul_sect`: `lift` is a canonical **section**, and every
-  element factors uniquely as `deck n * sect x.mat`. That globally trivialises
-  the `ℤ`-bundle with an explicit trivialisation, and is what a covering-map
-  proof would be built on — but it is a statement about sets and groups, with
-  no topological content.
-
-  The trap, and it is sharper now that the algebra is done: **a central
-  extension of `GL⁺(2, ℝ)` by `ℤ` is a statement about groups; the universal
-  cover is a statement about spaces.** Nothing here names a topology, so the
-  remaining gap is a change of category, not a missing lemma. Cite
-  `exact_deckHom_toMatHom` for the extension; never for the cover.
-- **"`AutQuot` is `Aut(D)`"** — not proved. Its setoid asks for the functors
-  *and* the inverses to be naturally isomorphic; adjoint uniqueness would make
-  the second redundant, but that is not imported here, so the relation is a
-  priori finer and `AutQuot` a priori larger. Everything proved about
-  `AutQuot` holds; that it *equals* `Aut(D)` does not. This is inherited
-  wholesale by `AutPairQuot` through its `Φ` component.
+- **"`GLTilde.universalCoverData` is a bundled Mathlib universal-cover
+  object"** — no. Mathlib has no such bundled predicate at this pin. The
+  theorem explicitly packages `IsCoveringMap GLTilde.mat`, surjectivity, and
+  `SimplyConnectedSpace GLTilde`; `exact_deckHom_toMatHom` separately records
+  the `ℤ` deck group. `GLTilde.isTopologicalGroup` supplies the group-topology
+  compatibility. Cite those exact declarations rather than implying a larger
+  bundled API.
+- **"`AutPairQuot v` is just `Aut(D)` with notation changed"** — no. The
+  autoequivalence relation itself is now the standard forward-functor natural
+  isomorphism relation; inverse isomorphisms follow from right-adjoint
+  uniqueness. But `AutPairQuot v` additionally carries `lam : Λ ≃+ Λ` and its
+  compatibility with `v`, so it remains a different group from bare
+  autoequivalences.
+- **"The deck/double-shift overlap is the whole action kernel"** — not proved.
+  `EffectiveCombinedSymmetry v` is deliberately the quotient by the full
+  kernel of the permutation action, and `(deck 1, [2])` is proved to belong to
+  it. Additional category-specific symmetries may act trivially. The theorem
+  also fixes the sign convention: `[2] = deck (-1)` as actions, so the
+  trivial diagonal representative is `(deck 1, [2])`.
 
 Related: do not cite `StrictAut` as the `Aut` action either. Its `F g` are
 isomorphisms of categories, not equivalences, so Serre functors and spherical

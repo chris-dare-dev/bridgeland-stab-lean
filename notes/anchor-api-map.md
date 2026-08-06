@@ -403,13 +403,10 @@ strict unit. Only `inv_mul_cancel` needs a real natural isomorphism
 (`unitIso.symm`) — which is precisely the one place strictness fails, and
 precisely what quotienting fixes.
 
-**One honest caveat.** The setoid asks for `functor ≅ functor` **and**
-`inverse ≅ inverse`. The second follows from the first since adjoints are
-unique up to isomorphism, but that is **not proved here**, so as stated the
-relation is a priori finer than natural isomorphism of the functors and
-`AutQuot` a priori larger than the usual `Aut(D)`. Carrying both keeps
-`comp`/`symm` compatibility trivial; closing it means importing
-adjoint-uniqueness and dropping the second component.
+The setoid now asks only for `functor ≅ functor`, the standard relation.
+`TriEquiv.inverseIsoOfFunctorIso` uses uniqueness of right adjoints to derive
+`inverse ≅ inverse` wherever inversion needs it. This removes the earlier
+artificially finer two-component relation without changing the action proof.
 
 Also: `AutQuot` is a plain `def`, so `Quotient.mk` alone does not carry enough
 type information for `•` to find its instance — use `AutQuot.mk`.
@@ -542,6 +539,74 @@ Done for stability conditions (2026-08-04), all three:
 Prove the `MulAction` laws (`one_smul`, `mul_smul`) at each stage rather than
 at the end — 3a's are cheap and will catch a wrong `f` vs `f⁻¹` convention
 immediately, which is the failure mode most likely to survive typechecking.
+
+---
+
+## 8. Joint topology of the symmetry action (2026-08-06)
+
+The fixed-element homeomorphisms in `TopologicalAction.lean` and
+`GLTildeContinuousAction.lean` are now strengthened in
+`GLTildeJointContinuousAction.lean`.
+
+The key identity-neighborhood estimates are:
+
+- `GLTilde.eventually_uniform_shift_displacement`: near `1`,
+  `|x.shift φ - φ|` is uniformly small for every `φ`. Joint phase
+  evaluation is continuous, compactness gives a uniform neighborhood on
+  `[0,1]`, and `NormalizedShift.map_add_int` transfers it to all of `ℝ`.
+- `GLTilde.continuous_actCCLM`: `x ↦ actCCLM x.mat` is continuous in operator
+  norm. Finite-dimensionality reduces this to continuity after evaluation at
+  every `z : ℂ`.
+- `stabSeminorm_near_identity_le`: the transformed seminorm is bounded by the
+  old seminorm times `‖actCCLM x.mat‖`, plus
+  `‖actCCLM x.mat - id‖`.
+- `exists_identity_basisNhd_control`: those estimates give one source
+  `basisNhd` working uniformly for all sufficiently small group elements.
+
+`continuousAt_smul_identity` proves continuity at `(1,σ)`. The factorization
+`x • τ = x₀ • ((x₀⁻¹ * x) • τ)` then gives
+`ContinuousSMul GLTilde (StabilityCondition.WithClassMap C v)` globally.
+
+For the autoequivalence factor the topology is an explicit design choice:
+`AutPairQuot v` is given the discrete topology, the standard topology when it
+is used as a symmetry group here. Its action is therefore jointly continuous,
+and the commuting product action receives `ContinuousSMul` as well. This does
+not assert a moduli topology on autoequivalences or identify `AutPairQuot v`
+with an external `Aut(D)`.
+
+---
+
+## 9. Component transport, period equivariance, and the effective quotient (2026-08-06)
+
+The three-milestone chain following the joint action is complete.
+
+1. `ComponentAction.lean` defines the induced action on
+   `ConnectedComponents X` for any group action with `ContinuousConstSMul`.
+   It proves exact transport of connected components, constructs the
+   restricted `Homeomorph` between component subtypes, and gives the component
+   stabilizer its action on the chosen component.
+2. `PeriodMapEquivariance.lean` defines the additive charge-space
+   equivalences. `GLTilde` postcomposes a charge by `actC`; `AutPairQuot v`
+   precomposes by its lattice automorphism. The central-charge map is
+   equivariant for each factor and their product, and the same square is
+   stated for the anchor's canonical componentwise local-model chart after
+   coercion to the ambient charge group. The `GLTilde` operation is only
+   asserted additive/real-linear here, not complex-linear.
+3. `EffectiveAction.lean` bundles the even shift functors as triangulated
+   equivalences, proves that `[2]` is trivial on `K₀`, and resolves the action
+   convention:
+
+   ```text
+   shiftTwoPair.act = deck (-1)
+   (deck 1, [2]) acts trivially.
+   ```
+
+   `EffectiveCombinedSymmetry v` is the product symmetry group modulo the
+   full kernel of its action on stability conditions. The induced action is
+   faithful by construction, and the explicit deck/double-shift overlap maps
+   to the identity. There is intentionally no theorem that this overlap
+   generates the whole kernel; extra category-specific ineffective
+   symmetries remain possible.
 
 ---
 
