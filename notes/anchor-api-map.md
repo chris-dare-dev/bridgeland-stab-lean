@@ -610,6 +610,42 @@ The three-milestone chain following the joint action is complete.
 
 ---
 
+## 10. HN mass, the three-coordinate distance, and full invariance (2026-08-06)
+
+The anchor supplies `HNFiltration`, intrinsic `phiPlus`/`phiMinus`, and the
+phase-only `slicingDist`, but no mass definition and no factorwise uniqueness
+theorem for complete HN filtrations. The metric chain therefore uses a
+choice-free envelope rather than choosing a filtration non-functorially.
+
+1. `StabilityMass.lean`
+   - `HNFiltration.mass σ F = ∑ i, ofReal ‖σ.charge (F.factor i)‖`;
+   - `stabilityMass σ E = ⨆ F, F.mass σ` over every HN filtration of `E`;
+   - positivity on nonzero objects and invariance under object isomorphism;
+   - exact backward/forward filtration-mass transport and
+     `AutPair.act_stabilityMass`.
+2. `StabilityDistance.lean`
+   - `logMassDist` agrees with the ordinary absolute log difference on finite
+     masses and treats `⊤` as infinitely far from finite values;
+   - `stabilityDistTerm` is the maximum of the `φ⁺`, `φ⁻`, and mass
+     discrepancies;
+   - `stabilityDist` is the supremum over nonzero objects;
+   - reflexivity, symmetry, triangle inequality, and
+     `slicingDist_le_stabilityDist` are proved.
+3. `AutFullIsometry.lean`
+   - transports each coordinate through `Φ⁻¹`;
+   - proves `AutPair.act_stabilityDist` by the two pointwise supremum bounds;
+   - descends to `AutPairQuot_smul_stabilityDist`.
+
+The remaining bridge to Bridgeland's literal Proposition 8.1 is explicit:
+prove factorwise HN uniqueness (or at least equality of every HN mass sum),
+deduce that `stabilityMass` is finite and equals any filtration's mass, then
+prove separation and equality of the induced topology with the Section 6
+topology. Until then the citations to Proposition 8.1 and Lemma 8.2 remain
+`no_claim`. Independently, `AutPairQuot v` is not identified with bare
+`Aut(D)`.
+
+---
+
 ## 6. Open risks
 
 - ~~**Module system.**~~ **RESOLVED.** The anchor uses Lean's new module

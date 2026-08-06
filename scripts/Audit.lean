@@ -494,6 +494,56 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.actStabAut_slicingDist
 #print axioms CategoryTheory.Triangulated.AutPairQuot_smul_slicingDist
 
+/-! ## StabilityMass — choice-free HN mass envelope -/
+
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_ne_zero_of_semistable
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_pos
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_ofIso
+#print axioms CategoryTheory.Triangulated.stabilityMass
+#print axioms CategoryTheory.Triangulated.stabilityMass_pos
+#print axioms CategoryTheory.Triangulated.stabilityMass_congr
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_charge
+#print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_inverse
+#print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_functor
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass_functor_obj
+
+/-! ## StabilityDistance — the three-coordinate extended pseudodistance -/
+
+#print axioms CategoryTheory.Triangulated.logMassDist
+#print axioms CategoryTheory.Triangulated.logMassDist_self
+#print axioms CategoryTheory.Triangulated.logMassDist_comm
+#print axioms CategoryTheory.Triangulated.logMassDist_triangle
+#print axioms CategoryTheory.Triangulated.phiPlusDist
+#print axioms CategoryTheory.Triangulated.phiMinusDist
+#print axioms CategoryTheory.Triangulated.massDist
+#print axioms CategoryTheory.Triangulated.stabilityDistTerm
+#print axioms CategoryTheory.Triangulated.stabilityDist
+#print axioms CategoryTheory.Triangulated.phiPlusDist_self
+#print axioms CategoryTheory.Triangulated.phiMinusDist_self
+#print axioms CategoryTheory.Triangulated.massDist_self
+#print axioms CategoryTheory.Triangulated.phiPlusDist_comm
+#print axioms CategoryTheory.Triangulated.phiMinusDist_comm
+#print axioms CategoryTheory.Triangulated.massDist_comm
+#print axioms CategoryTheory.Triangulated.phiPlusDist_triangle
+#print axioms CategoryTheory.Triangulated.phiMinusDist_triangle
+#print axioms CategoryTheory.Triangulated.massDist_triangle
+#print axioms CategoryTheory.Triangulated.stabilityDist_self
+#print axioms CategoryTheory.Triangulated.stabilityDist_comm
+#print axioms CategoryTheory.Triangulated.stabilityDist_triangle
+#print axioms CategoryTheory.Triangulated.slicingDist_le_stabilityDist
+
+/-! ## AutFullIsometry — invariance of all three coordinates -/
+
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_phiPlusDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_phiMinusDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_massDist
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDistTerm
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDistTerm_functor_obj
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityDist
+#print axioms CategoryTheory.Triangulated.AutPairQuot_smul_stabilityDist
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

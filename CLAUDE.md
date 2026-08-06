@@ -248,25 +248,24 @@ Six claims to keep off the page.
   is that these factors generate all symmetries. The `AutPairQuot v` factor is
   equipped with the discrete topology for this statement; no moduli topology
   on autoequivalences is being asserted.
-- **"`Aut(D)` acts by isometries"** — not proved, and the shortfall is a
-  missing *definition*, not a missing proof. What is proved, in
-  `GroupAction/AutIsometry.lean` (2026-08-05), is that the action preserves
-  the **anchor's** `slicingDist` — `mapEquiv_slicingDist`, carried to stability
-  conditions by `actStabAut_slicingDist` and to the `MulAction` by
-  `AutPairQuot_smul_slicingDist`.
+- **"`Aut(D)` acts by isometries"** — still not the theorem proved here, but
+  the earlier missing-mass gap is now narrowed substantially.
+  `GroupAction/StabilityMass.lean` defines the finite HN-factor mass sum and a
+  choice-free `stabilityMass` envelope (the supremum over all HN filtrations).
+  `StabilityDistance.lean` adds its logarithmic discrepancy to `φ⁺` and `φ⁻`,
+  proving reflexivity, symmetry, the triangle inequality, and
+  `slicingDist ≤ stabilityDist`. `AutFullIsometry.lean` proves exact
+  preservation by `AutPair` representatives and `AutPairQuot v`.
 
-  `slicingDist` is **not** Bridgeland's `d`. `d` is a supremum of *three*
-  quantities per nonzero object; `slicingDist` carries the `φ⁺` and `φ⁻`
-  discrepancies and omits `|log (m₂(E)/m₁(E))|`, the mass ratio — the only term
-  that sees the central charge, hence the only one `Z ∘ lam` could move. **The
-  anchor defines no mass function**, so that term is not expressible at this
-  pin; supplying it is separate work, and until it exists this is not the
-  paper's claim.
-
-  The registry relation is `no_claim`, not `one_way`, and that is a real
-  non-implication both ways: a supremum of three terms being preserved does not
-  give that each term is. Say "the action preserves the phase distance between
-  slicings".
+  The remaining boundary is mathematical, not cosmetic. The anchor proves
+  uniqueness of the extreme HN phases but not factorwise HN uniqueness, so the
+  supremal envelope has not been proved equal to the mass sum of every HN
+  filtration or finite. Proposition 8.1's separation and topology-comparison
+  clauses are also open. Independently, `AutPairQuot v` carries a compatible
+  lattice automorphism and is not identified with bare `Aut(D)`. The registry
+  relations therefore remain `no_claim`. Say "the compatible
+  autoequivalence group preserves the three-coordinate HN-envelope distance"
+  and state the HN-uniqueness boundary.
 
   Two things this cost that are worth reusing. The anchor had carried
   `slicingDist` since before this repo existed

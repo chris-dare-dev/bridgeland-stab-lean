@@ -25,6 +25,9 @@ import BridgelandStabLean.GroupAction.StrictFiniteLength
 import BridgelandStabLean.GroupAction.AutStabilityAction
 import BridgelandStabLean.GroupAction.AutPairAction
 import BridgelandStabLean.GroupAction.AutIsometry
+import BridgelandStabLean.GroupAction.StabilityMass
+import BridgelandStabLean.GroupAction.StabilityDistance
+import BridgelandStabLean.GroupAction.AutFullIsometry
 import BridgelandStabLean.GroupAction.CombinedAction
 import BridgelandStabLean.GroupAction.TopologicalAction
 import BridgelandStabLean.GroupAction.GLTildeContinuousAction
