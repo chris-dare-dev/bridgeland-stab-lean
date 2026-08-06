@@ -482,6 +482,18 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_mem_combinedActionKernel
 #print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_eq_one_in_effective
 
+/-! ## AutIsometry — the action preserves the anchor's phase distance -/
+
+#print axioms CategoryTheory.Triangulated.Slicing.phiPlus_congr
+#print axioms CategoryTheory.Triangulated.Slicing.phiMinus_congr
+#print axioms CategoryTheory.Triangulated.isZero_inverse_iff
+#print axioms CategoryTheory.Triangulated.isZero_functor_iff
+#print axioms CategoryTheory.Triangulated.mapEquiv_phiPlus
+#print axioms CategoryTheory.Triangulated.mapEquiv_phiMinus
+#print axioms CategoryTheory.Triangulated.mapEquiv_slicingDist
+#print axioms CategoryTheory.Triangulated.actStabAut_slicingDist
+#print axioms CategoryTheory.Triangulated.AutPairQuot_smul_slicingDist
+
 /-! ## Group-law spot checks
 
 `#print axioms` audits the proof term; these check the instance actually

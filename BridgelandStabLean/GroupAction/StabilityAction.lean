@@ -5,6 +5,7 @@ Released under the MIT license.
 import BridgelandStabLean.GroupAction.PreStabilityAction
 import BridgelandStabLean.GroupAction.ShiftAnalysis
 import BridgelandStability.Deformation.IntervalSelection
+import MathFormalContract
 
 /-!
 # The action on stability conditions
@@ -98,6 +99,9 @@ theorem actStab_Z (x : GLTilde) (σ : StabilityCondition.WithClassMap C v) (a : 
     (actStab C v x σ).Z a = actC x.mat (σ.Z a) := rfl
 
 /-- **The §8 action.** `G̃L⁺(2, ℝ)` acts on stability conditions. -/
+@[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := one_way)
+        (frontier := ["gltilde-universal-cover"])
+        (note := "Lemma 8.2 names GLTilde as the universal covering space of GL+(2,R). Here it is a group of compatible pairs, proved to be a group and nothing more -- the covering-space facts are absent from Mathlib at this revision. The paper's statement implies this one; not conversely.")]
 instance stabMulAction : MulAction GLTilde (StabilityCondition.WithClassMap C v) where
   smul := actStab C v
   one_smul σ := by

@@ -4,6 +4,7 @@ Released under the MIT license.
 -/
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStability.Slicing.Defs
+import MathFormalContract
 
 /-!
 # The action on slicings
@@ -98,6 +99,8 @@ theorem smul_slicing_P (f : NormalizedShift) (s : Slicing C) (φ : ℝ) :
 
 The matrix factor is not involved — it acts on the central charge, which is
 step 3b. -/
+@[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := no_claim)
+        (note := "A COMPONENT of the Lemma 8.2 action, not a weaker version of it: the paper states an action on Stab(D), and says nothing about GLTilde acting on slicings alone. Neither statement implies the other, so no_claim rather than one_way.")]
 instance gltildeSlicingMulAction : MulAction GLTilde (Slicing C) :=
   MulAction.compHom _ GLTilde.toShiftHom
 

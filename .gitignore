@@ -1,5 +1,13 @@
 /.lake/
 /scratch/
+
+# Emitter output. Derived from the build, and a stale copy in git would be a
+# trust record nobody regenerated -- which is worse than none, because it looks
+# current. Same rule as the contract package's own .gitignore.
+#
+# The release process attaches these as assets at a tag; it does not commit
+# them to main.
+/attest/
 *.olean
 *.ilean
 *.trace

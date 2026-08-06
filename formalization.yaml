@@ -185,6 +185,25 @@ fidelity:
     quotient by the full kernel acts faithfully; no claim says this explicit
     overlap generates the full kernel in every category.
 
+    CLOSED IN PART 2026-08-05: the ISOMETRY clause of Lemma 8.2, for the phase
+    discrepancies only -- AutIsometry.lean. mapEquiv_slicingDist proves the Aut
+    action preserves the ANCHOR's slicingDist exactly, with no finiteness
+    hypothesis, and actStabAut_slicingDist / AutPairQuot_smul_slicingDist carry
+    that to stability conditions and to the MulAction. See known_divergences
+    for why this is NOT Bridgeland's d and must not be cited as the isometry
+    claim: the anchor defines no mass function, and nothing here supplies one.
+
+    Worth recording as a process point, because it is the same failure mode the
+    count corrections below describe. The obstruction previously written into
+    actStabAut's own @[cites] note -- "no metric is constructed here, so
+    isometry is not proved" -- was literally true and practically misleading.
+    Nothing in THIS repo constructs a metric and nothing does now; the anchor
+    had carried slicingDist since before this repo existed, in
+    StabilityCondition/Defs.lean, written for the section 7 deformation theory
+    and never connected to section 8. CLAUDE.md section 5 already warns to
+    search the whole anchor before concluding something is missing. That
+    warning was written about Deformation/ and applies here unchanged.
+
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
     Slicing.mapEquiv), and QuotAutAction.lean quotients triangulated
@@ -246,7 +265,7 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-06 in the
-    working tree based on b4cbf47 via `scripts/check_audit.py` over 376
+    merged working tree via `scripts/check_audit.py` over 385
     declarations this project introduces: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass.
@@ -280,6 +299,11 @@ fidelity:
     This observation is working-tree-pinned rather than commit-pinned because
     the new files are not yet committed.
 
+    COUNT UPDATE (AutIsometry), 2026-08-06. The 9 additional records cover
+    iso-invariance of intrinsic phases, preservation and reflection of zero
+    objects by an equivalence, phase transport, and preservation of the
+    anchor's slicingDist through the bare and quotient autoequivalence actions.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -303,8 +327,8 @@ fidelity:
   builds_clean_date: 2026-08-06
   builds_clean_note: >
     Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
-    present, `lake build` completed at 3769 jobs with
-    exit 0, and `scripts/check_audit.py` accepted all 376 records with no
+    present, `lake build` completed at 3774 jobs with
+    exit 0, and `scripts/check_audit.py` accepted all 385 records with no
     sorryAx. The earlier committed tree was independently observed on Windows,
     macOS, and CI; the new uncommitted universal-cover, combined-action, and
     topological-action, joint-action, component-transport, period-equivariance,
@@ -312,7 +336,7 @@ fidelity:
   human_review: none
   machine_review: >
     Current 2026-08-06 working tree: local build plus the audit gate passed at
-    376 declarations. CI has not run against the uncommitted universal-cover,
+    385 declarations. CI has not run against the merged universal-cover,
     normalized-quotient, combined-action, topological-action, and joint-action
     changes, so the statements below describe the committed automation and
     must not be read as a remote verdict on this working tree.
@@ -519,6 +543,27 @@ fidelity:
     EffectiveAction identifies the categorical `[2]` action with `deck (-1)`,
     proves `(deck 1, [2])` ineffective, and defines the faithful quotient by
     the complete action kernel.
+
+    AutIsometry.lean (2026-08-05) targets the ISOMETRY clause of Lemma 8.2,
+    partially. mapEquiv_slicingDist proves the Aut action preserves the
+    anchor's slicingDist -- the sup over nonzero objects of the phi-plus and
+    phi-minus discrepancies, StabilityCondition/Defs.lean -- exactly, with no
+    finiteness hypothesis and with both sides allowed to be infinite.
+    actStabAut_slicingDist and AutPairQuot_smul_slicingDist carry it from bare
+    slicings to stability conditions and to the MulAction of AutPairQuot v.
+    Two supporting lemmas were missing and are stated here for the first time:
+    Slicing.phiPlus_congr / phiMinus_congr, the iso-invariance of the intrinsic
+    phases, which the anchor inlines at four separate sites in
+    Deformation/DeformedGtLe.lean without ever naming; and isZero_functor_iff /
+    isZero_inverse_iff, which Functor.map_isZero gives in one direction only.
+
+    The proof does NOT reindex the supremum along Phi, and cannot: Phi.functor
+    .obj is a function on the OBJECT TYPE of C, and an equivalence of
+    categories makes it injective only up to isomorphism, so there is no Equiv
+    to rewrite along. Each side dominates the other pointwise instead, which is
+    what forced phiPlus_congr into existence.
+
+    What this is NOT is in known_divergences and must be read before citing it.
   known_divergences: >
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
@@ -537,6 +582,33 @@ fidelity:
     multiplication and inversion. Mathlib has no single bundled
     universal-cover predicate at this pin, so these exact declarations are the
     public trust surface rather than an inferred larger API.
+
+    GroupAction/AutIsometry.lean proves the Aut action preserves the anchor's
+    slicingDist. That is NOT Bridgeland's generalised metric d, and the gap is
+    not a technicality. d is a sup of THREE quantities per nonzero object; the
+    anchor's slicingDist carries two of them, the phi-plus and phi-minus
+    discrepancies, and omits |log(m_2(E)/m_1(E))|, the mass ratio. The omitted
+    term is the ONLY one that sees the central charge, and therefore the only
+    one that could move under an autoequivalence at all, since actStabAut
+    replaces Z by Z composed with lam.
+
+    The relation to Lemma 8.2 is recorded as no_claim, not one_way, and that is
+    a genuine non-implication in both directions rather than modesty: a sup of
+    three terms being preserved does not give that each term is preserved, so
+    the paper's isometry claim does not imply this one; and this one does not
+    imply the paper's. The same call, for the same reason, as
+    gltildeSlicingMulAction.
+
+    Nothing here closes the gap and nothing here can. The anchor defines NO
+    mass function -- m_sigma(E) as a sum of |Z| over HN factors does not appear
+    in it -- so the omitted term is not currently expressible. Supplying it is
+    separate work. Do not cite mapEquiv_slicingDist, actStabAut_slicingDist or
+    AutPairQuot_smul_slicingDist as "Aut(D) acts by isometries"; say "the
+    action preserves the phase distance between slicings".
+
+    A second, independent reason AutPairQuot_smul_slicingDist is not the
+    paper's claim: AutPairQuot v is not Aut(D). See the AutPairQuot paragraph
+    above and notes/anchor-api-map.md section 7.
 
     GroupAction/QuotAutAction.lean defines AutQuot C as the quotient of
     triangulated auto-equivalences by natural isomorphism of the forward
