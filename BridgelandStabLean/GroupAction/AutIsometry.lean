@@ -36,12 +36,12 @@ them — the `φ⁺` and `φ⁻` discrepancies — and omits
 one that sees the central charge, and therefore the only one that could move
 under `Φ` at all, since `actStabAut` replaces `Z` by `Z ∘ lam`.
 
-This module does not close it: **the anchor has no mass function** —
+This module itself does not close it: **the anchor has no mass function** —
 `m_σ(E) = Σ|Z(A_i)|` over the HN factors is not defined anywhere in it.
-The downstream `StabilityMass`, `StabilityDistance`, and `AutFullIsometry`
-modules now supply a choice-free HN-mass envelope and prove preservation of
-the resulting three-coordinate distance.  Factorwise HN uniqueness is still
-needed to identify that envelope with Bridgeland's literal mass.
+The downstream `StabilityMass`, `HNMassUniqueness`, `StabilityDistance`, and
+`AutFullIsometry` modules define the HN mass, prove independence from the
+chosen filtration and finiteness, and prove preservation of the resulting
+three-coordinate distance.
 
 So the relation to Lemma 8.2 is `no_claim`, not `one_way`, and the reason is a
 genuine non-implication rather than modesty. A sup of three terms being

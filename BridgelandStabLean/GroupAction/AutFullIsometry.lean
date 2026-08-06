@@ -10,16 +10,15 @@ import MathFormalContract
 
 The phase coordinates were handled in `AutIsometry.lean`.  The new input is
 `AutPair.act_stabilityMass`: transporting every HN filtration through the
-equivalence preserves its finite charge-norm sum, so it preserves the
-choice-free mass envelope.  The three coordinates can then be transported
+equivalence preserves its finite charge-norm sum, so it preserves the HN
+mass.  The three coordinates can then be transported
 objectwise, and the two supremum inequalities use `Φ⁻¹ E` and `Φ E` exactly as
 in the phase-only proof.
 
 The final quotient theorem is the full-distance analogue of
 `AutPairQuot_smul_slicingDist`.  It is still stated for `AutPairQuot v`, not
-for the paper's bare `Aut(D)`, and `stabilityMass` is the HN-mass envelope until
-factorwise HN uniqueness is supplied.  The trust annotation records both
-boundaries rather than identifying this theorem with Lemma 8.2.
+for the paper's bare `Aut(D)`.  The trust annotation records that remaining
+group-level boundary rather than identifying this theorem with Lemma 8.2.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -119,7 +118,7 @@ theorem act_stabilityDistTerm_functor_obj
 /-- A compatible autoequivalence pair preserves the complete three-coordinate
 stability distance. -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := no_claim)
-        (note := "Full three-coordinate isometry for the repo's choice-free HN-mass envelope. It is not identified with Lemma 8.2 yet: factorwise HN uniqueness is still needed to prove that stabilityMass equals the paper's mass of any HN filtration, and the acting group is AutPairQuot v rather than bare Aut(D).")]
+        (note := "Full three-coordinate isometry using the ordinary finite HN mass. It is not identified with Lemma 8.2 because the acting group is AutPairQuot v, carrying compatible lattice data, rather than bare Aut(D).")]
 theorem act_stabilityDist (σ τ : StabilityCondition.WithClassMap C v) :
     stabilityDist (a.act σ) (a.act τ) = stabilityDist σ τ := by
   apply le_antisymm
@@ -156,7 +155,7 @@ variable {Λ : Type u'} [AddCommGroup Λ] (v : K₀ C →+ Λ)
 
 /-- **The compatible autoequivalence group acts by full-distance isometries.** -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := no_claim)
-        (note := "Quotient-group form of AutPair.act_stabilityDist. Two explicit boundaries remain: AutPairQuot v has extra compatible lattice data and is not proved equivalent to Aut(D), and the mass coordinate is the supremal HN-mass envelope until factorwise HN uniqueness identifies it with Bridgeland's ordinary mass.")]
+        (note := "Quotient-group form of AutPair.act_stabilityDist for the ordinary finite HN mass. The remaining boundary is group-theoretic: AutPairQuot v has extra compatible lattice data and is not proved equivalent to Aut(D).")]
 theorem AutPairQuot_smul_stabilityDist
     (g : BridgelandStabLean.GroupAction.AutPairQuot v)
     (σ τ : StabilityCondition.WithClassMap C v) :

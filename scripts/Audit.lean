@@ -503,6 +503,14 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityMass
 #print axioms CategoryTheory.Triangulated.stabilityMass_pos
 #print axioms CategoryTheory.Triangulated.stabilityMass_congr
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_eq_zero_of_isZero
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_eq_mass
+#print axioms CategoryTheory.Triangulated.stabilityMass_eq_mass
+#print axioms CategoryTheory.Triangulated.stabilityMass_ne_top
+#print axioms CategoryTheory.Triangulated.stabilityMass_lt_top
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_sum
+#print axioms CategoryTheory.Triangulated.stabilityMass_eq_zero_iff
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_pos
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_charge
 #print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_inverse
 #print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_functor
@@ -515,6 +523,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.logMassDist_self
 #print axioms CategoryTheory.Triangulated.logMassDist_comm
 #print axioms CategoryTheory.Triangulated.logMassDist_triangle
+#print axioms CategoryTheory.Triangulated.logMassDist_eq_of_ne_top
 #print axioms CategoryTheory.Triangulated.phiPlusDist
 #print axioms CategoryTheory.Triangulated.phiMinusDist
 #print axioms CategoryTheory.Triangulated.massDist
@@ -529,6 +538,8 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.phiPlusDist_triangle
 #print axioms CategoryTheory.Triangulated.phiMinusDist_triangle
 #print axioms CategoryTheory.Triangulated.massDist_triangle
+#print axioms CategoryTheory.Triangulated.massDist_eq_abs_log
+#print axioms CategoryTheory.Triangulated.massDist_eq_abs_log_ratio
 #print axioms CategoryTheory.Triangulated.stabilityDist_self
 #print axioms CategoryTheory.Triangulated.stabilityDist_comm
 #print axioms CategoryTheory.Triangulated.stabilityDist_triangle

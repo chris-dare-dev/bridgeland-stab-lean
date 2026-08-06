@@ -15,17 +15,14 @@ For an HN filtration `F` of `E`, its mass is the finite sum
 ```
 
 The anchor proves that the extreme phases of an HN filtration are intrinsic,
-but it does not yet prove uniqueness of the complete HN filtration.  Defining
-the mass using `Classical.choice (s.hn_exists E)` would therefore make its
-transport law depend on an arbitrary, non-functorial choice.  We instead take
-the supremum of the masses of all HN filtrations.  This is choice-free, lives
-naturally in `ℝ≥0∞`, and is enough for equivariance and the extended-distance
-construction in the next file.
+but does not expose uniqueness of the complete HN filtration.  Defining the
+mass using `Classical.choice (s.hn_exists E)` would therefore make its
+transport law depend on an arbitrary, non-functorial choice.  We first take
+the supremum of the masses of all HN filtrations.  This is choice-free and
+lives naturally in `ℝ≥0∞`.
 
-Mathematically, HN uniqueness makes every term in this supremum equal to the
-usual Bridgeland mass.  That identification is deliberately not claimed here:
-the missing factorwise HN-uniqueness theorem is recorded as an assumption-frontier
-item in the trust record.
+`HNMassUniqueness.lean` subsequently proves that every term in this supremum
+is equal, identifying `stabilityMass` with the usual finite Bridgeland mass.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -75,10 +72,8 @@ theorem HNFiltration.mass_ofIso (σ : StabilityCondition.WithClassMap C v) {E E'
     (F.ofIso C e).mass σ = F.mass σ :=
   rfl
 
-/-- The choice-free HN mass envelope of an object.
-
-Once factorwise HN uniqueness is available, this supremum is equal to the mass
-of every HN filtration and hence to Bridgeland's usual `m_σ(E)`. -/
+/-- The choice-free HN mass envelope of an object.  Downstream,
+`stabilityMass_eq_mass` identifies it with the mass of every HN filtration. -/
 def stabilityMass (σ : StabilityCondition.WithClassMap C v) (E : C) : ℝ≥0∞ :=
   ⨆ F : HNFiltration C σ.slicing.P E, F.mass σ
 

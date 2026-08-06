@@ -181,21 +181,24 @@ construction. The explicit deck/double-shift pair is proved to lie in that
 kernel. No claim is made that this one pair generates the entire kernel in an
 arbitrary category.
 
-The full-metric three-milestone chain is now implemented as well.
-`StabilityMass` defines the finite charge-norm sum for one HN filtration and a
-choice-free mass envelope over all HN filtrations. `StabilityDistance` combines
-the two intrinsic phase discrepancies with the logarithmic mass discrepancy;
-the resulting `ℝ≥0∞`-valued distance is reflexive, symmetric, satisfies the
-triangle inequality, and dominates the anchor's `slicingDist`.
-`AutFullIsometry` proves that compatible autoequivalence representatives and
-`AutPairQuot v` preserve all three coordinates exactly.
+The full-metric chain is now implemented as well. `StabilityMass` defines the
+finite charge-norm sum for one HN filtration and an initially choice-free mass
+envelope over all HN filtrations. `HNMassUniqueness` constructs head--tail
+triangles by octahedral induction and uses the slicing-induced t-structure to
+prove that every HN filtration has the same mass. Consequently
+`stabilityMass` equals every finite HN mass sum, is never `⊤`, and vanishes
+exactly on zero objects; its `toReal` is the literal sum of factor-charge
+norms. `StabilityDistance` combines the two intrinsic phase
+discrepancies with the ordinary logarithmic mass discrepancy; the resulting
+`ℝ≥0∞`-valued distance is reflexive, symmetric, satisfies the triangle
+inequality, and dominates the anchor's `slicingDist`. `AutFullIsometry` proves
+that compatible autoequivalence representatives and `AutPairQuot v` preserve
+all three coordinates exactly.
 
-This is deliberately not advertised as the literal metric of Proposition 8.1
-yet. The pinned anchor lacks factorwise HN uniqueness, so the supremal mass
-envelope has not been identified with the mass of every HN filtration or
-proved finite; separation and equality with the Section 6 topology also remain
-open. In addition, `AutPairQuot v` carries compatible class-lattice data and is
-not identified with bare `Aut(D)`.
+This is still not advertised as the complete Proposition 8.1: separation and
+equality with the Section 6 topology remain open. In addition,
+`AutPairQuot v` carries compatible class-lattice data and is not identified
+with bare `Aut(D)`.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation

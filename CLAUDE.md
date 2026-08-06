@@ -248,24 +248,22 @@ Six claims to keep off the page.
   is that these factors generate all symmetries. The `AutPairQuot v` factor is
   equipped with the discrete topology for this statement; no moduli topology
   on autoequivalences is being asserted.
-- **"`Aut(D)` acts by isometries"** — still not the theorem proved here, but
-  the earlier missing-mass gap is now narrowed substantially.
-  `GroupAction/StabilityMass.lean` defines the finite HN-factor mass sum and a
-  choice-free `stabilityMass` envelope (the supremum over all HN filtrations).
-  `StabilityDistance.lean` adds its logarithmic discrepancy to `φ⁺` and `φ⁻`,
-  proving reflexivity, symmetry, the triangle inequality, and
-  `slicingDist ≤ stabilityDist`. `AutFullIsometry.lean` proves exact
-  preservation by `AutPair` representatives and `AutPairQuot v`.
+- **"`Aut(D)` acts by isometries"** — still not literally the theorem proved
+  here. `GroupAction/StabilityMass.lean` defines the finite HN-factor mass sum
+  and a choice-free `stabilityMass` envelope. `HNMassUniqueness.lean` proves
+  equality of all HN mass sums by head--tail octahedral induction and
+  t-structure uniqueness, so the envelope equals every finite filtration mass
+  and is never `⊤`. `StabilityDistance.lean` adds the ordinary logarithmic
+  discrepancy to `φ⁺` and `φ⁻`, proving reflexivity, symmetry, the triangle
+  inequality, and `slicingDist ≤ stabilityDist`. `AutFullIsometry.lean` proves
+  exact preservation by `AutPair` representatives and `AutPairQuot v`.
 
-  The remaining boundary is mathematical, not cosmetic. The anchor proves
-  uniqueness of the extreme HN phases but not factorwise HN uniqueness, so the
-  supremal envelope has not been proved equal to the mass sum of every HN
-  filtration or finite. Proposition 8.1's separation and topology-comparison
-  clauses are also open. Independently, `AutPairQuot v` carries a compatible
-  lattice automorphism and is not identified with bare `Aut(D)`. The registry
+  Proposition 8.1's separation and topology-comparison clauses are still
+  open. Independently, `AutPairQuot v` carries a compatible lattice
+  automorphism and is not identified with bare `Aut(D)`. The registry
   relations therefore remain `no_claim`. Say "the compatible
-  autoequivalence group preserves the three-coordinate HN-envelope distance"
-  and state the HN-uniqueness boundary.
+  autoequivalence group preserves the three-coordinate HN-mass distance" and
+  state the remaining group-level distinction.
 
   Two things this cost that are worth reusing. The anchor had carried
   `slicingDist` since before this repo existed

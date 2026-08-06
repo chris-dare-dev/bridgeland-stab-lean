@@ -162,7 +162,7 @@ variable {Λ : Type u'} [AddCommGroup Λ] (v : K₀ C →+ Λ)
 in `compat'` is *unchanged* — an autoequivalence moves an object without
 moving its phase. -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.lem-8.2" (relation := one_way)
-        (note := "The Aut half of Lemma 8.2, and weaker than it in two stated ways. This declaration is a map for a pair (Phi, lam), not the MulAction of bare Aut(D). Downstream AutFullIsometry proves that AutPairQuot v preserves a three-coordinate distance built from the choice-free HN-mass envelope; factorwise HN uniqueness is still needed to identify that envelope with Bridgeland's literal mass, and AutPairQuot v still carries extra lattice data.")]
+        (note := "The Aut half of Lemma 8.2, but this declaration is a map for a pair (Phi, lam), not the MulAction of bare Aut(D). Downstream HNMassUniqueness identifies the mass coordinate with Bridgeland's finite HN mass and AutFullIsometry proves exact preservation by AutPairQuot v; that quotient still carries extra compatible lattice data.")]
 noncomputable def actStabAut (lam : Λ →+ Λ)
     (hlam : ∀ x : K₀ C, v (K₀.mapF Φ.inverse x) = lam (v x))
     (σ : StabilityCondition.WithClassMap C v) : StabilityCondition.WithClassMap C v where

@@ -2,7 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
-import BridgelandStabLean.GroupAction.StabilityMass
+import BridgelandStabLean.GroupAction.HNMassUniqueness
 import MathFormalContract
 
 /-!
@@ -13,17 +13,17 @@ This file adds the mass coordinate to the anchor's two-coordinate
 
 * the `φ⁺` discrepancy;
 * the `φ⁻` discrepancy;
-* the logarithmic discrepancy of the choice-free HN mass envelopes.
+* the logarithmic discrepancy of the HN masses.
 
 The supremum of those objectwise terms is an `ℝ≥0∞`-valued symmetric extended
 pseudodistance and satisfies the triangle inequality.
 
-`stabilityMass` can be `⊤` until factorwise HN uniqueness (and hence finiteness
-of the envelope) is formalized.  `logMassDist` therefore extends the usual
-absolute logarithmic difference by placing `⊤` at infinite distance from every
-finite value and at distance zero from itself.  On finite positive masses it
-is exactly `|log m₁ - log m₂|`, equivalently the absolute log-ratio used by
-Bridgeland.
+`HNMassUniqueness.lean` proves that the choice-free definition of
+`stabilityMass` is equal to the finite mass sum of every HN filtration.
+`logMassDist` is nevertheless defined on all of `ℝ≥0∞`: it places `⊤` at
+infinite distance from finite values and at distance zero from itself.  On the
+positive finite masses occurring here it is exactly `|log m₁ - log m₂|`,
+equivalently the absolute log-ratio used by Bridgeland.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -79,6 +79,13 @@ theorem logMassDist_triangle (m n k : ℝ≥0∞) :
     exact ENNReal.ofReal_le_ofReal (abs_sub_le
       (Real.log m.toReal) (Real.log n.toReal) (Real.log k.toReal))
 
+/-- On finite inputs, `logMassDist` is the ordinary absolute logarithmic
+difference. -/
+theorem logMassDist_eq_of_ne_top {m n : ℝ≥0∞} (hm : m ≠ ⊤) (hn : n ≠ ⊤) :
+    logMassDist m n =
+      ENNReal.ofReal |Real.log m.toReal - Real.log n.toReal| := by
+  simp [logMassDist, hm, hn]
+
 /-- The `φ⁺` coordinate discrepancy for a fixed nonzero object. -/
 def phiPlusDist (σ τ : StabilityCondition.WithClassMap C v) (E : C)
     (hE : ¬IsZero E) : ℝ≥0∞ :=
@@ -101,7 +108,7 @@ def stabilityDistTerm (σ τ : StabilityCondition.WithClassMap C v) (E : C)
 
 /-- The three-coordinate, `ℝ≥0∞`-valued stability distance. -/
 @[cites "stmt:a520a8d4f877:bridgeland2007.prop-8.1" (relation := no_claim)
-        (note := "The same three-coordinate formula, but with stabilityMass defined as the supremum of all HN-filtration mass sums. Factorwise HN uniqueness is still needed to identify that envelope with the paper's mass of any HN filtration and prove it finite. Separation and equality with the Section 6 topology are also not proved, so this is not yet Proposition 8.1.")]
+        (note := "The same three-coordinate formula, with stabilityMass now proved equal to the finite mass sum of every HN filtration. Separation and equality with the Section 6 topology are not proved, so this is not yet Proposition 8.1.")]
 def stabilityDist (σ τ : StabilityCondition.WithClassMap C v) : ℝ≥0∞ :=
   ⨆ (E : C) (hE : ¬IsZero E), stabilityDistTerm σ τ E hE
 
@@ -157,6 +164,32 @@ theorem phiMinusDist_triangle (σ τ υ : StabilityCondition.WithClassMap C v) (
 theorem massDist_triangle (σ τ υ : StabilityCondition.WithClassMap C v) (E : C) :
     massDist σ υ E ≤ massDist σ τ E + massDist τ υ E :=
   logMassDist_triangle _ _ _
+
+/-- The mass coordinate used by `stabilityDist` is always the ordinary finite
+absolute logarithmic difference. -/
+theorem massDist_eq_abs_log (σ τ : StabilityCondition.WithClassMap C v) (E : C) :
+    massDist σ τ E = ENNReal.ofReal
+      |Real.log (stabilityMass σ E).toReal -
+        Real.log (stabilityMass τ E).toReal| := by
+  unfold massDist
+  exact logMassDist_eq_of_ne_top (stabilityMass_ne_top σ E)
+    (stabilityMass_ne_top τ E)
+
+/-- Ratio form of the preceding theorem, matching the mass term in
+Bridgeland's formula. -/
+theorem massDist_eq_abs_log_ratio
+    (σ τ : StabilityCondition.WithClassMap C v) (E : C) (hE : ¬IsZero E) :
+    massDist σ τ E = ENNReal.ofReal
+      |Real.log ((stabilityMass τ E).toReal /
+        (stabilityMass σ E).toReal)| := by
+  rw [massDist_eq_abs_log, Real.log_div
+    (ne_of_gt (stabilityMass_toReal_pos τ hE))
+    (ne_of_gt (stabilityMass_toReal_pos σ hE))]
+  congr 1
+  rw [show Real.log (stabilityMass σ E).toReal -
+      Real.log (stabilityMass τ E).toReal =
+      -(Real.log (stabilityMass τ E).toReal -
+        Real.log (stabilityMass σ E).toReal) by ring, abs_neg]
 
 @[simp]
 theorem stabilityDist_self (σ : StabilityCondition.WithClassMap C v) :
