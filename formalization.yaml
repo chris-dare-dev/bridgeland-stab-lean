@@ -356,7 +356,8 @@ fidelity:
     analytic estimates, conditional HN-mass propagation, both neighborhood
     cofinality directions, topology compatibility, and the named compatible
     pseudo/extended metric structures. The manual audit now covers 497
-    declarations.
+    declarations. This count is pinned to commit 160f0f3 and was reproduced
+    after merge on main at 56c7531.
 
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
@@ -380,21 +381,23 @@ fidelity:
   builds_clean: true
   builds_clean_date: 2026-08-06
   builds_clean_note: >
-    Current working tree observed on macOS/aarch64 on 2026-08-06: Mathlib cache
-    present, `lake build` completed at 3780 jobs with exit 0. The strict parser
-    accepted all 497 records with no sorryAx after the Proposition 8.1
-    topology-infrastructure update, and `lake exe emit` completed successfully
-    with `mfc-emit: wrote attest/lean-emission.json`. PR #66 independently
-    carried the preceding universal-cover and symmetry work through its local
-    gates and was merged at 326d72b; PR #67 contains the full-metric chain,
-    with this topology extension observed locally before push.
+    Merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06 with a
+    Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
+    The strict parser accepted all 497 records with no sorryAx, and `lake exe
+    emit --out attest/lean-emission.json` completed successfully with
+    `mfc-emit: wrote attest/lean-emission.json`; the regenerated artifact was
+    byte-for-byte unchanged. PR #66 carried the universal-cover and symmetry
+    work and was merged at 326d72b. PR #67 carried the full-metric,
+    separation, and Proposition 8.1 topology-infrastructure chain and was
+    merged at 56c7531.
   human_review: none
   machine_review: >
-    Current 2026-08-06 working tree: local build, the manual audit gate at 497
-    declarations, and the environment-wide contract emitter all passed. PR
-    #66 is merged; CI for the mass/distance/isometry branch has not run on this
-    topology extension, so the statements below describe the committed
-    automation and must not be read as a remote verdict on this working tree.
+    Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
+    gate at 497 declarations, the environment-wide contract emitter, YAML and
+    JSON parsing, and attestation reproducibility all passed. PR #66 and PR
+    #67 are merged. GitHub reported no checks for PR #67, so these observations
+    are local verification of the committed theorem state, not a remote CI
+    verdict and not a source-faithfulness review.
     `lake exe lint-style` completed with only the repository's existing
     missing-nolints-file warning. `lake exe runLinter` is NOT clean: it reports
     six known errors in modules unchanged by the topology extension (two in
@@ -402,7 +405,7 @@ fidelity:
     K0Functor). The unusable `[simp]` attribute on `stabilityMass_eq_mass` was
     removed, clearing the only finding in the full-metric chain; the new
     StabilityDistanceTopology declarations have no linter findings. This
-    working tree does not claim to have repaired the remaining inherited
+    theorem state does not claim to have repaired the remaining inherited
     declaration-linter debt.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
@@ -496,8 +499,8 @@ fidelity:
     and unique deck-times-section factorization. These are group statements,
     not by themselves a covering-space theorem.
 
-    GLTildeTopology (landed in the working tree 2026-08-05) adds the source
-    topology. Its global coordinates are
+    GLTildeTopology (committed and merged 2026-08-06) adds the source topology.
+    Its global coordinates are
     R x (0,infinity) x R x (0,infinity), obtained by rotating the first column
     back through f(0) and reading the resulting positive-diagonal
     upper-triangular matrix. The coordinate equivalence is upgraded to a
