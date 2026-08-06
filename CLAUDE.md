@@ -274,6 +274,15 @@ Six claims to keep off the page.
   autoequivalence group preserves the three-coordinate HN-mass distance" and
   state the remaining group-level distinction.
 
+  `StabilityMassTriangle.lean` begins the missing categorical proof. It
+  defines the ordinary observable condition by composing the central charge
+  with `v`, reuses the heart-equivalence HN API, proves `‖Z(E)‖ ≤ mσ(E)`,
+  proves mass invariance under `[1]` and `[-1]`, and closes the
+  semistable-middle and same-phase-endpoint cases, including their heart
+  short-exact forms. Do not report the heart milestone complete:
+  `StabilityMassHeartShortExactInequality` is a named uninhabited proposition,
+  and the unrestricted polygonal argument still has to be formalized.
+
   Two things this cost that are worth reusing. The anchor had carried
   `slicingDist` since before this repo existed
   (`StabilityCondition/Defs.lean`), written for §7's deformation theory and

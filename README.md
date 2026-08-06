@@ -210,6 +210,17 @@ the explicit mass-triangle proposition is proved.  Independently,
 `AutPairQuot v` carries compatible class-lattice data and is not identified
 with bare `Aut(D)`.
 
+`StabilityMassTriangle` starts that remaining categorical chain without
+assuming its conclusion.  It turns a class-map stability condition into the
+ordinary observable condition with charge `Z.comp v`, exposes the induced
+heart stability function and its HN property, proves
+`\|Z(E)\| ≤ mσ(E)`, proves mass invariance under shifts by `±1`, and proves
+the triangle inequality when the middle term is semistable or when both
+endpoints are semistable of one phase.  The same base cases are transported
+to short exact sequences in the canonical heart. The unrestricted heart
+short-exact proposition is named explicitly but is not yet inhabited; the
+polygonal HN-filtration argument remains open.
+
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation
 `φ ↦ φ + 2n`, and `kerEquiv` packages that as `Multiplicative ℤ ≃* ker`. The

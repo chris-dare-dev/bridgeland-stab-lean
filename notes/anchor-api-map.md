@@ -662,13 +662,27 @@ choice-free envelope rather than choosing a filtration non-functorially.
    - constructs through `PseudoEMetricSpace.ofEDistOfTopology` and proves by
      `rfl` that the inherited topology is the existing Section 6 topology, so
      no topology/typeclass diamond is introduced.
+7. `StabilityMassTriangle.lean`
+   - defines the ordinary observable stability condition with central charge
+     `Z.comp v`, making the anchor's heart stability-function and HN APIs
+     available for arbitrary class maps;
+   - proves the universal charge lower bound `‖Z(E)‖ ≤ mσ(E)` and charge
+     additivity on distinguished triangles, together with mass invariance
+     under shifts by `1` and `-1`;
+   - proves mass subadditivity for semistable middle objects and for
+     same-phase semistable endpoints;
+   - transports both cases to short exact sequences in `P((0, 1])` and names
+     the still-open unrestricted heart short-exact proposition explicitly.
 
 The mass bridge, separation clause, analytic topology estimates, and safe
 metric-space construction are now closed.  The remaining Proposition 8.1
-work is the filtration-assembly proof of HN-mass subadditivity across every
-distinguished triangle; all topology comparison results are explicitly
-conditional on that proposition.  The citation to Proposition 8.1 therefore
-remains `no_claim`. The Lemma 8.2 citation also remains `no_claim`
+work is still the filtration-assembly proof of HN-mass subadditivity across
+every distinguished triangle. Its norm-theoretic and semistable base cases
+are now closed, but the unrestricted heart polygon argument and the two
+subsequent reductions remain open. All topology comparison results are
+explicitly conditional on the global proposition. The citation to
+Proposition 8.1 therefore remains `no_claim`. The Lemma 8.2 citation also
+remains `no_claim`
 independently, because `AutPairQuot v` is not identified with bare `Aut(D)`.
 
 ---

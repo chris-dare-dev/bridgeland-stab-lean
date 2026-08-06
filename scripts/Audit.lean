@@ -611,6 +611,27 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpaceOfMassTriangle
 #print axioms CategoryTheory.Triangulated.stabilityEMetricSpaceOfMassTriangle
 
+/-! ## StabilityMassTriangle — first categorical mass inequalities -/
+
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_slicing
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_charge
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_Zobj
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_hasHN
+#print axioms CategoryTheory.Triangulated.norm_charge_le_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_one
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_triangle
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₂_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_same_phase
+#print axioms CategoryTheory.Triangulated.StabilityMassHeartShortExactInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassHeartShortExactInequality_of_triangle
+#print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_obj₂_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_same_phase
+
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_phiPlusDist
