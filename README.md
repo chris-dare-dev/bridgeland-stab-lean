@@ -221,17 +221,25 @@ short exact sequences in the canonical heart. A public head--tail theorem now
 splits both an HN filtration and its real mass, and an octahedral induction
 proves that the semistable-left triangle inequality implies the unrestricted
 triangle inequality. `HNPolygon` now defines the paper's convex hull of
-subobject charges and the distinguished HN boundary path, proves that its
-successive edges are the HN-factor charges, identifies path length with factor
-mass, and supplies the endpoint chord bound. `H0ExactnessBridge` identifies
+subobject charges and the distinguished HN boundary path, proves containment
+under monomorphisms, and identifies successive edges with HN-factor charges
+whose arguments strictly decrease. Every interior path vertex is the unique
+maximizer of an explicit continuous real-linear functional among path
+vertices. Public semistable descent, the first-factor phase bound, and its
+extension to every nonzero subobject under the HN property supply the
+algebraic inputs for the ambient boundary theorem. The file also identifies
+path length with factor mass and supplies the endpoint chord bound.
+`H0ExactnessBridge` identifies
 the exact heart-source obstruction as monicity of
 `coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
 or `H⁰'` structure without installing a global instance. Of the three major
 mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
-first still needs HN-boundary extremality and the perimeter comparison under
-subobject inclusion; the second still needs the unconditional homological
-input (or the equivalent cokernel monicity proof). Their named propositions
-remain uninhabited and are not installed as instances or axioms.
+first now has path-level strict extremality, monomorphism containment, and the
+maximal-phase boundary algebra, but still needs the quotient/tail induction
+controlling all ambient subobject charges and the polygon-perimeter theorem.
+The second still needs the unconditional homological input (or the equivalent
+cokernel monicity proof). Their named propositions remain uninhabited and are
+not installed as instances or axioms.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation
