@@ -259,10 +259,14 @@ fidelity:
 
     ConvexPolygonPerimeter.lean now proves the independent t = 0
     polygon-perimeter comparison in Ikeda Lemma 3.7 by a finite support-fan
-    argument and specializes it to HN paths. The remaining first-milestone
-    geometric input is the boundary-filling containment of the full ambient
-    HN polygon in the convex hull of the closed HN vertex path; without that
-    bridge this still does not inhabit StabilityMassBoundaryHeartInequality.
+    argument and specializes it to HN paths. Code commit 10cb4c8 proves the
+    precise boundary-cut input for Lemma 3.8: positive-angle support maxima of
+    the ambient HN polygon occur on the distinguished HN path, and hence a
+    monomorphism A -> B gives m_HN(A) <= m_HN(B) + norm(Z(coker)). The result is
+    also stated for arbitrary short exact sequences. The remaining first-
+    milestone input is no longer geometric containment; it is the integration
+    bridge identifying this abelian factor mass with triangulated
+    stabilityMass on the canonical heart, together with zero-object cases.
     H0ExactnessBridge.lean packages the heart-source H0 short complex and
     proves that its exactness is equivalent to monicity of the canonical
     cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
@@ -274,9 +278,10 @@ fidelity:
     of Akishi Ikeda, Mass growth of objects and categorical entropy,
     arXiv:1612.00995. Lemma 3.8 supplies the boundary-heart polygon inequality;
     the proof of Proposition 3.3 then uses the H0 long exact sequence and its
-    kernel/image short-exact decompositions. The present files formalize the
-    polygon/path and exactness interfaces needed by that proof, not the two
-    source claims themselves.
+    kernel/image short-exact decompositions. The present files now formalize
+    the abelian polygon comparison and the exactness interfaces needed by that
+    proof, but not yet the triangulated stabilityMass statement or Proposition
+    3.3 itself.
 
     This still is NOT a completed formalization of Proposition 8.1 or the
     literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
@@ -476,6 +481,20 @@ fidelity:
     none in ConvexPolygonPerimeter. The environment emitter reports 1353
     constants, 734 in scope, and no sorryAx dependency.
 
+    COUNT UPDATE (boundary-cut HN mass comparison), 2026-08-06. Code commit
+    10cb4c8 adds six public declarations: positive-angle support completeness
+    first for subobject charges and then for the ambient convex hull, length of
+    an appended path, the monomorphism boundary-cut length comparison, its
+    cokernel-mass form, and its short-exact-sequence form. The strict audit now
+    covers 618 declarations, all within [propext, Classical.choice,
+    Quot.sound], with no sorryAx. The root build completes at 3794 jobs. This
+    update also corrects the previously recorded but false proposed bridge
+    hnPolygon(E) subset convexHull(range polygonVertex): a semistable one-edge
+    HN path already gives counterexamples. The proof uses the exact
+    positive-angle support statement required by Ikeda's boundary cut instead.
+    The regenerated environment emitter reports 1375 constants, 741 in scope,
+    and zero constants depending on sorryAx.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -527,6 +546,10 @@ fidelity:
     commands in total. `lake exe runLinter` still reports exactly the same six
     inherited findings and none in HNPolygon. The regenerated emitter records
     1257 constants, 693 in scope, and zero constants depending on sorryAx.
+    At code commit 10cb4c8, the boundary-cut comparison expanded the root
+    build to 3794 jobs. The strict parser accepts all 618 audit records with
+    the standard allowlist and no sorryAx. The regenerated emitter records
+    1375 constants, 741 in scope, and zero constants depending on sorryAx.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -583,11 +606,18 @@ fidelity:
     support of each interior HN vertex over the full convex hull of subobject
     charges. The full build completed at 3793 jobs; the ten new audit records
     pass the strict allowlist with no sorryAx; and the emitter reports 1257
-    constants (693 in scope) with no sorryAx dependency. The next open step is
-    the t=0 polygon-perimeter comparison of Ikeda Lemma 3.7. That comparison is
-    now proved in ConvexPolygonPerimeter.lean; the newly exposed first-milestone
-    gap is the ambient-polygon-to-closed-vertex-hull containment needed to
-    instantiate it. The H0 unconditional exactness gap is unchanged.
+    constants (693 in scope) with no sorryAx dependency. The t=0 polygon-
+    perimeter comparison was then proved in ConvexPolygonPerimeter.lean.
+
+    Code commit 10cb4c8 completes the abelian boundary-cut comparison without
+    asserting the false full-ambient-to-vertex-hull containment. It proves
+    that every positive-angle ambient support maximum occurs on the HN path,
+    handles the appended positive-real edge directly, and concludes the
+    monomorphism, cokernel-mass, and short-exact inequalities. The build covers
+    3794 jobs, the strict audit covers 618 declarations, and the emitter finds
+    no sorryAx dependency among 1375 constants. The remaining first-milestone
+    gap is the abelian-HN-mass-to-triangulated-stabilityMass bridge in the
+    canonical heart. The H0 unconditional exactness gap is unchanged.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -872,19 +902,23 @@ fidelity:
     defining StabilityMassBoundaryHeartInequality,
     StabilityMassSemistableLeftTriangleInequality, and
     StabilityMassHeartShortExactInequality records proof targets; it does not
-    supply terms of those propositions. The phase-one boundary-heart polygon
-    argument and the semistable-left cohomological reduction remain open. The
+    supply terms of those propositions. The abelian phase-one boundary-heart
+    polygon comparison is complete; its bridge to triangulated stabilityMass
+    and the semistable-left cohomological reduction remain open. The
     theorem stabilityMassTriangleInequality_of_semistable_obj₁ proves that
     the latter, once supplied, implies the unconditional global triangle
     proposition by head--tail octahedral induction.
 
-    HNPolygon.lean supplies the next algebraic/geometric layer: the convex
-    hull of subobject charges, the HN filtration path inside it, exact
-    edge-charge and length/mass identities, and the endpoint chord bound.
+    HNPolygon.lean and ConvexPolygonPerimeter.lean supply the next
+    algebraic/geometric layer: the convex hull of subobject charges, the HN
+    filtration path inside it, exact edge-charge and length/mass identities,
+    positive-angle ambient support completeness, and the boundary-cut short-
+    exact mass comparison.
     H0ExactnessBridge.lean supplies the exact cohomological interface:
     heart-source exactness iff the canonical cokernel comparison is monic,
     with local consequences from homological H0 or H0-prime. Neither file
-    hides the remaining extremality or homologicality theorem in an instance.
+    hides the remaining mass-identification or homologicality theorem in an
+    instance.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of
