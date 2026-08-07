@@ -22,13 +22,14 @@ artifact:
   name: BridgelandStabLean
   url: https://github.com/chris-dare-dev/bridgeland-stab-lean
   description: >
-    Extensions to mattrobball/BridgelandStability along five lanes that
+    Extensions to mattrobball/BridgelandStability along six lanes that
     require no algebraic-geometry substrate: rank-2 torsion-free lattice
     arithmetic; the Mukai extension Z + N + Z of a symmetric bilinear lattice
     together with rank-two subpair arithmetic; torsion pairs in an abelian
     category, which Mathlib lacks at the pin; the Kontsevich-Soibelman
-    quadratic-form reformulation of the support property; and the Bridgeland
-    2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
+    quadratic-form reformulation of the support property; charges on the free
+    lattice of simples; and the Bridgeland 2007 section 8 GL+(2,R)-tilde action
+    the anchor does not cover.
 
     The Mukai, Tilting and Support lanes are NOT scoped to this record's
     `source`. The Tilting lane does NOT contain the Happel-Reiten-Smalo tilt,
@@ -393,6 +394,13 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (FiniteLength lane), 2026-08-06. The 10 additional records are
+    the whole of BridgelandStabLean/FiniteLength/SimpleCharge.lean: the two
+    cone-closure lemmas the anchor lacks, the charge construction and its two
+    computation lemmas, the freeness/uniqueness pair, and the three half-plane
+    consequences. Audit count 585 -> 595. Coverage complete: 10 top-level
+    declarations, 0 private, 10 named. 9 are theorems; 1 is a construction.
+
     COUNT UPDATE (Support lane), 2026-08-06. The 11 additional records are the
     whole of BridgelandStabLean/Support/SupportProperty.lean: the support
     property, the two hypothesis structures, the compact slice and its
@@ -478,13 +486,19 @@ fidelity:
     MUKAI AND TILTING LANES, 2026-08-06, on Windows 11 / x86_64, working tree
     at branch agent/mukai-lattice off 45f2fba. Three of CI's five gates were
     run and all three passed, at both lanes. With Mukai only: `lake build` at
-    3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support
-    added:
-    `lake build` at 3782 jobs exit 0, `runLinter` printed "Linting passed" with
+    3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support added: 3782 jobs, linter clean,
+    audit 585 records. With FiniteLength added:
+    `lake build` at 3783 jobs exit 0, `runLinter` printed "Linting passed" with
     no findings, and `lake env lean scripts/Audit.lean | python
-    scripts/check_audit.py` accepted 585 records, all within
+    scripts/check_audit.py` accepted 595 records, all within
     [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
     build-log grep also passed.
+
+    SIMPNF CAUGHT A SECOND REAL DEFECT, in the FiniteLength lane: chargeOf_apply
+    was marked @[simp] and rewrote the left-hand side of chargeOf_single before
+    that lemma could fire. Removed, with the reason recorded at the
+    declaration. `lake build` alone had passed it green, as it had for
+    Mukai.pairing_outer.
 
     THE EMITTER GATE WAS NOT RUN, and this is a platform limit rather than a
     result. `lake exe emit` cannot LINK on Windows: `supportInterpreter = true`
@@ -535,8 +549,8 @@ fidelity:
     merged at 56c7531.
   human_review: none
   machine_review: >
-    THE MUKAI, TILTING AND SUPPORT LANES HAVE HAD NO REVIEW OF ANY KIND,
-    2026-08-06. All three were written
+    THE MUKAI, TILTING, SUPPORT AND FINITELENGTH LANES HAVE HAD NO REVIEW OF
+    ANY KIND, 2026-08-06. All four were written
     and gate-run in a single session by the same agent (Claude Opus 5); no
     independent adversarial pass has been made over it, and no human has read
     it. Three of five CI gates were run locally and passed -- see
@@ -697,6 +711,35 @@ fidelity:
 
     No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
+    FiniteLength/ IS THE FIRST NEW LANE THAT DOES TARGET `source` -- Bridgeland
+    2007's finite-length worked example, where a stability function on an
+    abelian category of finite length with n simples is a choice of charge in
+    the semi-closed upper half plane for each simple, so that component of the
+    stability manifold is H-bar^n. IT STILL CARRIES NO @[cites] RECORD, and the
+    reason is procedural rather than mathematical: registry/bridgeland2007.json
+    has nine entries and none covers the section 5 example, and minting a new
+    statement key requires a verbatim quote from the pinned document, which
+    needs the arXMCP corpus. That corpus was not reachable from the session
+    that wrote this lane. Uncited is the honest state; the fix is to mint the
+    key, not to attach an existing one that does not fit.
+
+    What the lane proves is the LATTICE HALF only, over the model `Fin n -> Z`.
+    It supplies the two cone-closure facts the anchor lacks -- closure under
+    multiplication by a positive real, and closure under a nonempty finite sum
+    -- then builds the additive charge determined by a choice of value per
+    basis vector, proves that choice free and unique (existsUnique_charge), and
+    proves that a nonzero N-combination of cone values stays in the cone
+    (mem_cone_natCombination), hence is nonzero. The cone itself,
+    CategoryTheory.upperHalfPlaneUnion, and its closure under addition are the
+    anchor's; this is the first of the lanes added in this series to import the
+    anchor at all.
+
+    The two new cone lemmas are deliberately placed in this repo's own
+    namespace rather than injected as CategoryTheory.upperHalfPlaneUnion_*.
+    CLAUDE.md section 1 tracks 21 dot-notation extensions on anchor types as
+    collision candidates for a future anchor bump; nothing needs these two by
+    dot notation, so the list is not lengthened.
+
     Support/ MAPS TO NO SECTION OF `source` EITHER. The support property is
     Kontsevich-Soibelman, and the quadratic-form reformulation is the one used
     by Bayer-Macri-Stellari; neither is Bridgeland 2007. No @[cites] records,
@@ -997,6 +1040,27 @@ fidelity:
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    FINITELENGTH LANE: `Fin n -> Z` IS NOT `K_0(A)`, AND THE MISSING BRIDGE IS
+    NAMED. Identifying the model with the Grothendieck group of a finite-length
+    abelian category is the Jordan-Holder theorem -- that K_0(A) is free
+    abelian on the classes of the simples. IT EXISTS IN NEITHER MATHLIB NOR THE
+    ANCHOR at the pin. Mathlib's Order/JordanHolder.lean is about modular
+    lattices and is not connected to K_0 of a category, and a search of the
+    whole anchor for jordan/holder/compositionSeries/free-on-simples returns
+    nothing; the anchor's GrothendieckGroup/ builds K_0 as a quotient of a free
+    abelian group by a relation subgroup and never says that quotient is free
+    on the simples. So this is an unrealized assumption of exactly the kind
+    Lattice/NumericalK.lean already records, and it is never discharged.
+
+    CONSEQUENTLY THE STABILITY-MANIFOLD CLAIM IS NOT MADE. Bridgeland's example
+    concludes that a component of Stab is H-bar^n. What is proved here is that
+    the charges of the basis vectors freely and uniquely determine an additive
+    map, and that the cone absorbs nonzero N-combinations. The step from there
+    to "these are exactly the stability functions on A", and the further step
+    to a component of a stability manifold, both need the Jordan-Holder bridge
+    and neither is formalized. Do not cite existsUnique_charge as "Stab of a
+    finite-length heart is H^n".
 
     SUPPORT LANE: ONE DIRECTION IS STRONGER THAN THE LITERATURE STATEMENT AND
     THE OTHER IS WEAKER. This is the sharpest divergence added by this work and

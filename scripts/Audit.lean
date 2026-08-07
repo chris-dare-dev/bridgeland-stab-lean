@@ -198,6 +198,23 @@ import, no geometry. -/
 #print axioms Support.HasSupportProperty.mono
 #print axioms Support.HasSupportProperty.eq_zero_of_charge_eq_zero
 
+/-! ## FiniteLength lane — charges on the free lattice of simples
+
+`Fin n -> Z` is a MODEL of `K_0(A)` for a finite-length abelian category, not
+an identification: that is Jordan-Holder, which exists in neither Mathlib nor
+the anchor. Every result is a theorem about `Fin n -> Z`. -/
+
+#print axioms FiniteLength.mem_cone_smul
+#print axioms FiniteLength.mem_cone_sum
+#print axioms FiniteLength.chargeOf
+#print axioms FiniteLength.chargeOf_apply
+#print axioms FiniteLength.chargeOf_single
+#print axioms FiniteLength.eq_chargeOf
+#print axioms FiniteLength.existsUnique_charge
+#print axioms FiniteLength.mem_cone_natCombination
+#print axioms FiniteLength.chargeOf_mem_cone
+#print axioms FiniteLength.chargeOf_ne_zero
+
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift

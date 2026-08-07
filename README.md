@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these five lanes and not others
+## Why these six lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -383,6 +383,38 @@ which is **strictly weaker** than being a quadratic form — `Q(x,y) = |xy|` on
 So do not cite `hasSupportProperty_iff` as "the support property is equivalent
 to the existence of a quadratic form". Closing that gap means restricting to an
 inner product space and building an actual `QuadraticMap`; it is not done.
+
+### Lane 6 — `FiniteLength/` (the lattice half of Bridgeland's `ℍ̄ⁿ`)
+
+Bridgeland's worked example: for an abelian category of finite length with `n`
+simples, a stability function is a choice of `Z(Sᵢ)` in the semi-closed upper
+half plane, one per simple — so that component of the manifold is `ℍ̄ⁿ`.
+
+What is proved is the lattice half over the model `Fin n → ℤ`:
+
+* the two cone-closure facts the anchor lacks — closure under multiplication by
+  a positive real, and closure under a **nonempty** finite sum;
+* `existsUnique_charge` — a choice of value per basis vector determines a
+  unique additive charge, and every additive charge arises that way;
+* `mem_cone_natCombination` — a nonzero `ℕ`-combination of cone values stays in
+  the cone, hence is nonzero.
+
+The cone `upperHalfPlaneUnion` and its closure under addition are the anchor's.
+This is the first of these lanes to import the anchor at all, and the two new
+cone lemmas are kept in this repo's namespace rather than injected as
+`CategoryTheory.upperHalfPlaneUnion_*` — CLAUDE.md §1 already tracks 21
+dot-notation extensions on anchor types as bump-collision candidates, and
+nothing needs these two by dot notation.
+
+**`Fin n → ℤ` is not `K₀(A)`, and the missing bridge has a name.** Identifying
+them is Jordan–Hölder — that `K₀(A)` is free abelian on the classes of the
+simples — and it exists in **neither Mathlib nor the anchor**.
+`Mathlib/Order/JordanHolder.lean` is about modular lattices and is not
+connected to `K₀` of a category; the anchor's `GrothendieckGroup/` builds `K₀`
+as a quotient and never says that quotient is free on the simples.
+
+So the stability-manifold conclusion is **not** drawn. Do not cite
+`existsUnique_charge` as "Stab of a finite-length heart is `ℍⁿ`".
 
 ### Not a lane
 

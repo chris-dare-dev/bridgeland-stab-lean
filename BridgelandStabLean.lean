@@ -9,6 +9,7 @@ import BridgelandStabLean.Mukai.Lattice
 import BridgelandStabLean.Mukai.RankTwo
 import BridgelandStabLean.Tilting.TorsionPair
 import BridgelandStabLean.Support.SupportProperty
+import BridgelandStabLean.FiniteLength.SimpleCharge
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.GLTildeFibre
@@ -61,6 +62,9 @@ Two lanes, both chosen because they need **no** algebraic-geometry substrate:
   property and a quadratic form negative definite on `ker Z`. Linear algebra
   and one compactness argument; the distinguished set is arbitrary and is not
   identified with the semistable classes.
+* `FiniteLength/` — charges on `Fin n → ℤ`, the lattice half of Bridgeland's
+  `ℍ̄ⁿ` example. The identification with `K₀(A)` is Jordan–Hölder, which
+  neither Mathlib nor the anchor has, and is never discharged.
 * `GroupAction/` — the §8 `G̃L⁺(2, ℝ)` action the anchor does not cover.
 
 See `README.md` for why the geometric lane is deliberately absent, and
