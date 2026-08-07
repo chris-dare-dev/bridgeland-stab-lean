@@ -274,12 +274,19 @@ Six claims to keep off the page.
   autoequivalence group preserves the three-coordinate HN-mass distance" and
   state the remaining group-level distinction.
 
-  `StabilityMassTriangle.lean` begins the missing categorical proof. It
+  `StabilityMassTriangle.lean` develops the missing categorical proof. It
   defines the ordinary observable condition by composing the central charge
   with `v`, reuses the heart-equivalence HN API, proves `‖Z(E)‖ ≤ mσ(E)`,
   proves mass invariance under `[1]` and `[-1]`, and closes the
   semistable-middle and same-phase-endpoint cases, including their heart
-  short-exact forms. Do not report the heart milestone complete:
+  short-exact forms. `HNFiltration.exists_headTail_mass` exposes a public
+  head--tail mass split, and
+  `stabilityMassTriangleInequality_of_semistable_obj₁` closes the
+  arbitrary-left octahedral reduction conditional only on the semistable-left
+  milestone. Do not report the three-milestone chain complete:
+  `StabilityMassBoundaryHeartInequality` and
+  `StabilityMassSemistableLeftTriangleInequality` are named uninhabited
+  propositions, while the arbitrary-left reduction is proved.
   `StabilityMassHeartShortExactInequality` is a named uninhabited proposition,
   and the unrestricted polygonal argument still has to be formalized.
 

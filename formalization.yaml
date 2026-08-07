@@ -231,9 +231,14 @@ fidelity:
     charge additivity on distinguished triangles, and mass subadditivity for
     a semistable middle object or same-phase semistable endpoints. Both base
     cases are transported to short exact sequences in the canonical heart.
-    The unrestricted heart short-exact inequality is named as
-    StabilityMassHeartShortExactInequality but is not inhabited; no premise
-    is installed as an instance or hidden axiom.
+    HNFiltration.exists_headTail_mass exposes the octahedral head--tail split
+    with its real mass identity. The phase-one boundary-heart and
+    semistable-left targets are named explicitly, and
+    stabilityMassTriangleInequality_of_semistable_obj₁ proves the
+    arbitrary-left target from the semistable-left one by induction on HN
+    length. The unrestricted heart short-exact inequality, boundary-heart
+    polygon inequality, and semistable-left inequality are not inhabited; no
+    premise is installed as an instance or hidden axiom.
 
     This still is NOT a completed formalization of Proposition 8.1 or the
     literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
@@ -380,6 +385,14 @@ fidelity:
     statements. The manual audit now covers 515 declarations, pinned to
     commit 3d74eae.
 
+    COUNT UPDATE (arbitrary-left mass-triangle reduction), 2026-08-06. The 4
+    additional records comprise the public HN head--tail real-mass split, the
+    phase-one boundary-heart target, the semistable-left target, and the proved
+    octahedral induction from semistable-left to unrestricted distinguished
+    triangles. The manual audit now covers 519 declarations, pinned to commit
+    ccf10f0. The two target propositions remain uninhabited; the reduction is
+    a theorem and does not assume either target as an instance or axiom.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -410,10 +423,10 @@ fidelity:
     byte-for-byte unchanged. PR #66 carried the universal-cover and symmetry
     work and was merged at 326d72b. PR #67 carried the full-metric,
     separation, and Proposition 8.1 topology-infrastructure chain and was
-    merged at 56c7531. On branch agent/hn-mass-triangle-chain at 3d74eae,
-    the first mass-triangle module and root library elaborated successfully.
-    The expanded full build against the final 515-entry audit completed at
-    3788 jobs with exit 0, and the strict parser accepted all 515 records.
+    merged at 56c7531. On branch agent/hn-mass-triangle-chain at ccf10f0, the
+    mass-triangle module and root library elaborated successfully. The
+    expanded full build against the 519-entry audit completed at 3788 jobs
+    with exit 0, and the strict parser accepted all 519 records.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -432,15 +445,16 @@ fidelity:
     theorem state does not claim to have repaired the remaining inherited
     declaration-linter debt.
 
-    Branch agent/hn-mass-triangle-chain at 3d74eae adds the first categorical
-    mass-triangle base cases. The strict audit covers 515 declarations with
-    the same exact allowlist and no sorryAx. The declaration linter still
-    reports exactly the six inherited findings above and none in
-    StabilityMassTriangle. The unrestricted heart and global triangle
-    propositions remain uninhabited and are not supplied by an instance. The
-    environment-wide attestation was regenerated successfully and remained
-    byte-for-byte unchanged because these declarations add no new formal
-    contract annotations.
+    Branch agent/hn-mass-triangle-chain at ccf10f0 adds the categorical
+    mass-triangle base cases, a public HN head--tail mass split, and the proved
+    arbitrary-left octahedral reduction. The strict audit covers 519
+    declarations with the same exact allowlist and no sorryAx. The declaration
+    linter still reports exactly the six inherited findings above and none in
+    StabilityMassTriangle. The boundary-heart, semistable-left, unrestricted
+    heart, and unconditional global triangle propositions remain uninhabited
+    and are not supplied by an instance. The environment-wide attestation was
+    regenerated successfully and remained byte-for-byte unchanged because
+    these declarations add no new formal contract annotations.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -720,12 +734,16 @@ fidelity:
     remains no_claim because the acting group has not been identified with
     bare Aut(D).
 
-    StabilityMassTriangle.lean closes only the norm-theoretic and semistable
-    base cases of that filtration-assembly theorem. In particular, defining
-    StabilityMassHeartShortExactInequality records the next proof target; it
-    does not supply a term of that proposition. The unrestricted heart
-    polygon argument, the semistable-left cohomological reduction, and the
-    arbitrary-left octahedral reduction all remain open.
+    StabilityMassTriangle.lean closes the norm-theoretic and semistable-middle
+    base cases and the arbitrary-left filtration assembly. In particular,
+    defining StabilityMassBoundaryHeartInequality,
+    StabilityMassSemistableLeftTriangleInequality, and
+    StabilityMassHeartShortExactInequality records proof targets; it does not
+    supply terms of those propositions. The phase-one boundary-heart polygon
+    argument and the semistable-left cohomological reduction remain open. The
+    theorem stabilityMassTriangleInequality_of_semistable_obj₁ proves that
+    the latter, once supplied, implies the unconditional global triangle
+    proposition by head--tail octahedral induction.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of

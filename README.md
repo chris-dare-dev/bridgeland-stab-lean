@@ -210,16 +210,20 @@ the explicit mass-triangle proposition is proved.  Independently,
 `AutPairQuot v` carries compatible class-lattice data and is not identified
 with bare `Aut(D)`.
 
-`StabilityMassTriangle` starts that remaining categorical chain without
-assuming its conclusion.  It turns a class-map stability condition into the
+`StabilityMassTriangle` develops that remaining categorical chain without
+assuming its conclusion. It turns a class-map stability condition into the
 ordinary observable condition with charge `Z.comp v`, exposes the induced
 heart stability function and its HN property, proves
 `\|Z(E)\| ≤ mσ(E)`, proves mass invariance under shifts by `±1`, and proves
 the triangle inequality when the middle term is semistable or when both
-endpoints are semistable of one phase.  The same base cases are transported
-to short exact sequences in the canonical heart. The unrestricted heart
-short-exact proposition is named explicitly but is not yet inhabited; the
-polygonal HN-filtration argument remains open.
+endpoints are semistable of one phase. The same base cases are transported to
+short exact sequences in the canonical heart. A public head--tail theorem now
+splits both an HN filtration and its real mass, and an octahedral induction
+proves that the semistable-left triangle inequality implies the unrestricted
+triangle inequality. Of the three major mass-triangle milestones, this closes
+the third (arbitrary-left assembly). The phase-one boundary-heart polygon
+inequality and its cohomological propagation to the semistable-left case remain
+uninhabited named propositions; neither is installed as an instance or axiom.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation
