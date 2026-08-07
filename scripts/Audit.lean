@@ -838,6 +838,13 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpaceOfMassTriangle
 #print axioms CategoryTheory.Triangulated.stabilityEMetricSpaceOfMassTriangle
 
+/-! ## The octahedral reduction of the mass triangle inequality -/
+
+#print axioms CategoryTheory.Triangulated.stabilityMass_eq_ofReal_norm_charge
+#print axioms CategoryTheory.Triangulated.exists_headTail_stabilityMass
+#print axioms CategoryTheory.Triangulated.StabilityMassSemistableTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable
+
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_phiPlusDist
