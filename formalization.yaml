@@ -464,11 +464,11 @@ fidelity:
     perimeter comparison is not included in that earlier count as a completed
     claim; it is completed by the later ConvexPolygonPerimeter update.
 
-    COUNT UPDATE (finite polygon-perimeter comparison), 2026-08-06. Forty
-    additional public declarations formalize normalized edge directions,
-    chain length under vertex deletion, cyclic closed perimeter, discrete
-    support-sum integration by parts, upper-half-plane chord closure, interior
-    bisector turns, monotone support maximizers, the t = 0 comparison of Ikeda
+    COUNT UPDATE (finite polygon-perimeter comparison), 2026-08-06. Code
+    commit 572fa50 adds forty public declarations formalizing normalized edge
+    directions, chain length under vertex deletion, cyclic closed perimeter,
+    discrete support-sum integration by parts, upper-half-plane chord closure,
+    interior bisector turns, monotone support maximizers, the t = 0 comparison of Ikeda
     Lemma 3.7, and its HN-path specialization. The strict audit now covers 612
     declarations, all within [propext, Classical.choice, Quot.sound], with no
     sorryAx. The full root-library build completes at 3793 jobs. The
