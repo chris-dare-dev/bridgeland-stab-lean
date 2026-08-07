@@ -614,6 +614,33 @@ These extend the anchor's own namespace, since they are API for its types. -/
 
 /-! ## StabilityMassTriangle — first categorical mass inequalities -/
 
+/-! ### HNPolygon — abelian HN polygon and metric boundary path -/
+
+#print axioms CategoryTheory.StabilityFunction.hnPolygon
+#print axioms CategoryTheory.StabilityFunction.subobjectCharge_mem_hnPolygon
+#print axioms CategoryTheory.ComplexPolygonalPath.length
+#print axioms CategoryTheory.ComplexPolygonalPath.norm_last_sub_zero_le_length
+#print axioms CategoryTheory.AbelianHNFiltration.factorObj
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength
+#print axioms CategoryTheory.AbelianHNFiltration.mass
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_succ_sub
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_eq_mass
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_zero
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_last
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_mem_hnPolygon
+#print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_polygonLength
+#print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_mass
+
+/-! ### H0ExactnessBridge — the exact heart-source obstruction -/
+
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_iff_mono_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_H0Functor_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_of_H0Functor
+
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_slicing
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_charge
