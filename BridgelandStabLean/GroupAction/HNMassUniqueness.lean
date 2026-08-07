@@ -534,6 +534,37 @@ theorem stabilityMass_toReal_eq_sum
   · intro i _
     exact ENNReal.ofReal_ne_top
 
+/-- Split a positive-length HN filtration into its highest-phase factor and
+an HN-filtered tail, with the corresponding real-valued mass identity.
+
+This is the public induction interface for arguments which remove one HN
+factor at a time.  The categorical construction is the octahedral
+`HNFiltration.exists_headTail` proof above; the statement deliberately exposes
+only the ordinary factor norm and `stabilityMass`, not its private proof
+abbreviations. -/
+theorem HNFiltration.exists_headTail_mass
+    (σ : StabilityCondition.WithClassMap C v) {E : C}
+    (F : HNFiltration C σ.slicing.P E) (hn : 0 < F.n) :
+    ∃ (Y : C) (G : HNFiltration C σ.slicing.P Y)
+      (f : F.factor ⟨0, hn⟩ ⟶ E) (g : E ⟶ Y)
+      (h : Y ⟶ (F.factor ⟨0, hn⟩)⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C ∧
+      (stabilityMass σ E).toReal =
+        ‖σ.charge (F.factor ⟨0, hn⟩)‖ + (stabilityMass σ Y).toReal ∧
+      G.n = F.n - 1 ∧
+      ∀ j : Fin G.n, ∃ i : Fin F.n,
+        i.val = j.val + 1 ∧ G.φ j = F.φ i := by
+  obtain ⟨Y, G, f, g, h, hT, hmass, hnG, hφ⟩ := F.exists_headTail σ hn
+  refine ⟨Y, G, f, g, h, hT, ?_, hnG, hφ⟩
+  rw [stabilityMass_eq_mass σ F, stabilityMass_eq_mass σ G]
+  have hGtop : G.mass σ ≠ ⊤ := by
+    rw [← stabilityMass_eq_mass σ G]
+    exact stabilityMass_ne_top σ Y
+  have hmassReal := congrArg ENNReal.toReal hmass
+  simp only [factorMass] at hmassReal
+  rw [ENNReal.toReal_add ENNReal.ofReal_ne_top hGtop] at hmassReal
+  simpa [ENNReal.toReal_ofReal (norm_nonneg _)] using hmassReal
+
 /-- Mass vanishes exactly on zero objects. -/
 @[simp]
 theorem stabilityMass_eq_zero_iff

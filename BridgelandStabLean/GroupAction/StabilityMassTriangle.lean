@@ -6,10 +6,10 @@ import BridgelandStabLean.GroupAction.StabilityDistanceTopology
 import BridgelandStability.HeartEquivalence.Reverse
 
 /-!
-# First mass-triangle inequalities
+# The HN mass-triangle chain
 
-This file begins the remaining mathematical input to Bridgeland's
-Proposition 8.1: subadditivity of the mass along distinguished triangles.
+This file develops the stronger HN-mass subadditivity route selected for the
+repository's topology comparison around Bridgeland's Proposition 8.1.
 
 The general theorem requires the polygonal argument through the heart and
 Harder--Narasimhan filtrations.  Here we establish its norm-theoretic base:
@@ -18,12 +18,15 @@ Harder--Narasimhan filtrations.  Here we establish its norm-theoretic base:
 * charge is additive on every distinguished triangle;
 * consequently the mass-triangle inequality holds when the middle object is
   semistable;
-* in particular it holds when both endpoints are semistable of the same
-  phase, since semistable slices are extension-closed.
+* in particular it holds when both endpoints are semistable of the same phase,
+  since semistable slices are extension-closed;
+* the arbitrary-left case reduces, by head--tail octahedral induction, to the
+  semistable-left case.
 
-The final two theorems transport these statements to short exact sequences in
-the heart `P((0, 1])`.  They deliberately retain semistability hypotheses;
-the unrestricted heart inequality is the next polygonal milestone.
+The remaining mathematical inputs are the phase-one boundary-heart polygon
+inequality and the cohomological reduction from that boundary case to a
+semistable first object.  They are named below but are not assumed as instances
+or axioms.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex
@@ -179,6 +182,92 @@ theorem stabilityMass_triangle_le_of_same_phase
         (stabilityMass σ T.obj₃).toReal := by
   exact stabilityMass_triangle_le_of_obj₂_semistable σ T hT
     (σ.slicing.semistable_of_triangle C φ h₁ h₃ hT)
+
+/-- The first major mass-triangle milestone, in its phase-one boundary-heart
+form.  For a short exact sequence `0 ⟶ A ⟶ B ⟶ C ⟶ 0` in the
+canonical heart with `C ∈ P(1)`, the mass of `A` is at most the combined
+mass of `B` and `C`.
+
+This is a named proof target, not an installed premise. -/
+def StabilityMassBoundaryHeartInequality : Prop :=
+  ∀ (σ : StabilityCondition.WithClassMap C v)
+    (S : ShortComplex σ.slicing.toTStructure.heart.FullSubcategory),
+    S.ShortExact → σ.slicing.P 1 S.X₃.obj →
+      (stabilityMass σ S.X₁.obj).toReal ≤
+        (stabilityMass σ S.X₂.obj).toReal +
+          (stabilityMass σ S.X₃.obj).toReal
+
+/-- The second paper-level mass-triangle milestone: subadditivity for a
+distinguished triangle whose first object is semistable. -/
+def StabilityMassSemistableLeftTriangleInequality : Prop :=
+  ∀ (σ : StabilityCondition.WithClassMap C v) (T : Triangle C),
+    T ∈ distTriang C →
+    ∀ (φ : ℝ), σ.slicing.P φ T.obj₁ →
+      (stabilityMass σ T.obj₂).toReal ≤
+        (stabilityMass σ T.obj₁).toReal +
+          (stabilityMass σ T.obj₃).toReal
+
+/-- The arbitrary-left octahedral milestone.  Once the triangle inequality is
+known for semistable first objects, split an HN filtration of the first object
+into its head and tail.  The octahedron produces one semistable-left triangle
+and a shorter arbitrary-left triangle, so induction proves the unrestricted
+statement. -/
+theorem stabilityMassTriangleInequality_of_semistable_obj₁
+    (hsemistable :
+      StabilityMassSemistableLeftTriangleInequality (C := C) (v := v)) :
+    StabilityMassTriangleInequality (C := C) (v := v) := by
+  intro σ T hT
+  obtain ⟨F⟩ := σ.slicing.hn_exists T.obj₁
+  suffices hmain :
+      ∀ (m : ℕ) (U : Triangle C), U ∈ distTriang C →
+        ∀ G : HNFiltration C σ.slicing.P U.obj₁, G.n ≤ m →
+          (stabilityMass σ U.obj₂).toReal ≤
+            (stabilityMass σ U.obj₁).toReal +
+              (stabilityMass σ U.obj₃).toReal by
+    exact hmain F.n T hT F le_rfl
+  intro m
+  induction m with
+  | zero =>
+      intro U hU G hG
+      have hn : G.n = 0 := by omega
+      have hzero : IsZero U.obj₁ := G.zero_isZero hn
+      haveI : IsIso U.mor₂ := (Triangle.isZero₁_iff_isIso₂ U hU).mp hzero
+      rw [stabilityMass_congr σ (asIso U.mor₂)]
+      simp [show stabilityMass σ U.obj₁ = 0 from
+        (stabilityMass_eq_zero_iff σ U.obj₁).2 hzero]
+  | succ m ih =>
+      intro U hU G hG
+      by_cases hn0 : G.n = 0
+      · have hzero : IsZero U.obj₁ := G.zero_isZero hn0
+        haveI : IsIso U.mor₂ := (Triangle.isZero₁_iff_isIso₂ U hU).mp hzero
+        rw [stabilityMass_congr σ (asIso U.mor₂)]
+        simp [show stabilityMass σ U.obj₁ = 0 from
+          (stabilityMass_eq_zero_iff σ U.obj₁).2 hzero]
+      · have hn : 0 < G.n := Nat.pos_of_ne_zero hn0
+        obtain ⟨Y, Gtail, f, _g, _δ, hhead, hmass, hnTail, _hφ⟩ :=
+          G.exists_headTail_mass σ hn
+        obtain ⟨Z, v₁₃, w₁₃, h₁₃⟩ :=
+          distinguished_cocone_triangle (f ≫ U.mor₁)
+        let oct := Triangulated.someOctahedron rfl hhead hU h₁₃
+        have hfirst := hsemistable σ
+          (Triangle.mk (f ≫ U.mor₁) v₁₃ w₁₃) h₁₃
+          (G.φ ⟨0, hn⟩) (G.semistable ⟨0, hn⟩)
+        have hheadMass :
+            (stabilityMass σ (G.factor ⟨0, hn⟩)).toReal =
+              ‖σ.charge (G.factor ⟨0, hn⟩)‖ :=
+          stabilityMass_toReal_eq_norm_charge σ (G.semistable ⟨0, hn⟩)
+        change (stabilityMass σ U.obj₂).toReal ≤
+          (stabilityMass σ (G.factor ⟨0, hn⟩)).toReal +
+            (stabilityMass σ Z).toReal at hfirst
+        rw [hheadMass] at hfirst
+        have htail :
+            (stabilityMass σ Z).toReal ≤
+              (stabilityMass σ Y).toReal +
+                (stabilityMass σ U.obj₃).toReal := by
+          simpa [oct] using ih oct.triangle oct.mem Gtail (by
+            rw [hnTail]
+            omega)
+        linarith
 
 /-- The first remaining polygonal milestone: mass subadditivity for every
 short exact sequence in the canonical heart `P((0, 1])`. -/

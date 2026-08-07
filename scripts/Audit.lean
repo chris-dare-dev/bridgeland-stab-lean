@@ -509,6 +509,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.stabilityMass_ne_top
 #print axioms CategoryTheory.Triangulated.stabilityMass_lt_top
 #print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_sum
+#print axioms CategoryTheory.Triangulated.HNFiltration.exists_headTail_mass
 #print axioms CategoryTheory.Triangulated.stabilityMass_eq_zero_iff
 #print axioms CategoryTheory.Triangulated.stabilityMass_toReal_pos
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_charge
@@ -627,6 +628,9 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_triangle
 #print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₂_semistable
 #print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_same_phase
+#print axioms CategoryTheory.Triangulated.StabilityMassBoundaryHeartInequality
+#print axioms CategoryTheory.Triangulated.StabilityMassSemistableLeftTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable_obj₁
 #print axioms CategoryTheory.Triangulated.StabilityMassHeartShortExactInequality
 #print axioms CategoryTheory.Triangulated.stabilityMassHeartShortExactInequality_of_triangle
 #print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_obj₂_semistable
