@@ -6,7 +6,7 @@ import BridgelandStabLean.GroupAction.AutAction
 import Mathlib.CategoryTheory.Adjunction.Unique
 
 /-!
-# `Aut(D)` as an honest group, by quotienting
+# `AutQuot C` as an honest group, by quotienting
 
 `StrictAutAction.lean` bought a `MulAction` by *restricting* to autoequivalences
 with strict inverses — isomorphisms of categories — which excludes Serre
@@ -145,7 +145,13 @@ instance setoid : Setoid (TriEquiv C) where
 
 end TriEquiv
 
-/-- `Aut(D)`: triangulated auto-equivalences modulo natural isomorphism.
+/-- `AutQuot C`: triangulated auto-equivalences modulo natural isomorphism.
+
+This is NOT the paper's `Aut(D)` and must not be named as it. `TriEquiv.setoid`
+quotients by a bare natural isomorphism of the *underlying functors*, leaving the
+`CommShift` datum unconstrained, so `AutQuot C` is a priori COARSER than exact
+autoequivalences modulo isomorphism of exact functors. Coarser makes the action
+theorem stronger, not weaker -- but it is a different group.
 
 Unlike `StrictAut`, this excludes nothing. -/
 def AutQuot (C : Type u) [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
@@ -172,7 +178,7 @@ instance group : Group (AutQuot C) where
   inv_mul_cancel := by
     rintro ⟨A⟩; exact Quotient.sound ⟨A.e.unitIso.symm⟩
 
-/-- **`Aut(D)` acts on slicings.** Well defined by `TriEquiv.act_congr`. -/
+/-- **`AutQuot C` acts on slicings.** Well defined by `TriEquiv.act_congr`. -/
 noncomputable instance mulActionSlicing : MulAction (AutQuot C) (Slicing C) where
   smul a s := Quotient.liftOn a (fun Φ => Φ.act s)
     (fun _ _ h => TriEquiv.act_congr h.some s)

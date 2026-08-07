@@ -89,7 +89,7 @@ private lemma HNFiltration.mass_dropFirst
       change _ = f ⟨0, by lia⟩ + _
       rw [show f ⟨0, by lia⟩ = 0 from hhead, zero_add]
 
-private lemma HNFiltration.mass_ofIso_factor
+private lemma factorMass_congr
     (σ : StabilityCondition.WithClassMap C v) {E E' : C} (e : E ≅ E') :
     factorMass σ E = factorMass σ E' := by
   simp only [factorMass]
@@ -480,7 +480,7 @@ theorem HNFiltration.mass_eq_mass
           inv_hom_id := eT.inv_hom_id_triangle_hom₃ }
       have hheadMass : factorMass σ (F.factor ⟨0, hnF⟩) =
           factorMass σ (G.factor ⟨0, hnG⟩) :=
-        HNFiltration.mass_ofIso_factor σ eHead
+        factorMass_congr σ eHead
       have htailMass : TF.mass σ = TG.mass σ := by
         have hrec := ih (TF.ofIso C eTail) TG (by
           change TF.n + TG.n ≤ m

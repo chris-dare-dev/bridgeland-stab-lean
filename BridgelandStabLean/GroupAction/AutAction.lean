@@ -2,7 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
-import BridgelandStabLean.GroupAction.SlicingAction
+import BridgelandStability.Slicing.Defs
 import Mathlib.CategoryTheory.Triangulated.Functor
 import Mathlib.CategoryTheory.Shift.Adjunction
 

@@ -39,7 +39,15 @@ variable {C : Type u} [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
   [IsTriangulated C]
 variable {Λ : Type u'} [AddCommGroup Λ] {v : K₀ C →+ Λ}
 
-/-- The finite mass sum attached to one HN filtration. -/
+/-- The finite mass sum attached to one HN filtration.
+
+Stated over `StabilityCondition.WithClassMap` for uniformity with the rest of
+the §8 track, but note that **the mass API never projects `locallyFinite`**:
+Bridgeland §5 defines `m_σ` from the slicing and the charge alone. The parent
+field is not a class, so Lean generates no coercion and dropping it would
+require `.toWithClassMap` at every positional call site — hence this comment
+rather than a weakening. `[IsTriangulated C]` *is* genuinely needed downstream,
+for `someOctahedron` in `HNMassUniqueness`. -/
 def HNFiltration.mass (σ : StabilityCondition.WithClassMap C v) {E : C}
     (F : HNFiltration C σ.slicing.P E) : ℝ≥0∞ :=
   ∑ i : Fin F.n, ENNReal.ofReal ‖σ.charge (F.factor i)‖

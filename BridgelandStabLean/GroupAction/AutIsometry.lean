@@ -9,14 +9,13 @@ import MathFormalContract
 /-!
 # The `Aut` action preserves the phase distance
 
-Lemma 8.2 says `Aut(D)` acts on `Stab(D)` **by isometries**. Until now this
-repo said nothing about that clause, and `actStabAut`'s `@[cites]` note gave
-the reason: *"The paper says Aut(D) acts by ISOMETRIES; no metric is
-constructed here, so isometry is not proved."*
+Lemma 8.2 says `Aut(D)` acts on `Stab(D)` **by isometries**. For a while this
+repo said nothing about that clause, on the ground that no metric is
+constructed here.
 
-Read literally that note is true — nothing in *this repo* constructs a metric,
-and it still does not. What it invites is the wrong inference, that the clause
-is therefore out of reach. It is not: the **anchor** carries a distance,
+That ground is literally true — nothing in *this* repo constructs a metric, and
+this module still does not. What it invites is the wrong inference, that the
+clause is therefore out of reach. It is not: the **anchor** carries a distance,
 `slicingDist` (`StabilityCondition/Defs.lean:168`), built for the deformation
 theory of §7 and never connected to §8.
 
@@ -48,19 +47,6 @@ genuine non-implication rather than modesty. A sup of three terms being
 preserved does not give that each term is preserved, so the paper's statement
 does **not** imply this one; and this one plainly does not imply the paper's.
 The same call, for the same reason, as `gltildeSlicingMulAction`.
-
-## Why the supremum is bounded twice rather than reindexed
-
-The obvious proof — reindex the supremum along `Φ` — does not typecheck, and
-the reason is worth keeping. `Φ.functor.obj` is a function on the **object
-type** of `C`, and an equivalence of categories makes it injective only *up to
-isomorphism*. Two distinct terms of the type `C` can be isomorphic objects, and
-`Φ.functor.obj` is free to identify them. There is no `Equiv` to rewrite along.
-
-What is true is that each side dominates the other pointwise, which is all a
-supremum needs. `≤` sends `E` to `Φ⁻¹ E`; `≥` sends `E` to `Φ E` and then needs
-`phiPlus_congr` to move back along the unit isomorphism. That last step is why
-`phiPlus_congr` exists at all.
 
 ## Why the supremum is bounded twice rather than reindexed
 

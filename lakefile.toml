@@ -1,6 +1,6 @@
 name = "BridgelandStabLean"
 version = "0.1.0"
-defaultTargets = ["BridgelandStabLean", "Audit"]
+defaultTargets = ["BridgelandStabLean"]
 keywords = ["math"]
 
 [leanOptions]
@@ -51,15 +51,28 @@ name = "BridgelandStabLean"
 # sorry-backed declaration still builds green here. The gate is the emitter
 # (contract-v1-e4), which sweeps `Environment.constants` instead of listing
 # names by hand.
+#
+# REMOVED FROM defaultTargets 2026-08-06. It is still a lean_lib, so it is still
+# built by `lake build Audit` and it still cannot fall behind the source tree --
+# but `scripts/Audit.lean` does `import BridgelandStabLean`, which puts it
+# downstream of EVERY module, so leaving it in defaultTargets made every edit
+# anywhere re-elaborate 497 `#print axioms` before `lake build` returned. CI is
+# unaffected: the `axiom gate` step runs `lake env lean scripts/Audit.lean`
+# directly and never relied on defaultTargets.
 [[lean_lib]]
 name = "Audit"
 srcDir = "scripts"
 
 # The emitter. Deliberately NOT in defaultTargets: `lake build` should stay a
 # statement about whether the library compiles, and building the emitter binary
-# on every build would slow that down without checking anything more. CI runs
-# `lake exe emit` as its own step, which is also where its non-zero exit on
-# sorryAx becomes a gate.
+# on every build would slow that down without checking anything more.
+#
+# CI runs `lake exe emit` as its own step, which is also where its non-zero exit
+# on sorryAx becomes a gate -- BUT ONLY SINCE 6259180 (2026-08-06). This comment
+# asserted it in the present tense from 484821a onward, through the whole of the
+# 56c7531 theorem baseline, while ci.yml had no such step; the fixing commit is
+# named "fix(ci): actually link the emitter, which I claimed CI did and it did
+# not". Do not restate this without a commit attached.
 [[lean_exe]]
 name = "emit"
 root = "Emit"

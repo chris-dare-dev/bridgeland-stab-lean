@@ -6,8 +6,19 @@ and the only place a citation key is minted. Everything else is measured.
 Validate it with the contract package:
 
 ```sh
-mfc registry validate registry/bridgeland2007.json --frontier-kind-labels mathlib-gap
+mfc registry validate registry/bridgeland2007.json \
+  --frontier-kind-labels mathlib-gap,unproved-here,definitional-divergence
 ```
+
+`kind_label` is a free per-topic string and `mfc lint` checks it against exactly
+the list you pass here, so **a new label must be added to this command in the
+same commit that introduces it**. Three are in use:
+
+| label | means |
+|---|---|
+| `mathlib-gap` | the pinned Mathlib has no API to instantiate, so the claim is recorded as a conjunction of named theorems |
+| `unproved-here` | the statement exists in the literature but no theorem inhabits it in this environment |
+| `definitional-divergence` | what is formalized is a different object from the paper's, and the difference is not a presentation choice |
 
 ## Rules that are easy to break by typing
 
@@ -24,8 +35,24 @@ mfc registry validate registry/bridgeland2007.json --frontier-kind-labels mathli
   only rule that compares a digest to the text it summarizes rather than to
   another digest, and it will catch this.
 - **`relation_claimed: exact` is not available while an entry has an open
-  frontier item.** That is `E-05`, and it is the reason `lem-8.2` cannot be
-  cited `exact` today.
+  frontier item.** That is `E-05`. Four items are open today:
+  `gltilde-universal-cover` and `autpairquot-not-aut-d` on `lem-8.2`, and
+  `stability-mass-triangle` on `prop-8.1` and its obligation.
+- **A frontier item is a live gate, so a stale one silently opens the gate.**
+  This is not hypothetical. `gltilde-universal-cover` asserted from 2026-08-05
+  to 2026-08-06 that the covering-map, surjectivity and simple-connectedness
+  facts were *"absent from Mathlib at the pinned revision and unproved here"* —
+  of a tree that proved all three. It was minted before `GLTildeCover.lean`
+  landed and never revisited. Had it been discharged as written, `E-05` would
+  have permitted `exact` on Lemma 8.2 while the two gaps that actually block it
+  had no item at all. **When you discharge an item, check that the reason it was
+  open is still the reason you are closing it**, and check what *else* should be
+  open before you do.
+- **Discharging needs a named human.** `discharged_by` requires
+  `discharged_by_reviewer`, and per
+  [`ADR-0005`](../.claude/decisions/ADR-0005-trust-axes.md) an agent may not
+  fill it. A machine review may correct a false `statement`; it may not close
+  the item.
 
 ## Why JSON and not YAML
 
@@ -45,11 +72,19 @@ matter more than the byte-stability.
 ## Provenance of the current entries
 
 Seven statements lifted verbatim from the `bridgeland-stability` arXMCP corpus
-and one obligation that has no printed statement. Each quote was verified three
+and two obligations that have no printed statement. Each quote was verified three
 ways at mint time: the registry text is byte-identical to the corpus body, the
 declared `quote_sha256` recomputes from it, and the corpus `chunk_id` itself
 still recomputes as `sha256(NFC(body_text))[:16]` (every chunk of this paper has
 `preamble_ref = NULL`, so the id reduces to that).
+
+The second obligation, `obl-stability-mass-triangle`, was **drafted by a machine
+review on 2026-08-06 and has not been signed off**. Its `minted_by` says so, and
+that field must be corrected when a human accepts it. No `quote` was minted for
+it, so the three-way verification above does not apply and nothing corpus-derived
+entered the key. The `informal` field of `lem-3.4` was corrected in the same pass:
+it had described Bridgeland's Lemma 4.3 (`P(I)` quasi-abelian) rather than the
+extreme-phase monotonicity its own stored quote states.
 
 **`mint_resolution` is `null` on every entry, with a reason.** No resolver has
 been run — `tools/statement_resolve.py` (#43) does not exist. And the corpus

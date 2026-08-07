@@ -56,7 +56,14 @@ def main(path: str) -> int:
                for n, axs in ENTRY.findall(flat)]
     entries += [(n, set()) for n in NO_AXIOMS.findall(flat)]
 
-    expected = flat.count("depends on axioms")
+    # Both report shapes must be counted. `#print axioms` emits "does not depend
+    # on any axioms" for an axiom-free declaration, and that phrase does NOT
+    # contain "depends on axioms" -- so counting only the first phrase would make
+    # `entries` exceed `expected` the moment one such declaration appears, and
+    # this guard would fail a run that is in fact fully parsed. Latent today
+    # (all 497 currently report axioms), wrong the first time one does not.
+    expected = (flat.count("depends on axioms")
+                + flat.count("does not depend on any axioms"))
     if len(entries) != expected:
         print(f"::error::audit parse mismatch: parsed {len(entries)} entries but the "
               f"output contains {expected} axiom reports. The gate would be checking "

@@ -37,7 +37,14 @@ namespace BridgelandStabLean.GroupAction
 
 The phase-relabelling half of an element of `G̃L⁺(2, ℝ)`. The `φ + 1`
 equivariance is what makes it descend to the circle `ℝ / 2ℤ`, and it is why
-the shift functor `[1]` interacts with the action the way §8 needs. -/
+the shift functor `[1]` interacts with the action the way §8 needs.
+
+**On `≃o` rather than "increasing".** Bridgeland §8 asks only for an
+*increasing* `f` with `f(φ + 1) = f(φ) + 1`, and a priori that is weaker:
+`φ ↦ ⌊φ⌋ + (φ - ⌊φ⌋)/2` is strictly increasing and `+1`-equivariant but is not
+a bijection. The narrowing is harmless because pairing with an *invertible* `T`
+forces bijectivity — but that forcing happens in `GLTilde`, not here, so this
+structure on its own is strictly narrower than the paper's phrase. -/
 structure NormalizedShift where
   /-- The underlying increasing bijection of `ℝ`. -/
   toOrderIso : ℝ ≃o ℝ

@@ -43,7 +43,16 @@ variable {Λ : Type u'} [AddCommGroup Λ] {v : K₀ C →+ Λ}
 /-- Extended absolute logarithmic distance on `ℝ≥0∞`.
 
 Finite inputs use the ordinary real logarithm.  `⊤` is infinitely far from
-every finite input and zero distance from itself. -/
+every finite input and zero distance from itself.
+
+**The `0` input is not a distance.**  `ENNReal.toReal 0 = 0` and
+`Real.log 0 = 0`, so this function reads mass `0` as mass `1`: `logMassDist 0 1`
+is `0`, and `logMassDist 0 n` is finite where the true value is `+∞`.  That is
+unreachable in this development and deliberately not guarded against — every
+application is to `stabilityMass`, which `stabilityMass_pos` and
+`stabilityMass_ne_top` pin inside `(0, ⊤)`, and `stabilityDist` takes its
+supremum only over `¬IsZero E`.  Do not reuse this function on a mass that has
+not been shown nonzero. -/
 def logMassDist (m n : ℝ≥0∞) : ℝ≥0∞ :=
   if m = ⊤ then
     if n = ⊤ then 0 else ⊤
@@ -293,8 +302,11 @@ theorem slicingDist_le_stabilityDist (σ τ : StabilityCondition.WithClassMap C 
     exact le_iSup₂ (f := fun (X : C) (hX : ¬IsZero X) ↦
       stabilityDistTerm σ τ X hX) E hE
   rw [ENNReal.ofReal_max]
-  exact le_trans (max_le_max le_rfl (le_max_left _ _))
-    hterm
+  -- Unfold explicitly rather than relying on default-transparency delta: the
+  -- `le_trans` below otherwise unifies only by silently unfolding three
+  -- definitions the proof never names.
+  simp only [stabilityDistTerm, phiPlusDist, phiMinusDist] at hterm ⊢
+  exact le_trans (max_le_max le_rfl (le_max_left _ _)) hterm
 
 end
 
