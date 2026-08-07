@@ -337,8 +337,9 @@ surjectivity and simple connectedness as `GLTilde.universalCoverData`;
 is only that **Mathlib has no bundled universal-cover predicate at this pin**,
 so the identification is a conjunction of those named theorems rather than an
 instance of an upstream API — cite them, do not imply a larger bundled object.
-The registry records this as the (still open) frontier item
-`gltilde-universal-cover`.
+The registry recorded this as the frontier item `gltilde-universal-cover`,
+**discharged 2026-08-07** by Chris Dare on those two declarations. Lemma 8.2 is
+still not citable as `exact`: `autpairquot-not-aut-d` remains open on it.
 
 Still absent: the `Aut` half — begun, see below.
 
