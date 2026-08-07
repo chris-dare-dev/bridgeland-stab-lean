@@ -336,6 +336,36 @@ lake exe cache get && lake build
 `lake exe cache get` pulls prebuilt Mathlib oleans. Skipping it means
 compiling Mathlib from source — hours, not minutes.
 
+Then the two gates CI runs, both of which fail on findings:
+
+```bash
+lake exe runLinter BridgelandStabLean
+```
+
+```bash
+lake env lean scripts/Audit.lean > audit.txt 2>&1 && python scripts/check_audit.py audit.txt
+```
+
+`runLinter` is the environment linters — the ones §1 says to run, now pointed
+at this library and not only at upstream candidates. It is Batteries'
+executable, reached transitively; there is no `runLinter` target in Mathlib at
+this pin. Green since 2026-08-05, and wired into `.github/workflows/ci.yml` the
+same day.
+
+### On Windows: the path-length trap
+
+The anchor's deepest artefact,
+`.lake/packages/BridgelandStability/.lake/build/lib/lean/BridgelandStability/ForMathlib/Analysis/SpecialFunctions/Complex/SectorBound.olean`,
+is 138 characters. Add a checkout prefix over ~121 characters and `lake build`
+fails with `failed to create file` on that module and three others — a
+filesystem `MAX_PATH` limit, not a Lean error.
+
+The repo root is fine. **A worktree under `.claude/worktrees/<name>/` is not**:
+it adds ~46 characters and lands exactly on 260. `subst` and junctions do not
+help — Lake canonicalises the workspace directory before handing paths to
+`lean`, so the real path is what gets used. Build from a short path, or from
+the repo root.
+
 ## 8. Relationship to arXMCP
 
 Sibling repo, never a subdirectory. Never a `require`, never a submodule.

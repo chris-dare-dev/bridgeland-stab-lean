@@ -81,7 +81,13 @@ noncomputable def actC (T : Matrix.GLPos (Fin 2) ℝ) : ℂ →ₗ[ℝ] ℂ wher
 theorem actC_apply (T : Matrix.GLPos (Fin 2) ℝ) (z : ℂ) :
     actC T z = cplxCoord.symm (toMat T *ᵥ cplxCoord z) := rfl
 
-@[simp]
+/-- `actC 1` is the identity map.
+
+Deliberately **not** `@[simp]`. `actC_apply` is the simp lemma that unfolds
+`actC`, and once it fires `toMat_one`, `Matrix.one_mulVec` and
+`LinearEquiv.symm_apply_apply` finish the job — so a `@[simp]` here is
+redundant and `simpNF` rejects it. Stated in applied form to match `actC_mul`,
+which is not `@[simp]` either. -/
 theorem actC_one (z : ℂ) : actC 1 z = z := by
   simp [toMat_one, Matrix.one_mulVec]
 

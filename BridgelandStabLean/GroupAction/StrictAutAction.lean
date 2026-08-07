@@ -38,6 +38,10 @@ Everything hard is already in `AutAction.lean` — `PostnikovTower.mapF`,
 packaging: `StrictAut.equiv` turns the strict data into an honest
 `Equivalence` (unit and counit are `eqToIso`, and the coherence field
 discharges automatically), and the `MulAction` laws are then two `simp`s.
+
+The `MulAction` is a `def`, not an `instance` — `ρ` is unrecoverable by
+instance search, so as an `instance` it was dead code. See
+`mulActionSlicing`'s own docstring.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -57,10 +61,18 @@ structure StrictAut (G : Type*) [Group G] (C : Type u) [Category.{w} C]
     [∀ n : ℤ, (shiftFunctor C n).Additive] [Pretriangulated C] where
   /-- The endofunctor attached to a group element. -/
   F : G → (C ⥤ C)
+  /-- The unit acts as the identity functor, on the nose. -/
   map_one : F 1 = 𝟭 C
+  /-- Multiplication is composition, on the nose. -/
   map_mul : ∀ g h : G, F (g * h) = F h ⋙ F g
+  /-- Every `F g` is additive. -/
   additive : ∀ g, (F g).Additive
+  /-- Every `F g` commutes with the shift. Unlike its neighbours this field is
+  **data**, not a proof — `Functor.CommShift` carries the comparison
+  isomorphism — which is why `docBlame` asks for a docstring here and not for
+  the `Prop`-valued fields around it. -/
   commShift : ∀ g, (F g).CommShift ℤ
+  /-- Every `F g` sends distinguished triangles to distinguished triangles. -/
   triangulated : ∀ g, (F g).IsTriangulated
 
 namespace StrictAut
@@ -116,8 +128,27 @@ noncomputable def actSlicing (g : G) (s : Slicing C) : Slicing C :=
 @[simp] theorem actSlicing_P (g : G) (s : Slicing C) (φ : ℝ) (X : C) :
     (ρ.actSlicing g s).P φ X = s.P φ ((ρ.F g⁻¹).obj X) := rfl
 
-/-- A strict group of triangulated autoequivalences acts on slicings. -/
-noncomputable instance mulActionSlicing : MulAction G (Slicing C) where
+/-- A strict group of triangulated autoequivalences acts on slicings.
+
+**A `def`, not an `instance`, and that is forced rather than stylistic.** `ρ`
+is explicit data appearing neither in the return type `MulAction G (Slicing C)`
+nor in any instance-implicit argument, so instance search has nothing to infer
+it from: as an `instance` this was unreachable and could never have fired —
+the `impossibleInstance` linter's finding, and a real defect, not a style nit.
+
+It would also be the wrong thing to register globally even if it worked, since
+the head `MulAction G (Slicing C)` claims *every* group acts on the slicings of
+*every* pretriangulated category, for whatever `ρ` search happened to pick.
+
+Bring it into scope at the use site with `letI := ρ.mulActionSlicing`. For an
+action `•` can find on its own, use `AutQuot` (`QuotAutAction.lean`), where the
+acting object *is* the group.
+
+`@[reducible]` because Lean requires it of any `def` whose type is a class —
+Mathlib's reducible-non-instance convention, and what makes the `letI` above
+transparent to later instance search. -/
+@[reducible]
+noncomputable def mulActionSlicing : MulAction G (Slicing C) where
   smul := ρ.actSlicing
   one_smul s := Slicing.ext C (by
     funext φ; funext X

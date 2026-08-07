@@ -55,6 +55,32 @@ autoequivalences. That is a design decision, not an oversight — see
    invariant under an equivalence of interval categories — and the anchor's
    `interval_thinFiniteLength_of_inclusion_strict` does not apply, since it
    compares two `intervalProp`s on the *same* object.
+
+## Why two `@[nolint unusedArguments]`s below, and one in `K0Functor.lean`
+
+The environment linter reports `[F.Additive]` unused by `PostnikovTower.mapF`
+and `[Φ.inverse.Additive]` unused by `Slicing.mapEquiv`. Both are true of the
+proof terms, and both hypotheses are kept anyway.
+
+Deleting them does not remove the finding — it **moves it one caller up**,
+measured 2026-08-05 by doing exactly that and re-running the linter:
+
+| deleted from | the linter then flags |
+|---|---|
+| `PostnikovTower.mapF` | `HNFiltration.mapF`, which passes it straight through |
+| `Slicing.mapEquiv` | `Slicing.mapEquiv_P`, whose *statement* carries it |
+| `isTriangleAdditive_of_isTriangulated` | `K₀.mapF` |
+
+Six errors before, six after; the build stayed green throughout. Following the
+chase to its end amputates the hypothesis from `K₀.mapF_of`, from
+`AutStabilityAction`, and finally from `TriEquiv.iAdd` — a structure field
+whose whole purpose is to make the six instances of a triangulated
+auto-equivalence travel together.
+
+So the hypothesis set is the interface, not an artefact of how the fields were
+discharged: "triangulated functor" here means `Additive` + `CommShift ℤ` +
+`IsTriangulated`, every consumer supplies all three, and a later reproof that
+does use additivity must not be a breaking signature change.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -70,7 +96,11 @@ variable {C : Type u} [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
 
 Everything is transported structurally: the chain is `chain ⋙ F`, each
 triangle is `F.mapTriangle.obj`, and distinguishedness is
-`F.map_distinguished`. -/
+`F.map_distinguished`.
+
+`[F.Additive]` is unused by this term and kept regardless — see the module
+docstring, which records what deleting it actually does. -/
+@[nolint unusedArguments]
 noncomputable def PostnikovTower.mapF {E : C} (P : PostnikovTower C E)
     (F : C ⥤ C) [F.Additive] [F.CommShift ℤ] [F.IsTriangulated] :
     PostnikovTower C (F.obj E) where
@@ -102,7 +132,12 @@ noncomputable def HNFiltration.mapF {P P' : ℝ → ObjectProperty C} {E : C}
 `(Φ • s).P φ X = s.P φ (Φ⁻¹ X)`.
 
 Dual to `BridgelandStabLean.GroupAction.relabel`, which moves phases and fixes
-objects. -/
+objects.
+
+`[Φ.inverse.Additive]` is unused by this term and kept regardless: without it
+`Φ` is no longer an equivalence of *triangulated* categories, which is what
+this definition transports along. See the module docstring. -/
+@[nolint unusedArguments]
 noncomputable def Slicing.mapEquiv (s : Slicing C) (Φ : C ≌ C)
     [Φ.functor.Additive] [Φ.inverse.Additive]
     [Φ.functor.CommShift ℤ] [Φ.inverse.CommShift ℤ]
