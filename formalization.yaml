@@ -22,14 +22,14 @@ artifact:
   name: BridgelandStabLean
   url: https://github.com/chris-dare-dev/bridgeland-stab-lean
   description: >
-    Extensions to mattrobball/BridgelandStability along six lanes that
+    Extensions to mattrobball/BridgelandStability along seven lanes that
     require no algebraic-geometry substrate: rank-2 torsion-free lattice
     arithmetic; the Mukai extension Z + N + Z of a symmetric bilinear lattice
     together with rank-two subpair arithmetic; torsion pairs in an abelian
     category, which Mathlib lacks at the pin; the Kontsevich-Soibelman
     quadratic-form reformulation of the support property; charges on the free
-    lattice of simples; and the Bridgeland 2007 section 8 GL+(2,R)-tilde action
-    the anchor does not cover.
+    lattice of simples; numerical walls in the (s,t) half plane; and the
+    Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
 
     The Mukai, Tilting and Support lanes are NOT scoped to this record's
     `source`. The Tilting lane does NOT contain the Happel-Reiten-Smalo tilt,
@@ -394,6 +394,15 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (Wall lane), 2026-08-06. The 21 additional records are the
+    whole of BridgelandStabLean/Wall/Numerical.lean: the class abbreviation and
+    its three accessors, the two charge components, the three minors, the wall
+    expression, the collapse identity, the circle and line forms, the shift and
+    its four invariance lemmas, the charge-degeneracy criterion, and the
+    two-wall determination. Audit count 595 -> 616. Coverage complete: 21
+    top-level declarations, 0 private, 21 named. 11 are theorems; 10 are
+    constructions (9 def, 1 abbrev).
+
     COUNT UPDATE (FiniteLength lane), 2026-08-06. The 10 additional records are
     the whole of BridgelandStabLean/FiniteLength/SimpleCharge.lean: the two
     cone-closure lemmas the anchor lacks, the charge construction and its two
@@ -487,10 +496,11 @@ fidelity:
     at branch agent/mukai-lattice off 45f2fba. Three of CI's five gates were
     run and all three passed, at both lanes. With Mukai only: `lake build` at
     3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support added: 3782 jobs, linter clean,
-    audit 585 records. With FiniteLength added:
-    `lake build` at 3783 jobs exit 0, `runLinter` printed "Linting passed" with
+    audit 585 records. With FiniteLength added: 3783 jobs, linter
+    clean, audit 595 records. With Wall added:
+    `lake build` at 3784 jobs exit 0, `runLinter` printed "Linting passed" with
     no findings, and `lake env lean scripts/Audit.lean | python
-    scripts/check_audit.py` accepted 595 records, all within
+    scripts/check_audit.py` accepted 616 records, all within
     [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
     build-log grep also passed.
 
@@ -549,8 +559,8 @@ fidelity:
     merged at 56c7531.
   human_review: none
   machine_review: >
-    THE MUKAI, TILTING, SUPPORT AND FINITELENGTH LANES HAVE HAD NO REVIEW OF
-    ANY KIND, 2026-08-06. All four were written
+    THE MUKAI, TILTING, SUPPORT, FINITELENGTH AND WALL LANES HAVE HAD NO
+    REVIEW OF ANY KIND, 2026-08-06. All five were written
     and gate-run in a single session by the same agent (Claude Opus 5); no
     independent adversarial pass has been made over it, and no human has read
     it. Three of five CI gates were run locally and passed -- see
@@ -711,6 +721,23 @@ fidelity:
 
     No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
+    Wall/ MAPS TO NO SECTION OF `source`. Numerical walls in the (s,t) half
+    plane are tilt-stability material (Arcara-Bertram, Maciocia,
+    Bayer-Macri-Toda), not Bridgeland 2007. No @[cites], no registry entries.
+
+    Wall/Numerical.lean works with NumClass = R x R x R, a triple `(r, c, d)`
+    standing for (ch0, ch1.H, ch2), and the twisted charge
+    Re Z = -d + s c - (s^2/2) r + (t^2/2) r, Im Z = t (c - s r). The wall
+    expression is the cross product of two charges. The central result,
+    wallExpr_eq, is that it collapses to
+    t * (minC + s minB + ((s^2+t^2)/2) minA), where minA, minB, minC are the
+    three 2x2 minors of the matrix with rows v and w. Hence for t nonzero the
+    wall is minA (s^2+t^2) + 2 minB s + 2 minC = 0: a circle centred on the
+    s-axis when minA is nonzero, a vertical line when minA vanishes and minB
+    does not. Centre and radius are given in cleared form so no division
+    appears. Each minor is alternating, so the wall depends only on w modulo v
+    (wallExpr_shift). charge_eq_zero_iff locates the single degenerate point.
+
     FiniteLength/ IS THE FIRST NEW LANE THAT DOES TARGET `source` -- Bridgeland
     2007's finite-length worked example, where a stability function on an
     abelian category of finite length with n simples is a choice of charge in
@@ -1040,6 +1067,32 @@ fidelity:
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    WALL LANE: NO BOGOMOLOV-GIESEKER INEQUALITY IS ASSUMED, AND NONE IS
+    AXIOMATISED. This is worth stating because the lane was SCOPED expecting to
+    need one -- the plan was a numerical-surface structure carrying the Hodge
+    index and the discriminant bound as stated hypotheses. It turned out no
+    such hypothesis is required: wallExpr_eq is a polynomial IDENTITY, true of
+    every triple of reals, and the circle and line forms need only `t` nonzero
+    and a nonvanishing minor, both of which are hypotheses of the individual
+    theorems rather than standing assumptions. So CLAUDE.md section 4's rule --
+    say so and stop rather than axiomatising the gap -- was never engaged,
+    because the gap was not on the path.
+
+    WALL LANE: THERE IS NO SURFACE. NumClass is a triple of reals, not ch(E) for
+    a sheaf. No coherent sheaf, Chern character, polarisation or Neron-Severi
+    lattice appears anywhere in the lane, and nothing identifies the triple with
+    the numerical invariants of an object. That identification is geometry and
+    is not made.
+
+    WALL LANE: THE NESTING THEOREM IS NOT PROVED. The statement the picture is
+    usually quoted by -- that two DISTINCT walls for the SAME v never meet, so
+    the walls for a fixed v are nested semicircles -- is NOT here. What is
+    proved is eq_of_two_walls: if two walls meet at a point and the (A,B) cross
+    term minA1 minB2 - minA2 minB1 is nonzero, that meeting point is pinned
+    down. The full nesting statement additionally needs that both minor vectors
+    are cross products against a common v, plus a rank argument in R^3, and
+    neither is done. Do not cite this lane as "walls are nested".
 
     FINITELENGTH LANE: `Fin n -> Z` IS NOT `K_0(A)`, AND THE MISSING BRIDGE IS
     NAMED. Identifying the model with the Grothendieck group of a finite-length

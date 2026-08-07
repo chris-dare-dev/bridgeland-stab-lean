@@ -215,6 +215,34 @@ the anchor. Every result is a theorem about `Fin n -> Z`. -/
 #print axioms FiniteLength.chargeOf_mem_cone
 #print axioms FiniteLength.chargeOf_ne_zero
 
+/-! ## Wall lane — numerical walls in the (s, t) half plane
+
+Arithmetic on triples of reals. There is NO surface: no coherent sheaf, no
+Chern character, no polarisation, and no Bogomolov-Gieseker inequality -- and
+none is axiomatised, because the wall equation is an identity and needs none. -/
+
+#print axioms Wall.NumClass
+#print axioms Wall.NumClass.rk
+#print axioms Wall.NumClass.deg
+#print axioms Wall.NumClass.ch2
+#print axioms Wall.reZ
+#print axioms Wall.imZ
+#print axioms Wall.minA
+#print axioms Wall.minB
+#print axioms Wall.minC
+#print axioms Wall.wallExpr
+#print axioms Wall.wallExpr_eq
+#print axioms Wall.wall_iff_circle
+#print axioms Wall.wall_circle_eq
+#print axioms Wall.wall_line_eq
+#print axioms Wall.shift
+#print axioms Wall.minA_shift
+#print axioms Wall.minB_shift
+#print axioms Wall.minC_shift
+#print axioms Wall.wallExpr_shift
+#print axioms Wall.charge_eq_zero_iff
+#print axioms Wall.eq_of_two_walls
+
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift

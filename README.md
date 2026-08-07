@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these six lanes and not others
+## Why these seven lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -415,6 +415,46 @@ as a quotient and never says that quotient is free on the simples.
 
 So the stability-manifold conclusion is **not** drawn. Do not cite
 `existsUnique_charge` as "Stab of a finite-length heart is `ℍⁿ`".
+
+### Lane 7 — `Wall/` (numerical walls in the `(s, t)` half plane)
+
+For a class `v = (r, c, d)` — a triple of reals, standing for
+`(ch₀, ch₁·H, ch₂)` — the twisted charge at `(s, t)` is
+
+```
+Re Z = -d + s·c - (s²/2)·r + (t²/2)·r,      Im Z = t·(c - s·r).
+```
+
+The whole lane rests on one identity, `wallExpr_eq`: the cross product of two
+charges collapses to
+
+```
+t · ( minC + s·minB + ((s² + t²)/2)·minA )
+```
+
+where `minA, minB, minC` are the three `2 × 2` minors of the matrix with rows
+`v` and `w`. So for `t ≠ 0` the wall is `minA(s²+t²) + 2·minB·s + 2·minC = 0` —
+**a circle centred on the `s`-axis, or a vertical line.** Centre and radius are
+given in cleared form, so no division appears. Each minor is alternating, so a
+wall depends only on `w` modulo `v`.
+
+**No Bogomolov–Gieseker inequality is assumed, and none is axiomatised.** This
+lane was scoped expecting to need one — a numerical-surface structure carrying
+the Hodge index and the discriminant bound as stated hypotheses. It turned out
+none is required: `wallExpr_eq` is a polynomial identity, and the circle and
+line forms need only `t ≠ 0` and a nonvanishing minor, both hypotheses of the
+individual theorems. CLAUDE.md §4's "say so and stop rather than axiomatise the
+gap" was never engaged, because the gap was not on the path.
+
+**There is no surface.** `NumClass` is a triple of reals, not `ch(E)`.
+
+**The nesting theorem is not proved.** The statement usually quoted with this
+picture — two *distinct* walls for the *same* `v` never meet, so walls for a
+fixed `v` are nested — is not here. What is proved is `eq_of_two_walls`: two
+walls meeting at a point pin that point down, when the `(A,B)` cross term is
+nonzero. Full nesting needs that both minor vectors are cross products against
+a common `v`, plus a rank argument in `ℝ³`. Do not cite this lane as "walls are
+nested".
 
 ### Not a lane
 

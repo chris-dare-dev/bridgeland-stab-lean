@@ -10,6 +10,7 @@ import BridgelandStabLean.Mukai.RankTwo
 import BridgelandStabLean.Tilting.TorsionPair
 import BridgelandStabLean.Support.SupportProperty
 import BridgelandStabLean.FiniteLength.SimpleCharge
+import BridgelandStabLean.Wall.Numerical
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.GLTildeFibre
@@ -65,6 +66,9 @@ Two lanes, both chosen because they need **no** algebraic-geometry substrate:
 * `FiniteLength/` — charges on `Fin n → ℤ`, the lattice half of Bridgeland's
   `ℍ̄ⁿ` example. The identification with `K₀(A)` is Jordan–Hölder, which
   neither Mathlib nor the anchor has, and is never discharged.
+* `Wall/` — numerical walls in the `(s, t)` half plane. The wall equation is
+  an identity on triples of reals: no surface, no Chern character, and no
+  Bogomolov–Gieseker inequality assumed or axiomatised.
 * `GroupAction/` — the §8 `G̃L⁺(2, ℝ)` action the anchor does not cover.
 
 See `README.md` for why the geometric lane is deliberately absent, and
