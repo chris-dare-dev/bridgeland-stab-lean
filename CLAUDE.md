@@ -287,17 +287,17 @@ Six claims to keep off the page.
   charges, builds the distinguished HN path, proves edge-charge and
   length-equals-mass formulas, and supplies the endpoint chord inequality.
   `H0ExactnessBridge.lean` proves that the heart-source `H⁰` complex is exact
-  exactly when its canonical cokernel comparison is monic; homological `H⁰`
-  or `H⁰'` discharges that obstruction locally, with no global instance.
-  Do not report the three-milestone chain complete:
+  exactly when its canonical cokernel comparison is monic, and now proves the
+  canonical `H⁰'` and `H⁰` functors homological unconditionally.
   `StabilityMassBoundaryHeartInequality` and
-  `StabilityMassSemistableLeftTriangleInequality` are named uninhabited
-  propositions, while the arbitrary-left reduction is proved. The remaining
-  first-milestone work is HN-boundary extremality/perimeter comparison; the
-  remaining second-milestone work is an unconditional homological `H⁰`
-  construction or the equivalent monicity proof.
+  `StabilityMassSemistableLeftTriangleInequality` are both inhabited. The
+  second proof factors the six-term cohomology sequence into short exact
+  pieces, proves the `(0, 2]` amplitude case, removes the lower and upper tails
+  by exact HN cutoffs, and rotates an arbitrary semistable phase to one. The
+  arbitrary-left reduction is also proved, but its final application has not
+  yet been exposed as the named unconditional global triangle theorem.
   `StabilityMassHeartShortExactInequality` is a named uninhabited proposition,
-  and the unrestricted polygonal argument still has to be formalized.
+  pending that global corollary.
 
   Two things this cost that are worth reusing. The anchor had carried
   `slicingDist` since before this repo existed

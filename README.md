@@ -251,14 +251,18 @@ and the named phase-one boundary-heart proposition is inhabited, with its
 zero-object branch handled explicitly.
 `H0ExactnessBridge` identifies
 the exact heart-source obstruction as monicity of
-`coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
-or `H⁰'` structure without installing a global instance. Of the three major
-mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
-first (phase-one boundary heart) is now complete. The second still needs the
-unconditional homological input (or the equivalent cokernel-monicity proof),
-after which the completed third milestone promotes it to the global triangle
-inequality. The remaining named propositions are not installed as instances
-or axioms.
+`coker(A → H⁰(X₂)) → H⁰(X₃)`, proves the canonical `H⁰'` and `H⁰`
+functors homological, and discharges the obstruction without adding an axiom.
+`StabilityMassTriangle` then constructs the six-term cohomology sequence for a
+phase-one source, factors it into three short exact sequences, and proves the
+mass comparison on the two-cohomology window `(0, 2]`. Exact HN cutoffs at
+phases zero and two remove that amplitude restriction, and lifted-rotation
+invariance moves an arbitrary semistable source to phase one. Thus the first
+(phase-one boundary-heart) and second (arbitrary-phase semistable-left) major
+milestones are inhabited. The third, arbitrary-left octahedral reduction was
+already proved; applying it to the new second milestone is the remaining
+named global-triangle corollary. No open premise is installed as an instance
+or axiom.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation

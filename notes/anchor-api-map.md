@@ -671,8 +671,12 @@ choice-free envelope rather than choosing a filtration non-functorially.
      under shifts by `1` and `-1`;
    - proves mass subadditivity for semistable middle objects and for
      same-phase semistable endpoints;
-   - transports both cases to short exact sequences in `P((0, 1])` and names
-     the still-open unrestricted heart short-exact proposition explicitly.
+   - transports both cases to short exact sequences in `P((0, 1])`;
+   - proves the phase-one boundary-heart inequality, the six-term
+     cohomological comparison on `(0, 2]`, the two exact HN cutoffs, and hence
+     the arbitrary-phase semistable-left triangle inequality;
+   - retains the unrestricted heart short-exact proposition as an explicit
+     target for the final global-triangle corollary.
 8. `HNPolygon.lean`
    - defines the HN polygon as the convex hull of all subobject charges;
    - realizes an abelian HN filtration as its distinguished complex path;
@@ -684,8 +688,10 @@ choice-free envelope rather than choosing a filtration non-functorially.
    - packages the heart-source `H⁰` short complex;
    - identifies exactness with monicity of the canonical map from the
      cokernel of its first arrow;
-   - derives exactness and monicity from homological `H⁰` or `H⁰'` locally,
-     without installing an instance or assuming the missing input.
+   - proves the canonical `H⁰'` functor homological from nonpositive
+     truncation and transports that structure to `H⁰`;
+   - derives the heart-source exactness and monicity unconditionally without
+     installing a global instance or assuming an extra input.
 
 Items 8--9 follow the `t = 0` proof architecture of Ikeda,
 *Mass growth of objects and categorical entropy*
@@ -694,14 +700,14 @@ boundary-heart polygon step, and the proof of Proposition 3.3 is the subsequent
 `H⁰` kernel/image reduction.
 
 The mass bridge, separation clause, analytic topology estimates, and safe
-metric-space construction are now closed. The remaining Proposition 8.1 work
-is the completion of HN-mass subadditivity across every distinguished
-triangle. Its norm-theoretic and semistable base cases
-are now closed, and the polygon-path and exactness-obstruction libraries are
-landed. HN-boundary extremality/perimeter comparison and unconditional `H⁰`
-homologicality remain open; the arbitrary-left reduction is already closed.
-All topology comparison results are
-explicitly conditional on the global proposition. The citation to
+metric-space construction are now closed. The boundary-heart and
+semistable-left mass-triangle milestones are also closed, including the
+unconditional `H⁰` homological bridge and the exact lower/upper HN cutoffs.
+The arbitrary-left reduction is already proved; its one-step application to
+the semistable-left theorem remains to expose the unconditional global
+triangle proposition. Until that named corollary lands, all topology
+comparison results remain explicitly conditional on the global proposition.
+The citation to
 Proposition 8.1 therefore remains `no_claim`. The Lemma 8.2 citation also
 remains `no_claim`
 independently, because `AutPairQuot v` is not identified with bare `Aut(D)`.

@@ -223,8 +223,8 @@ fidelity:
     that their inherited topology is definitionally the already-installed
     Section 6 topology. No competing global metric instance is installed.
 
-    OPENED 2026-08-06, FIRST MILESTONE CLOSED 2026-08-07: the categorical
-    mass-triangle chain.
+    OPENED 2026-08-06, FIRST AND SECOND MILESTONES CLOSED 2026-08-07: the
+    categorical mass-triangle chain.
     StabilityMassTriangle.lean defines the ordinary observable stability
     condition with central charge Z.comp v and exposes its induced heart
     stability function and HN property. It proves the charge lower bound
@@ -241,9 +241,14 @@ fidelity:
     heart/slicing semistability implication, converts an abelian HN filtration
     into an ambient HN tower factor by factor, identifies its real mass with
     triangulated stabilityMass, and inhabits the phase-one boundary-heart
-    target including zero objects. The unrestricted heart short-exact and
-    semistable-left inequalities are not inhabited; no open premise is
-    installed as an instance or hidden axiom.
+    target including zero objects. Code commit 797c200 also inhabits the
+    semistable-left target. It proves lifted-rotation invariance of mass,
+    strict HN-cut mass splitting, the two-cohomology amplitude formula, the
+    six-term H0 kernel/image comparison for a phase-one source, and exact HN
+    cutoffs at phases zero and two. A final lifted rotation handles every
+    semistable phase. The unrestricted heart short-exact target and the named
+    unconditional global triangle corollary are not yet inhabited; no open
+    premise is installed as an instance or hidden axiom.
 
     FOUNDATION UPDATE 2026-08-06: HNPolygon.lean now defines the HN polygon as
     the convex hull of all subobject charges and realizes an abelian HN
@@ -275,26 +280,28 @@ fidelity:
     cases are explicit.
     H0ExactnessBridge.lean packages the heart-source H0 short complex and
     proves that its exactness is equivalent to monicity of the canonical
-    cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
-    exactness locally; no global homological instance is installed, so the
-    equivalent unconditional monicity proof remains open as well. The first
-    mass-triangle milestone is inhabited; the second remains open.
+    cokernel comparison into H0(X3). Code commit 797c200 proves the canonical
+    H0-prime functor homological on arbitrary distinguished triangles by
+    truncating to the nonpositive case, then transports that structure to H0.
+    Thus the exactness and cokernel-monicity bridges are unconditional, while
+    still avoiding a global instance. The first and second mass-triangle
+    milestones are both inhabited.
 
     SECONDARY SOURCE NOTE: this two-stage route is the t = 0 specialization
     of Akishi Ikeda, Mass growth of objects and categorical entropy,
     arXiv:1612.00995. Lemma 3.8 supplies the boundary-heart polygon inequality;
     the proof of Proposition 3.3 then uses the H0 long exact sequence and its
-    kernel/image short-exact decompositions. The present files now formalize
-    the abelian polygon comparison and the exactness interfaces needed by that
-    proof and the canonical-heart triangulated stabilityMass statement, but
-    not yet Proposition 3.3 itself.
+    kernel/image short-exact decompositions. The present files formalize this
+    t = 0 route through the semistable-left triangle inequality, including the
+    amplitude reduction and both HN cutoffs.
 
     This still is NOT a completed formalization of Proposition 8.1 or the
-    literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
-    conditional on the still-unproved distinguished-triangle HN-mass
-    inequality, and AutPairQuot v carries extra compatible lattice data. The
-    relevant @[cites] records stay no_claim and known_divergences states the
-    boundary precisely.
+    literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison
+    remains stated conditionally on the named distinguished-triangle HN-mass
+    proposition until the already-proved arbitrary-left reduction is applied
+    to the new semistable-left theorem, and AutPairQuot v carries extra
+    compatible lattice data. The relevant @[cites] records stay no_claim and
+    known_divergences states the boundary precisely.
 
     The Aut action on SLICINGS is landed, and generally: AutAction.lean is the
     transport groundwork (PostnikovTower.mapF, HNFiltration.mapF,
@@ -514,6 +521,21 @@ fidelity:
     StabilityMassTriangle. The regenerated emitter reports 1397 constants,
     745 in scope, and zero constants depending on sorryAx.
 
+    COUNT UPDATE (unconditional H0 and semistable-left milestone),
+    2026-08-07. Code commit 797c200 adds 37 public declarations: 16 construct
+    the nonpositive H0-prime comparison, prove unconditional homologicality of
+    H0-prime and H0, and discharge the heart-source exactness obstruction; 21
+    cover lifted-rotation mass invariance, exact HN-cut splitting, the
+    two-cohomology amplitude formula, same-phase and phase-one extension
+    comparisons, the six-term kernel/image calculation, both amplitude
+    cutoffs, and the arbitrary-phase semistable-left theorem. The strict audit
+    covers 659 declarations, all within [propext, Classical.choice,
+    Quot.sound], with no sorryAx. The root build completes all 3795 jobs. The
+    declaration linter retains exactly the six inherited findings and has none
+    in H0ExactnessBridge or StabilityMassTriangle. The regenerated emitter is
+    byte-for-byte unchanged and reports 1485 constants, 789 in scope, with no
+    sorryAx dependency.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -575,6 +597,13 @@ fidelity:
     exactly the six inherited findings and has none in either changed module.
     The environment emitter records 1397 constants, 745 in scope, and zero
     constants depending on sorryAx.
+    At code commit 797c200, the unconditional H0 and semistable-left chain
+    keeps the full build at 3795 jobs. The strict parser accepts all 659 audit
+    records with the standard allowlist and no sorryAx. The declaration linter
+    reports exactly the six inherited findings and none in either changed
+    module. The environment emitter completes with 1485 constants, 789 in
+    scope, no sorryAx dependency, and leaves the tracked attestation
+    byte-for-byte unchanged.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -657,6 +686,18 @@ fidelity:
     (745 in scope) with no sorryAx dependency; and the linter has no finding in
     either changed module. The H0 unconditional exactness gap, and therefore
     the semistable-left milestone, is unchanged.
+
+    Code commit 797c200 closes that second-milestone gap. It proves
+    H0-prime homological on arbitrary distinguished triangles by comparison
+    with a nonpositive truncation, transports homologicality to H0, and uses
+    the resulting six-term sequence to prove the phase-one amplitude
+    comparison. Exact HN cutoffs at zero and two remove the amplitude bound;
+    lifted-rotation invariance then proves the semistable-left proposition at
+    every phase. The full build completes all 3795 jobs. The strict parser
+    accepts 659 declarations within the standard allowlist and with no
+    sorryAx. The linter retains exactly the six inherited findings and none in
+    either changed module. The emitter reports 1485 constants (789 in scope),
+    no sorryAx dependency, and no change to the tracked attestation.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -929,10 +970,11 @@ fidelity:
     cofinality direction, and proves reverse cofinality plus the compatible
     EMetricSpace construction conditional on StabilityMassTriangleInequality.
     Its ofEDistOfTopology route retains the Section 6 topology definitionally,
-    so no raw metric instance or topology diamond is present. The remaining
-    filtration-assembly theorem is not assumed and is not hidden in an
-    instance; hence the registry relation to Proposition 8.1 is still
-    no_claim. The relation of the full-distance isometry to Lemma 8.2 also
+    so no raw metric instance or topology diamond is present. The global
+    triangle proposition has not yet been exposed by applying the proved
+    arbitrary-left reduction to the new semistable-left theorem; hence the
+    registry relation to Proposition 8.1 is still no_claim. The relation of
+    the full-distance isometry to Lemma 8.2 also
     remains no_claim because the acting group has not been identified with
     bare Aut(D).
 
@@ -943,11 +985,14 @@ fidelity:
     StabilityMassHeartShortExactInequality records the three proof targets.
     The phase-one boundary-heart target is now supplied: the abelian polygon
     comparison is bridged to triangulated stabilityMass by an explicit ambient
-    HN tower built from every abelian HN chain. The unrestricted heart target
-    and the semistable-left cohomological reduction remain open. The
-    theorem stabilityMassTriangleInequality_of_semistable_obj₁ proves that
-    the latter, once supplied, implies the unconditional global triangle
-    proposition by head--tail octahedral induction.
+    HN tower built from every abelian HN chain. The semistable-left target is
+    also supplied: unconditional H0 homologicality gives its six-term
+    cohomology comparison, exact lower and upper HN cutoffs reduce to the
+    `(0, 2]` amplitude window, and a lifted rotation handles every phase. The
+    theorem stabilityMassTriangleInequality_of_semistable_obj₁ is the proved
+    head--tail octahedral reduction to the unconditional global triangle
+    proposition. Its final application, and hence the unrestricted heart
+    target, remains to be exposed.
 
     HNPolygon.lean and ConvexPolygonPerimeter.lean supply the next
     algebraic/geometric layer: the convex hull of subobject charges, the HN
@@ -955,9 +1000,9 @@ fidelity:
     positive-angle ambient support completeness, and the boundary-cut short-
     exact mass comparison.
     H0ExactnessBridge.lean supplies the exact cohomological interface:
-    heart-source exactness iff the canonical cokernel comparison is monic,
-    with local consequences from homological H0 or H0-prime. Neither file
-    hides the remaining homologicality theorem in an instance.
+    heart-source exactness iff the canonical cokernel comparison is monic. It
+    now proves H0-prime and H0 homological unconditionally and uses those
+    theorems locally; no global instance or hidden premise is introduced.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of
