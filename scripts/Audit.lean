@@ -262,6 +262,9 @@ import, no geometry. -/
 #print axioms Support.hasSupportProperty_iff
 #print axioms Support.HasSupportProperty.mono
 #print axioms Support.HasSupportProperty.eq_zero_of_charge_eq_zero
+#print axioms Support.hasSupportProperty_of_norm_sub_le
+#print axioms Support.HasSupportProperty.exists_tolerance
+#print axioms Support.isOpen_hasSupportProperty
 
 /-! ## FiniteLength lane — charges on the free lattice of simples
 
