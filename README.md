@@ -241,19 +241,24 @@ needed: every positive-angle support maximum of the ambient subobject polygon
 is attained on the HN path. This yields the boundary-cut comparison
 `m_HN(A) ≤ m_HN(B) + ‖Z(C)‖` for every short exact sequence
 `0 ⟶ A ⟶ B ⟶ C ⟶ 0`, including Ikeda's positive-real closing edge.
+The induced stability function on the canonical heart is now proved to have
+the converse semistability property as well: every heart-semistable nonzero
+object belongs to the ambient slice at its heart phase. Replacing the
+successive short exact quotients of an abelian HN filtration by distinguished
+triangles therefore produces an ambient HN tower with the same factors.
+Consequently abelian HN mass equals triangulated `stabilityMass` on the heart,
+and the named phase-one boundary-heart proposition is inhabited, with its
+zero-object branch handled explicitly.
 `H0ExactnessBridge` identifies
 the exact heart-source obstruction as monicity of
 `coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
 or `H⁰'` structure without installing a global instance. Of the three major
 mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
-first now has its abelian HN-polygon comparison, including monomorphism and
-short-exact forms. Its remaining integration step is to identify this abelian
-factor mass with the triangulated `stabilityMass` of an object in the canonical
-heart (plus the zero-object cases) before the named boundary-heart proposition
-can be inhabited.
-The second still needs the unconditional homological input (or the equivalent
-cokernel monicity proof). Their named propositions remain uninhabited and are
-not installed as instances or axioms.
+first (phase-one boundary heart) is now complete. The second still needs the
+unconditional homological input (or the equivalent cokernel-monicity proof),
+after which the completed third milestone promotes it to the global triangle
+inequality. The remaining named propositions are not installed as instances
+or axioms.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation

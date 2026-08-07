@@ -223,7 +223,8 @@ fidelity:
     that their inherited topology is definitionally the already-installed
     Section 6 topology. No competing global metric instance is installed.
 
-    OPENED 2026-08-06: the categorical mass-triangle chain.
+    OPENED 2026-08-06, FIRST MILESTONE CLOSED 2026-08-07: the categorical
+    mass-triangle chain.
     StabilityMassTriangle.lean defines the ordinary observable stability
     condition with central charge Z.comp v and exposes its induced heart
     stability function and HN property. It proves the charge lower bound
@@ -236,9 +237,13 @@ fidelity:
     semistable-left targets are named explicitly, and
     stabilityMassTriangleInequality_of_semistable_obj₁ proves the
     arbitrary-left target from the semistable-left one by induction on HN
-    length. The unrestricted heart short-exact inequality, boundary-heart
-    polygon inequality, and semistable-left inequality are not inhabited; no
-    premise is installed as an instance or hidden axiom.
+    length. StabilityMassTriangle.lean now also proves the missing converse
+    heart/slicing semistability implication, converts an abelian HN filtration
+    into an ambient HN tower factor by factor, identifies its real mass with
+    triangulated stabilityMass, and inhabits the phase-one boundary-heart
+    target including zero objects. The unrestricted heart short-exact and
+    semistable-left inequalities are not inhabited; no open premise is
+    installed as an instance or hidden axiom.
 
     FOUNDATION UPDATE 2026-08-06: HNPolygon.lean now defines the HN polygon as
     the convex hull of all subobject charges and realizes an abelian HN
@@ -263,16 +268,17 @@ fidelity:
     precise boundary-cut input for Lemma 3.8: positive-angle support maxima of
     the ambient HN polygon occur on the distinguished HN path, and hence a
     monomorphism A -> B gives m_HN(A) <= m_HN(B) + norm(Z(coker)). The result is
-    also stated for arbitrary short exact sequences. The remaining first-
-    milestone input is no longer geometric containment; it is the integration
-    bridge identifying this abelian factor mass with triangulated
-    stabilityMass on the canonical heart, together with zero-object cases.
+    also stated for arbitrary short exact sequences. The formerly remaining
+    first-milestone integration bridge is now closed in
+    StabilityMassTriangle.lean: abelian factor mass is identified with
+    triangulated stabilityMass on the canonical heart, and the zero-object
+    cases are explicit.
     H0ExactnessBridge.lean packages the heart-source H0 short complex and
     proves that its exactness is equivalent to monicity of the canonical
     cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
     exactness locally; no global homological instance is installed, so the
     equivalent unconditional monicity proof remains open as well. The first
-    two mass-triangle milestone propositions therefore remain uninhabited.
+    mass-triangle milestone is inhabited; the second remains open.
 
     SECONDARY SOURCE NOTE: this two-stage route is the t = 0 specialization
     of Akishi Ikeda, Mass growth of objects and categorical entropy,
@@ -280,8 +286,8 @@ fidelity:
     the proof of Proposition 3.3 then uses the H0 long exact sequence and its
     kernel/image short-exact decompositions. The present files now formalize
     the abelian polygon comparison and the exactness interfaces needed by that
-    proof, but not yet the triangulated stabilityMass statement or Proposition
-    3.3 itself.
+    proof and the canonical-heart triangulated stabilityMass statement, but
+    not yet Proposition 3.3 itself.
 
     This still is NOT a completed formalization of Proposition 8.1 or the
     literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
@@ -495,6 +501,19 @@ fidelity:
     The regenerated environment emitter reports 1375 constants, 741 in scope,
     and zero constants depending on sorryAx.
 
+    COUNT UPDATE (canonical-heart mass bridge and boundary milestone),
+    2026-08-07. Four additional public declarations prove uniqueness of
+    abelian HN factor mass, the converse heart-to-slicing semistability
+    implication, equality of abelian HN mass with triangulated stabilityMass
+    on the canonical heart, and the phase-one boundary-heart inequality with
+    zero objects included. The strict audit now covers 622 declarations, all
+    within [propext, Classical.choice, Quot.sound], with no sorryAx. The root
+    build completes at 3795 jobs. This count is pinned to code commit b1a0910.
+    The declaration linter remains at exactly
+    the six inherited findings and has none in ConvexPolygonPerimeter or
+    StabilityMassTriangle. The regenerated emitter reports 1397 constants,
+    745 in scope, and zero constants depending on sorryAx.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -515,7 +534,7 @@ fidelity:
     and two fields quoting different bare numbers is the normal failure, not an
     unlucky one. Quote the commit with the count, or do not quote the count.
   builds_clean: true
-  builds_clean_date: 2026-08-06
+  builds_clean_date: 2026-08-07
   builds_clean_note: >
     Merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06 with a
     Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
@@ -550,6 +569,12 @@ fidelity:
     build to 3794 jobs. The strict parser accepts all 618 audit records with
     the standard allowlist and no sorryAx. The regenerated emitter records
     1375 constants, 741 in scope, and zero constants depending on sorryAx.
+    At code commit b1a0910, the canonical-heart mass bridge makes `lake build`
+    complete all 3795 jobs. The strict parser accepts all 622 audit records
+    with the standard allowlist and no sorryAx. The declaration linter retains
+    exactly the six inherited findings and has none in either changed module.
+    The environment emitter records 1397 constants, 745 in scope, and zero
+    constants depending on sorryAx.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -615,9 +640,23 @@ fidelity:
     handles the appended positive-real edge directly, and concludes the
     monomorphism, cokernel-mass, and short-exact inequalities. The build covers
     3794 jobs, the strict audit covers 618 declarations, and the emitter finds
-    no sorryAx dependency among 1375 constants. The remaining first-milestone
-    gap is the abelian-HN-mass-to-triangulated-stabilityMass bridge in the
-    canonical heart. The H0 unconditional exactness gap is unchanged.
+    no sorryAx dependency among 1375 constants. At that commit the remaining
+    first-milestone gap was the abelian-HN-mass-to-triangulated-stabilityMass
+    bridge in the canonical heart.
+
+    Code commit b1a0910 closes that gap. Abelian HN mass is first proved
+    independent of filtration from the identity-monomorphism
+    boundary comparison. StabilityMassTriangle.lean proves the converse
+    heart-semistability-to-slice implication by bounding the ambient extreme
+    phases through the first-factor image and last-factor quotient. It then
+    realizes every abelian HN chain as an ambient Postnikov/HN tower and proves
+    equality with stabilityMass. The resulting theorem inhabits
+    StabilityMassBoundaryHeartInequality, including the zero-source case. The
+    root build completes at 3795 jobs; all 622 audited declarations pass the
+    standard allowlist with no sorryAx; the emitter reports 1397 constants
+    (745 in scope) with no sorryAx dependency; and the linter has no finding in
+    either changed module. The H0 unconditional exactness gap, and therefore
+    the semistable-left milestone, is unchanged.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -901,9 +940,10 @@ fidelity:
     base cases and the arbitrary-left filtration assembly. In particular,
     defining StabilityMassBoundaryHeartInequality,
     StabilityMassSemistableLeftTriangleInequality, and
-    StabilityMassHeartShortExactInequality records proof targets; it does not
-    supply terms of those propositions. The abelian phase-one boundary-heart
-    polygon comparison is complete; its bridge to triangulated stabilityMass
+    StabilityMassHeartShortExactInequality records the three proof targets.
+    The phase-one boundary-heart target is now supplied: the abelian polygon
+    comparison is bridged to triangulated stabilityMass by an explicit ambient
+    HN tower built from every abelian HN chain. The unrestricted heart target
     and the semistable-left cohomological reduction remain open. The
     theorem stabilityMassTriangleInequality_of_semistable_obj₁ proves that
     the latter, once supplied, implies the unconditional global triangle
@@ -917,8 +957,7 @@ fidelity:
     H0ExactnessBridge.lean supplies the exact cohomological interface:
     heart-source exactness iff the canonical cokernel comparison is monic,
     with local consequences from homological H0 or H0-prime. Neither file
-    hides the remaining mass-identification or homologicality theorem in an
-    instance.
+    hides the remaining homologicality theorem in an instance.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of
