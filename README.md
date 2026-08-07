@@ -362,29 +362,34 @@ H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
 The two agree wherever the usual one can be stated, but they are not literally
 the same definition, and a reader comparing to a textbook should know it.
 
-**Five of the six non-trivial `TStructure` fields are proved.** The aisles
-exist at every integer level, and:
+**Every `TStructure` field is proved, and `tilt` assembles them** into a
+genuine `Triangulated.TStructure`:
 
-| field | status |
+| field | theorem |
 |---|---|
-| `le_isClosedUnderIsomorphisms` / `ge_…` | proved |
-| `le_shift` / `ge_shift` | proved — one `shiftFunctorAdd'` each |
-| `le_zero_le` / `ge_one_le` | proved — pure degree counts against `t.zero` |
-| `zero'` | proved — no cohomology functor in the proof |
-| `exists_triangle_zero_one` | **not proved** |
+| `le_isClosedUnderIsomorphisms` / `ge_…` | `tiltLEAt_isClosedUnderIsomorphisms` / `…` |
+| `le_shift` / `ge_shift` | `tiltLEAt_shift` / `tiltGEAt_shift` — one `shiftFunctorAdd'` each |
+| `le_zero_le` / `ge_one_le` | `tiltLEAt_zero_le` / `tiltGEAt_one_le` — pure degree counts |
+| `zero'` | `tiltAt_zero'` |
+| `exists_triangle_zero_one` | `exists_tilt_triangle` — two octahedra |
 
-`zero'` carries `[IsTriangulated C]` explicitly, because the octahedral axiom is
-what makes `τ^{≥0}` preserve `D^{≤0}` — which is how the truncation lands in the
-heart. Both inclusions turn out not to use the orthogonality hypothesis they're
-handed at all.
+`tilt` carries `[IsTriangulated C]` explicitly, and it earns it three times: the
+octahedral axiom is what makes `τ^{≥0}` preserve `D^{≤0}` (so the truncation
+lands in the heart), and it supplies both octahedra in the last field.
 
-The one remaining field needs the long exact sequence of `H⁰` — the machinery
-missing above. **Nothing is declared with `sorry`, and no `TStructure` instance
-is assembled.**
+The last field is where the choice of *which* octahedron matters.
+`Octahedron'` works with **fibres**, so on `B → H → F₀` its three fibres are
+`τ^{≤-1}A`, `X`, `T₀` — giving `τ^{≤-1}A → X → T₀` with no desuspension.
+`Octahedron` works with **cones**, so on `X → B → A` its three cones are `F₀`,
+`Y`, `τ^{≥1}A`. Both outputs are exactly what the two recognition lemmas
+consume.
 
-**So there is no tilt in this repository.** Do not cite `Tilting/` as a
-formalization of Happel–Reiten–Smalø. Nothing in the lane connects to a
-stability condition yet.
+**Nothing is declared with `sorry`.**
+
+**What is still not here.** `tilt` is a t-structure on a triangulated category.
+Nothing in the lane connects it to a stability condition, and nothing
+identifies the tilted heart with the extension closure of `T` and `F⟦1⟧` — the
+usual description. Both are further theorems.
 
 ### Lane 5 — `Support/` (the Kontsevich–Soibelman reformulation)
 

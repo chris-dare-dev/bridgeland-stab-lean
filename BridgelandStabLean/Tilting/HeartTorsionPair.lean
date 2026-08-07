@@ -9,9 +9,12 @@ import Mathlib.Tactic
 /-!
 # Torsion pairs on a heart, and the tilted aisles
 
-Groundwork for the Happel–Reiten–Smalø tilt. **The tilt itself is not
-constructed here**; see the trust record and the TODO at the end of this file
-for exactly what is missing and why.
+The Happel–Reiten–Smalø tilt: from a torsion pair on the heart of a
+t-structure, a second t-structure whose heart is the extension of the torsion
+class by the shifted torsion-free class.
+
+**The tilt is constructed here**, as `HeartTorsionPair.tilt`, with every field
+proved and nothing declared with `sorry`.
 
 ## The one design decision worth explaining
 
@@ -43,20 +46,17 @@ here, where the usual one is not.
 ## Status
 
 Established here: the datum, the aisles at every integer level with their
-isomorphism-closure, the factorisation lemma standing in for the counit, the
-orthogonality characterisation of the torsion class, and **five of the six
-non-trivial `TStructure` fields** — both shift axioms, both inclusions, and the
-Hom-vanishing axiom.
+isomorphism-closure, the factorisation lemma standing in for the counit, and
+the orthogonality characterisation of the torsion class.
 
-**`exists_triangle_zero_one` is the one field not proved.** It is *assembly
-work, not blocked work*: `tiltLEAt_zero_of_triangle` and
-`tiltGEAt_one_of_triangle` are its two halves and neither needs a cohomology
-functor. What is left is producing the two triangles they consume, which is
-three steps of triangle bookkeeping — see the TODO at the end of the file.
+All six non-trivial `TStructure` fields are proved, and `tilt` assembles them.
+`exists_triangle_zero_one` — the last and hardest — is `exists_tilt_triangle`,
+built from two octahedra and no cohomology functor.
 
-It is not declared, not even with `sorry`; see §2 of `CLAUDE.md` for why that
-rule exists. So no `TStructure` instance is assembled and there is still no
-tilt here.
+`tilt` requires `[IsTriangulated C]`. That is not incidental: the octahedral
+axiom is what makes `τ^{≥0}` preserve `D^{≤0}`, which is what puts `H⁰` in the
+heart, and it is also what supplies the two octahedra. It is carried
+explicitly rather than assumed globally.
 -/
 
 namespace BridgelandStabLean.Tilting
@@ -105,8 +105,8 @@ variable (P : HeartTorsionPair t)
 
 /-! ### The tilted aisles
 
-Both are stated at the level where the tilt lives; the shifted family a full
-`TStructure` needs is not built here. -/
+Stated first at the level the tilt is defined at; `tiltLEAt` / `tiltGEAt` below
+extend them to every integer, which is what a `TStructure` needs. -/
 
 /-- The tilted co-aisle `D^{≤0}_†`: objects of `D^{≤0}` with no nonzero map to
 a torsion-free object. Under the counit isomorphism this says `H⁰(X) ∈ T`. -/
@@ -391,72 +391,178 @@ theorem tiltGEAt_one_of_triangle {F₀ Y W : C} (hF : P.free F₀) (hW : t.IsGE 
     (hdist : Triangle.mk f g h ∈ distTriang C) : P.tiltGEAt 1 Y :=
   (P.tiltGEAt_one_iff Y).mpr (P.tiltGE_of_triangle hF hW hdist)
 
-/-! ### TODO — what remains of the tilt, and why it is not here
+/-! ### The truncation triangle for the tilted aisles
 
-The two aisles above, together with the shifted family, are meant to assemble
-into a `Triangulated.TStructure C`. Of its fields:
+The last field. Two octahedra do all the work, and the choice of *which*
+octahedron is the whole trick:
 
-**Five of the six non-trivial fields are proved. One is not.**
+* `Octahedron'` works with **fibres**, and applied to `B ⟶ H ⟶ F₀` its three
+  fibres are `Z`, `X`, `T₀` — delivering `Z ⟶ X ⟶ T₀` with no desuspension.
+  The cone-flavoured `Octahedron` would give the same triangle shifted once,
+  and unshifting it costs sign bookkeeping for nothing.
+* `Octahedron` works with **cones**, and applied to `X ⟶ B ⟶ A` its three
+  cones are `F₀`, `Y`, `W` — delivering `F₀ ⟶ Y ⟶ W` directly.
 
-* `le_isClosedUnderIsomorphisms` / `ge_isClosedUnderIsomorphisms` — **done**;
-* `le_shift` / `ge_shift` — **done**, as `tiltLEAt_shift` / `tiltGEAt_shift`;
-* `le_zero_le` / `ge_one_le` — **done**, as `tiltLEAt_zero_le` /
-  `tiltGEAt_one_le`. Neither uses the orthogonality hypothesis it is handed:
-  both are pure degree counts against `t.zero`;
-* `zero'` — **done**, as `hom_eq_zero_of_tiltLE_of_tiltGE`, and transported to
-  the indexed families as `tiltAt_zero'`. No cohomology functor appears in the
-  proof. It needs `[IsTriangulated C]`: the octahedral axiom is what makes
-  `τ^{≥0}` preserve `D^{≤0}`, which is how `τ^{≥0}X` gets into the heart. That
-  hypothesis is real and is carried explicitly rather than assumed globally;
-* `free_of_orthogonal` — not a `TStructure` field, and the dual of
-  `tors_of_orthogonal`. **Not done**: it is not needed for `zero'`, and the
-  inverse-rotation bookkeeping it wants is not worth carrying speculatively;
-* `exists_triangle_zero_one` — **the one remaining field. It is assembly work,
-  not blocked work**, and the earlier claim in this file that it needs a
-  cohomology functor is now known to be false. See below.
+Both outputs are exactly what `tiltLE_of_triangle` and `tiltGE_of_triangle`
+consume. -/
 
-### `exists_triangle_zero_one`: what is actually left
+/-- **The tilted truncation triangle, from abstract triangle data.**
 
-`tiltLEAt_zero_of_triangle` and `tiltGEAt_one_of_triangle` are the two halves
-of the field, and neither needs `Hⁿ`. What remains is producing the two
-triangles they consume, from the truncation triangles and the torsion pair.
-Writing `B := τ^{≤0}A`, `H := τ^{≥0}B` (in the heart, by the same argument
-`zero'` uses), and `T₀ → H → F₀` for its torsion decomposition:
+Separated from the instantiation so that the octahedral content is visible on
+its own: given the two t-structure truncation triangles and the torsion
+decomposition of the heart object between them, this produces the tilted
+truncation of `A`. -/
+theorem exists_tilt_triangle_of_data [IsTriangulated C] {A B W Z H T₀ F₀ : C}
+    {zb : Z ⟶ B} {bh : B ⟶ H} {hz : H ⟶ Z⟦(1 : ℤ)⟧}
+    (hZBH : Triangle.mk zb bh hz ∈ distTriang C)
+    {ba : B ⟶ A} {aw : A ⟶ W} {wb : W ⟶ B⟦(1 : ℤ)⟧}
+    (hBAW : Triangle.mk ba aw wb ∈ distTriang C)
+    {th : T₀ ⟶ H} {hf : H ⟶ F₀} {ft : F₀ ⟶ T₀⟦(1 : ℤ)⟧}
+    (hTHF : Triangle.mk th hf ft ∈ distTriang C)
+    (hZ : t.IsLE Z (-1)) (hT : P.tors T₀) (hF : P.free F₀) (hW : t.IsGE W 1) :
+    ∃ (X Y : C) (_ : P.tiltLEAt 0 X) (_ : P.tiltGEAt 1 Y)
+      (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C := by
+  -- `X` is the fibre of `B ⟶ F₀`; the fibre octahedron makes it an extension
+  -- of `T₀` by `Z`, which is the shape the co-aisle recognises.
+  obtain ⟨X, xb, fx, hXBF⟩ := distinguished_cocone_triangle₁ (bh ≫ hf)
+  have hX : P.tiltLEAt 0 X :=
+    P.tiltLEAt_zero_of_triangle hZ hT
+      (Triangulated.someOctahedron' rfl hZBH hTHF hXBF).mem
+  -- `Y` is the cone of `X ⟶ A`; the cone octahedron makes it an extension of
+  -- `W` by `F₀`, which is the shape the aisle recognises.
+  obtain ⟨Y, ay, yx, hXAY⟩ := distinguished_cocone_triangle (xb ≫ ba)
+  have hY : P.tiltGEAt 1 Y :=
+    P.tiltGEAt_one_of_triangle hF hW
+      (Triangulated.someOctahedron rfl hXBF hBAW hXAY).mem
+  exact ⟨X, Y, hX, hY, xb ≫ ba, ay, yx, hXAY⟩
 
-1. **Build `X`.** Complete `T₀ → H --δ--> (τ^{≤-1}A)⟦1⟧` to a triangle and
-   rotate, giving `τ^{≤-1}A → X → T₀ → (τ^{≤-1}A)⟦1⟧`. `tiltLEAt_zero_of_triangle`
-   then applies directly. Cheap: `distinguished_cocone_triangle` plus rotation.
-2. **Get `X ⟶ A`.** TR3 against the triangle `τ^{≤-1}A → B → H` gives `X ⟶ B`,
-   which composes with `B ⟶ A`.
-3. **Identify `cone(X ⟶ A)`.** The octahedron on `X ⟶ B ⟶ A` gives
-   `cone(X⟶B) → cone(X⟶A) → cone(B⟶A) →`. Here `cone(B⟶A) = τ^{≥1}A`, and
-   `cone(X⟶B) ≅ F₀` because `X ⟶ B` covers `T₀ ⟶ H` over a common
-   `τ^{≤-1}A`. That last isomorphism is the fiddliest step and is where the
-   remaining effort sits. `tiltGEAt_one_of_triangle` then finishes it.
+/-- **`exists_triangle_zero_one` for the tilted aisles.**
 
-None of the three needs a cohomology functor; all three are triangle
-bookkeeping. **They are not done here**, and nothing below is declared with
-`sorry`.
+Every object has a tilted truncation. With the five fields already proved
+above, this completes the Happel–Reiten–Smalø tilt as a `TStructure`. -/
+theorem exists_tilt_triangle [IsTriangulated C] (A : C) :
+    ∃ (X Y : C) (_ : P.tiltLEAt 0 X) (_ : P.tiltGEAt 1 Y)
+      (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C := by
+  -- `B = τ^{≤0}A`, `W = τ^{≥1}A`.
+  have hBAW := t.triangleLTGE_distinguished 1 A
+  set B := ((t.triangleLTGE 1).obj A).obj₁ with hBdef
+  haveI : t.IsLE B 0 := t.isLE_of_le B (1 - 1) 0 (by lia)
+  -- `Z = τ^{≤-1}B`, `H = τ^{≥0}B`, and `H` lies in the heart.
+  have hZBH := t.triangleLTGE_distinguished 0 B
+  -- `IsGE` is immediate; `IsLE` needs the octahedral axiom, via the same
+  -- `truncGE`-preserves-`D^{≤0}` instance that `zero'` leans on.
+  have hHle : t.IsLE ((t.triangleLTGE 0).obj B).obj₃ 0 := by
+    have hobj : ((t.triangleLTGE 0).obj B).obj₃ = (t.truncGE 0).obj B := rfl
+    rw [hobj]; infer_instance
+  obtain ⟨T₀, F₀, hT, hF, th, hf, ft, hTHF⟩ :=
+    P.exists_triangle ((t.triangleLTGE 0).obj B).obj₃ hHle inferInstance
+  exact P.exists_tilt_triangle_of_data hZBH hBAW hTHF
+    (t.isLE_of_le _ (0 - 1) (-1) (by lia)) hT hF inferInstance
 
-Superseded reasoning, kept because the correction is the useful part: this file
-previously said the field needs the long exact cohomology sequence of `H⁰`.
-That was inferred from the textbook construction, which cuts `X` as the fibre
-of `B ⟶ F₀`. **That shape genuinely does need cohomology** — `IsLE X 0` then
-depends on `H⁰(A) ⟶ F₀` being epi, and formally `Hom(X, Z)` only injects into
-`Hom(F₀⟦-1⟧, Z)`, which does not vanish for degree reasons. The extension shape
-used above has both ends in `D^{≤0}` already and sidesteps it entirely. The
-obstruction was in the chosen construction, not in the theorem.
+/-! ### The tilt
 
-Producing the
-  truncation triangle for the tilted aisles is the octahedral-axiom step, and
-  it needs the long exact cohomology sequence of `H⁰`, i.e. that `H⁰` is a
-  homological functor. Mathlib has no `H⁰` for a t-structure at all, and the
-  anchor's `HeartEquivalence/H0Homological.lean` establishes exactness only in
-  named special cases.
+All six non-trivial fields are proved, so the tilted aisles assemble into an
+honest `Triangulated.TStructure`. -/
 
-Per `CLAUDE.md` §2 none of these is declared with `sorry`. A sorry-backed
-`TStructure` instance would typecheck, get imported, and launder an unproved
-tilt into everything downstream.
+instance tiltLEAt_isClosedUnderIsomorphisms (n : ℤ) :
+    (P.tiltLEAt n).IsClosedUnderIsomorphisms where
+  of_iso {X Y} e hX := by
+    obtain ⟨hle, horth⟩ := hX
+    haveI := hle
+    exact ⟨t.isLE_of_iso e n,
+      ObjectProperty.prop_of_iso P.torsOrth ((shiftFunctor C n).mapIso e) horth⟩
+
+instance tiltGEAt_isClosedUnderIsomorphisms (n : ℤ) :
+    (P.tiltGEAt n).IsClosedUnderIsomorphisms where
+  of_iso {X Y} e hX := by
+    obtain ⟨hge, horth⟩ := hX
+    haveI := hge
+    exact ⟨t.isGE_of_iso e (n - 1),
+      ObjectProperty.prop_of_iso P.freeOrth ((shiftFunctor C (n - 1)).mapIso e) horth⟩
+
+/-- **The Happel–Reiten–Smalø tilt of `t` at the torsion pair `P`.**
+
+The aisles are `tiltLEAt` and `tiltGEAt`; every field is one of the theorems
+above. No cohomology functor appears anywhere in the construction — see the
+module docstring for why the usual one is unavailable here and what replaces
+it. -/
+def tilt [IsTriangulated C] : TStructure C where
+  le := P.tiltLEAt
+  ge := P.tiltGEAt
+  le_isClosedUnderIsomorphisms n := P.tiltLEAt_isClosedUnderIsomorphisms n
+  ge_isClosedUnderIsomorphisms n := P.tiltGEAt_isClosedUnderIsomorphisms n
+  le_shift := P.tiltLEAt_shift
+  ge_shift := P.tiltGEAt_shift
+  zero' _ _ f hX hY := P.tiltAt_zero' hX hY f
+  le_zero_le := P.tiltLEAt_zero_le
+  ge_one_le := P.tiltGEAt_one_le
+  exists_triangle_zero_one := P.exists_tilt_triangle
+
+@[simp]
+theorem tilt_le [IsTriangulated C] (n : ℤ) : (P.tilt).le n = P.tiltLEAt n := rfl
+
+@[simp]
+theorem tilt_ge [IsTriangulated C] (n : ℤ) : (P.tilt).ge n = P.tiltGEAt n := rfl
+
+/-- The tilt of the degenerate torsion pair changes nothing at level zero on
+the co-aisle side, in the sense that its membership is the original `IsLE`
+condition together with a vacuous orthogonality clause. Recorded as a sanity
+check on the indexing rather than as a result. -/
+theorem tilt_le_zero_iff [IsTriangulated C] (X : C) :
+    (P.tilt).le 0 X ↔ (t.IsLE X 0 ∧ P.torsOrth (X⟦(0 : ℤ)⟧)) := Iff.rfl
+
+/-! ### What is proved, and what is not
+
+**Every field of `Triangulated.TStructure` is proved**, and `tilt` is the
+resulting t-structure:
+
+| field | theorem |
+|---|---|
+| `le_isClosedUnderIsomorphisms` / `ge_…` | `tiltLEAt_isClosedUnderIsomorphisms` / `tiltGEAt_…` |
+| `le_shift` / `ge_shift` | `tiltLEAt_shift` / `tiltGEAt_shift` |
+| `le_zero_le` / `ge_one_le` | `tiltLEAt_zero_le` / `tiltGEAt_one_le` |
+| `zero'` | `tiltAt_zero'`, on `hom_eq_zero_of_tiltLE_of_tiltGE` |
+| `exists_triangle_zero_one` | `exists_tilt_triangle` |
+
+Neither inclusion uses the orthogonality hypothesis it is handed — both are
+pure degree counts against `t.zero`.
+
+### What is still not here
+
+* **`free_of_orthogonal`**, the dual of `tors_of_orthogonal`. Not a
+  `TStructure` field, not needed for `zero'`, and its inverse-rotation
+  bookkeeping is not worth carrying speculatively.
+* **Any connection to a stability condition.** `tilt` is a t-structure on a
+  triangulated category. That the tilted heart is the heart of a stability
+  condition, or that tilting is how stability conditions on surfaces are
+  built, is *motivation* for this file and is not formalised in it.
+* **Any identification of the tilted heart.** The heart of `tilt` is
+  `tilt.heart`, and nothing here proves it is the extension closure of `T` and
+  `F⟦1⟧` — the usual description. That is a further theorem.
+
+### The correction that made this possible
+
+Kept because the wrong turn is what a reader would otherwise repeat. Earlier
+revisions of this file asserted that `exists_triangle_zero_one` needs the long
+exact cohomology sequence of `H⁰`, and treated it as blocked on machinery
+Mathlib does not have.
+
+That was inferred from the **textbook construction**, which cuts `X` as the
+fibre of `τ^{≤0}A ⟶ F₀`. **That shape genuinely does need cohomology**:
+`IsLE X 0` then depends on `H⁰(A) ⟶ F₀` being epi, and formally `Hom(X, Z)`
+only injects into `Hom(F₀⟦-1⟧, Z)`, which does not vanish for degree reasons.
+
+The shape used here builds `X` as an **extension of `T₀` by `τ^{≤-1}A`**, whose
+two ends are already in `D^{≤0}`, so `isLE₂` closes the degree half and one
+factorisation closes the orthogonality half. The obstruction was in the chosen
+construction, not in the theorem.
+
+The same substitution runs throughout: `τ^{≥0}X` plays the role of `H⁰(X)`,
+`exists_factor_truncGE` plays the role of the counit isomorphism, and
+Hom-orthogonality plays the role of membership in `T`. None of the three needs
+a cohomology functor to exist.
 -/
 
 end HeartTorsionPair

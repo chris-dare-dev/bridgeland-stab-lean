@@ -227,6 +227,23 @@ and this one does not. -/
 #print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_of_triangle
 #print axioms Tilting.HeartTorsionPair.tiltGEAt_one_of_triangle
 
+/-! ## Tilting lane — the Happel-Reiten-Smalo tilt
+
+`tilt` is a genuine Triangulated.TStructure: every field is proved, none is
+sorry-backed, and no cohomology functor appears in the construction. Note
+`tilt` is a `def`, so its clean axiom line reports the axiom closure of a
+CONSTRUCTION -- the theorems it is built from are the six field lemmas above
+and below. -/
+
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.exists_tilt_triangle_of_data
+#print axioms Tilting.HeartTorsionPair.exists_tilt_triangle
+#print axioms Tilting.HeartTorsionPair.tilt
+#print axioms Tilting.HeartTorsionPair.tilt_le
+#print axioms Tilting.HeartTorsionPair.tilt_ge
+#print axioms Tilting.HeartTorsionPair.tilt_le_zero_iff
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
