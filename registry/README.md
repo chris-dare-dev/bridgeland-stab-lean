@@ -35,9 +35,16 @@ same commit that introduces it**. Three are in use:
   only rule that compares a digest to the text it summarizes rather than to
   another digest, and it will catch this.
 - **`relation_claimed: exact` is not available while an entry has an open
-  frontier item.** That is `E-05`. Four items are open today:
-  `gltilde-universal-cover` and `autpairquot-not-aut-d` on `lem-8.2`, and
-  `stability-mass-triangle` on `prop-8.1` and its obligation.
+  frontier item.** That is `E-05`. **Two** are open today:
+  `autpairquot-not-aut-d` on `lem-8.2`, and `stability-mass-triangle` on
+  `prop-8.1` and its obligation. Both `lem-8.2` and `prop-8.1` therefore remain
+  non-`exact`.
+
+  `gltilde-universal-cover` was discharged on 2026-08-07 by Chris Dare, on
+  `GLTilde.universalCoverData` together with `exact_deckHom_toMatHom`. Note what
+  that did **not** do: `lem-8.2` carried two items, so closing one moved it no
+  closer to `exact`. A discharge is progress toward citability only when it was
+  the last item on the entry.
 - **A frontier item is a live gate, so a stale one silently opens the gate.**
   This is not hypothetical. `gltilde-universal-cover` asserted from 2026-08-05
   to 2026-08-06 that the covering-map, surjectivity and simple-connectedness
@@ -52,7 +59,13 @@ same commit that introduces it**. Three are in use:
   `discharged_by_reviewer`, and per
   [`ADR-0005`](../.claude/decisions/ADR-0005-trust-axes.md) an agent may not
   fill it. A machine review may correct a false `statement`; it may not close
-  the item.
+  the item. This is why `gltilde-universal-cover` sat corrected-but-open from
+  2026-08-06 to 2026-08-07: the review that found it false was not entitled to
+  close it.
+- **Discharging a frontier item is not a source-faithfulness review.** They are
+  different axes and neither implies the other. `fidelity.human_review` is
+  `none` and stays `none` until a human performs and records the four-axis
+  review; the 2026-08-07 discharge did not touch it.
 
 ## Why JSON and not YAML
 

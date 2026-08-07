@@ -1114,7 +1114,13 @@ fidelity:
     would have permitted `exact` on Lemma 8.2 while the two gaps that actually
     block it had no item at all. Corrected, and two real items minted:
     `autpairquot-not-aut-d` on lem-8.2 and `stability-mass-triangle` on
-    prop-8.1.
+    prop-8.1. DISCHARGED 2026-08-07 by Chris Dare, on
+    GLTilde.universalCoverData together with exact_deckHom_toMatHom. That
+    closed the covering-space gap ONLY: lem-8.2 carried two frontier items, so
+    closing one left it exactly as far from `exact` as before, and prop-8.1
+    still carries stability-mass-triangle. A discharge is progress toward
+    citability only when it was the last item on the entry, and this was not.
+    It is also not a source-faithfulness review; human_review stays none.
 
     (2) lakefile.toml and exe/Emit.lean asserted in the present tense that CI
     runs the emitter gate. At 56c7531 it did not; the step landed at 6259180,
