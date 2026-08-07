@@ -48,9 +48,15 @@ orthogonality characterisation of the torsion class, and **five of the six
 non-trivial `TStructure` fields** — both shift axioms, both inclusions, and the
 Hom-vanishing axiom.
 
-**`exists_triangle_zero_one` is the one field not proved**, and it is not
-declared, not even with `sorry`; see §2 of `CLAUDE.md` for why that rule exists.
-So no `TStructure` instance is assembled and there is still no tilt here.
+**`exists_triangle_zero_one` is the one field not proved.** It is *assembly
+work, not blocked work*: `tiltLEAt_zero_of_triangle` and
+`tiltGEAt_one_of_triangle` are its two halves and neither needs a cohomology
+functor. What is left is producing the two triangles they consume, which is
+three steps of triangle bookkeeping — see the TODO at the end of the file.
+
+It is not declared, not even with `sorry`; see §2 of `CLAUDE.md` for why that
+rule exists. So no `TStructure` instance is assembled and there is still no
+tilt here.
 -/
 
 namespace BridgelandStabLean.Tilting
@@ -322,6 +328,69 @@ theorem tiltAt_zero' [IsTriangulated C] {X Y : C}
   P.hom_eq_zero_of_tiltLE_of_tiltGE ((P.tiltLEAt_zero_iff X).mp hX)
     ((P.tiltGEAt_one_iff Y).mp hY) f
 
+/-! ### Recognising the two aisles from a triangle
+
+These are the shapes the two halves of a tilted truncation take, and they are
+the reason the tilt does **not** need a cohomology functor after all.
+
+The textbook construction of `exists_triangle_zero_one` says: cut `H⁰(A)` by
+the torsion pair as `0 → T₀ → H⁰(A) → F₀ → 0`, then take
+
+```
+X = extension of T₀ by τ^{≤-1}A,      Y = extension of τ^{≥1}A by F₀.
+```
+
+Membership of `X` and `Y` in the two aisles is then usually read off a long
+exact cohomology sequence. The two lemmas below get it instead from
+`isLE₂`/`isGE₂` plus a single factorisation through the triangle — no `Hⁿ`
+anywhere.
+
+A first attempt built `X` as the fibre of `τ^{≤0}A → F₀` instead. That shape
+does **not** work formally: `IsLE X 0` then sits between `0` and
+`Hom(F₀⟦-1⟧, Z)`, which does not vanish for degree reasons, and recovering it
+genuinely needs that `H⁰(A) → F₀` is epi. The extension shape below avoids that
+entirely, because both of its ends are already in `D^{≤0}`. -/
+
+/-- **An extension of a torsion object by an object of `D^{≤-1}` lies in the
+tilted co-aisle.** -/
+theorem tiltLE_of_triangle {Z X T₀ : C} (hZ : t.IsLE Z (-1)) (hT : P.tors T₀)
+    {f : Z ⟶ X} {g : X ⟶ T₀} {h : T₀ ⟶ Z⟦(1 : ℤ)⟧}
+    (hdist : Triangle.mk f g h ∈ distTriang C) : P.tiltLE X := by
+  haveI := hZ
+  haveI := P.tors_isLE T₀ hT
+  refine ⟨t.isLE₂ _ hdist 0 (t.isLE_of_le Z (-1) 0 (by lia)) (P.tors_isLE T₀ hT), ?_⟩
+  intro F' hF' u
+  obtain ⟨u', hu'⟩ := Triangle.yoneda_exact₂ _ hdist u
+    (t.zero_of_isLE_of_isGE _ (-1) 0 (by lia) hZ (P.free_isGE F' hF'))
+  rw [hu', P.hom_eq_zero hT hF' u']
+  exact comp_zero
+
+/-- **An extension of an object of `D^{≥1}` by a torsion-free object lies in
+the tilted aisle.** -/
+theorem tiltGE_of_triangle {F₀ Y W : C} (hF : P.free F₀) (hW : t.IsGE W 1)
+    {f : F₀ ⟶ Y} {g : Y ⟶ W} {h : W ⟶ F₀⟦(1 : ℤ)⟧}
+    (hdist : Triangle.mk f g h ∈ distTriang C) : P.tiltGE Y := by
+  haveI := hW
+  haveI := P.free_isGE F₀ hF
+  refine ⟨t.isGE₂ _ hdist 0 (P.free_isGE F₀ hF) (t.isGE_of_ge W 0 1 (by lia)), ?_⟩
+  intro T hT u
+  obtain ⟨u', hu'⟩ := Triangle.coyoneda_exact₂ _ hdist u
+    (t.zero_of_isLE_of_isGE _ 0 1 (by lia) (P.tors_isLE T hT) hW)
+  rw [hu', P.hom_eq_zero hT hF u']
+  exact zero_comp
+
+/-- The co-aisle recognition, in the indexed form a `TStructure` field wants. -/
+theorem tiltLEAt_zero_of_triangle {Z X T₀ : C} (hZ : t.IsLE Z (-1)) (hT : P.tors T₀)
+    {f : Z ⟶ X} {g : X ⟶ T₀} {h : T₀ ⟶ Z⟦(1 : ℤ)⟧}
+    (hdist : Triangle.mk f g h ∈ distTriang C) : P.tiltLEAt 0 X :=
+  (P.tiltLEAt_zero_iff X).mpr (P.tiltLE_of_triangle hZ hT hdist)
+
+/-- The aisle recognition, in the indexed form a `TStructure` field wants. -/
+theorem tiltGEAt_one_of_triangle {F₀ Y W : C} (hF : P.free F₀) (hW : t.IsGE W 1)
+    {f : F₀ ⟶ Y} {g : Y ⟶ W} {h : W ⟶ F₀⟦(1 : ℤ)⟧}
+    (hdist : Triangle.mk f g h ∈ distTriang C) : P.tiltGEAt 1 Y :=
+  (P.tiltGEAt_one_iff Y).mpr (P.tiltGE_of_triangle hF hW hdist)
+
 /-! ### TODO — what remains of the tilt, and why it is not here
 
 The two aisles above, together with the shifted family, are meant to assemble
@@ -342,8 +411,43 @@ into a `Triangulated.TStructure C`. Of its fields:
 * `free_of_orthogonal` — not a `TStructure` field, and the dual of
   `tors_of_orthogonal`. **Not done**: it is not needed for `zero'`, and the
   inverse-rotation bookkeeping it wants is not worth carrying speculatively;
-* `exists_triangle_zero_one` — **the one remaining field, and the real
-  obstruction.** Producing the
+* `exists_triangle_zero_one` — **the one remaining field. It is assembly work,
+  not blocked work**, and the earlier claim in this file that it needs a
+  cohomology functor is now known to be false. See below.
+
+### `exists_triangle_zero_one`: what is actually left
+
+`tiltLEAt_zero_of_triangle` and `tiltGEAt_one_of_triangle` are the two halves
+of the field, and neither needs `Hⁿ`. What remains is producing the two
+triangles they consume, from the truncation triangles and the torsion pair.
+Writing `B := τ^{≤0}A`, `H := τ^{≥0}B` (in the heart, by the same argument
+`zero'` uses), and `T₀ → H → F₀` for its torsion decomposition:
+
+1. **Build `X`.** Complete `T₀ → H --δ--> (τ^{≤-1}A)⟦1⟧` to a triangle and
+   rotate, giving `τ^{≤-1}A → X → T₀ → (τ^{≤-1}A)⟦1⟧`. `tiltLEAt_zero_of_triangle`
+   then applies directly. Cheap: `distinguished_cocone_triangle` plus rotation.
+2. **Get `X ⟶ A`.** TR3 against the triangle `τ^{≤-1}A → B → H` gives `X ⟶ B`,
+   which composes with `B ⟶ A`.
+3. **Identify `cone(X ⟶ A)`.** The octahedron on `X ⟶ B ⟶ A` gives
+   `cone(X⟶B) → cone(X⟶A) → cone(B⟶A) →`. Here `cone(B⟶A) = τ^{≥1}A`, and
+   `cone(X⟶B) ≅ F₀` because `X ⟶ B` covers `T₀ ⟶ H` over a common
+   `τ^{≤-1}A`. That last isomorphism is the fiddliest step and is where the
+   remaining effort sits. `tiltGEAt_one_of_triangle` then finishes it.
+
+None of the three needs a cohomology functor; all three are triangle
+bookkeeping. **They are not done here**, and nothing below is declared with
+`sorry`.
+
+Superseded reasoning, kept because the correction is the useful part: this file
+previously said the field needs the long exact cohomology sequence of `H⁰`.
+That was inferred from the textbook construction, which cuts `X` as the fibre
+of `B ⟶ F₀`. **That shape genuinely does need cohomology** — `IsLE X 0` then
+depends on `H⁰(A) ⟶ F₀` being epi, and formally `Hom(X, Z)` only injects into
+`Hom(F₀⟦-1⟧, Z)`, which does not vanish for degree reasons. The extension shape
+used above has both ends in `D^{≤0}` already and sidesteps it entirely. The
+obstruction was in the chosen construction, not in the theorem.
+
+Producing the
   truncation triangle for the tilted aisles is the octahedral-axiom step, and
   it needs the long exact cohomology sequence of `H⁰`, i.e. that `H⁰` is a
   homological functor. Mathlib has no `H⁰` for a t-structure at all, and the
