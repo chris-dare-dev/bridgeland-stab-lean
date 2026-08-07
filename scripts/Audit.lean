@@ -216,17 +216,6 @@ test for exactly that parse hazard. -/
 #print axioms Tilting.HeartTorsionPair.tiltGEAt_one_le
 #print axioms Tilting.HeartTorsionPair.tiltAt_zero'
 
-/-! ## Tilting lane — recognising the two aisles from a triangle
-
-The two halves of `exists_triangle_zero_one`. Neither needs a cohomology
-functor; see the module docstring for why the textbook construction appeared to
-and this one does not. -/
-
-#print axioms Tilting.HeartTorsionPair.tiltLE_of_triangle
-#print axioms Tilting.HeartTorsionPair.tiltGE_of_triangle
-#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_of_triangle
-#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_of_triangle
-
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
