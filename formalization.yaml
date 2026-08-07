@@ -402,6 +402,33 @@ fidelity:
     reports the closure of a CONSTRUCTION; the propositions are the six field
     theorems it is built from.
 
+    COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
+    additional records are the orthogonality identity minor_orth, the three
+    cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
+    the algebraic core minorCross_eq_zero_of_two_walls, the one-sided inclusion
+    wall_subset_of_crossZero, the theorem wall_eq_of_meet, and the three
+    declarations of the counterexample showing its charge hypothesis is
+    necessary (degV, degV_charge_eq_zero, wall_eq_of_meet_needs_charge). Audit
+    count 642 -> 655, pinned to commit 2ab9a9b. Coverage complete: 13 top-level
+    declarations, 0 private, 13 named. 9 are theorems; 4 are constructions.
+
+    THAT COUNT IS 655 AND NOT 659, and the four-record difference is a defect
+    of the session that added it, recorded because the mechanism will recur.
+    The first commit of this work, aefda82, took the count to 659 by staging
+    scripts/Audit.lean WHOLE in a working tree a second session was editing at
+    the same time. Four of the seventeen records it added --
+    Tilting.HeartTorsionPair.tiltLE_of_triangle, tiltGE_of_triangle, and their
+    At-level twins -- belonged to that other session's UNCOMMITTED work, so
+    they named constants absent from the environment. `#print axioms` on an
+    unknown constant is a hard error, so the axiom gate failed to elaborate and
+    main was red until 2ab9a9b removed them. Those four then arrived properly,
+    with the file that defines them, in PR #72 -- which is why main reads 659
+    again today. Only 13 of that swing belongs to this lane.
+
+    The gate behaved correctly throughout and is the reason this was caught in
+    minutes rather than inherited: a name that does not exist cannot be audited
+    silently. What failed was upstream of it, in how the commit was staged.
+
     COUNT UPDATE (Tilting lane, indexed families), 2026-08-07. The 13
     additional records are the two orthogonality predicates with their
     isomorphism-closure instances, the aisles at every integer level, the two
@@ -809,6 +836,48 @@ fidelity:
     does not. Centre and radius are given in cleared form so no division
     appears. Each minor is alternating, so the wall depends only on w modulo v
     (wallExpr_shift). charge_eq_zero_iff locates the single degenerate point.
+
+    ADDED 2026-08-07: THE NESTING THEOREM, which the file's own docstring had
+    listed as out of reach. That docstring said the statement -- two distinct
+    walls for the same v never meet -- "needs the extra input that both minor
+    vectors are cross products against a common v, and a rank argument in R^3.
+    Neither is done." The first half is minor_orth, a one-line ring identity:
+    ch2 * minA + deg * minB + rk * minC = 0, which is exactly the statement
+    that (minA, minB, minC) is v cross w with its coordinates reversed. The
+    second half turns out not to be needed at all.
+
+    With minor_orth, two walls through one point give two circle equations and
+    two orthogonality relations; eliminating pairwise leaves
+    (deg - s rk) * crossAB = 0 and (ch2 - ((s^2+t^2)/2) rk) * crossAB = 0, and
+    the file's own charge_eq_zero_iff already says those two coefficients
+    vanish TOGETHER exactly when v's charge vanishes at (s,t). So off that
+    locus crossAB = 0 and the other two cross terms follow from the circle
+    equations alone (minorCross_eq_zero_of_two_walls). wall_eq_of_meet then
+    concludes that the two walls agree at every point;
+    wall_subset_of_crossZero does one inclusion and the reverse is the same
+    lemma with the arguments swapped, since the cross terms are antisymmetric.
+    The R^3 rank argument never appears -- the two orthogonality relations do
+    its work, and what would have been a genericity assumption is instead an
+    explicit hypothesis.
+
+    THE CHARGE HYPOTHESIS IS PROVED NECESSARY, not merely stated.
+    wall_eq_of_meet_needs_charge exhibits v = (2,0,1), whose charge vanishes at
+    (0,1). There the wall equation collapses to minA + 2 minC = 0, which
+    minor_orth makes automatic for EVERY w, so at that one point all walls of v
+    meet at once. w1 = (0,1,0) gives the unit circle and w2 = (1,0,0) the line
+    s = 0; both minor vectors are nonzero, they meet at (0,1), and (0,2)
+    separates them. Every hypothesis of wall_eq_of_meet except the charge one
+    holds and the conclusion is false.
+
+    STILL NOT THE GEOMETRIC NESTED WALL THEOREM, and the gap is the same one
+    the paragraph above opens with. What is proved is a statement about triples
+    of real numbers. The geometric theorem additionally asserts that the walls
+    it totally orders are walls of ACTUAL STABILITY -- that crossing one changes
+    the set of semistable objects of a class -- and that needs the
+    identification of NumClass with ch(E) for a sheaf on a surface, which
+    CLAUDE.md section 4 rules out at this pin. Do not cite wall_eq_of_meet as
+    Bertram's theorem without that qualification. No @[cites], no registry
+    entry; Wall/ still maps to no section of `source`.
 
     FiniteLength/ IS THE FIRST NEW LANE THAT DOES TARGET `source` -- Bridgeland
     2007's finite-length worked example, where a stability function on an
