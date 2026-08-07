@@ -45,8 +45,17 @@ variable {C : Type u} [Category.{w} C] [HasZeroObject C] [HasShift C ℤ]
 /-! ## Shift functors as triangulated equivalences -/
 
 set_option backward.isDefEq.respectTransparency false in
-/-- A shift functor coherently commutes with every other shift. -/
-noncomputable instance shiftFunctorCommShift (n : ℤ) :
+/-- A shift functor coherently commutes with every other shift.
+
+**`scoped`, deliberately.** This is a global, unconditional `CommShift` datum
+for *every* `n`, on a functor Mathlib also equips elsewhere. For ODD `n` this is
+NOT the structure under which `shiftFunctor C n` is triangulated -- the
+triangulated one carries the sign `(-1)^n` on the connecting map -- so a global
+instance here would silently win instance search at sites that wanted the
+triangulated structure. Scoping keeps it inside
+`BridgelandStabLean.GroupAction`, where the only consumer is the DOUBLE shift
+and the sign is `+1`. -/
+noncomputable scoped instance shiftFunctorCommShift (n : ℤ) :
     (shiftFunctor C n).CommShift ℤ where
   commShiftIso a := shiftFunctorComm C a n
   commShiftIso_zero := by

@@ -314,7 +314,27 @@ Toolchain is pinned to `leanprover/lean4:v4.29.0`. Mathlib
 
 This repo is a deliberate sibling of, never a subdirectory of,
 [arXMCP](https://github.com/chris-dare-dev/arXMCP). arXMCP is a read-only
-retrieval data plane; its R5 track pins *released* formalizations and serves
-their trust records. It does not host formalization work. `formalization.yaml`
-is the interface between the two, and its schema mirrors the anchor's so one
-parser reads both.
+retrieval data plane over a LanceDB corpus of parsed arXiv papers; the
+`bridgeland-stability` notebook is the corpus behind this repo's sources.
+
+**Three things this section used to assert that are false.** They were
+corrected in `CLAUDE.md` §8 and not here, so the README kept saying them until
+2026-08-06. Kept, because the corrections are the useful part.
+
+- **arXMCP's R5 track does not pin released formalizations or serve trust
+  records.** R5 is a brief with no `plans/` entry; `get_formal_targets` /
+  `formal_targets` return zero hits in `server/`; and `find -iname "*formaliz*"`
+  across arXMCP returns zero files. There is no parser.
+- **"It does not host formalization work" is true, but not for the reason
+  implied.** The prohibition is in an unroadmapped, geometry-scoped brief
+  (`.claude/roadmap-briefs/R5-formal-target-registry.md`), not in arXMCP's
+  `CLAUDE.md` §4.8. Cite the brief.
+- **`formalization.yaml` is not "the interface between the two".** It has no
+  reader, on either side. The interface is designed
+  (`.claude/decisions/ADR-0001`…`ADR-0009`) and **not yet built**; until it
+  ships, the boundary is unilateral — arXMCP contains zero documents mentioning
+  this repo.
+
+Its schema does mirror the anchor's, which is worth keeping, but "key-for-key
+so one parser reads both" overstates it: no such parser exists, and the mirror
+is a convention this repo maintains by hand.

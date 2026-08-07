@@ -76,6 +76,33 @@ waiting for it. The deletion condition is a `lake build` against the new pin
 resolving `Matrix.polarFactor` (or its general replacement) from Mathlib — a
 command, not a citation.
 
+### Bumping the anchor pin: check the injected names first
+
+`ForMathlib/` is not the only place a pin bump can create a duplicate. This repo
+declares **21 dot-notation extensions on types it does not own**, all of them
+anchor types, and none is covered by the table above:
+
+| owner type | injected here |
+|---|---|
+| `HNFiltration` | `exists_headTail`, `mapF`, `mass`, `mass_appendFactor`, `mass_dropFirst`, `mass_eq_mass`, `mass_eq_zero_of_isZero`, `mass_ofIso`, `mass_pos`, `mass_prefix_last` |
+| `K₀` | `mapF`, `mapF_comp`, `mapF_congr`, `mapF_id`, `mapF_of`, `mapF_shift_neg_two` |
+| `Slicing` | `mapEquiv`, `mapEquiv_P`, `phiMinus_congr`, `phiPlus_congr` |
+| `PostnikovTower` | `mapF` |
+
+Regenerate the list with:
+
+```bash
+grep -hoE "^(private )?(noncomputable )?(scoped )?(theorem|lemma|def|instance|abbrev) (Slicing|HNFiltration|PostnikovTower|K₀)\.[A-Za-z_'0-9]+" \
+  BridgelandStabLean/GroupAction/*.lean | sed -E 's/^.*(theorem|lemma|def|instance|abbrev) //' | sort -u
+```
+
+Before bumping the anchor, check each against the new anchor tree. If upstream
+has grown the same name, you get an ambiguity at best and a silent divergence at
+worst — the same failure mode §1 already guards for `ForMathlib/`, on names that
+are easier to miss because they read like anchor API. Measured collisions today:
+**zero**. The failure mode when one arrives is a loud, local build error, which
+is why this is a checklist item and not a rename campaign.
+
 Two lessons from #42449 being closed, recorded so they are not repeated.
 **Ask on Zulip before writing an upstream PR** — check not only whether Mathlib
 *has* a result but whether anyone is *working* on it, and whether the
@@ -86,12 +113,21 @@ matrices. **And run the environment linters, not just `lake build` and
 `lake exe lint-style`** — CI rejected an `@[simp]` on
 `polarUnitary_mul_polarFactor` via `simpNF`, which neither local check runs.
 
-The two versions already differ, which is the point of the rule. The upstream version is
-in master's **module system** (`module` / `public import` /
-`@[expose] public section`, none of which exist at v4.29.0) and needs
-`Matrix.star_eq_conjTranspose` spelled out, because `star` on matrices no
-longer simp-normalises to `ᴴ` there. Neither change can be back-ported to the
-pin, and neither local form is valid upstream.
+The two versions already differ, which is the point of the rule. The upstream
+version needs `Matrix.star_eq_conjTranspose` spelled out, because `star` on
+matrices no longer simp-normalises to `ᴴ` there. That change cannot be
+back-ported to the pin, and the local form is not valid upstream.
+
+> **CORRECTION (2026-08-06).** This paragraph used to add that the upstream
+> version is *"in master's module system (`module` / `public import` /
+> `@[expose] public section`, none of which exist at v4.29.0)"*. **That is
+> false, and it was load-bearing here.** All three exist at v4.29.0 and are the
+> ambient convention in this very environment: **7,765 of Mathlib's 7,871 files
+> and all 75 anchor files** are `module`-form at the pin, and the anchor uses
+> `@[expose] public section` throughout. This repository is the only thing in
+> its own environment that is *not* — **0 of 36**. The `star`/`ᴴ` difference is
+> real and is reason enough for the rule; the module-system claim never was.
+> See §9 for what the module system is actually worth here.
 
 ## 2. No `sorry`. Absent beats sorry-backed.
 
@@ -319,7 +355,9 @@ compile errors wastes a full Mathlib rebuild per guess.
 
 ## 6. `formalization.yaml` is a claim, not decoration
 
-Its schema mirrors the anchor's key-for-key so one parser reads both. Keep it
+Its schema mirrors the anchor's, which is worth keeping. But "so one parser
+reads both" is aspirational, not observed: **no such parser exists**, on either
+side. The mirror is a convention this repo maintains by hand. Keep it
 that way; do not rename keys.
 
 Every field is a claim someone may cite. `human_review: none` stays `none`
@@ -418,3 +456,76 @@ the GitHub issue tracker.
 Until it ships the boundary is **unilateral**: arXMCP contains zero documents
 mentioning this repo. Do not write text here that assumes otherwise, and do
 not describe the contract in the present tense.
+
+## 9. The Lean module system is available, and it is the build lever
+
+Added 2026-08-06, after §1's claim that `module` / `public import` /
+`@[expose] public section` "do not exist at v4.29.0" was found to be false.
+
+**Adoption in this very environment, measured at the pin:**
+
+| | module-form | total |
+|---|---|---|
+| Mathlib | 7,765 | 7,871 |
+| anchor (`BridgelandStability`) | 75 | 75 |
+| **this repo** | **0** | **36** |
+
+Every file here is non-module, so **every import is effectively public and
+propagates to everything downstream**. That is the whole build-cost problem, not
+a style question.
+
+### What it buys, measured
+
+Probes elaborated at this pin (files since removed from `scratch/`):
+
+| probe | wall | outcome |
+|---|---|---|
+| `module` file, `public import Mathlib.Tactic`, module importer | 9.0 s | `linarith` visible |
+| `module` file, **private** `import Mathlib.Tactic`, module importer | **4.8 s** | `linarith` → *"unknown tactic"* |
+| same private base, **non-module** importer | 9.8 s | `linarith` **visible** |
+
+**A private import cuts downstream load by ~4.2 s per module — 47 % on that
+probe.** Lean states the mechanism itself:
+
+```
+error(lean.unknownIdentifier): Unknown constant `Real`
+  Note: A public declaration `Real` exists but is imported privately;
+        consider adding `public import Mathlib.Data.Real.Basic`.
+```
+
+For scale: `import Mathlib.Tactic` costs **+11.0 s of load in non-module form**
+(11.8 s → 22.8 s), and it sits at fan-out 32 (`NormalizedShift.lean`) and
+fan-out 30 (`GLTilde.lean`). `NormalizedShift.lean` takes 24.5 s to build and a
+file that does nothing but import it takes 23.4 s — **its own elaboration is
+≈1 s; ~95 % of its cost is import loading.**
+
+### Two constraints that fix the migration order
+
+Both measured, not inferred:
+
+1. `error: cannot import non-module BridgelandStabLean.GroupAction.NormalizedShift from module`
+   — a `module` file **cannot** import a non-`module` file.
+2. A **non-module importer still sees a private import** (the 9.8 s row). So the
+   saving only lands when *both ends of an edge* are module-form.
+
+Together these make the migration **strictly bottom-up in topological order**,
+starting at depth 0 (`NormalizedShift`, `Lattice/Basic`,
+`ForMathlib/PolarDecomposition`), and **incremental and always green**: a
+not-yet-converted file can still import a converted one, and each file's saving
+lands as you convert it.
+
+### Why prefer this to hand-narrowing imports
+
+Narrowing `import Mathlib.Tactic` to a hand-picked tactic list is real work
+whose result decays the moment someone reaches for a new tactic. Under the
+module system you keep the import where you actually want it and simply do not
+mark it `public`; the discipline becomes a compiler-enforced property instead of
+a convention. Note the anchor's `GrothendieckGroup/Defs.lean:10` is
+`public import Mathlib.Tactic`, so everything downstream of `K0Functor` gets the
+full environment regardless of what we do locally — file that upstream, do not
+work around it, and do not wait on it.
+
+**Not yet done, and not to be assumed.** No module of this repo has been
+migrated. The three facts above are measured; the aggregate saving on the real
+36-file graph is an extrapolation. Spike `NormalizedShift` + `GLTilde` and
+re-measure before committing to a sweep.

@@ -362,7 +362,7 @@ noncomputable def glPosCoordinateHomeomorph :
 
 /-- A covering map remains a covering map after taking its product with an
 identity map. -/
-theorem IsCoveringMap.prodMap_id {E X Y : Type*} [TopologicalSpace E]
+theorem isCoveringMap_prodMap_id {E X Y : Type*} [TopologicalSpace E]
     [TopologicalSpace X] [TopologicalSpace Y] {f : E → X} (hf : IsCoveringMap f) :
     IsCoveringMap (Prod.map f (id : Y → Y)) := by
   intro xy
@@ -409,7 +409,7 @@ noncomputable def coordinateProjection : GLTildeCoordinates → GLPosCoordinates
   Prod.map phaseCircle id
 
 theorem coordinateProjection_isCoveringMap : IsCoveringMap coordinateProjection := by
-  exact IsCoveringMap.prodMap_id phaseCircle_isCoveringMap
+  exact isCoveringMap_prodMap_id phaseCircle_isCoveringMap
 
 /-! ## Conjugating the matrix projection to the standard cover -/
 

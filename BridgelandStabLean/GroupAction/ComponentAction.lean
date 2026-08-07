@@ -46,8 +46,13 @@ theorem componentSmul_mk (g : G) (x : X) :
   rfl
 
 /-- Functoriality of connected components turns the original group action into
-an action on component labels. -/
-instance componentMulAction : MulAction G (ConnectedComponents X) where
+an action on component labels.
+
+**`scoped`.** Stated at full generality, in a domain-specific namespace, for a
+class pairing (`MulAction`/`ConnectedComponents`) that Mathlib does not equip at
+this pin. If it is ever upstreamed, an unscoped copy here becomes a second
+instance for the same class and type. -/
+scoped instance componentMulAction : MulAction G (ConnectedComponents X) where
   smul := componentSmul
   one_smul cc := by
     obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe cc
@@ -98,8 +103,10 @@ theorem mem_componentStabilizer_iff {cc : ConnectedComponents X} {g : G} :
     g ∈ componentStabilizer (G := G) cc ↔ g • cc = cc :=
   MulAction.mem_stabilizer_iff
 
-/-- The component stabilizer acts on the corresponding component subtype. -/
-instance componentStabilizerMulAction (cc : ConnectedComponents X) :
+/-- The component stabilizer acts on the corresponding component subtype.
+
+`scoped` for the same reason as `componentMulAction` above. -/
+scoped instance componentStabilizerMulAction (cc : ConnectedComponents X) :
     MulAction (componentStabilizer (G := G) cc)
       {x : X // ConnectedComponents.mk x = cc} where
   smul g x := ⟨g.1 • x.1, by

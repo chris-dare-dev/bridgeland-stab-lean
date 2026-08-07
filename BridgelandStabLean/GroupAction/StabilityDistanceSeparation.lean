@@ -12,11 +12,14 @@ through the class map.  More precisely, distance zero implies equality of the
 two slicings and of the composites `Z.comp v : K₀ C →+ ℂ`.
 
 For `StabilityCondition.WithClassMap C v`, literal equality of the stored
-central charges on `Λ` additionally requires `v` to be surjective.  This is a
-real mathematical requirement: the distance only evaluates the charge on
-classes in the image of `v`.  In the ordinary specialization
-`StabilityCondition C`, the class map is the identity and separation is
-unconditional.
+central charges on `Λ` additionally requires `v` to be surjective.  Some
+hypothesis is genuinely needed — the distance only ever evaluates the charge on
+classes in the image of `v`, so nothing constrains the two charges off that
+image.  Surjectivity is **sufficient, not necessary**: since `ℂ` is
+torsion-free, `Λ / range v` being torsion already suffices.  Surjectivity is
+used because it is the hypothesis the `(Λ, v)` literature carries by
+definition.  In the ordinary specialization `StabilityCondition C`, the class
+map is the identity and separation is unconditional.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex
@@ -178,8 +181,13 @@ theorem stabilityDist_eq_zero
     obtain ⟨y, rfl⟩ := hv x
     exact DFunLike.congr_fun hcomp y
 
-/-- Identity of indiscernibles for a surjective class map. -/
-@[simp]
+/-- Identity of indiscernibles for a surjective class map.
+
+Deliberately NOT `@[simp]`: `Function.Surjective v` is not equation-theorem
+shaped, so simp's default discharger never consults the context, and
+`Function.surjective_id` is not itself `@[simp]` -- the rewrite would be inert
+even at `v = id`. The unconditional `stabilityConditionDist_eq_zero_iff` below
+carries the attribute instead. -/
 theorem stabilityDist_eq_zero_iff
     {σ τ : StabilityCondition.WithClassMap C v}
     (hv : Function.Surjective v) : stabilityDist σ τ = 0 ↔ σ = τ := by

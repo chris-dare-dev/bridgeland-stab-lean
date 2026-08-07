@@ -290,12 +290,38 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-06 in the
-    stability-distance-separation working tree via `scripts/check_audit.py`
-    over 448
-    declarations this project introduces: every one depends on a subset of
+    No axiom declarations. Transitive closure enumerated 2026-08-06 at 56c7531
+    via `scripts/check_audit.py` over the 497 declarations named in
+    scripts/Audit.lean: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass.
+
+    WHAT THIS COUNT IS AND IS NOT, corrected 2026-08-06. It is 497 NAMED
+    declarations, not "every declaration this project introduces". A direct
+    census of BridgelandStabLean/ finds 569 top-level declarations, so 72 are
+    outside the gate. 42 of those are `private` and are STRUCTURALLY
+    unlistable: Lean mangles a private name to
+    `_private.<Module>.<n>.<Name>`, so it cannot be written as a short name
+    from an importing module, and `scripts/Audit.lean`'s instruction "adding a
+    declaration to the library means adding it here" cannot be followed for
+    them. The other 29 (whose full list is in the review dossier for this
+    commit) are public declarations simply not yet added -- 20 of them in
+    GLTildeSurj.lean alone. Nothing detects the shortfall: check_audit.py never
+    reads the source tree, and Audit.lean fails to build only when a name it
+    ALREADY lists disappears, never when a name it should list appears.
+
+    SECOND QUALIFICATION: 167 of the 497 entries are not theorems -- 121 def,
+    34 instance, 7 abbrev, 5 structure. For a `def`, `#print axioms` reports
+    the axiom closure of a CONSTRUCTION and asserts nothing about any
+    proposition being proved. `CategoryTheory.Triangulated.
+    StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
+    so its clean axiom line means only that the DEFINITION is axiom-clean, not
+    that the proposition holds. Do not read this count as "497 established
+    results".
+
+    The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
+    and therefore does see the private and unlisted names. It is the gate that
+    closes this hole, and as of 6259180 CI runs it.
 
     COUNT UPDATE (components/periods/effective quotient), 2026-08-06. The 44
     additional records comprise 9 for connected-component transport and
@@ -373,11 +399,22 @@ fidelity:
     computes the intended composition, not merely some group structure that
     typechecks. Re-run it before editing this block.
 
-    COUNTS ARE PINNED TO A COMMIT, deliberately. This repo moved five times on
-    2026-08-03 alone (58359e1 -> 5b40d5a) and the count went 15 -> 43 -> 77 ->
-    90 -> 105 -> 111 in that span, so a bare number here is stale on arrival
-    and two fields quoting different bare numbers is the normal failure, not an
-    unlucky one. Quote the commit with the count, or do not quote the count.
+    COUNTS ARE PINNED TO A COMMIT, deliberately. Over 58359e1 -> 5b40d5a the
+    count went 15 -> 39 -> 42 -> 48 -> 59 -> 66 -> 73 -> 77 -> 90 -> 105 ->
+    111 -> 118 -> 124 across 16 commits (58359e1 plus 15), 13 of them dated
+    2026-08-03 and 3 dated 2026-08-04. A bare number here is therefore stale on
+    arrival, and two fields quoting different bare numbers is the normal
+    failure, not an unlucky one. Quote the commit with the count, or do not
+    quote the count.
+
+    CORRECTED 2026-08-06. This paragraph previously read "moved five times on
+    2026-08-03 alone" with the chain 15 -> 43 -> 77 -> 90 -> 105 -> 111. Three
+    things were wrong: 43 never occurred, the span does not end at 111, and
+    5b40d5a is dated 2026-08-04 rather than 08-03. The chain above was
+    remeasured directly with
+    `git show <commit>:scripts/Audit.lean | grep -c '^#print axioms '`. A
+    paragraph whose whole point is "do not quote a stale number" had quoted
+    three of them.
   builds_clean: true
   builds_clean_date: 2026-08-06
   builds_clean_note: >
@@ -385,19 +422,53 @@ fidelity:
     Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
     The strict parser accepted all 497 records with no sorryAx, and `lake exe
     emit --out attest/lean-emission.json` completed successfully with
-    `mfc-emit: wrote attest/lean-emission.json`; the regenerated artifact was
-    byte-for-byte unchanged. PR #66 carried the universal-cover and symmetry
+    `mfc-emit: wrote attest/lean-emission.json`.
+
+    THE LOCAL attest/ ARTIFACTS ARE STALE AND HAVE BEEN QUARANTINED,
+    2026-08-06. The `attest/*.json` on disk were generated 2026-08-05 and
+    attest only 20 of the library's 36 modules -- they predate
+    GLTildeTopology, GLTildeCover, GLTildeTopologicalGroup, StabilityMass,
+    HNMassUniqueness, StabilityDistance, StabilityDistanceSeparation,
+    StabilityDistanceTopology, AutFullIsometry, CombinedAction,
+    TopologicalAction, GLTildeContinuousAction, GLTildeJointContinuousAction,
+    ComponentAction, PeriodMapEquivariance and EffectiveAction. They are
+    renamed to `*.json.stale-2026-08-05-20of36modules` rather than deleted,
+    because the emitter CANNOT LINK ON WINDOWS and so cannot be regenerated on
+    the owner's workstation. The next honest attestation is a CI artifact:
+    quote its run id, not a local observation.
+
+    THE REPRODUCIBILITY CLAIM IS WITHDRAWN, 2026-08-06. This block previously
+    added "the regenerated artifact was byte-for-byte unchanged", evidenced by
+    `git diff --exit-code -- attest/lean-emission.json` returning 0. That
+    command cannot fail: `.gitignore` line 6 ignores `/attest/` and
+    `git ls-files attest/` is empty, so the path is untracked and there is
+    nothing for git to compare. The check was vacuous, and byte-identity is in
+    any case impossible by construction while the artifact carries an
+    `emitted_at` timestamp. Do not restore either clause without a check that
+    can observably fail. PR #66 carried the universal-cover and symmetry
     work and was merged at 326d72b. PR #67 carried the full-metric,
     separation, and Proposition 8.1 topology-infrastructure chain and was
     merged at 56c7531.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
-    gate at 497 declarations, the environment-wide contract emitter, YAML and
-    JSON parsing, and attestation reproducibility all passed. PR #66 and PR
+    gate at 497 declarations, the environment-wide contract emitter, and YAML
+    and JSON parsing all passed. "Attestation reproducibility" was ALSO listed
+    here and is withdrawn -- see builds_clean_note; the command that evidenced
+    it cannot fail, because attest/ is gitignored and untracked. PR #66 and PR
     #67 are merged. GitHub reported no checks for PR #67, so these observations
     are local verification of the committed theorem state, not a remote CI
     verdict and not a source-faithfulness review.
+
+    SECOND MACHINE REVIEW, 2026-08-06, at 56c7531: an independent adversarial
+    theorem/API/instance/trust audit of the whole b4cbf47..56c7531 delta
+    (Claude Opus 5, multi-agent, findings adversarially re-verified). It found
+    NO P0 -- no false theorem, no unsound proof, no sorry, no new axiom, no
+    vacuous hypothesis, no smuggled instance -- and six P1s, every one of them
+    a false or stale claim in a trust record rather than a defect in Lean. The
+    fixes are in this commit and are listed in known_divergences. This is
+    machine review under ADR-0005 and does not touch human_review, which stays
+    none.
     `lake exe lint-style` completed with only the repository's existing
     missing-nolints-file warning. `lake exe runLinter` was NOT clean at
     56c7531: it reported six errors in modules unchanged by the topology
@@ -462,25 +533,47 @@ fidelity:
     makes a statement faithful. A green lint step must not be quoted for
     either.
 
-    What CI does NOT cover, and #29 lists: the emitter, mfc bundle/lint/
-    conformance, ilean coverage, resolution freshness, emitter reproducibility,
-    and `git diff --exit-code attest/`. All six need mfc (#21), which does not
-    exist. nanoda is off with the reason recorded inline -- it cannot run at
-    this toolchain, measured.
+    What CI does NOT cover, and #29 lists: mfc bundle/lint/conformance, ilean
+    coverage, and resolution freshness. Those three need the mfc CLI, which
+    ships in the MathFormalContract checkout
+    (.lake/packages/MathFormalContract/contract/mfc/) but is not installed in
+    the CI image. nanoda is off with the reason recorded inline -- it cannot
+    run at this toolchain, measured.
+
+    CORRECTED 2026-08-06, three ways. (1) THE EMITTER IS NOW COVERED, but was
+    not at 56c7531: the "emit, and fail on sorryAx" step was added at 6259180,
+    whose message is "fix(ci): actually link the emitter, which I claimed CI
+    did and it did not". Any statement about the emitter gate must name a
+    commit at or after 6259180. (2) "All six" was six because it counted
+    emitter reproducibility and `git diff --exit-code attest/` as pending work;
+    both are withdrawn, not pending -- attest/ is untracked, so that diff can
+    never fail. (3) "which does not exist" was false of mfc: the package is a
+    pinned Lake dependency of this repo and its Python CLI is on disk. The
+    obstacle is installation, not existence.
 
     Earlier: lake build at commit 5b40d5a (3547 jobs, exit 0). Since 2026-08-03
     the #print axioms pass is
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
-    by `[[lean_lib]] name = "Audit"` (srcDir = "scripts") and is in
-    defaultTargets, so `lake build` elaborates it and its 111 audit records are
-    build output. The anchor itself was also built from source for the first
+    by `[[lean_lib]] name = "Audit"` (srcDir = "scripts"), so it cannot fall
+    behind the source tree. Its 124 audit records at 5b40d5a are build output.
+    The anchor itself was also built from source for the first
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
 
-    All 118 records were re-parsed from the build log at 5b40d5a and every one
+    All 124 records were re-parsed from the build log at 5b40d5a and every one
     is a subset of [propext, Classical.choice, Quot.sound]; the distinct axiom
-    set across all 111 is exactly those three; sorryAx does not appear anywhere
+    set across all 124 is exactly those three; sorryAx does not appear anywhere
     in the log.
+
+    CORRECTED 2026-08-06, two ways. (1) This paragraph gave three different
+    counts for one commit -- "111 audit records", "All 118 records", "across
+    all 111". The measured count at 5b40d5a is 124, by
+    `git show 5b40d5a:scripts/Audit.lean | grep -c '^#print axioms '`. (2)
+    Audit was REMOVED from defaultTargets at this commit, because
+    scripts/Audit.lean does `import BridgelandStabLean` and so sat downstream
+    of every module, making every edit anywhere re-elaborate all 497
+    `#print axioms` before `lake build` returned. It is still a lean_lib and
+    CI's axiom gate still runs it directly, so nothing it guarded is lost.
 
     HOW TO PARSE THIS OUTPUT, because the two obvious ways are both WRONG. The
     axiom list wraps across lines, so a line-oriented grep under-reads it; and
@@ -689,6 +782,50 @@ fidelity:
 
     What this is NOT is in known_divergences and must be read before citing it.
   known_divergences: >
+    DIVERGENCES ADDED BY THE 2026-08-06 MACHINE REVIEW. Six trust-record
+    claims in this repo were found FALSE at 56c7531 and are corrected in this
+    commit. They are listed here because a corrected record still owes a reader
+    the fact that it was wrong.
+
+    (1) The registry frontier item `gltilde-universal-cover` asserted that the
+    covering-map, surjectivity and simple-connectedness facts were "absent from
+    Mathlib at the pinned revision and unproved here" -- of the same tree that
+    proves all three. It was minted 2026-08-05, before GLTildeCover.lean
+    landed, and never revisited. Because `relation_claimed: exact` is gated on
+    an entry having NO open frontier item (E-05), discharging it as written
+    would have permitted `exact` on Lemma 8.2 while the two gaps that actually
+    block it had no item at all. Corrected, and two real items minted:
+    `autpairquot-not-aut-d` on lem-8.2 and `stability-mass-triangle` on
+    prop-8.1.
+
+    (2) lakefile.toml and exe/Emit.lean asserted in the present tense that CI
+    runs the emitter gate. At 56c7531 it did not; the step landed at 6259180,
+    whose message says so. Both are now commit-scoped.
+
+    (3) machine_review listed "attestation reproducibility" as passed, on the
+    evidence of `git diff --exit-code -- attest/`. That command cannot fail:
+    attest/ is gitignored and untracked. Withdrawn; see builds_clean_note.
+
+    (4) The local attest/*.json attested 20 of 36 modules. Quarantined.
+
+    (5) scripts/Audit.lean claimed to cover "every declaration this project
+    introduces". It covers 497 of 569; 42 of the remainder are `private` and
+    structurally unlistable, and 167 of the 497 are definitions rather than
+    theorems. Qualified in place.
+
+    (6) machine_review said the six uncovered CI axes "need mfc, which does not
+    exist". mfc exists and is a pinned Lake dependency of this repo; the
+    obstacle is installation. Also, the count was six only because two of the
+    axes are withdrawn rather than pending.
+
+    Two further presentation divergences, newly recorded rather than newly
+    introduced. The GLTilde action is formalized as the LEFT action of the
+    inverse pair; Bridgeland's is a RIGHT action. The conversion is faithful,
+    but the theorem is not literally the paper's form, and stabMulAction's
+    @[cites] note now says so. And the `informal` field of the minted `lem-3.4`
+    entry described Bridgeland's Lemma 4.3 rather than the extreme-phase
+    monotonicity its own stored quote states; corrected.
+
     Lattice/NumericalK.lean models K_num(Ku(X)) as the concrete lattice
     Fin 2 -> Z. Every lemma there is a theorem about a rank-2 torsion-free
     lattice, NOT about a Kuznetsov component. The identification is geometry,

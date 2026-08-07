@@ -25,7 +25,11 @@ uniformity while retaining that topology definitionally.  No metric instance
 is installed before this comparison theorem is proved.
 
 The first part of the file records elimination lemmas for a strict full-
-distance bound.  They are the common input to both cofinality directions.
+distance bound.  They feed the **easy** direction only —
+`exists_stabilityDist_ball_subset_basisNhd`.  The hard direction,
+`exists_basisNhd_subset_stabilityDist_ball`, goes through the anchor's
+`phiPlus_sub_lt_of_slicingDist` and `abs_log_mass_ratio_le_of_mem_basisNhd`
+and touches none of them.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated
@@ -286,8 +290,8 @@ theorem norm_charge_sub_mass_phaseExp_le_of_stabilityDist
     _ = Real.pi * ε * (stabilityMass τ E).toReal := by rw [hmass]
 
 /-- A narrow HN sector bounds mass by the norm of the total charge.  This is
-the mass-specialized lower-sector estimate used in both directions of the
-topology comparison. -/
+the mass-specialized lower-sector estimate, used by the **hard** direction of
+the topology comparison (`exists_basisNhd_subset_stabilityDist_ball`) only. -/
 theorem cos_mul_stabilityMass_le_norm_charge_of_width
     (σ : StabilityCondition.WithClassMap C v) {E : C} (hE : ¬IsZero E)
     {η : ℝ} (hη : 0 ≤ η) (hη1 : η < 1)
@@ -911,7 +915,14 @@ theorem exists_stabilityChargeControl_lt {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
 
 /-- Every centered Section 6 basis neighborhood contains a centered full-
 distance ball.  This is one of the two cofinality directions in Proposition
-8.1. -/
+8.1, and the one that is **unconditional** — it does not take
+`StabilityMassTriangleInequality`.
+
+`hε8 : ε < 1 / 8` is stronger than this proof needs: it is consumed once, to
+derive `hε1 : ε < 1` for `Real.sin_pos_of_pos_of_lt_pi`.  It is kept because
+`ε < 1/8` is the anchor's radius convention for the whole `basisNhd` family and
+matches `basisNhdFamily`'s generating predicate; weakening it here alone would
+desynchronise this lemma from its siblings for no gain. -/
 theorem exists_stabilityDist_ball_subset_basisNhd
     (σ : StabilityCondition.WithClassMap C v) {ε : ℝ}
     (hε : 0 < ε) (hε8 : ε < 1 / 8) :

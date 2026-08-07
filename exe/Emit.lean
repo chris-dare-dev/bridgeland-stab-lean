@@ -23,6 +23,28 @@ returns non-zero when any constant's axiom closure contains `sorryAx`, and it
 writes the artifact either way, because the record is most useful exactly when
 the build is not clean.
 
+It is also the only one of the two that is COMPLETE. `Audit` names 497 of the
+library's 569 top-level declarations and structurally cannot name the 42 private
+ones; this sweeps `Environment.constants`, so a declaration nobody remembered to
+list cannot slip past it.
+
+## When CI actually started running this
+
+**From `6259180` (2026-08-06), not before.** That commit's message is
+*"fix(ci): actually link the emitter, which I claimed CI did and it did not"*.
+Everything above describes a gate that was real in this file's prose and absent
+from `.github/workflows/ci.yml` for the whole of the `56c7531` theorem baseline.
+Any claim about the emitter gate must name a commit at or after `6259180`; at or
+before `56c7531`, the only axiom gate CI ran was `scripts/Audit.lean` plus a
+grep of the build log for `declaration uses 'sorry'`.
+
+Note also that this exe **cannot be linked on Windows** — `supportInterpreter`
+pushes a Mathlib-scale environment past the PE export table
+(`ld.lld: too many exported symbols (got 134112, max 65535)`) — so the owner's
+own workstation cannot run this gate. On that platform `scripts/Audit.lean`
+is the only axiom check available, which is the reason it is kept despite the
+coverage gap above.
+
 ## `leanOptions` is declared here, not observed
 
 Elaboration options are compile flags and are not recorded in the `.olean`, so

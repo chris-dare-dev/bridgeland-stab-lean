@@ -324,9 +324,23 @@ Do not attempt step 3 as one milestone.
 
    It was briefly recorded here as blocked; see the correction in §4.
 
-**The §8 `G̃L⁺(2, ℝ)` action is complete.** Still absent: the covering-space
-identification of `GLTilde` (see `known_divergences` in `formalization.yaml`),
-and the `Aut` half — begun, see below.
+**The §8 `G̃L⁺(2, ℝ)` action is complete.**
+
+**The covering-space identification is no longer absent** (corrected
+2026-08-06; this sentence said it was, and forwarded to a
+`known_divergences` entry that says the opposite). `GLTildeTopology.lean`
+supplies contractible global coordinates and `SimplyConnectedSpace GLTilde`;
+`GLTildeCover.lean` proves `IsCoveringMap GLTilde.mat` and packages it with
+surjectivity and simple connectedness as `GLTilde.universalCoverData`;
+`GLTildeSurj.lean` gives `exact_deckHom_toMatHom` for the `ℤ` deck group; and
+`GLTildeTopologicalGroup.lean` gives `IsTopologicalGroup GLTilde`. What remains
+is only that **Mathlib has no bundled universal-cover predicate at this pin**,
+so the identification is a conjunction of those named theorems rather than an
+instance of an upstream API — cite them, do not imply a larger bundled object.
+The registry records this as the (still open) frontier item
+`gltilde-universal-cover`.
+
+Still absent: the `Aut` half — begun, see below.
 
 ---
 
