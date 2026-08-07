@@ -189,6 +189,27 @@ theorem wallExpr_shift (s t k : ℝ) (v w : NumClass) :
     wallExpr s t v (shift k v w) = wallExpr s t v w := by
   rw [wallExpr_eq, wallExpr_eq, minA_shift, minB_shift, minC_shift]
 
+/-! ### The minor vector is orthogonal to `v`
+
+The fact that makes nesting true, and the one the "two walls through one
+point" section below does without.
+
+`(minA, minB, minC)` is the cross product `v × w` with its coordinates
+reversed: `(v × w) = (minC, minB, minA)`. A cross product is orthogonal to
+both factors, so every minor vector built from a **common** `v` lies in the
+plane `v^⊥`. Two of them plus one more linear condition is three conditions on
+a 3-dimensional space, and generically that forces proportionality — which is
+the whole content of `minorCross_eq_zero_of_two_walls`. -/
+
+/-- **The minor vector is orthogonal to `v`.**
+
+Stated with the coordinates paired as they actually appear — `ch₂` against
+`minA`, `deg` against `minB`, `rk` against `minC` — because
+`(minA, minB, minC)` is the cross product with coordinates *reversed*. -/
+theorem minor_orth (v w : NumClass) :
+    v.ch2 * minA v w + v.deg * minB v w + v.rk * minC v w = 0 := by
+  simp only [minA, minB, minC, rk, deg, ch2]; ring
+
 /-! ### Degeneracy of the charge -/
 
 /-- The charge of `v` vanishes at `(s, t)`, `t ≠ 0`, exactly when `v` is the
@@ -215,10 +236,10 @@ If two walls meet at `(s, t)` and their minor vectors are **not** proportional
 in the `(A, B)` slot, then that meeting point is forced. This is the algebraic
 half of "walls for a fixed `v` are nested".
 
-**The full nesting theorem is not proved here.** That statement — two distinct
-walls for the *same* `v` never meet — needs the extra input that both minor
-vectors are cross products against a common `v`, and a rank argument in `ℝ³`.
-Neither is done; see the trust record. -/
+The full nesting theorem follows, and is proved in the next section. It needs
+exactly the extra input this section lacks: that both minor vectors are cross
+products against a **common** `v`, hence both orthogonal to it. That is
+`minor_orth`, and it is a one-line `ring` identity. -/
 
 /-- Two walls meeting at a common point determine `s` and `s² + t²`, provided
 the `(A, B)` cross term is nonzero. -/
@@ -230,5 +251,204 @@ theorem eq_of_two_walls {s t : ℝ} (ht : t ≠ 0) {v w₁ w₂ : NumClass}
   rw [wall_iff_circle ht] at h₁ h₂
   rw [eq_div_iff hD]
   linear_combination (-(minA v w₂) / 2) * h₁ + (minA v w₁ / 2) * h₂
+
+/-! ## The nested wall theorem
+
+Two distinct walls for the same `v` never meet — away from the one point where
+`v`'s own charge degenerates, which `charge_eq_zero_iff` already identifies.
+
+The proof is four linear eliminations and no geometry. Write `Aᵢ, Bᵢ, Cᵢ` for
+the minors of `(v, wᵢ)` and `u = s² + t²`. A meeting point gives two circle
+equations; `minor_orth` gives two orthogonality relations:
+
+```
+Aᵢ·u + 2Bᵢ·s + 2Cᵢ = 0        (both walls pass through (s, t))
+ch₂·Aᵢ + deg·Bᵢ + rk·Cᵢ = 0    (minor_orth, the common v)
+```
+
+Eliminating pairwise turns those four into
+
+```
+(deg − s·rk)·crossAB = 0     and     (ch₂ − (u/2)·rk)·crossAB = 0
+```
+
+and `charge_eq_zero_iff` says those two coefficients vanish **together**
+exactly when `v`'s charge vanishes at `(s, t)`. So off that locus
+`crossAB = 0`, and the other two cross terms follow immediately.
+
+The `ℝ³` rank argument the previous section's docstring anticipated is
+therefore never needed as such: the two orthogonality relations do its work,
+and the degenerate case comes out as an explicit hypothesis rather than as a
+genericity assumption. -/
+
+/-- The `A`–`B` cross term of the two minor vectors. Vanishing of all three
+cross terms is exactly proportionality. -/
+def crossAB (v w₁ w₂ : NumClass) : ℝ := minA v w₁ * minB v w₂ - minA v w₂ * minB v w₁
+
+/-- The `A`–`C` cross term of the two minor vectors. -/
+def crossAC (v w₁ w₂ : NumClass) : ℝ := minA v w₁ * minC v w₂ - minA v w₂ * minC v w₁
+
+/-- The `B`–`C` cross term of the two minor vectors. -/
+def crossBC (v w₁ w₂ : NumClass) : ℝ := minB v w₁ * minC v w₂ - minB v w₂ * minC v w₁
+
+/-! The three cross terms are antisymmetric in `w₁`, `w₂`. That is what lets
+`wall_eq_of_meet` get its reverse inclusion from the same lemma.
+
+**Deliberately not `@[simp]`.** An antisymmetry lemma whose two sides are the
+same head symbol with permuted arguments rewrites forever: `simp` takes
+`crossAB v w₂ w₁` to `-crossAB v w₁ w₂`, then the inner term back again. Marking
+these `@[simp]` was the first version here, and `lake exe runLinter` rejected
+all three with `maximum recursion depth has been reached` -- a loop `lake build`
+does not see, because nothing in this file happened to call `simp` on one. -/
+
+theorem crossAB_swap (v w₁ w₂ : NumClass) :
+    crossAB v w₂ w₁ = -crossAB v w₁ w₂ := by simp only [crossAB]; ring
+
+theorem crossAC_swap (v w₁ w₂ : NumClass) :
+    crossAC v w₂ w₁ = -crossAC v w₁ w₂ := by simp only [crossAC]; ring
+
+theorem crossBC_swap (v w₁ w₂ : NumClass) :
+    crossBC v w₂ w₁ = -crossBC v w₁ w₂ := by simp only [crossBC]; ring
+
+/-- **The nested wall theorem, algebraic core.** Two walls for the same `v`
+that meet at a point where `v`'s charge does not vanish have proportional
+minor vectors — so they are the same wall.
+
+The charge hypothesis is not a genericity dodge: `charge_eq_zero_iff` shows the
+excluded locus is a single point of the `(s, t)` half plane for each `v` of
+nonzero rank, and it is exactly where the wall stops being a circle. -/
+theorem minorCross_eq_zero_of_two_walls {s t : ℝ} (ht : t ≠ 0) {v w₁ w₂ : NumClass}
+    (hv : ¬(reZ s t v = 0 ∧ imZ s t v = 0))
+    (h₁ : wallExpr s t v w₁ = 0) (h₂ : wallExpr s t v w₂ = 0) :
+    crossAB v w₁ w₂ = 0 ∧ crossAC v w₁ w₂ = 0 ∧ crossBC v w₁ w₂ = 0 := by
+  rw [wall_iff_circle ht] at h₁ h₂
+  have o₁ := minor_orth v w₁
+  have o₂ := minor_orth v w₂
+  -- The two eliminations. Each is a linear combination of the four hypotheses.
+  have key₁ : (v.deg - s * v.rk) * crossAB v w₁ w₂ = 0 := by
+    simp only [crossAB]
+    linear_combination (minA v w₁) * o₂ - (minA v w₂) * o₁
+      - (v.rk / 2) * (minA v w₁ * h₂ - minA v w₂ * h₁)
+  have key₂ : (v.ch2 - ((s ^ 2 + t ^ 2) / 2) * v.rk) * crossAB v w₁ w₂ = 0 := by
+    simp only [crossAB]
+    linear_combination (minB v w₂) * o₁ - (minB v w₁) * o₂
+      - (v.rk / 2) * (minB v w₂ * h₁ - minB v w₁ * h₂)
+  -- `hv`, read through `charge_eq_zero_iff`, says the two coefficients above
+  -- are not both zero.
+  have hv' : ¬(v.deg = s * v.rk ∧ v.ch2 = ((s ^ 2 + t ^ 2) / 2) * v.rk) := fun h =>
+    hv ((charge_eq_zero_iff ht v).mpr h)
+  have hAB : crossAB v w₁ w₂ = 0 := by
+    by_cases hd : v.deg = s * v.rk
+    · have hc : v.ch2 - ((s ^ 2 + t ^ 2) / 2) * v.rk ≠ 0 := fun h =>
+        hv' ⟨hd, by linarith⟩
+      exact (mul_eq_zero.mp key₂).resolve_left hc
+    · have hc : v.deg - s * v.rk ≠ 0 := fun h => hd (by linarith)
+      exact (mul_eq_zero.mp key₁).resolve_left hc
+  refine ⟨hAB, ?_, ?_⟩
+  · -- `s · crossAB + crossAC = 0`, from the two circle equations alone.
+    simp only [crossAB] at hAB
+    simp only [crossAC]
+    linear_combination (minA v w₁ / 2) * h₂ - (minA v w₂ / 2) * h₁ - s * hAB
+  · -- `u · crossAB = 2 · crossBC`, likewise.
+    simp only [crossAB] at hAB
+    simp only [crossBC]
+    linear_combination ((s ^ 2 + t ^ 2) / 2) * hAB
+      - (minB v w₂ / 2) * h₁ + (minB v w₁ / 2) * h₂
+
+/-! ### From proportional minors to equal loci
+
+With the cross terms gone, each coordinate of one minor vector times the other
+wall's circle expression is symmetric. So a single nonzero coordinate of `w₁`'s
+minor vector is enough to push `w₁`'s wall into `w₂`'s, and the reverse
+inclusion is the same lemma with the arguments swapped — the cross terms are
+antisymmetric, so they stay zero. -/
+
+/-- One inclusion. If the cross terms vanish and `w₁`'s minor vector is not the
+zero vector, every point of `w₁`'s wall is a point of `w₂`'s. -/
+theorem wall_subset_of_crossZero {v w₁ w₂ : NumClass}
+    (hAB : crossAB v w₁ w₂ = 0) (hAC : crossAC v w₁ w₂ = 0) (hBC : crossBC v w₁ w₂ = 0)
+    (hn : ¬(minA v w₁ = 0 ∧ minB v w₁ = 0 ∧ minC v w₁ = 0))
+    {s t : ℝ} (ht : t ≠ 0) (h : wallExpr s t v w₁ = 0) :
+    wallExpr s t v w₂ = 0 := by
+  rw [wall_iff_circle ht] at h ⊢
+  simp only [crossAB] at hAB
+  simp only [crossAC] at hAC
+  simp only [crossBC] at hBC
+  -- For each coordinate `X`, `X₁ · circ₂ = X₂ · circ₁`; the right side is `0`.
+  by_cases hA : minA v w₁ = 0
+  · by_cases hB : minB v w₁ = 0
+    · have hC : minC v w₁ ≠ 0 := fun hC => hn ⟨hA, hB, hC⟩
+      have : minC v w₁ * (minA v w₂ * (s ^ 2 + t ^ 2) + 2 * minB v w₂ * s
+          + 2 * minC v w₂) = 0 := by
+        linear_combination (-(s ^ 2 + t ^ 2)) * hAC - 2 * s * hBC + minC v w₂ * h
+      exact (mul_eq_zero.mp this).resolve_left hC
+    · have : minB v w₁ * (minA v w₂ * (s ^ 2 + t ^ 2) + 2 * minB v w₂ * s
+          + 2 * minC v w₂) = 0 := by
+        linear_combination (-(s ^ 2 + t ^ 2)) * hAB + 2 * hBC + minB v w₂ * h
+      exact (mul_eq_zero.mp this).resolve_left hB
+  · have : minA v w₁ * (minA v w₂ * (s ^ 2 + t ^ 2) + 2 * minB v w₂ * s
+        + 2 * minC v w₂) = 0 := by
+      linear_combination 2 * s * hAB + 2 * hAC + minA v w₂ * h
+    exact (mul_eq_zero.mp this).resolve_left hA
+
+/-- **Bertram's nested wall theorem.** Two walls for the same numerical class
+`v` that meet at a single point, away from the degenerate locus of `v`'s own
+charge, are the **same wall** — they agree at every point of the half plane.
+
+Contrapositively: distinct numerical walls for a fixed `v` are disjoint. That
+is the statement the "walls are nested semicircles" picture rests on, and the
+reason wall-crossing for a fixed class is totally ordered.
+
+Both minor vectors are required to be nonzero. A zero minor vector is not a
+wall — `wallExpr` vanishes identically — so excluding it excludes nothing the
+statement is about. -/
+theorem wall_eq_of_meet {s t : ℝ} (ht : t ≠ 0) {v w₁ w₂ : NumClass}
+    (hv : ¬(reZ s t v = 0 ∧ imZ s t v = 0))
+    (h₁ : wallExpr s t v w₁ = 0) (h₂ : wallExpr s t v w₂ = 0)
+    (hn₁ : ¬(minA v w₁ = 0 ∧ minB v w₁ = 0 ∧ minC v w₁ = 0))
+    (hn₂ : ¬(minA v w₂ = 0 ∧ minB v w₂ = 0 ∧ minC v w₂ = 0))
+    {s' t' : ℝ} (ht' : t' ≠ 0) :
+    wallExpr s' t' v w₁ = 0 ↔ wallExpr s' t' v w₂ = 0 := by
+  obtain ⟨hAB, hAC, hBC⟩ := minorCross_eq_zero_of_two_walls ht hv h₁ h₂
+  have hAB' : crossAB v w₂ w₁ = 0 := by rw [crossAB_swap, hAB, neg_zero]
+  have hAC' : crossAC v w₂ w₁ = 0 := by rw [crossAC_swap, hAC, neg_zero]
+  have hBC' : crossBC v w₂ w₁ = 0 := by rw [crossBC_swap, hBC, neg_zero]
+  exact ⟨wall_subset_of_crossZero hAB hAC hBC hn₁ ht',
+         wall_subset_of_crossZero hAB' hAC' hBC' hn₂ ht'⟩
+
+/-! ### The charge hypothesis is load-bearing
+
+`wall_eq_of_meet` excludes the point where `v`'s own charge vanishes. That is
+not a technical convenience, and the exclusion is not vacuous either way — the
+witnesses below are explicit.
+
+Take `v = (2, 0, 1)` and the point `(s, t) = (0, 1)`. Then `reZ = -1 + 1 = 0`
+and `imZ = 0`, so the charge degenerates there; and the wall equation
+`minA·(s² + t²) + 2·minB·s + 2·minC = 0` becomes `minA + 2·minC = 0`, which
+`minor_orth` makes automatic for **every** `w`. So at that one point *all*
+walls of `v` meet, and nesting fails as badly as it possibly could.
+
+`w₁ = (0, 1, 0)` gives the unit circle and `w₂ = (1, 0, 0)` the line `s = 0`.
+They meet at `(0, 1)`, both minor vectors are nonzero, and they are different
+walls — `(0, 2)` is on the second and not the first. Every hypothesis of
+`wall_eq_of_meet` except the charge one holds. -/
+
+/-- The degenerate class of the worked counterexample: `v = (2, 0, 1)`. -/
+def degV : NumClass := (2, 0, 1)
+
+/-- `v`'s charge really does vanish at `(0, 1)`. -/
+theorem degV_charge_eq_zero : reZ 0 1 degV = 0 ∧ imZ 0 1 degV = 0 := by
+  constructor <;> norm_num [reZ, imZ, degV, rk, deg, ch2]
+
+/-- **Dropping the charge hypothesis makes `wall_eq_of_meet` false.** Two walls
+of `degV` with nonzero minor vectors meet at `(0, 1)` and disagree at `(0, 2)`. -/
+theorem wall_eq_of_meet_needs_charge :
+    ∃ w₁ w₂ : NumClass,
+      wallExpr 0 1 degV w₁ = 0 ∧ wallExpr 0 1 degV w₂ = 0 ∧
+      ¬(minA degV w₁ = 0 ∧ minB degV w₁ = 0 ∧ minC degV w₁ = 0) ∧
+      ¬(minA degV w₂ = 0 ∧ minB degV w₂ = 0 ∧ minC degV w₂ = 0) ∧
+      wallExpr 0 2 degV w₂ = 0 ∧ wallExpr 0 2 degV w₁ ≠ 0 := by
+  refine ⟨(0, 1, 0), (1, 0, 0), ?_, ?_, ?_, ?_, ?_, ?_⟩ <;>
+    norm_num [wallExpr, reZ, imZ, minA, minB, minC, degV, rk, deg, ch2]
 
 end BridgelandStabLean.Wall

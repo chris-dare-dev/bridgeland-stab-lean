@@ -216,6 +216,17 @@ test for exactly that parse hazard. -/
 #print axioms Tilting.HeartTorsionPair.tiltGEAt_one_le
 #print axioms Tilting.HeartTorsionPair.tiltAt_zero'
 
+/-! ## Tilting lane — recognising the two aisles from a triangle
+
+The two halves of `exists_triangle_zero_one`. Neither needs a cohomology
+functor; see the module docstring for why the textbook construction appeared to
+and this one does not. -/
+
+#print axioms Tilting.HeartTorsionPair.tiltLE_of_triangle
+#print axioms Tilting.HeartTorsionPair.tiltGE_of_triangle
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_of_triangle
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_of_triangle
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
@@ -279,6 +290,32 @@ none is axiomatised, because the wall equation is an identity and needs none. -/
 #print axioms Wall.wallExpr_shift
 #print axioms Wall.charge_eq_zero_iff
 #print axioms Wall.eq_of_two_walls
+
+/-! ### Wall lane — the nested wall theorem
+
+Still the same arithmetic: `wall_eq_of_meet` is a statement about triples of
+reals and says nothing about sheaves. In particular it is NOT the geometric
+nested-wall theorem, which additionally asserts that the walls it orders are
+walls of actual stability, and that is not expressible at the pin.
+
+`wall_eq_of_meet_needs_charge` is a counterexample, not a theorem about walls:
+it exhibits two genuinely different walls meeting at the one point where `v`'s
+charge degenerates, which is what makes the charge hypothesis load-bearing
+rather than decorative. -/
+
+#print axioms Wall.minor_orth
+#print axioms Wall.crossAB
+#print axioms Wall.crossAC
+#print axioms Wall.crossBC
+#print axioms Wall.crossAB_swap
+#print axioms Wall.crossAC_swap
+#print axioms Wall.crossBC_swap
+#print axioms Wall.minorCross_eq_zero_of_two_walls
+#print axioms Wall.wall_subset_of_crossZero
+#print axioms Wall.wall_eq_of_meet
+#print axioms Wall.degV
+#print axioms Wall.degV_charge_eq_zero
+#print axioms Wall.wall_eq_of_meet_needs_charge
 
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
