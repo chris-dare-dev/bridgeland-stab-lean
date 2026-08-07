@@ -20,8 +20,10 @@ length is exactly the usual sum of factor masses.
 Convex-hull containment under monomorphisms, strict support of interior path
 vertices, and the semistable-descent/maximal-phase algebra needed for the
 ambient boundary theorem are proved separately below; none is hidden inside
-the path representation.  The remaining step from these ingredients to full
-ambient-polygon extremality is likewise kept explicit.
+the path representation.  The support-completeness theorem for every
+positive-angle direction is stated explicitly and avoids identifying the
+whole ambient polygon with the closed HN vertex hull, which is false in
+general.
 -/
 
 open CategoryTheory CategoryTheory.Limits Complex
@@ -943,6 +945,200 @@ private theorem cokernel_ofLE_not_isZero {I S : Subobject E} (hIS : I ≤ S)
   haveI : IsIso (Subobject.ofLE I S hIS) := isIso_of_mono_of_epi _
   exact hne (Subobject.eq_of_comm (asIso (Subobject.ofLE I S hIS))
     (Subobject.ofLE_arrow hIS))
+
+/-- A vertex which maximizes a cross-product support functional on the
+distinguished HN path also maximizes it against every subobject charge.
+
+This is the support-function form of the statement that the HN path is the
+left boundary of the ambient HN polygon.  Unlike the stronger (and generally
+false) assertion that the whole ambient polygon is the convex hull of the HN
+vertices, it only controls support directions with angle in `(0, π)`.  Those
+are exactly the directions used by the polygon-perimeter comparison.
+
+The proof cuts an arbitrary subobject `S` at the maximizing filtration vertex
+`K = E_k`.  The quotient `S / (S ∩ K)` lies no higher than the next HN ray,
+while `K / (S ∩ K)` lies no lower than the preceding HN ray.  Maximality on
+the two neighboring path vertices places the support ray between them, so the
+two quotient contributions have opposite signs. -/
+theorem subobjectCharge_le_of_polygonVertex_isMax
+    (hHN : Z.HasHNProperty) {θ : ℝ} (hθ : θ ∈ Set.Ioo 0 Real.pi)
+    (k : Fin (F.n + 1))
+    (hmax : ∀ j, ComplexPolygonalPath.crossFunctional
+      (ComplexPolygonalPath.unitRay θ) (F.polygonVertex j) ≤
+        ComplexPolygonalPath.crossFunctional
+          (ComplexPolygonalPath.unitRay θ) (F.polygonVertex k))
+    (S : Subobject E) :
+    ComplexPolygonalPath.crossFunctional
+        (ComplexPolygonalPath.unitRay θ) (Z.Zobj (S : A)) ≤
+      ComplexPolygonalPath.crossFunctional
+        (ComplexPolygonalPath.unitRay θ) (F.polygonVertex k) := by
+  let r : ℂ := ComplexPolygonalPath.unitRay θ
+  let l : ℂ →L[ℝ] ℝ := ComplexPolygonalPath.crossFunctional r
+  have hr : r ∈ upperHalfPlaneUnion :=
+    ComplexPolygonalPath.unitRay_mem_upperHalfPlaneUnion hθ.1 hθ.2
+  have hrne : r ≠ 0 := upperHalfPlaneUnion_ne_zero hr
+  have hrarg : Complex.arg r = θ :=
+    ComplexPolygonalPath.arg_unitRay hθ.1 hθ.2
+  let K : Subobject E := F.chain k
+  let I : Subobject E := S ⊓ K
+  let Qₛ : A := cokernel (Subobject.ofLE I S inf_le_left)
+  let Qₖ : A := cokernel (Subobject.ofLE I K inf_le_right)
+  have hZₛ : Z.Zobj (S : A) = Z.Zobj (I : A) + Z.Zobj Qₛ :=
+    Z.additive _ (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE I S inf_le_left))
+      inferInstance inferInstance)
+  have hZₖ : Z.Zobj (K : A) = Z.Zobj (I : A) + Z.Zobj Qₖ :=
+    Z.additive _ (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE I K inf_le_right))
+      inferInstance inferInstance)
+  have hdiff : Z.Zobj (S : A) - Z.Zobj (K : A) =
+      Z.Zobj Qₛ - Z.Zobj Qₖ := by
+    linear_combination hZₛ - hZₖ
+  have hleft : l (Z.Zobj Qₛ) ≤ 0 := by
+    by_cases hkn : k < Fin.last F.n
+    · let iNext : Fin F.n := ⟨k.1, by simpa [Fin.last] using hkn⟩
+      have hkNext : iNext.castSucc = k := by apply Fin.ext; rfl
+      have hpath : l (F.polygonVertex iNext.succ) ≤
+          l (F.polygonVertex iNext.castSucc) := by
+        simpa [l, r, hkNext] using hmax iNext.succ
+      have hedge_nonpos : l (F.polygonEdge iNext) ≤ 0 := by
+        rw [polygonEdge, map_sub]
+        linarith
+      have hargNext : Complex.arg (F.polygonEdge iNext) ≤ θ := by
+        have hcross : 0 ≤
+            (F.polygonEdge iNext).re * r.im -
+              (F.polygonEdge iNext).im * r.re := by
+          dsimp [l] at hedge_nonpos
+          rw [ComplexPolygonalPath.crossFunctional_apply] at hedge_nonpos
+          linarith
+        have harg := arg_le_of_cross_nonneg
+          (upperHalfPlaneUnion_ne_zero
+            (F.polygonEdge_mem_upperHalfPlaneUnion iNext)) hrne
+          (by rw [hrarg]; exact hθ.1) hcross
+        simpa [hrarg] using harg
+      by_cases hIS : I = S
+      · have hZzero : Z.Zobj Qₛ = 0 := by
+          rw [hIS] at hZₛ
+          exact (add_left_cancel (show Z.Zobj (S : A) + 0 =
+            Z.Zobj (S : A) + Z.Zobj Qₛ by simpa using hZₛ)).symm
+        rw [hZzero, map_zero]
+      · have hQₛ : ¬IsZero Qₛ := cokernel_ofLE_not_isZero inf_le_left hIS
+        have hphase : Z.phase Qₛ ≤ F.φ iNext := by
+          simpa [Qₛ, I, K, iNext] using
+            F.quotient_inf_phase_le hHN (k := k.1) (by
+              simpa [Fin.last] using hkn) S hQₛ
+        have hargQ : Complex.arg (Z.Zobj Qₛ) ≤ θ := by
+          apply le_trans _ hargNext
+          rw [F.polygonEdge_arg iNext]
+          calc
+            Complex.arg (Z.Zobj Qₛ) = Real.pi * Z.phase Qₛ := by
+              unfold StabilityFunction.phase
+              field_simp
+            _ ≤ Real.pi * F.φ iNext :=
+              mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+        have hcross := cross_nonneg_of_arg_le
+          (im_nonneg_of_mem_upperHalfPlaneUnion (Z.upper Qₛ hQₛ))
+          (upperHalfPlaneUnion_ne_zero (Z.upper Qₛ hQₛ)) hrne
+          (by simpa [hrarg] using hargQ)
+        dsimp [l]
+        rw [ComplexPolygonalPath.crossFunctional_apply]
+        linarith
+    · have hk : k = Fin.last F.n :=
+        le_antisymm (Fin.le_last k) (not_lt.mp hkn)
+      have hKtop : K = ⊤ := by
+        dsimp [K]
+        rw [hk]
+        exact F.chain_top
+      have hIS : I = S := by
+        simp [I, hKtop]
+      have hZzero : Z.Zobj Qₛ = 0 := by
+        rw [hIS] at hZₛ
+        exact (add_left_cancel (show Z.Zobj (S : A) + 0 =
+          Z.Zobj (S : A) + Z.Zobj Qₛ by simpa using hZₛ)).symm
+      rw [hZzero, map_zero]
+  have hright : 0 ≤ l (Z.Zobj Qₖ) := by
+    by_cases hk₀ : 0 < k
+    · let iPrev : Fin F.n := ⟨k.1 - 1, by omega⟩
+      have hkPrev : iPrev.succ = k := by apply Fin.ext; simp [iPrev]; omega
+      have hpath : l (F.polygonVertex iPrev.castSucc) ≤
+          l (F.polygonVertex iPrev.succ) := by
+        simpa [l, r, hkPrev] using hmax iPrev.castSucc
+      have hedge_nonneg : 0 ≤ l (F.polygonEdge iPrev) := by
+        rw [polygonEdge, map_sub]
+        linarith
+      have hθargPrev : θ ≤ Complex.arg (F.polygonEdge iPrev) := by
+        have harg := arg_le_of_cross_nonneg hrne
+          (upperHalfPlaneUnion_ne_zero
+            (F.polygonEdge_mem_upperHalfPlaneUnion iPrev))
+          (arg_pos_of_mem_upperHalfPlaneUnion
+            (F.polygonEdge_mem_upperHalfPlaneUnion iPrev)) (by
+              dsimp [l] at hedge_nonneg
+              simpa [ComplexPolygonalPath.crossFunctional_apply] using hedge_nonneg)
+        simpa [hrarg] using harg
+      by_cases hIK : I = K
+      · have hZzero : Z.Zobj Qₖ = 0 := by
+          rw [hIK] at hZₖ
+          exact (add_left_cancel (show Z.Zobj (K : A) + 0 =
+            Z.Zobj (K : A) + Z.Zobj Qₖ by simpa using hZₖ)).symm
+        rw [hZzero, map_zero]
+      · have hQₖ : ¬IsZero Qₖ := cokernel_ofLE_not_isZero inf_le_right hIK
+        have hphase : F.φ iPrev ≤ Z.phase Qₖ := by
+          simpa [Qₖ, I, K, iPrev] using
+            F.last_prefix_le_quotient_phase hHN (k := k.1) (by omega)
+              (by omega) (cokernel.π (Subobject.ofLE I K inf_le_right)) hQₖ
+        have hargQ : θ ≤ Complex.arg (Z.Zobj Qₖ) := by
+          apply hθargPrev.trans
+          rw [F.polygonEdge_arg iPrev]
+          calc
+            Real.pi * F.φ iPrev ≤ Real.pi * Z.phase Qₖ :=
+              mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+            _ = Complex.arg (Z.Zobj Qₖ) := by
+              unfold StabilityFunction.phase
+              field_simp
+        exact cross_nonneg_of_arg_le (im_nonneg_of_mem_upperHalfPlaneUnion hr)
+          hrne (upperHalfPlaneUnion_ne_zero (Z.upper Qₖ hQₖ)) (by
+            simpa [hrarg] using hargQ)
+    · have hk : k = 0 := by
+        apply Fin.ext
+        exact Nat.eq_zero_of_not_pos hk₀
+      have hKbot : K = ⊥ := by
+        dsimp [K]
+        rw [hk]
+        exact F.chain_bot
+      have hIK : I = K := by
+        simp [I, hKbot]
+      have hZzero : Z.Zobj Qₖ = 0 := by
+        rw [hIK] at hZₖ
+        exact (add_left_cancel (show Z.Zobj (K : A) + 0 =
+          Z.Zobj (K : A) + Z.Zobj Qₖ by simpa using hZₖ)).symm
+      rw [hZzero, map_zero]
+  have hmapdiff : l (Z.Zobj (S : A)) - l (Z.Zobj (K : A)) =
+      l (Z.Zobj Qₛ) - l (Z.Zobj Qₖ) := by
+    rw [← map_sub, hdiff, map_sub]
+  change l (Z.Zobj (S : A)) ≤ l (F.polygonVertex k)
+  rw [show F.polygonVertex k = Z.Zobj (K : A) by rfl]
+  linarith
+
+/-- Every positive-angle support functional reaches its ambient HN-polygon
+maximum on the distinguished HN path. -/
+theorem hnPolygon_le_of_polygonVertex_isMax
+    (hHN : Z.HasHNProperty) {θ : ℝ} (hθ : θ ∈ Set.Ioo 0 Real.pi)
+    (k : Fin (F.n + 1))
+    (hmax : ∀ j, ComplexPolygonalPath.crossFunctional
+      (ComplexPolygonalPath.unitRay θ) (F.polygonVertex j) ≤
+        ComplexPolygonalPath.crossFunctional
+          (ComplexPolygonalPath.unitRay θ) (F.polygonVertex k))
+    {z : ℂ} (hz : z ∈ Z.hnPolygon E) :
+    ComplexPolygonalPath.crossFunctional
+        (ComplexPolygonalPath.unitRay θ) z ≤
+      ComplexPolygonalPath.crossFunctional
+        (ComplexPolygonalPath.unitRay θ) (F.polygonVertex k) := by
+  let l : ℂ →L[ℝ] ℝ := ComplexPolygonalPath.crossFunctional
+    (ComplexPolygonalPath.unitRay θ)
+  obtain ⟨y, ⟨S, rfl⟩, hy⟩ :=
+    (l.toLinearMap.convexOn (convex_univ : Convex ℝ (Set.univ : Set ℂ))).exists_ge_of_mem_convexHull
+      (Set.subset_univ _) hz
+  exact hy.trans (F.subobjectCharge_le_of_polygonVertex_isMax hHN hθ k hmax S)
 
 /-- A strict linear maximum on a generating set remains a strict unique
 maximum on its convex hull. -/

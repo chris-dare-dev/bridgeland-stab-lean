@@ -27,12 +27,15 @@ Harder--Narasimhan filtrations.  Here we establish its norm-theoretic base:
 
 `HNPolygon` supplies the ambient convex hull and distinguished HN path.
 `ConvexPolygonPerimeter` proves the independent `t = 0` comparison of closed
-vertex polygons and specializes it to HN paths. `H0ExactnessBridge` identifies
-the exact heart-source obstruction as a canonical cokernel map being monic and
-discharges it from homological `H⁰`/`H⁰'` data. The remaining mathematical
-inputs are containment of the full ambient HN polygon in the closed HN vertex
-polygon, and an unconditional proof of that exactness obstruction. They are
-named below but are not assumed as instances or axioms.
+vertex polygons, proves that positive-angle support maxima of the ambient HN
+polygon occur on the HN path, and derives the boundary-cut mass comparison for
+monomorphisms and short exact sequences. `H0ExactnessBridge` identifies the
+exact heart-source obstruction as a canonical cokernel map being monic and
+discharges it from homological `H⁰`/`H⁰'` data. The remaining integration
+inputs are the identification of abelian HN factor mass with the ambient
+`stabilityMass` on the canonical heart, and an unconditional proof of the
+exactness obstruction. They are named below but are not assumed as instances
+or axioms.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex

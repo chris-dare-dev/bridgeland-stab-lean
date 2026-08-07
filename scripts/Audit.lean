@@ -658,6 +658,8 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.AbelianHNFiltration.quotientInfToCokernel_mono
 #print axioms CategoryTheory.AbelianHNFiltration.last_prefix_le_quotient_phase
 #print axioms CategoryTheory.AbelianHNFiltration.quotient_inf_phase_le
+#print axioms CategoryTheory.AbelianHNFiltration.subobjectCharge_le_of_polygonVertex_isMax
+#print axioms CategoryTheory.AbelianHNFiltration.hnPolygon_le_of_polygonVertex_isMax
 #print axioms CategoryTheory.AbelianHNFiltration.subobjectCharge_exists_strict_support
 #print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_exists_strict_support_hnPolygon
 #print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_mem_hnPolygon
@@ -689,6 +691,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional
 #print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_sum_turning
 #print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_length_add_chord
+#print axioms CategoryTheory.ComplexPolygonalPath.length_snoc
 #print axioms CategoryTheory.ComplexPolygonalPath.closedLength_comp_monotone_le
 #print axioms CategoryTheory.ComplexPolygonalPath.closedLength_le_of_monotone_support
 #print axioms CategoryTheory.ComplexPolygonalPath.last_sub_zero_mem_upperHalfPlaneUnion
@@ -706,6 +709,9 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex_mono_of_angle_gt
 #print axioms CategoryTheory.ComplexPolygonalPath.length_le_of_convexHull_subset
 #print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_of_vertexHull_subset
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_add_norm_charge_sub_of_mono
+#print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_cokernel_of_mono
+#print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_of_shortExact
 
 /-! ### H0ExactnessBridge — the exact heart-source obstruction -/
 
