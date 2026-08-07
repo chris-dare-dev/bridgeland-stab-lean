@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these three lanes and not others
+## Why these four lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -325,6 +325,32 @@ Three names in this lane are suggestive and each is weaker than it sounds.
 object has that class. `IsHyperbolicPair` is negative Gram determinant, not a
 claim that a wall exists — the correspondence with actual walls is
 Bayer–Macrì Theorem 5.7, which is geometry and is **not** formalized here.
+
+### Lane 4 — `Tilting/` (a gap in Mathlib, not in the anchor)
+
+Torsion pairs on an abelian category: two isomorphism-closed classes `(T, F)`
+with no nonzero map `T → F`, such that every object sits in a short exact
+sequence `0 → tX → X → fX → 0` with `tX ∈ T`, `fX ∈ F`.
+
+**Mathlib does not have this at the pin.** Every `Torsion` file there is about
+torsion in algebra — `Algebra/Group/Torsion.lean`, `GroupTheory/Torsion.lean`,
+`RingTheory/Flat/TorsionFree.lean`. There is no torsion pair, torsion theory,
+or torsion class for abelian categories, so this is built from scratch. It
+imports only Mathlib: no anchor, no triangulated category, no geometry.
+
+Proved: each class is exactly the orthogonal of the other (`tors_iff`,
+`free_iff`); `F` is closed under subobjects and `T` under quotients; both are
+closed under extensions; and a torsion subobject factors through any
+decomposition, so the torsion end is maximal. The two degenerate torsion pairs
+are **constructed**, not assumed — a structure with no inhabitant would make
+every theorem about it vacuously true.
+
+**The Happel–Reiten–Smalø tilt is not here.** The directory name invites the
+opposite reading, so: what exists is the *input datum* and its elementary
+theory. The tilt — building a second t-structure whose heart is the extension
+of `T` by `F[1]` — needs `TStructure`'s `exists_triangle_zero_one` field, and
+producing that triangle for the tilted aisles needs the octahedral axiom. None
+of it is attempted. Nothing in this lane connects to a stability condition yet.
 
 ### Not a lane
 

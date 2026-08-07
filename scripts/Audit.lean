@@ -161,6 +161,24 @@ in `BridgelandStabLean/Mukai/`. -/
 #print axioms Mukai.HasIsotropicClass
 #print axioms Mukai.exists_neg_selfPairing_of_isHyperbolicPair
 
+/-! ## Tilting lane — torsion pairs in an abelian category
+
+Mathlib has no torsion pair for abelian categories at the pin, so this is built
+from scratch. Pure abelian-category theory: no anchor import, no geometry. The
+Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
+
+#print axioms Tilting.TorsionPair
+#print axioms Tilting.TorsionPair.isZero_of_tors_of_free
+#print axioms Tilting.TorsionPair.tors_iff
+#print axioms Tilting.TorsionPair.free_iff
+#print axioms Tilting.TorsionPair.free_of_mono
+#print axioms Tilting.TorsionPair.tors_of_epi
+#print axioms Tilting.TorsionPair.tors_of_shortExact
+#print axioms Tilting.TorsionPair.free_of_shortExact
+#print axioms Tilting.TorsionPair.exists_factor_of_tors
+#print axioms Tilting.TorsionPair.allTors
+#print axioms Tilting.TorsionPair.allFree
+
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift
