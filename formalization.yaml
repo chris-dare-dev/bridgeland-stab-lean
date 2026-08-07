@@ -246,17 +246,19 @@ fidelity:
     under monomorphisms. Consecutive edges are proved equal to factor charges,
     lie in the Bridgeland half-plane, and have strictly decreasing arguments.
     Every interior path vertex is the strict unique maximizer of an explicit
-    continuous real-linear functional among path vertices. The file now also
-    exposes the semistable-descent theorem used in the HN-boundary argument,
-    proves that no semistable subobject lies above the first HN phase, proves
-    phase(E) <= phi(0), and extends that phase bound to every nonzero subobject
-    under HasHNProperty. Path length remains identified with factor mass, and
+    continuous real-linear functional among path vertices. At code commit
+    50c468d this is upgraded to the full ambient HN polygon: a quotient-tail
+    HN filtration identifies the phase window below a cut, the canonical map
+    S/(S intersection E_k) -> E/E_k is proved monic, and a prefix-quotient
+    vanishing argument supplies the opposite phase window. Their charge
+    decomposition proves strict support against every other subobject charge,
+    and a convex-hull argument proves strict support against every other point
+    of the polygon. This completes the interior extremality input from
+    Proposition 2.13. Path length remains identified with factor mass, and
     the endpoint chord remains bounded by path length.
 
-    This is an audited strengthening of the boundary foundation, not a claim
-    of full Proposition 2.13: the quotient/tail induction upgrading strict
-    path support to extremality against every ambient subobject charge is
-    still open, as is the polygon-perimeter comparison in Ikeda Lemma 3.7.
+    The independent polygon-perimeter comparison in Ikeda Lemma 3.7 is still
+    open, so this does not inhabit StabilityMassBoundaryHeartInequality.
     H0ExactnessBridge.lean packages the heart-source H0 short complex and
     proves that its exactness is equivalent to monicity of the canonical
     cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
@@ -447,6 +449,16 @@ fidelity:
     sorryAx. Full ambient-polygon extremality and perimeter monotonicity are
     not included in that count as completed claims.
 
+    COUNT UPDATE (ambient HN boundary), 2026-08-06. Ten additional public
+    declarations cover the last-edge phase bound, prefix-to-semistable
+    vanishing, the quotient-tail HN filtration, the canonical quotient
+    monomorphism, both phase-window estimates, strict support against every
+    subobject charge, and strict support over the full convex hull. The manual
+    audit has 572 print commands at code commit 50c468d. The ten new records
+    were independently parsed against [propext, Classical.choice, Quot.sound]
+    with no sorryAx, on top of the previously gated 562-record sweep. The
+    perimeter comparison is not included as a completed claim.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -492,6 +504,12 @@ fidelity:
     `lake exe runLinter` still reports exactly the same six inherited findings
     and none in HNPolygon. The environment emitter completed successfully with
     1178 constants, 683 in scope, and zero constants depending on sorryAx.
+    At code commit 50c468d, `lake build` again completed all 3793 jobs. The ten
+    new ambient-boundary audit records passed the strict parser with the
+    standard allowlist and no sorryAx; the audit source contains 572 print
+    commands in total. `lake exe runLinter` still reports exactly the same six
+    inherited findings and none in HNPolygon. The regenerated emitter records
+    1257 constants, 693 in scope, and zero constants depending on sorryAx.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -540,6 +558,17 @@ fidelity:
     ambient subobject charges, followed by the Lemma 3.7 perimeter theorem.
     The H0 unconditional exactness gap is unchanged. The environment emitter
     was rebuilt and emitted 1178 constants (683 in scope) with no sorryAx.
+
+    Code commit 50c468d completes the interior ambient-extremality obligation.
+    It constructs the quotient-tail HN filtration at an arbitrary cut, proves
+    S/(S intersection E_k) -> E/E_k monic, proves the complementary prefix
+    quotient phase estimate, and combines the two estimates into strict
+    support of each interior HN vertex over the full convex hull of subobject
+    charges. The full build completed at 3793 jobs; the ten new audit records
+    pass the strict allowlist with no sorryAx; and the emitter reports 1257
+    constants (693 in scope) with no sorryAx dependency. The next open step is
+    precisely the t=0 polygon-perimeter comparison of Ikeda Lemma 3.7. The H0
+    unconditional exactness gap is unchanged.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean

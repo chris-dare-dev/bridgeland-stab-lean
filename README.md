@@ -225,18 +225,19 @@ subobject charges and the distinguished HN boundary path, proves containment
 under monomorphisms, and identifies successive edges with HN-factor charges
 whose arguments strictly decrease. Every interior path vertex is the unique
 maximizer of an explicit continuous real-linear functional among path
-vertices. Public semistable descent, the first-factor phase bound, and its
-extension to every nonzero subobject under the HN property supply the
-algebraic inputs for the ambient boundary theorem. The file also identifies
-path length with factor mass and supplies the endpoint chord bound.
+vertices and, under the HN property, among every point of the full ambient HN
+polygon. The ambient theorem is obtained from a quotient-tail HN filtration,
+the canonical monomorphism `S / (S ∩ Eₖ) ⟶ E / Eₖ`, and the complementary
+prefix-quotient phase bound. The file also identifies path length with factor
+mass and supplies the endpoint chord bound.
 `H0ExactnessBridge` identifies
 the exact heart-source obstruction as monicity of
 `coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
 or `H⁰'` structure without installing a global instance. Of the three major
 mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
-first now has path-level strict extremality, monomorphism containment, and the
-maximal-phase boundary algebra, but still needs the quotient/tail induction
-controlling all ambient subobject charges and the polygon-perimeter theorem.
+first now has full interior ambient-polygon extremality and monomorphism
+containment, but still needs the independent polygon-perimeter theorem from
+Ikeda Lemma 3.7 before its named boundary-heart proposition can be inhabited.
 The second still needs the unconditional homological input (or the equivalent
 cokernel monicity proof). Their named propositions remain uninhabited and are
 not installed as instances or axioms.
