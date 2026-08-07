@@ -712,6 +712,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_add_norm_charge_sub_of_mono
 #print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_cokernel_of_mono
 #print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_of_shortExact
+#print axioms CategoryTheory.AbelianHNFiltration.mass_eq_mass
 
 /-! ### H0ExactnessBridge — the exact heart-source obstruction -/
 
@@ -728,6 +729,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_Zobj
 #print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_hasHN
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.mem_slicing_of_heart_isSemistable
 #print axioms CategoryTheory.Triangulated.norm_charge_le_stabilityMass_toReal
 #print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_one
 #print axioms CategoryTheory.Triangulated.stabilityMass_shift_one
@@ -740,6 +742,8 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.Triangulated.StabilityMassSemistableLeftTriangleInequality
 #print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable_obj₁
 #print axioms CategoryTheory.Triangulated.StabilityMassHeartShortExactInequality
+#print axioms CategoryTheory.Triangulated.AbelianHNFiltration.mass_eq_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.stabilityMassBoundaryHeartInequality
 #print axioms CategoryTheory.Triangulated.stabilityMassHeartShortExactInequality_of_triangle
 #print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_obj₂_semistable
 #print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_same_phase

@@ -32,10 +32,11 @@ polygon occur on the HN path, and derives the boundary-cut mass comparison for
 monomorphisms and short exact sequences. `H0ExactnessBridge` identifies the
 exact heart-source obstruction as a canonical cokernel map being monic and
 discharges it from homological `H⁰`/`H⁰'` data. The remaining integration
-inputs are the identification of abelian HN factor mass with the ambient
-`stabilityMass` on the canonical heart, and an unconditional proof of the
-exactness obstruction. They are named below but are not assumed as instances
-or axioms.
+input is an unconditional proof of that exactness obstruction. This file now
+also proves that heart semistability agrees with the ambient slicing, converts
+abelian HN filtrations into ambient HN towers with the same factor mass, and
+inhabits the phase-one boundary-heart milestone, including zero objects. No
+open premise is assumed as an instance or axiom.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex
@@ -100,6 +101,166 @@ theorem StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_hasHN
       ((σ.slicing.toTStructure).heartFullSubcategoryAbelian)
       σ.observableStabilityFunctionOnHeart :=
   σ.observable.stabilityFunctionOnHeart_hasHN_local C
+
+/-- The converse half of the heart/slicing semistability comparison.  A
+nonzero object that is semistable for the stability function on the canonical
+heart is semistable in the ambient slicing, at the same phase. -/
+theorem StabilityCondition.WithClassMap.mem_slicing_of_heart_isSemistable
+    (σ : StabilityCondition.WithClassMap C v)
+    (E : σ.slicing.toTStructure.heart.FullSubcategory)
+    (hE : @StabilityFunction.IsSemistable _ _
+      ((σ.slicing.toTStructure).heartFullSubcategoryAbelian)
+      σ.observableStabilityFunctionOnHeart E) :
+    σ.slicing.P (@StabilityFunction.phase _ _
+      ((σ.slicing.toTStructure).heartFullSubcategoryAbelian)
+      σ.observableStabilityFunctionOnHeart E) E.obj := by
+  let t := σ.slicing.toTStructure
+  let Z := σ.observableStabilityFunctionOnHeart
+  letI := t.hasHeartFullSubcategory
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  have hEnz : ¬IsZero E := hE.1
+  have hEobj : ¬IsZero E.obj := fun hZ ↦ hEnz <|
+    ObjectProperty.FullSubcategory.isZero_of_obj_isZero
+      (C := C) (P := t.heart) (X := E) hZ
+  have hEheart := (σ.slicing.toTStructure_heart_iff C E.obj).mp E.property
+  obtain ⟨F, hn, hfirst, hlast⟩ :=
+    HNFiltration.exists_both_nonzero C σ.slicing hEobj
+  have hall_mem : ∀ i : Fin F.n, F.φ i ∈ Set.Ioc (0 : ℝ) 1 := by
+    intro i
+    constructor
+    · calc
+        0 < σ.slicing.phiMinus C E.obj hEobj :=
+          gt_phases_of_gtProp C σ.slicing hEobj hEheart.1
+        _ = F.φ ⟨F.n - 1, by lia⟩ :=
+          σ.slicing.phiMinus_eq C E.obj hEobj F hn hlast
+        _ ≤ F.φ i := F.hφ.antitone (Fin.mk_le_mk.mpr (by lia))
+    · calc
+        F.φ i ≤ F.φ ⟨0, hn⟩ :=
+          F.hφ.antitone (Fin.mk_le_mk.mpr (Nat.zero_le i.val))
+        _ = σ.slicing.phiPlus C E.obj hEobj := by
+          symm
+          exact σ.slicing.phiPlus_eq C E.obj hEobj F hn hfirst
+        _ ≤ 1 := σ.slicing.phiPlus_le_of_leProp C hEobj hEheart.2
+  let iFirst : Fin F.n := ⟨0, hn⟩
+  have hAheart : t.heart (F.triangle iFirst).obj₃ := by
+    rw [σ.slicing.toTStructure_heart_iff C]
+    exact ⟨σ.slicing.gtProp_of_semistable C (F.φ iFirst) 0 _
+        (F.semistable iFirst) (hall_mem iFirst).1,
+      σ.slicing.leProp_of_semistable C (F.φ iFirst) 1 _
+        (F.semistable iFirst) (hall_mem iFirst).2⟩
+  let A : t.heart.FullSubcategory := ⟨(F.triangle iFirst).obj₃, hAheart⟩
+  have hAnz : ¬IsZero A := fun hZ ↦ hfirst ((t.heart).ι.map_isZero hZ)
+  have hAss : @StabilityFunction.IsSemistable _ _
+      t.heartFullSubcategoryAbelian Z A :=
+    σ.observable.stabilityFunctionOnHeart_isSemistable_of_mem_P_phi C
+      (hall_mem iFirst) A (F.semistable iFirst) hAnz
+  have hAphase : Z.phase A = F.φ iFirst :=
+    σ.observable.stabilityFunctionOnHeart_phase_eq_of_mem_P_phi C
+      (hall_mem iFirst) A (F.semistable iFirst) hAnz
+  have hα : ∃ α : A.obj ⟶ E.obj, α ≠ 0 := by
+    by_contra hzero
+    push Not at hzero
+    exact hfirst <|
+      F.isZero_factor_zero_of_hom_eq_zero C σ.slicing hn hzero
+  obtain ⟨α, hα⟩ := hα
+  let αH : A ⟶ E := ObjectProperty.homMk α
+  have hIm : ¬IsZero (Limits.image αH) := by
+    intro hZ
+    apply hα
+    have hι : Limits.image.ι αH = 0 := zero_of_source_iso_zero _ hZ.isoZero
+    have hαH : αH = 0 := by rw [← Limits.image.fac αH, hι, comp_zero]
+    exact congr_arg (·.hom) hαH
+  have hImSub : ¬IsZero (imageSubobject αH : t.heart.FullSubcategory) := by
+    intro hZ
+    exact hIm (hZ.of_iso (imageSubobjectIso αH).symm)
+  have hfirst_le : F.φ iFirst ≤ Z.phase E := by
+    rw [← hAphase]
+    calc
+      Z.phase A ≤ Z.phase (Limits.image αH) :=
+        phase_le_of_epi Z (factorThruImage αH) hAss hIm
+      _ = Z.phase (imageSubobject αH : t.heart.FullSubcategory) :=
+        Z.phase_eq_of_iso (imageSubobjectIso αH).symm
+      _ ≤ Z.phase E := hE.2 (imageSubobject αH) hImSub
+  have hplus_le : σ.slicing.phiPlus C E.obj hEobj ≤ Z.phase E := by
+    rw [σ.slicing.phiPlus_eq C E.obj hEobj F hn hfirst]
+    exact hfirst_le
+
+  let jLast : Fin F.n := ⟨F.n - 1, by lia⟩
+  have hXheart : t.heart (F.chain.obj ⟨F.n - 1, by lia⟩) := by
+    by_cases hk : F.n - 1 = 0
+    · rw [σ.slicing.toTStructure_heart_iff C]
+      have hidx : (⟨F.n - 1, by lia⟩ : Fin (F.n + 1)) = 0 :=
+        Fin.ext (by simpa using hk)
+      have hzero : IsZero (F.chain.obj ⟨F.n - 1, by lia⟩) := by
+        rw [hidx]
+        simpa [ComposableArrows.left] using F.base_isZero
+      exact ⟨Or.inl hzero, Or.inl hzero⟩
+    · rw [σ.slicing.toTStructure_heart_iff C]
+      constructor
+      · exact HNFiltration.chain_obj_gtProp C σ.slicing F (F.n - 1)
+          (by lia) (Nat.pos_of_ne_zero hk) 0
+          (fun j ↦ (hall_mem ⟨j, by lia⟩).1)
+      · exact HNFiltration.chain_obj_leProp C σ.slicing F (F.n - 1)
+          (by lia) (Nat.pos_of_ne_zero hk) 1
+          (fun j ↦ (hall_mem ⟨j, by lia⟩).2)
+  let X : t.heart.FullSubcategory :=
+    ⟨F.chain.obj ⟨F.n - 1, by lia⟩, hXheart⟩
+  have hBheart : t.heart (F.triangle jLast).obj₃ := by
+    rw [σ.slicing.toTStructure_heart_iff C]
+    exact ⟨σ.slicing.gtProp_of_semistable C (F.φ jLast) 0 _
+        (F.semistable jLast) (hall_mem jLast).1,
+      σ.slicing.leProp_of_semistable C (F.φ jLast) 1 _
+        (F.semistable jLast) (hall_mem jLast).2⟩
+  let B : t.heart.FullSubcategory := ⟨(F.triangle jLast).obj₃, hBheart⟩
+  have hBnz : ¬IsZero B := fun hZ ↦ hlast ((t.heart).ι.map_isZero hZ)
+  have hBphase : Z.phase B = F.φ jLast :=
+    σ.observable.stabilityFunctionOnHeart_phase_eq_of_mem_P_phi C
+      (hall_mem jLast) B (F.semistable jLast) hBnz
+  let Tlast := F.triangle jLast
+  let e₁ := Classical.choice (F.triangle_obj₁ jLast)
+  let e₂ := Classical.choice (F.triangle_obj₂ jLast)
+  have hobj₂_eq : F.chain.obj' (F.n - 1 + 1) (by lia) = F.chain.right := by
+    simp only [ComposableArrows.obj']
+    congr 1
+    ext
+    simp
+    lia
+  let e₂E : Tlast.obj₂ ≅ E.obj :=
+    e₂.trans ((eqToIso hobj₂_eq).trans (Classical.choice F.top_iso))
+  let i : X ⟶ E := ObjectProperty.homMk
+    (e₁.inv ≫ Tlast.mor₁ ≫ e₂E.hom)
+  let q : E ⟶ B := ObjectProperty.homMk (e₂E.inv ≫ Tlast.mor₂)
+  let δ : B.obj ⟶ X.obj⟦(1 : ℤ)⟧ := Tlast.mor₃ ≫ e₁.hom⟦(1 : ℤ)⟧'
+  have hTlast : Triangle.mk i.hom q.hom δ ∈ distTriang C := by
+    refine isomorphic_distinguished _ (F.triangle_dist jLast) _ ?_
+    exact Triangle.isoMk _ _ e₁.symm e₂E.symm (Iso.refl _)
+      (by simp [Tlast, i, e₂E]) (by simp [Tlast, q, e₂E])
+      (by simp [Tlast, δ])
+  have hiq_hom : i.hom ≫ q.hom = 0 := by
+    simpa using comp_distTriang_mor_zero₁₂ _ hTlast
+  have hiq : i ≫ q = 0 := by
+    ext
+    exact hiq_hom
+  have hCok : IsColimit (CokernelCofork.ofπ q hiq) := by
+    simpa [hiq] using
+      Triangulated.AbelianSubcategory.isColimitCokernelCoforkOfDistTriang
+        (TStructure.heart_hι t) i q δ hTlast
+  letI : Epi q := Cofork.IsColimit.epi hCok
+  have hlast_ge : Z.phase E ≤ F.φ jLast := by
+    rw [← hBphase]
+    exact phase_le_of_epi Z q hE hBnz
+  have hminus_ge : Z.phase E ≤ σ.slicing.phiMinus C E.obj hEobj := by
+    rw [σ.slicing.phiMinus_eq C E.obj hEobj F hn hlast]
+    exact hlast_ge
+  have hextreme : σ.slicing.phiPlus C E.obj hEobj =
+      σ.slicing.phiMinus C E.obj hEobj := by
+    apply le_antisymm
+    · exact hplus_le.trans hminus_ge
+    · exact σ.slicing.phiMinus_le_phiPlus C E.obj hEobj
+  have hP := σ.slicing.semistable_of_phiPlus_eq_phiMinus (C := C) hEobj hextreme
+  rwa [show σ.slicing.phiPlus C E.obj hEobj = Z.phase E from
+    le_antisymm hplus_le
+      ((σ.observable.stabilityFunctionOnHeart_phase_le_phiPlus C E hEnz))] at hP
 
 /-- The norm of the total charge is at most the sum of the norms of the
 Harder--Narasimhan factor charges. -/
@@ -309,6 +470,124 @@ private theorem heartShortExact_exists_distinguished_triangle
       have hker : IsLimit (KernelFork.ofι S.f S.zero) := hS.fIsKernel
       exact ⟨hker.lift (KernelFork.ofι α hα),
         hker.fac _ WalkingParallelPair.zero⟩)
+
+/-- An abelian HN filtration in the canonical heart is also an ambient HN
+filtration after replacing each short exact successive quotient by its
+distinguished triangle.  Consequently its factor-norm mass is exactly the
+ambient `stabilityMass`. -/
+theorem AbelianHNFiltration.mass_eq_stabilityMass_toReal
+    (σ : StabilityCondition.WithClassMap C v)
+    {E : σ.slicing.toTStructure.heart.FullSubcategory}
+    (F : @AbelianHNFiltration _ _
+      ((σ.slicing.toTStructure).heartFullSubcategoryAbelian)
+      σ.observableStabilityFunctionOnHeart E) :
+    @AbelianHNFiltration.mass _ _
+      ((σ.slicing.toTStructure).heartFullSubcategoryAbelian)
+      σ.observableStabilityFunctionOnHeart E F =
+        (stabilityMass σ E.obj).toReal := by
+  let t := σ.slicing.toTStructure
+  let Z := σ.observableStabilityFunctionOnHeart
+  letI := t.hasHeartFullSubcategory
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  let fH (i : Fin F.n) :
+      (F.chain i.castSucc : t.heart.FullSubcategory) ⟶
+        (F.chain i.succ : t.heart.FullSubcategory) :=
+    Subobject.ofLE (F.chain i.castSucc) (F.chain i.succ)
+      (le_of_lt (F.chain_strictMono i.castSucc_lt_succ))
+  haveI hmono (i : Fin F.n) : Mono (fH i) := by
+    dsimp [fH]
+    infer_instance
+  let S (i : Fin F.n) : ShortComplex t.heart.FullSubcategory :=
+    ShortComplex.mk (fH i) (cokernel.π (fH i)) (cokernel.condition (fH i))
+  have hS (i : Fin F.n) : (S i).ShortExact := by
+    exact StabilityFunction.shortExact_of_mono (fH i)
+  let δ (i : Fin F.n) :
+      (cokernel (fH i)).obj ⟶ (F.chain i.castSucc : t.heart.FullSubcategory).obj⟦(1 : ℤ)⟧ :=
+    Classical.choose (heartShortExact_exists_distinguished_triangle σ (S i) (hS i))
+  have hδ (i : Fin F.n) :
+      Triangle.mk (fH i).hom (cokernel.π (fH i)).hom (δ i) ∈ distTriang C := by
+    exact Classical.choose_spec
+      (heartShortExact_exists_distinguished_triangle σ (S i) (hS i))
+  let objFn : Fin (F.n + 1) → C := fun j ↦ (F.chain j : t.heart.FullSubcategory).obj
+  let mapSuccFn : ∀ i : Fin F.n, objFn i.castSucc ⟶ objFn i.succ :=
+    fun i ↦ (fH i).hom
+  let T (i : Fin F.n) : Triangle C :=
+    Triangle.mk (fH i).hom (cokernel.π (fH i)).hom (δ i)
+  let G : HNFiltration C σ.slicing.P E.obj :=
+    { n := F.n
+      chain := ComposableArrows.mkOfObjOfMapSucc objFn mapSuccFn
+      triangle := T
+      triangle_dist := fun i ↦ hδ i
+      triangle_obj₁ := fun i ↦ ⟨eqToIso (by
+        simp only [T, ComposableArrows.obj', ComposableArrows.mkOfObjOfMapSucc_obj,
+          objFn]
+        rfl)⟩
+      triangle_obj₂ := fun i ↦ ⟨eqToIso (by
+        simp only [T, ComposableArrows.obj', ComposableArrows.mkOfObjOfMapSucc_obj,
+          objFn]
+        rfl)⟩
+      base_isZero := by
+        change IsZero (objFn 0)
+        have hzero : IsZero (F.chain 0 : t.heart.FullSubcategory) :=
+          (StabilityFunction.subobject_isZero_iff_eq_bot (F.chain 0)).2 F.chain_bot
+        exact (t.heart).ι.map_isZero hzero
+      top_iso := by
+        have htop : F.chain (Fin.last F.n) = ⊤ := F.chain_top
+        let eEq : (F.chain (Fin.last F.n) : t.heart.FullSubcategory) ≅
+            ((⊤ : Subobject E) : t.heart.FullSubcategory) :=
+          eqToIso (congrArg (fun S : Subobject E ↦
+            (S : t.heart.FullSubcategory)) htop)
+        let eTop : (F.chain (Fin.last F.n) : t.heart.FullSubcategory) ≅ E :=
+          eEq.trans (asIso (⊤ : Subobject E).arrow)
+        exact ⟨(t.heart).ι.mapIso eTop⟩
+      zero_isZero := fun h ↦ absurd h (Nat.ne_of_gt F.hn)
+      φ := F.φ
+      hφ := F.φ_anti
+      semistable := fun i ↦ by
+        have hP := σ.mem_slicing_of_heart_isSemistable
+          (cokernel (fH i)) (by simpa [Z, fH] using F.factor_semistable i)
+        rw [show Z.phase (cokernel (fH i)) = F.φ i by
+          simpa [Z, fH] using F.factor_phase i] at hP
+        exact hP }
+  rw [stabilityMass_toReal_eq_sum σ G]
+  unfold AbelianHNFiltration.mass
+  apply Finset.sum_congr rfl
+  intro i _
+  rfl
+
+/-- The phase-one boundary-heart mass inequality.  The nonzero case is the
+boundary-cut comparison for abelian HN polygons, transported to ambient mass
+by `AbelianHNFiltration.mass_eq_stabilityMass_toReal`; the zero source case is
+handled directly. -/
+theorem stabilityMassBoundaryHeartInequality :
+    StabilityMassBoundaryHeartInequality (C := C) (v := v) := by
+  intro σ S hS h₃
+  let t := σ.slicing.toTStructure
+  let Z := σ.observableStabilityFunctionOnHeart
+  letI := t.hasHeartFullSubcategory
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  by_cases h₁ : IsZero S.X₁
+  · have h₁obj : IsZero S.X₁.obj := (t.heart).ι.map_isZero h₁
+    rw [show stabilityMass σ S.X₁.obj = 0 from
+      (stabilityMass_eq_zero_iff σ S.X₁.obj).2 h₁obj]
+    positivity
+  · haveI := hS.mono_f
+    have h₂ : ¬IsZero S.X₂ := by
+      intro h₂
+      exact h₁ (IsZero.of_mono S.f h₂)
+    obtain ⟨F⟩ := σ.observableStabilityFunctionOnHeart_hasHN S.X₁ h₁
+    obtain ⟨G⟩ := σ.observableStabilityFunctionOnHeart_hasHN S.X₂ h₂
+    have hmass := F.mass_le_add_norm_of_shortExact S hS G
+      σ.observableStabilityFunctionOnHeart_hasHN
+    calc
+      (stabilityMass σ S.X₁.obj).toReal = F.mass :=
+        (AbelianHNFiltration.mass_eq_stabilityMass_toReal σ F).symm
+      _ ≤ G.mass + ‖Z.Zobj S.X₃‖ := hmass
+      _ = (stabilityMass σ S.X₂.obj).toReal +
+          (stabilityMass σ S.X₃.obj).toReal := by
+        rw [AbelianHNFiltration.mass_eq_stabilityMass_toReal σ G,
+          stabilityMass_toReal_eq_norm_charge σ h₃]
+        rfl
 
 /-- The global distinguished-triangle inequality restricts to the heart-level
 short-exact inequality. -/

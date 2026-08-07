@@ -921,6 +921,18 @@ theorem mass_le_add_norm_of_shortExact (S : ShortComplex A)
     Z.Zobj_eq_of_iso e
   rwa [hcharge] at hmass
 
+/-- The mass of an abelian HN filtration is independent of the chosen
+filtration.  This is the identity-monomorphism specialization of the
+boundary-cut comparison. -/
+theorem mass_eq_mass (F G : AbelianHNFiltration Z E)
+    (hHN : Z.HasHNProperty) :
+    F.mass = G.mass := by
+  apply le_antisymm
+  · rw [← F.polygonLength_eq_mass, ← G.polygonLength_eq_mass]
+    simpa using F.polygonLength_le_add_norm_charge_sub_of_mono G hHN (𝟙 E)
+  · rw [← F.polygonLength_eq_mass, ← G.polygonLength_eq_mass]
+    simpa using G.polygonLength_le_add_norm_charge_sub_of_mono F hHN (𝟙 E)
+
 end AbelianHNFiltration
 
 end
