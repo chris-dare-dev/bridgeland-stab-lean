@@ -257,6 +257,32 @@ theorem arg_last_sub_zero_le_arg_first {n : ℕ} (z : Fin (n + 1) → ℂ)
   intro i _
   exact harg (Fin.zero_le i)
 
+/-- For an upper-half-plane path with decreasing edge arguments, the
+argument of its last edge is bounded above by the argument of its total
+displacement. -/
+theorem arg_last_edge_le_arg_last_sub_zero {n : ℕ} (z : Fin (n + 1) → ℂ)
+    (hn : 0 < n)
+    (hedge : ∀ i : Fin n, z i.succ - z i.castSucc ∈ upperHalfPlaneUnion)
+    (harg : Antitone (fun i : Fin n ↦
+      Complex.arg (z i.succ - z i.castSucc))) :
+    Complex.arg
+        (z (Fin.succ ⟨n - 1, by omega⟩) - z (Fin.castSucc ⟨n - 1, by omega⟩)) ≤
+      Complex.arg (z (Fin.last n) - z 0) := by
+  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  let s : Finset (Fin n) := Finset.univ
+  have hs : s.Nonempty := ⟨⟨0, hn⟩, Finset.mem_univ _⟩
+  rw [← sum_edges_eq_last_sub_zero]
+  have hlast_le_inf :
+      Complex.arg (z (Fin.succ ⟨n - 1, by omega⟩) -
+          z (Fin.castSucc ⟨n - 1, by omega⟩)) ≤
+        s.inf' hs (Complex.arg ∘ fun i : Fin n ↦
+          z i.succ - z i.castSucc) := by
+    apply Finset.le_inf'
+    intro i _
+    exact harg (Fin.mk_le_mk.mpr (by omega))
+  exact hlast_le_inf.trans
+    (inf'_le_arg_sum_of_upperHalfPlane hs (fun i _ ↦ hedge i))
+
 /-- The Euclidean length of a finite path in the complex plane.  A path with
 `n` edges is represented by its `n + 1` vertices. -/
 def length {n : ℕ} (z : Fin (n + 1) → ℂ) : ℝ :=
@@ -296,6 +322,232 @@ end ComplexPolygonalPath
 namespace AbelianHNFiltration
 
 variable {Z : StabilityFunction A} {E : A} (F : AbelianHNFiltration Z E)
+
+/-- Pulling the image of `S → E/M` back to `E` recovers `S` when
+`M ≤ S`.  This is the subobject correspondence needed to transport an HN
+tail to a quotient. -/
+private theorem pullback_image_to_quotient_eq (Z : StabilityFunction A)
+    {M S : Subobject E}
+    (hMS : M ≤ S) :
+    (Subobject.pullback (cokernel.π M.arrow)).obj
+      (imageSubobject (S.arrow ≫ cokernel.π M.arrow)) = S := by
+  let p := cokernel.π M.arrow
+  let I := imageSubobject (S.arrow ≫ p)
+  let pbI := (Subobject.pullback p).obj I
+  have hle : S ≤ pbI := Subobject.le_of_comm
+    ((Subobject.isPullback p I).isLimit.lift
+      (PullbackCone.mk (factorThruImageSubobject (S.arrow ≫ p)) S.arrow
+        (imageSubobject_arrow_comp (f := S.arrow ≫ p))))
+    ((Subobject.isPullback p I).isLimit.fac _ WalkingCospan.right)
+  have hZ_pb := Zobj_pullback_eq_add Z M I
+  have hZ_S := Z.additive _
+    (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE M S hMS)) inferInstance inferInstance)
+  have hZ_I : Z.Zobj (I : A) =
+      Z.Zobj (cokernel (Subobject.ofLE M S hMS)) := by
+    have hZ_ses := Z.additive _ (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (kernel.ι (S.arrow ≫ p))) inferInstance inferInstance)
+    have hcond : Subobject.ofLE M S hMS ≫ (S.arrow ≫ p) = 0 := by
+      rw [← Category.assoc, Subobject.ofLE_arrow]
+      exact cokernel.condition M.arrow
+    have hkerfac : (kernel.ι (S.arrow ≫ p) ≫ S.arrow) ≫
+        cokernel.π M.arrow = 0 := by
+      rw [Category.assoc]
+      exact kernel.condition (S.arrow ≫ p)
+    let k := kernel.lift (S.arrow ≫ p) (Subobject.ofLE M S hMS) hcond
+    let l := Abelian.monoLift M.arrow (kernel.ι (S.arrow ≫ p) ≫ S.arrow) hkerfac
+    have hk : k ≫ kernel.ι (S.arrow ≫ p) = Subobject.ofLE M S hMS :=
+      kernel.lift_ι _ _ _
+    have hl : l ≫ M.arrow = kernel.ι (S.arrow ≫ p) ≫ S.arrow :=
+      Abelian.monoLift_comp _ _ _
+    have hkl : k ≫ l = 𝟙 _ := by
+      apply (cancel_mono M.arrow).1
+      rw [Category.assoc, hl, ← Category.assoc, hk, Subobject.ofLE_arrow,
+        Category.id_comp]
+    have hlk : l ≫ k = 𝟙 _ := by
+      apply (cancel_mono (kernel.ι (S.arrow ≫ p))).1
+      rw [Category.assoc, hk, Category.id_comp]
+      apply (cancel_mono S.arrow).1
+      rw [Category.assoc, Subobject.ofLE_arrow, hl]
+    have hZ_ker : Z.Zobj (M : A) = Z.Zobj (kernel (S.arrow ≫ p)) :=
+      Z.Zobj_eq_of_iso ⟨k, l, hkl, hlk⟩
+    have hZ_coim := Z.Zobj_eq_of_iso (Abelian.coimageIsoImage' (S.arrow ≫ p))
+    have hZ_im := Z.Zobj_eq_of_iso (imageSubobjectIso (S.arrow ≫ p))
+    rw [← hZ_ker] at hZ_ses
+    exact (hZ_im.trans hZ_coim.symm).trans
+      (add_left_cancel (hZ_ses.symm.trans hZ_S))
+  have hZ_eq : Z.Zobj (pbI : A) = Z.Zobj (S : A) := by
+    rw [hZ_pb, hZ_I]
+    exact hZ_S.symm
+  rcases hle.eq_or_lt with h | hlt
+  · exact h.symm
+  · exfalso
+    have hse := ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE S pbI hle)) inferInstance inferInstance
+    have hZ_add := Z.additive _ hse
+    have hZ_cok : Z.Zobj (cokernel (Subobject.ofLE S pbI hle)) = 0 := by
+      apply add_left_cancel (a := Z.Zobj (S : A))
+      simpa [hZ_eq] using hZ_add.symm
+    have hcok_nz : ¬IsZero (cokernel (Subobject.ofLE S pbI hle)) := by
+      intro hzero
+      haveI : Epi (Subobject.ofLE S pbI hle) :=
+        Preadditive.epi_of_isZero_cokernel _ hzero
+      haveI := isIso_of_mono_of_epi (Subobject.ofLE S pbI hle)
+      exact absurd (Subobject.eq_of_comm (asIso (Subobject.ofLE S pbI hle))
+        (Subobject.ofLE_arrow hle)) (ne_of_lt hlt)
+    exact absurd hZ_cok (ne_of_mem_of_not_mem (Z.upper _ hcok_nz)
+      (show (0 : ℂ) ∉ upperHalfPlaneUnion from fun hc ↦ by
+        rcases hc with hc | ⟨_, hc⟩ <;> simp at hc))
+
+/-- The image subobject of an epimorphism is the top subobject. -/
+private theorem imageSubobject_eq_top_of_epi {X Y : A} (f : X ⟶ Y) [Epi f] :
+    imageSubobject f = ⊤ := by
+  haveI : Epi (imageSubobject f).arrow := epi_of_epi_fac (imageSubobject_arrow_comp f)
+  haveI : IsIso (imageSubobject f).arrow := isIso_of_mono_of_epi _
+  exact Subobject.eq_top_of_isIso_arrow _
+
+/-- The tail of an HN filtration after the `k`-th vertex, transported to the
+quotient by that vertex.  Its factors are precisely the original factors at
+indices `k, ..., n - 1`. -/
+noncomputable def quotientHNFiltration {k : ℕ} (hk : k < F.n) :
+    AbelianHNFiltration Z
+      (cokernel (F.chain ⟨k, by omega⟩).arrow) where
+  n := F.n - k
+  hn := Nat.sub_pos_of_lt hk
+  chain := fun ⟨j, _⟩ ↦ imageSubobject
+    ((F.chain ⟨k + j, by omega⟩).arrow ≫
+      cokernel.π (F.chain ⟨k, by omega⟩).arrow)
+  chain_strictMono := by
+    apply Fin.strictMono_iff_lt_succ.mpr
+    intro ⟨j, hj⟩
+    change imageSubobject ((F.chain ⟨k + j, by omega⟩).arrow ≫
+        cokernel.π (F.chain ⟨k, by omega⟩).arrow) <
+      imageSubobject ((F.chain ⟨k + (j + 1), by omega⟩).arrow ≫
+        cokernel.π (F.chain ⟨k, by omega⟩).arrow)
+    have hM₁ : F.chain ⟨k, by omega⟩ ≤ F.chain ⟨k + j, by omega⟩ :=
+      F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))
+    have hM₂ : F.chain ⟨k, by omega⟩ ≤ F.chain ⟨k + (j + 1), by omega⟩ :=
+      F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))
+    have hS₁S₂ : F.chain ⟨k + j, by omega⟩ <
+        F.chain ⟨k + (j + 1), by omega⟩ :=
+      F.chain_strictMono (Fin.mk_lt_mk.mpr (by omega))
+    have hle : imageSubobject ((F.chain ⟨k + j, by omega⟩).arrow ≫
+          cokernel.π (F.chain ⟨k, by omega⟩).arrow) ≤
+        imageSubobject ((F.chain ⟨k + (j + 1), by omega⟩).arrow ≫
+          cokernel.π (F.chain ⟨k, by omega⟩).arrow) := by
+      rw [show (F.chain ⟨k + j, by omega⟩).arrow ≫
+            cokernel.π (F.chain ⟨k, by omega⟩).arrow =
+          Subobject.ofLE _ _ hS₁S₂.le ≫
+            ((F.chain ⟨k + (j + 1), by omega⟩).arrow ≫
+              cokernel.π (F.chain ⟨k, by omega⟩).arrow) from by
+        rw [← Category.assoc, Subobject.ofLE_arrow]]
+      exact imageSubobject_comp_le _ _
+    exact lt_of_le_of_ne hle (fun heq ↦ absurd
+      ((pullback_image_to_quotient_eq Z hM₁).symm.trans
+        (heq ▸ pullback_image_to_quotient_eq Z hM₂))
+      (ne_of_lt hS₁S₂))
+  chain_bot := by
+    change imageSubobject ((F.chain ⟨k, by omega⟩).arrow ≫
+      cokernel.π (F.chain ⟨k, by omega⟩).arrow) = ⊥
+    rw [cokernel.condition, imageSubobject_zero]
+  chain_top := by
+    change imageSubobject ((F.chain ⟨k + (F.n - k), by omega⟩).arrow ≫
+      cokernel.π (F.chain ⟨k, by omega⟩).arrow) = ⊤
+    have hidx : k + (F.n - k) = F.n := Nat.add_sub_of_le hk.le
+    have htop : F.chain ⟨k + (F.n - k), by omega⟩ = ⊤ := by
+      have hi : (⟨k + (F.n - k), by omega⟩ : Fin (F.n + 1)) =
+          ⟨F.n, Nat.lt_succ_self F.n⟩ := Fin.ext hidx
+      rw [hi, F.chain_top]
+    rw [htop]
+    haveI : IsIso (⊤ : Subobject E).arrow := inferInstance
+    rw [imageSubobject_iso_comp]
+    exact imageSubobject_eq_top_of_epi _
+  φ := fun ⟨j, _⟩ ↦ F.φ ⟨k + j, by omega⟩
+  φ_anti := by
+    intro ⟨j₁, _⟩ ⟨j₂, _⟩ h
+    exact F.φ_anti (Fin.mk_lt_mk.mpr (by
+      simp only [Fin.lt_def] at h
+      omega))
+  factor_phase := by
+    intro ⟨j, hj⟩
+    exact ((phase_cokernel_pullback_eq Z (F.chain ⟨k, by omega⟩) _).symm.trans
+      ((phase_cokernel_ofLE_congr Z
+        (pullback_image_to_quotient_eq Z
+          (F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))))
+        (pullback_image_to_quotient_eq Z
+          (F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))))).trans
+      (F.factor_phase ⟨k + j, by omega⟩)))
+  factor_semistable := by
+    intro ⟨j, hj⟩
+    have hM₁ : F.chain ⟨k, by omega⟩ ≤ F.chain ⟨k + j, by omega⟩ :=
+      F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))
+    have hM₂ : F.chain ⟨k, by omega⟩ ≤ F.chain ⟨k + (j + 1), by omega⟩ :=
+      F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by omega))
+    have hS₁S₂ : F.chain ⟨k + j, by omega⟩ <
+        F.chain ⟨k + (j + 1), by omega⟩ :=
+      F.chain_strictMono (Fin.mk_lt_mk.mpr (by omega))
+    have hle : imageSubobject ((F.chain ⟨k + j, by omega⟩).arrow ≫
+          cokernel.π (F.chain ⟨k, by omega⟩).arrow) ≤
+        imageSubobject ((F.chain ⟨k + (j + 1), by omega⟩).arrow ≫
+          cokernel.π (F.chain ⟨k, by omega⟩).arrow) := by
+      rw [show (F.chain ⟨k + j, by omega⟩).arrow ≫
+            cokernel.π (F.chain ⟨k, by omega⟩).arrow =
+          Subobject.ofLE _ _ hS₁S₂.le ≫
+            ((F.chain ⟨k + (j + 1), by omega⟩).arrow ≫
+              cokernel.π (F.chain ⟨k, by omega⟩).arrow) from by
+        rw [← Category.assoc, Subobject.ofLE_arrow]]
+      exact imageSubobject_comp_le _ _
+    exact Z.isSemistable_of_iso
+      (cokernelPullbackIso Z (F.chain ⟨k, by omega⟩)
+        (lt_of_le_of_ne hle (fun heq ↦ absurd
+          ((pullback_image_to_quotient_eq Z hM₁).symm.trans
+            (heq ▸ pullback_image_to_quotient_eq Z hM₂))
+          (ne_of_lt hS₁S₂))))
+      (isSemistable_cokernel_ofLE_congr Z
+        (pullback_image_to_quotient_eq Z hM₁)
+        (pullback_image_to_quotient_eq Z hM₂)
+        (F.factor_semistable ⟨k + j, by omega⟩))
+
+/-- The quotient of `S` by `S ∩ K` maps canonically into `E / K`. -/
+noncomputable def quotientInfToCokernel (S K : Subobject E) :
+    cokernel (Subobject.ofLE (S ⊓ K) S inf_le_left) ⟶ cokernel K.arrow :=
+  cokernel.desc (Subobject.ofLE (S ⊓ K) S inf_le_left)
+    (S.arrow ≫ cokernel.π K.arrow) (by
+      rw [← Category.assoc, Subobject.inf_comp_left]
+      rw [← Subobject.inf_comp_right S K, Category.assoc, cokernel.condition,
+        comp_zero])
+
+/-- The canonical map `S / (S ∩ K) → E / K` is a monomorphism. -/
+instance quotientInfToCokernel_mono (S K : Subobject E) :
+    Mono (quotientInfToCokernel S K) := by
+  let i : ((S ⊓ K : Subobject E) : A) ⟶ (S : A) :=
+    Subobject.ofLE (S ⊓ K) S inf_le_left
+  let q : (S : A) ⟶ cokernel K.arrow := S.arrow ≫ cokernel.π K.arrow
+  have hiq : i ≫ q = 0 := by
+    dsimp [i, q]
+    rw [← Category.assoc, Subobject.inf_comp_left]
+    rw [← Subobject.inf_comp_right S K, Category.assoc, cokernel.condition,
+      comp_zero]
+  let T : ShortComplex A := ShortComplex.mk i q hiq
+  have hK : IsLimit (KernelFork.ofι K.arrow (cokernel.condition K.arrow)) :=
+    (ShortComplex.ShortExact.mk' (ShortComplex.exact_cokernel K.arrow)
+      inferInstance inferInstance).fIsKernel
+  have hiKernel : IsLimit (KernelFork.ofι i hiq) := by
+    apply KernelFork.IsLimit.ofι'
+    intro X g hg
+    have hgK : (g ≫ S.arrow) ≫ cokernel.π K.arrow = 0 := by
+      simpa [q, Category.assoc] using hg
+    let u : X ⟶ (K : A) := hK.lift (KernelFork.ofι (g ≫ S.arrow) hgK)
+    have hu : u ≫ K.arrow = g ≫ S.arrow :=
+      hK.fac (KernelFork.ofι (g ≫ S.arrow) hgK) WalkingParallelPair.zero
+    let c : PullbackCone S.arrow K.arrow := PullbackCone.mk g u hu.symm
+    let l : X ⟶ ((S ⊓ K : Subobject E) : A) :=
+      (Subobject.inf_isPullback S K).isLimit.lift c
+    refine ⟨l, ?_⟩
+    exact (Subobject.inf_isPullback S K).isLimit.fac c WalkingCospan.left
+  have hExact : T.Exact := T.exact_of_f_is_kernel hiKernel
+  change Mono (cokernel.desc i q hiq)
+  exact T.exact_iff_mono_cokernel_desc.mp hExact
 
 /-- If a subobject of `S` maps trivially to the cokernel of `M → S`, it is
 already contained in `M`. -/
@@ -492,6 +744,82 @@ theorem phase_le_first : Z.phase E ≤ F.φ ⟨0, F.hn⟩ := by
   unfold StabilityFunction.phase
   exact mul_le_mul_of_nonneg_left harg (by positivity)
 
+/-- The phase of the last HN factor is at most the phase of the filtered
+object. -/
+theorem last_le_phase :
+    F.φ ⟨F.n - 1, Nat.sub_lt F.hn Nat.one_pos⟩ ≤ Z.phase E := by
+  have harg := ComplexPolygonalPath.arg_last_edge_le_arg_last_sub_zero
+    F.polygonVertex F.hn (fun i ↦ F.polygonEdge_mem_upperHalfPlaneUnion i)
+    F.polygonEdge_arg_strictAnti.antitone
+  have hlast : F.polygonVertex (Fin.last F.n) = Z.Zobj E := by
+    exact F.polygonVertex_last
+  rw [hlast, F.polygonVertex_zero, sub_zero,
+    show F.polygonVertex
+        (Fin.succ ⟨F.n - 1, Nat.sub_lt F.hn Nat.one_pos⟩) -
+        F.polygonVertex
+          (Fin.castSucc ⟨F.n - 1, Nat.sub_lt F.hn Nat.one_pos⟩) =
+      F.polygonEdge ⟨F.n - 1, Nat.sub_lt F.hn Nat.one_pos⟩ from rfl,
+    F.polygonVertex_succ_sub] at harg
+  rw [← F.factor_phase ⟨F.n - 1, Nat.sub_lt F.hn Nat.one_pos⟩]
+  unfold StabilityFunction.phase
+  exact mul_le_mul_of_nonneg_left harg (by positivity)
+
+/-- A nonzero map from a filtration prefix to a semistable object cannot land
+strictly below the phase of the prefix's last factor.  The proof extends
+zero-vanishing one HN factor at a time. -/
+theorem phase_last_prefix_le_of_ne_zero_to_semistable {Q : A}
+    (hQ : Z.IsSemistable Q) {k : ℕ} (hk₀ : 0 < k) (hkn : k ≤ F.n)
+    (q : (F.chain ⟨k, by omega⟩ : A) ⟶ Q) (hq : q ≠ 0) :
+    F.φ ⟨k - 1, by omega⟩ ≤ Z.phase Q := by
+  by_contra hnot
+  have hphaseQ : Z.phase Q < F.φ ⟨k - 1, by omega⟩ :=
+    lt_of_not_ge hnot
+  have hzero : ∀ m (hm : m ≤ k),
+      Subobject.ofLE (F.chain ⟨m, by omega⟩) (F.chain ⟨k, by omega⟩)
+        (F.chain_strictMono.monotone (Fin.mk_le_mk.mpr hm)) ≫ q = 0 := by
+    intro m hm
+    induction m with
+    | zero =>
+        have hbot : F.chain ⟨0, by omega⟩ = ⊥ := by
+          simpa using F.chain_bot
+        have hz : IsZero (F.chain ⟨0, by omega⟩ : A) :=
+          (StabilityFunction.subobject_isZero_iff_eq_bot _).2 hbot
+        exact zero_of_source_iso_zero _ hz.isoZero
+    | succ m ih =>
+        have hmk : m ≤ k := by omega
+        have hmn : m < F.n := by omega
+        let j : Fin F.n := ⟨m, hmn⟩
+        let M : Subobject E := F.chain j.castSucc
+        let N : Subobject E := F.chain j.succ
+        let K : Subobject E := F.chain ⟨k, by omega⟩
+        have hMN : M ≤ N := le_of_lt (F.chain_strictMono j.castSucc_lt_succ)
+        have hNK : N ≤ K :=
+          F.chain_strictMono.monotone (Fin.mk_le_mk.mpr (by
+            omega))
+        let r : (N : A) ⟶ Q := Subobject.ofLE N K hNK ≫ q
+        have hfr : Subobject.ofLE M N hMN ≫ r = 0 := by
+          dsimp [r, M, N, K]
+          rw [← Category.assoc, Subobject.ofLE_comp_ofLE]
+          simpa using ih hmk
+        let d : cokernel (Subobject.ofLE M N hMN) ⟶ Q :=
+          cokernel.desc (Subobject.ofLE M N hMN) r hfr
+        have hd : d = 0 := by
+          dsimp [d, M, N]
+          apply hom_zero_of_semistable_phase_gt Z (F.factor_semistable j) hQ
+          rw [F.factor_phase j]
+          exact hphaseQ.trans_le (F.φ_anti.antitone (Fin.mk_le_mk.mpr (by
+            omega)))
+        have hr : r = 0 := by
+          calc
+            r = cokernel.π (Subobject.ofLE M N hMN) ≫ d := by
+              dsimp [d]
+              exact (cokernel.π_desc (Subobject.ofLE M N hMN) r hfr).symm
+            _ = 0 := by rw [hd, comp_zero]
+        simpa [r, N, K, j] using hr
+  have htop := hzero k le_rfl
+  apply hq
+  simpa only [Subobject.ofLE_refl, Category.id_comp] using htop
+
 /-- Assuming the HN property, every nonzero subobject has phase at most the
 first phase of a chosen HN filtration.  The proof takes the first HN factor of
 the subobject, embeds its first filtration step into the ambient object, and
@@ -534,6 +862,317 @@ theorem subobject_phase_le_first (hHN : Z.HasHNProperty) {B : Subobject E}
     _ = Z.phase (C₁ : A) := hC₁phase.symm
     _ = Z.phase (D : A) := (Z.phase_eq_of_iso e).symm
     _ ≤ F.φ ⟨0, F.hn⟩ := F.semistable_phase_le_first hDss
+
+/-- Every nonzero quotient of a filtration prefix has phase at least the
+phase of the prefix's last HN factor.  We compose with the last semistable
+factor of an HN filtration of the quotient and use factor-by-factor
+vanishing on the prefix. -/
+theorem last_prefix_le_quotient_phase (hHN : Z.HasHNProperty)
+    {k : ℕ} (hk₀ : 0 < k) (hkn : k ≤ F.n) {Q : A}
+    (q : (F.chain ⟨k, by omega⟩ : A) ⟶ Q) [Epi q]
+    (hQ : ¬IsZero Q) :
+    F.φ ⟨k - 1, by omega⟩ ≤ Z.phase Q := by
+  obtain ⟨G⟩ := hHN Q hQ
+  let j : Fin G.n := ⟨G.n - 1, Nat.sub_lt G.hn Nat.one_pos⟩
+  have htop : G.chain j.succ = ⊤ := by
+    have hj : j.succ = ⟨G.n, Nat.lt_succ_self G.n⟩ := by
+      apply Fin.ext
+      simp only [j, Fin.succ_mk]
+      have := G.hn
+      omega
+    rw [hj, G.chain_top]
+  haveI : IsIso (G.chain j.succ).arrow := by
+    rw [htop]
+    infer_instance
+  let p : Q ⟶ G.factorObj j :=
+    inv (G.chain j.succ).arrow ≫
+      cokernel.π (Subobject.ofLE (G.chain j.castSucc) (G.chain j.succ)
+        (le_of_lt (G.chain_strictMono j.castSucc_lt_succ)))
+  haveI : Epi p := by
+    dsimp [p]
+    infer_instance
+  have hp : p ≠ 0 := by
+    intro hp
+    exact (G.factor_semistable j).1 (IsZero.of_epi_eq_zero p hp)
+  have hqp : q ≫ p ≠ 0 := by
+    intro h
+    apply hp
+    exact (cancel_epi q).1 (by simpa using h)
+  calc
+    F.φ ⟨k - 1, by omega⟩ ≤ Z.phase (G.factorObj j) :=
+      F.phase_last_prefix_le_of_ne_zero_to_semistable
+        (G.factor_semistable j) hk₀ hkn (q ≫ p) hqp
+    _ = G.φ j := G.factor_phase j
+    _ ≤ Z.phase Q := G.last_le_phase
+
+/-- The quotient `S / (S ∩ E_k)` lies in the phase range of the HN tail:
+its phase is at most the phase of the next factor. -/
+theorem quotient_inf_phase_le (hHN : Z.HasHNProperty) {k : ℕ}
+    (hk : k < F.n) (S : Subobject E)
+    (hQ : ¬IsZero (cokernel (Subobject.ofLE (S ⊓ F.chain ⟨k, by omega⟩) S
+      inf_le_left))) :
+    Z.phase (cokernel (Subobject.ofLE (S ⊓ F.chain ⟨k, by omega⟩) S
+      inf_le_left)) ≤ F.φ ⟨k, hk⟩ := by
+  let K : Subobject E := F.chain ⟨k, by omega⟩
+  let Q : A := cokernel (Subobject.ofLE (S ⊓ K) S inf_le_left)
+  let f : Q ⟶ cokernel K.arrow := quotientInfToCokernel S K
+  let D : Subobject (cokernel K.arrow) := Subobject.mk f
+  have hD : D ≠ ⊥ := by
+    intro hDbot
+    have hf : f = 0 := by
+      rw [← Subobject.mk_eq_bot_iff_zero]
+      exact hDbot
+    exact hQ (IsZero.of_mono_eq_zero f hf)
+  let G := F.quotientHNFiltration hk
+  have hphaseD : Z.phase (D : A) ≤ G.φ ⟨0, G.hn⟩ :=
+    G.subobject_phase_le_first hHN hD
+  have e : (D : A) ≅ Q := Subobject.underlyingIso f
+  calc
+    Z.phase (cokernel (Subobject.ofLE (S ⊓ F.chain ⟨k, by omega⟩) S
+      inf_le_left)) = Z.phase Q := rfl
+    _ = Z.phase (D : A) := (Z.phase_eq_of_iso e).symm
+    _ ≤ G.φ ⟨0, G.hn⟩ := hphaseD
+    _ = F.φ ⟨k, hk⟩ := by rfl
+
+/-- A proper inclusion of subobjects has a nonzero cokernel. -/
+private theorem cokernel_ofLE_not_isZero {I S : Subobject E} (hIS : I ≤ S)
+    (hne : I ≠ S) : ¬IsZero (cokernel (Subobject.ofLE I S hIS)) := by
+  intro hzero
+  haveI : Epi (Subobject.ofLE I S hIS) :=
+    Preadditive.epi_of_isZero_cokernel _ hzero
+  haveI : IsIso (Subobject.ofLE I S hIS) := isIso_of_mono_of_epi _
+  exact hne (Subobject.eq_of_comm (asIso (Subobject.ofLE I S hIS))
+    (Subobject.ofLE_arrow hIS))
+
+/-- A strict linear maximum on a generating set remains a strict unique
+maximum on its convex hull. -/
+private theorem strict_support_convexHull {s : Set ℂ} {v : ℂ}
+    (l : ℂ →L[ℝ] ℝ) (h : ∀ x ∈ s, x ≠ v → l x < l v) :
+    ∀ x ∈ convexHull ℝ s, x ≠ v → l x < l v := by
+  let T : Set ℂ := {x | l x < l v ∨ x = v}
+  have hsT : s ⊆ T := by
+    intro x hx
+    by_cases hxv : x = v
+    · exact Or.inr hxv
+    · exact Or.inl (h x hx hxv)
+  have hTconvex : Convex ℝ T := by
+    intro x hx y hy a b ha hb hab
+    rcases hx with hx | rfl <;> rcases hy with hy | rfl
+    · left
+      simp only [map_add, map_smul, smul_eq_mul]
+      by_cases ha₀ : a = 0
+      · have hb₁ : b = 1 := by linarith
+        simpa [ha₀, hb₁] using hy
+      · have ha' : 0 < a := lt_of_le_of_ne ha (Ne.symm ha₀)
+        calc
+          a * l x + b * l y < a * l v + b * l v :=
+            add_lt_add_of_lt_of_le
+              (mul_lt_mul_of_pos_left hx ha')
+              (mul_le_mul_of_nonneg_left hy.le hb)
+          _ = l v := by rw [← add_mul, hab, one_mul]
+    · by_cases ha₀ : a = 0
+      · right
+        have hb₁ : b = 1 := by linarith
+        simp [ha₀, hb₁]
+      · left
+        simp only [map_add, map_smul, smul_eq_mul]
+        have ha' : 0 < a := lt_of_le_of_ne ha (Ne.symm ha₀)
+        calc
+          a * l x + b * l y < a * l y + b * l y :=
+            add_lt_add_of_lt_of_le (mul_lt_mul_of_pos_left hx ha') le_rfl
+          _ = l y := by rw [← add_mul, hab, one_mul]
+    · by_cases hb₀ : b = 0
+      · right
+        have ha₁ : a = 1 := by linarith
+        simp [hb₀, ha₁]
+      · left
+        simp only [map_add, map_smul, smul_eq_mul]
+        have hb' : 0 < b := lt_of_le_of_ne hb (Ne.symm hb₀)
+        calc
+          a * l x + b * l y < a * l x + b * l x :=
+            add_lt_add_of_le_of_lt le_rfl (mul_lt_mul_of_pos_left hy hb')
+          _ = l x := by rw [← add_mul, hab, one_mul]
+    · right
+      calc
+        a • y + b • y = (a + b) • y := (add_smul a b y).symm
+        _ = y := by rw [hab]; exact one_smul ℝ y
+  have hhull : convexHull ℝ s ⊆ T := convexHull_min hsT hTconvex
+  intro x hx hxv
+  rcases hhull hx with hlt | heq
+  · exact hlt
+  · exact (hxv heq).elim
+
+/-- Every interior HN vertex is strictly supported against the charge of
+every other subobject.  At the cut `K = E_k`, the charge difference splits as
+
+`Z(S) - Z(K) = Z(S / (S ∩ K)) - Z(K / (S ∩ K))`.
+
+The first quotient lies below the next HN ray and the second lies above the
+preceding HN ray, so the cross-product functional at an intermediate angle is
+strictly smaller on `S`. -/
+theorem subobjectCharge_exists_strict_support (hHN : Z.HasHNProperty)
+    (k : Fin (F.n + 1)) (hk₀ : 0 < k) (hkn : k < Fin.last F.n) :
+    ∃ l : ℂ →L[ℝ] ℝ, ∀ S : Subobject E, S ≠ F.chain k →
+      l (Z.Zobj (S : A)) < l (F.polygonVertex k) := by
+  let iPrev : Fin F.n := ⟨k.1 - 1, by omega⟩
+  let iNext : Fin F.n := ⟨k.1, by simpa [Fin.last] using hkn⟩
+  have hiPrevNext : iPrev < iNext := by
+    simp only [iPrev, iNext, Fin.mk_lt_mk]
+    omega
+  have hargNextPrev : Complex.arg (F.polygonEdge iNext) <
+      Complex.arg (F.polygonEdge iPrev) :=
+    F.polygonEdge_arg_strictAnti hiPrevNext
+  let θ : ℝ :=
+    (Complex.arg (F.polygonEdge iPrev) + Complex.arg (F.polygonEdge iNext)) / 2
+  have hargNextθ : Complex.arg (F.polygonEdge iNext) < θ := by
+    dsimp [θ]
+    linarith
+  have hθargPrev : θ < Complex.arg (F.polygonEdge iPrev) := by
+    dsimp [θ]
+    linarith
+  have hθ₀ : 0 < θ :=
+    (arg_pos_of_mem_upperHalfPlaneUnion
+      (F.polygonEdge_mem_upperHalfPlaneUnion iNext)).trans hargNextθ
+  have hθπ : θ < Real.pi :=
+    hθargPrev.trans_le (Complex.arg_le_pi _)
+  let r : ℂ := ComplexPolygonalPath.unitRay θ
+  let l : ℂ →L[ℝ] ℝ := ComplexPolygonalPath.crossFunctional r
+  have hr : r ∈ upperHalfPlaneUnion :=
+    ComplexPolygonalPath.unitRay_mem_upperHalfPlaneUnion hθ₀ hθπ
+  have hrarg : Complex.arg r = θ :=
+    ComplexPolygonalPath.arg_unitRay hθ₀ hθπ
+  refine ⟨l, fun S hSK ↦ ?_⟩
+  let K : Subobject E := F.chain k
+  let I : Subobject E := S ⊓ K
+  let Qₛ : A := cokernel (Subobject.ofLE I S inf_le_left)
+  let Qₖ : A := cokernel (Subobject.ofLE I K inf_le_right)
+  have hZₛ : Z.Zobj (S : A) = Z.Zobj (I : A) + Z.Zobj Qₛ :=
+    Z.additive _ (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE I S inf_le_left))
+      inferInstance inferInstance)
+  have hZₖ : Z.Zobj (K : A) = Z.Zobj (I : A) + Z.Zobj Qₖ :=
+    Z.additive _ (ShortComplex.ShortExact.mk'
+      (ShortComplex.exact_cokernel (Subobject.ofLE I K inf_le_right))
+      inferInstance inferInstance)
+  have hdiff : Z.Zobj (S : A) - Z.Zobj (K : A) =
+      Z.Zobj Qₛ - Z.Zobj Qₖ := by
+    linear_combination hZₛ - hZₖ
+  have hleft : l (Z.Zobj Qₛ) ≤ 0 := by
+    by_cases hIS : I = S
+    · have hZzero : Z.Zobj Qₛ = 0 := by
+        rw [hIS] at hZₛ
+        exact (add_left_cancel (show Z.Zobj (S : A) + 0 =
+          Z.Zobj (S : A) + Z.Zobj Qₛ by simpa using hZₛ)).symm
+      rw [hZzero, map_zero]
+    · have hQₛ : ¬IsZero Qₛ := cokernel_ofLE_not_isZero inf_le_left hIS
+      have hphase : Z.phase Qₛ ≤ F.φ iNext := by
+        simpa [Qₛ, I, K, iNext] using
+          F.quotient_inf_phase_le hHN (k := k.1) (by
+            simpa [Fin.last] using hkn) S hQₛ
+      have hargQ : Complex.arg (Z.Zobj Qₛ) ≤
+          Complex.arg (F.polygonEdge iNext) := by
+        rw [F.polygonEdge_arg iNext]
+        calc
+          Complex.arg (Z.Zobj Qₛ) = Real.pi * Z.phase Qₛ := by
+            unfold StabilityFunction.phase
+            field_simp
+          _ ≤ Real.pi * F.φ iNext :=
+            mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+      exact (ComplexPolygonalPath.crossFunctional_neg_of_arg_lt hr
+        (Z.upper Qₛ hQₛ) (by
+          rw [hrarg]
+          exact hargQ.trans_lt hargNextθ)).le
+  have hright : 0 ≤ l (Z.Zobj Qₖ) := by
+    by_cases hIK : I = K
+    · have hZzero : Z.Zobj Qₖ = 0 := by
+        rw [hIK] at hZₖ
+        exact (add_left_cancel (show Z.Zobj (K : A) + 0 =
+          Z.Zobj (K : A) + Z.Zobj Qₖ by simpa using hZₖ)).symm
+      rw [hZzero, map_zero]
+    · have hQₖ : ¬IsZero Qₖ := cokernel_ofLE_not_isZero inf_le_right hIK
+      have hphase : F.φ iPrev ≤ Z.phase Qₖ := by
+        simpa [Qₖ, I, K, iPrev] using
+          F.last_prefix_le_quotient_phase hHN (k := k.1) (by omega)
+            (by omega) (cokernel.π (Subobject.ofLE I K inf_le_right)) hQₖ
+      have hargQ : Complex.arg (F.polygonEdge iPrev) ≤
+          Complex.arg (Z.Zobj Qₖ) := by
+        rw [F.polygonEdge_arg iPrev]
+        calc
+          Real.pi * F.φ iPrev ≤ Real.pi * Z.phase Qₖ :=
+            mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+          _ = Complex.arg (Z.Zobj Qₖ) := by
+            unfold StabilityFunction.phase
+            field_simp
+      exact (ComplexPolygonalPath.crossFunctional_pos_of_arg_lt hr
+        (Z.upper Qₖ hQₖ) (by
+          rw [hrarg]
+          exact hθargPrev.trans_le hargQ)).le
+  have hstrict : l (Z.Zobj Qₛ) - l (Z.Zobj Qₖ) < 0 := by
+    by_cases hIS : I = S
+    · have hIK : I ≠ K := by
+        intro h
+        apply hSK
+        change S = K
+        exact hIS.symm.trans h
+      have hQₖ : ¬IsZero Qₖ := cokernel_ofLE_not_isZero inf_le_right hIK
+      have hright' : 0 < l (Z.Zobj Qₖ) := by
+        have hphase : F.φ iPrev ≤ Z.phase Qₖ := by
+          simpa [Qₖ, I, K, iPrev] using
+            F.last_prefix_le_quotient_phase hHN (k := k.1) (by omega)
+              (by omega) (cokernel.π (Subobject.ofLE I K inf_le_right)) hQₖ
+        apply ComplexPolygonalPath.crossFunctional_pos_of_arg_lt hr
+          (Z.upper Qₖ hQₖ)
+        rw [hrarg]
+        refine hθargPrev.trans_le ?_
+        rw [F.polygonEdge_arg iPrev]
+        calc
+          Real.pi * F.φ iPrev ≤ Real.pi * Z.phase Qₖ :=
+            mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+          _ = Complex.arg (Z.Zobj Qₖ) := by
+            unfold StabilityFunction.phase
+            field_simp
+      linarith
+    · have hQₛ : ¬IsZero Qₛ := cokernel_ofLE_not_isZero inf_le_left hIS
+      have hleft' : l (Z.Zobj Qₛ) < 0 := by
+        have hphase : Z.phase Qₛ ≤ F.φ iNext := by
+          simpa [Qₛ, I, K, iNext] using
+            F.quotient_inf_phase_le hHN (k := k.1) (by
+              simpa [Fin.last] using hkn) S hQₛ
+        apply ComplexPolygonalPath.crossFunctional_neg_of_arg_lt hr
+          (Z.upper Qₛ hQₛ)
+        rw [hrarg]
+        have hargQ : Complex.arg (Z.Zobj Qₛ) ≤
+            Complex.arg (F.polygonEdge iNext) := by
+          rw [F.polygonEdge_arg iNext]
+          calc
+            Complex.arg (Z.Zobj Qₛ) = Real.pi * Z.phase Qₛ := by
+              unfold StabilityFunction.phase
+              field_simp
+            _ ≤ Real.pi * F.φ iNext :=
+              mul_le_mul_of_nonneg_left hphase Real.pi_pos.le
+        exact hargQ.trans_lt hargNextθ
+      linarith
+  have hmapdiff : l (Z.Zobj (S : A)) - l (Z.Zobj (K : A)) =
+      l (Z.Zobj Qₛ) - l (Z.Zobj Qₖ) := by
+    rw [← map_sub, hdiff, map_sub]
+  change l (Z.Zobj (S : A)) < l (Z.Zobj (K : A))
+  linarith
+
+/-- Every interior HN path vertex is an exposed point of the full ambient HN
+polygon: it is the strict unique maximizer of a continuous real-linear
+functional over the convex hull of all subobject charges. -/
+theorem polygonVertex_exists_strict_support_hnPolygon
+    (hHN : Z.HasHNProperty) (k : Fin (F.n + 1)) (hk₀ : 0 < k)
+    (hkn : k < Fin.last F.n) :
+    ∃ l : ℂ →L[ℝ] ℝ, ∀ z ∈ Z.hnPolygon E, z ≠ F.polygonVertex k →
+      l z < l (F.polygonVertex k) := by
+  obtain ⟨l, hl⟩ := F.subobjectCharge_exists_strict_support hHN k hk₀ hkn
+  refine ⟨l, strict_support_convexHull l ?_⟩
+  rintro z ⟨S, rfl⟩ hz
+  exact hl S (by
+    intro hSK
+    apply hz
+    simp [polygonVertex, hSK])
 
 /-- Every vertex of the distinguished HN path lies in the ambient HN
 polygon. -/

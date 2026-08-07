@@ -631,6 +631,7 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.ComplexPolygonalPath.exists_strict_support_at_interior
 #print axioms CategoryTheory.ComplexPolygonalPath.sum_edges_eq_last_sub_zero
 #print axioms CategoryTheory.ComplexPolygonalPath.arg_last_sub_zero_le_arg_first
+#print axioms CategoryTheory.ComplexPolygonalPath.arg_last_edge_le_arg_last_sub_zero
 #print axioms CategoryTheory.ComplexPolygonalPath.length
 #print axioms CategoryTheory.ComplexPolygonalPath.norm_last_sub_zero_le_length
 #print axioms CategoryTheory.AbelianHNFiltration.semistable_le_chain_of_phase_gt
@@ -649,7 +650,16 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_zero
 #print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_last
 #print axioms CategoryTheory.AbelianHNFiltration.phase_le_first
+#print axioms CategoryTheory.AbelianHNFiltration.last_le_phase
+#print axioms CategoryTheory.AbelianHNFiltration.phase_last_prefix_le_of_ne_zero_to_semistable
 #print axioms CategoryTheory.AbelianHNFiltration.subobject_phase_le_first
+#print axioms CategoryTheory.AbelianHNFiltration.quotientHNFiltration
+#print axioms CategoryTheory.AbelianHNFiltration.quotientInfToCokernel
+#print axioms CategoryTheory.AbelianHNFiltration.quotientInfToCokernel_mono
+#print axioms CategoryTheory.AbelianHNFiltration.last_prefix_le_quotient_phase
+#print axioms CategoryTheory.AbelianHNFiltration.quotient_inf_phase_le
+#print axioms CategoryTheory.AbelianHNFiltration.subobjectCharge_exists_strict_support
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_exists_strict_support_hnPolygon
 #print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_mem_hnPolygon
 #print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_polygonLength
 #print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_mass
