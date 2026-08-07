@@ -257,8 +257,12 @@ fidelity:
     Proposition 2.13. Path length remains identified with factor mass, and
     the endpoint chord remains bounded by path length.
 
-    The independent polygon-perimeter comparison in Ikeda Lemma 3.7 is still
-    open, so this does not inhabit StabilityMassBoundaryHeartInequality.
+    ConvexPolygonPerimeter.lean now proves the independent t = 0
+    polygon-perimeter comparison in Ikeda Lemma 3.7 by a finite support-fan
+    argument and specializes it to HN paths. The remaining first-milestone
+    geometric input is the boundary-filling containment of the full ambient
+    HN polygon in the convex hull of the closed HN vertex path; without that
+    bridge this still does not inhabit StabilityMassBoundaryHeartInequality.
     H0ExactnessBridge.lean packages the heart-source H0 short complex and
     proves that its exactness is equivalent to monicity of the canonical
     cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
@@ -457,7 +461,20 @@ fidelity:
     audit has 572 print commands at code commit 50c468d. The ten new records
     were independently parsed against [propext, Classical.choice, Quot.sound]
     with no sorryAx, on top of the previously gated 562-record sweep. The
-    perimeter comparison is not included as a completed claim.
+    perimeter comparison is not included in that earlier count as a completed
+    claim; it is completed by the later ConvexPolygonPerimeter update.
+
+    COUNT UPDATE (finite polygon-perimeter comparison), 2026-08-06. Forty
+    additional public declarations formalize normalized edge directions,
+    chain length under vertex deletion, cyclic closed perimeter, discrete
+    support-sum integration by parts, upper-half-plane chord closure, interior
+    bisector turns, monotone support maximizers, the t = 0 comparison of Ikeda
+    Lemma 3.7, and its HN-path specialization. The strict audit now covers 612
+    declarations, all within [propext, Classical.choice, Quot.sound], with no
+    sorryAx. The full root-library build completes at 3793 jobs. The
+    declaration linter remains at exactly the six inherited findings and has
+    none in ConvexPolygonPerimeter. The environment emitter reports 1353
+    constants, 734 in scope, and no sorryAx dependency.
 
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
@@ -567,8 +584,10 @@ fidelity:
     charges. The full build completed at 3793 jobs; the ten new audit records
     pass the strict allowlist with no sorryAx; and the emitter reports 1257
     constants (693 in scope) with no sorryAx dependency. The next open step is
-    precisely the t=0 polygon-perimeter comparison of Ikeda Lemma 3.7. The H0
-    unconditional exactness gap is unchanged.
+    the t=0 polygon-perimeter comparison of Ikeda Lemma 3.7. That comparison is
+    now proved in ConvexPolygonPerimeter.lean; the newly exposed first-milestone
+    gap is the ambient-polygon-to-closed-vertex-hull containment needed to
+    instantiate it. The H0 unconditional exactness gap is unchanged.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean

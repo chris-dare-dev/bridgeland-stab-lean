@@ -3,7 +3,7 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.GroupAction.StabilityDistanceTopology
-import BridgelandStabLean.GroupAction.HNPolygon
+import BridgelandStabLean.GroupAction.ConvexPolygonPerimeter
 import BridgelandStabLean.GroupAction.H0ExactnessBridge
 import BridgelandStability.HeartEquivalence.Reverse
 
@@ -25,13 +25,14 @@ Harder--Narasimhan filtrations.  Here we establish its norm-theoretic base:
 * the arbitrary-left case reduces, by head--tail octahedral induction, to the
   semistable-left case.
 
-`HNPolygon` now supplies the ambient convex hull, the distinguished HN path,
-its edge-charge and length-equals-mass formulas, and the finite-path chord
-inequality. `H0ExactnessBridge` identifies the exact heart-source obstruction
-as a canonical cokernel map being monic and discharges it from homological
-`H⁰`/`H⁰'` data. The remaining mathematical inputs are HN-boundary
-extremality/perimeter comparison and an unconditional proof of that exactness
-obstruction. They are named below but are not assumed as instances or axioms.
+`HNPolygon` supplies the ambient convex hull and distinguished HN path.
+`ConvexPolygonPerimeter` proves the independent `t = 0` comparison of closed
+vertex polygons and specializes it to HN paths. `H0ExactnessBridge` identifies
+the exact heart-source obstruction as a canonical cokernel map being monic and
+discharges it from homological `H⁰`/`H⁰'` data. The remaining mathematical
+inputs are containment of the full ambient HN polygon in the closed HN vertex
+polygon, and an unconditional proof of that exactness obstruction. They are
+named below but are not assumed as instances or axioms.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex

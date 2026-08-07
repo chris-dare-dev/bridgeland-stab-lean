@@ -230,14 +230,22 @@ polygon. The ambient theorem is obtained from a quotient-tail HN filtration,
 the canonical monomorphism `S / (S ∩ Eₖ) ⟶ E / Eₖ`, and the complementary
 prefix-quotient phase bound. The file also identifies path length with factor
 mass and supplies the endpoint chord bound.
+`ConvexPolygonPerimeter` proves the independent `t = 0` comparison from
+Ikeda Lemma 3.7. It closes each path by the common endpoint chord, represents
+perimeter as a finite support sum, proves support-maximizing outer vertices
+move monotonically, and reduces the comparison to deletion of vertices from a
+polygonal chain. An HN-path specialization converts closed vertex-hull
+containment and equal total charge directly into the polygon-length inequality.
 `H0ExactnessBridge` identifies
 the exact heart-source obstruction as monicity of
 `coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
 or `H⁰'` structure without installing a global instance. Of the three major
 mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
 first now has full interior ambient-polygon extremality and monomorphism
-containment, but still needs the independent polygon-perimeter theorem from
-Ikeda Lemma 3.7 before its named boundary-heart proposition can be inhabited.
+containment, and the independent polygon-perimeter theorem. Its remaining
+geometric input is containment of the full ambient HN polygon in the closed
+HN vertex polygon (the boundary-filling statement needed to feed the new
+comparison theorem) before its named boundary-heart proposition can be inhabited.
 The second still needs the unconditional homological input (or the equivalent
 cokernel monicity proof). Their named propositions remain uninhabited and are
 not installed as instances or axioms.

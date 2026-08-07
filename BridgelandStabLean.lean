@@ -31,6 +31,7 @@ import BridgelandStabLean.GroupAction.StabilityDistance
 import BridgelandStabLean.GroupAction.StabilityDistanceSeparation
 import BridgelandStabLean.GroupAction.StabilityDistanceTopology
 import BridgelandStabLean.GroupAction.HNPolygon
+import BridgelandStabLean.GroupAction.ConvexPolygonPerimeter
 import BridgelandStabLean.GroupAction.H0ExactnessBridge
 import BridgelandStabLean.GroupAction.StabilityMassTriangle
 import BridgelandStabLean.GroupAction.AutFullIsometry

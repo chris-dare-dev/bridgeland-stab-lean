@@ -664,6 +664,49 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_polygonLength
 #print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_mass
 
+/-! ### ConvexPolygonPerimeter — Ikeda Lemma 3.7 at t = 0 -/
+
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_apply
+#print axioms CategoryTheory.ComplexPolygonalPath.unitDirection
+#print axioms CategoryTheory.ComplexPolygonalPath.norm_unitDirection_le_one
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_unitDirection_self
+#print axioms CategoryTheory.ComplexPolygonalPath.unitDirection_eq_unitRay_arg
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_le_norm_mul
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_sub_left
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_sub_right
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_unitRay_sub
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_nil
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_singleton
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_cons_cons
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_mono_sublist
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_comp_monotone_le
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_ofFn_eq_length
+#print axioms CategoryTheory.ComplexPolygonalPath.closedEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength
+#print axioms CategoryTheory.ComplexPolygonalPath.closedTangent
+#print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_sum_turning
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_length_add_chord
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_comp_monotone_le
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_le_of_monotone_support
+#print axioms CategoryTheory.ComplexPolygonalPath.last_sub_zero_mem_upperHalfPlaneUnion
+#print axioms CategoryTheory.ComplexPolygonalPath.sub_mem_upperHalfPlaneUnion_of_lt
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorPrevEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorNextEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorTurnScale
+#print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional_interior_eq_cross
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorTurnScale_pos
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector_mem_Ioo
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector_strictAnti
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex_max
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex_mono_of_angle_gt
+#print axioms CategoryTheory.ComplexPolygonalPath.length_le_of_convexHull_subset
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_of_vertexHull_subset
+
 /-! ### H0ExactnessBridge — the exact heart-source obstruction -/
 
 #print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex
