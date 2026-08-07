@@ -5,6 +5,8 @@ Released under the MIT license.
 import BridgelandStabLean.ForMathlib.PolarDecomposition
 import BridgelandStabLean.Lattice.Basic
 import BridgelandStabLean.Lattice.NumericalK
+import BridgelandStabLean.Mukai.Lattice
+import BridgelandStabLean.Mukai.RankTwo
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.GLTildeFibre
@@ -48,6 +50,9 @@ Two lanes, both chosen because they need **no** algebraic-geometry substrate:
 
 * `ForMathlib/` — results Mathlib lacks at the pin, written to be upstreamed.
 * `Lattice/` — rank-2 torsion-free arithmetic (closed proofs, today).
+* `Mukai/` — the Mukai extension `ℤ ⊕ N ⊕ ℤ` of a symmetric bilinear lattice,
+  and rank-two subpair arithmetic. Pure lattice theory: no surface, no K3, no
+  `D^b(Coh X)`. See that directory's module docstrings for the frontier.
 * `GroupAction/` — the §8 `G̃L⁺(2, ℝ)` action the anchor does not cover.
 
 See `README.md` for why the geometric lane is deliberately absent, and

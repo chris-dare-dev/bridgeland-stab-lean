@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these two lanes and not others
+## Why these three lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -33,7 +33,14 @@ decompositions, or Fourier–Mukai transforms.
 So a paper like "Bridgeland stability on K3 surfaces" is not a hard
 formalization target — it is a *blocked* one, behind a multi-year Mathlib
 program. The papers that are reachable are the ones that never leave the
-abstract layer. Both lanes below were chosen on that criterion alone.
+abstract layer. Every lane below was chosen on that criterion alone.
+
+**Lane 3 does not change that.** `Mukai/` formalizes the *lattice* that a K3's
+Mukai lattice is an instance of, which is arithmetic and needs no substrate.
+The identification with `H⁰ ⊕ NS(X) ⊕ H⁴` still needs `D^b(Coh X)`, Chern
+characters and HRR, and is still blocked. Adding the lattice does not move that
+wall an inch; it just means the arithmetic is already there when someone else
+moves it.
 
 ### Lane 1 — `GroupAction/` (the §8 gap)
 
@@ -284,9 +291,48 @@ rank-component non-vanishing. Small, closed, no substrate required. These
 exist to exercise the whole path — build, axiom audit, review record — on
 statements too simple to hide a mistake in.
 
+### Lane 3 — `Mukai/` (lattice arithmetic for the wall literature)
+
+The extension `ℤ ⊕ N ⊕ ℤ` of an additive group `N` carrying a symmetric
+`ℤ`-bilinear form `b`, with
+
+```
+⟪(r, c, s), (r', c', s')⟫ = b c c' - r·s' - r'·s.
+```
+
+`Mukai/Lattice.lean` proves bilinearity, symmetry, the quadratic refinement
+`⟪v,v⟫ = b c c - 2rs`, that the extension of an even lattice is even, the
+disjointness of the spherical (`⟪v,v⟫ = -2`) and isotropic (`⟪v,v⟫ = 0`)
+conditions, and that the two outer summands span a hyperbolic plane — two
+isotropic generators pairing to `-1`.
+
+`Mukai/RankTwo.lean` is the rank-two subpair arithmetic the wall literature is
+organised around. Its two loads:
+
+* **`gram_lincomb`** — the Gram determinant transforms by the *square* of the
+  change-of-basis determinant, for an arbitrary integer `2 × 2` matrix rather
+  than only unimodular ones. This is what makes "hyperbolic" a property of the
+  sublattice and not of a chosen basis.
+* **`selfPairing_orthWitness_neg`** — the explicit integral class
+  `⟪v,w⟫ • v - ⟪v,v⟫ • w` is orthogonal to `v` and has strictly negative
+  square whenever `⟪v,v⟫ > 0` and the pair is hyperbolic. That is the
+  signature-`(1,1)` witness in integral form: no real coefficients, no
+  diagonalisation, no appeal to Sylvester's law.
+
+Three names in this lane are suggestive and each is weaker than it sounds.
+`expectedDim v = ⟪v,v⟫ + 2` is a **definition**, not Mukai's dimension theorem.
+`IsSpherical` is the numerical condition `⟪v,v⟫ = -2`, not a claim that any
+object has that class. `IsHyperbolicPair` is negative Gram determinant, not a
+claim that a wall exists — the correspondence with actual walls is
+Bayer–Macrì Theorem 5.7, which is geometry and is **not** formalized here.
+
 ### Not a lane
 
-Anything requiring `Coh(X)`. See above.
+Anything requiring `Coh(X)`. See above. In particular the Bayer–Macrì wall
+*classification* — assigning a type (totally semistable, divisorial, flopping,
+fake) to a rank-two datum — needs moduli of stable objects and is out of scope.
+Lane 3 supplies the numerical substrate that classification is phrased over,
+and stops there.
 
 ## What this repo is not
 
@@ -295,6 +341,16 @@ there is a theorem about a **rank-2 torsion-free lattice**, not about a
 Kuznetsov component. The identification is geometry, is not expressible in
 Mathlib today, and is tracked as an unrealized assumption. It is never
 discharged here.
+
+`Mukai/` is the same divergence one level up, and the suggestive naming makes
+it easier to misread. `MukaiLattice N` is the abstract extension `ℤ × N × ℤ`
+of **any** additive group with **any** symmetric `ℤ`-bilinear form. It is not
+the Mukai lattice of a K3 surface. Every theorem in the lane is true of an
+arbitrary symmetric bilinear `ℤ`-lattice and would remain true if no K3
+surface existed. The lane also carries **no `@[cites]` records and no registry
+entries** — the pinned source is Bridgeland 2007, which this lane is not
+about, and minting keys against a document outside the pinned corpus would
+require quotes that cannot be verified here. Uncited is the honest state.
 
 Typechecking is not fidelity. TheoremGraph's statement-only experiment had
 22/24 outputs typecheck while 5/24 were semantically faithful. Nothing in this

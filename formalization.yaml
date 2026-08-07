@@ -22,10 +22,14 @@ artifact:
   name: BridgelandStabLean
   url: https://github.com/chris-dare-dev/bridgeland-stab-lean
   description: >
-    Extensions to mattrobball/BridgelandStability along two lanes that require
-    no algebraic-geometry substrate: rank-2 torsion-free lattice arithmetic,
-    and the Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does
-    not cover.
+    Extensions to mattrobball/BridgelandStability along three lanes that
+    require no algebraic-geometry substrate: rank-2 torsion-free lattice
+    arithmetic; the Mukai extension Z + N + Z of a symmetric bilinear lattice
+    together with rank-two subpair arithmetic; and the Bridgeland 2007
+    section 8 GL+(2,R)-tilde action the anchor does not cover.
+
+    The Mukai lane is NOT scoped to this record's `source`. See
+    source_mapping.
   date: 2026-08-03
   authors:
     - Chris Dare
@@ -385,6 +389,32 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (Mukai lane), 2026-08-06. The 66 additional records are the
+    whole of BridgelandStabLean/Mukai/: 39 from Lattice.lean (the pairing, its
+    bilinearity, symmetry, the quadratic refinement, evenness, the
+    spherical/isotropic conditions, the expectedDim bookkeeping, the outer
+    hyperbolic plane, and the bundled bilinear map) and 27 from RankTwo.lean
+    (the Gram determinant, its change-of-basis law, the hyperbolic-pair
+    predicate and its invariance, the integral orthogonal witness, and the
+    pairSpan wall-datum predicates). Audit count 497 -> 563.
+
+    THIS LANE'S COVERAGE IS COMPLETE, which is NOT true of the record above and
+    is stated separately for that reason. A direct census of
+    BridgelandStabLean/Mukai/ finds exactly 66 top-level declarations and ZERO
+    `private` ones, and scripts/Audit.lean names all 66. There is no shortfall
+    here of the kind the preceding paragraphs describe for GLTildeSurj.lean.
+
+    The second qualification above still applies in proportion: 51 of the 66
+    are theorems and 15 are constructions (14 `def`, 1 `abbrev`). FIVE of those
+    defs are `def ... : Prop` -- IsSpherical, IsIsotropic, IsHyperbolicPair,
+    HasSphericalClass, HasIsotropicClass -- so a clean axiom line for them
+    means the DEFINITION is axiom-clean and asserts nothing about any of those
+    propositions holding of anything.
+
+    This observation is WORKING-TREE-PINNED, not commit-pinned: it was taken
+    before the Mukai lane was committed. Re-take it against the commit hash
+    before quoting it as a commit-level fact.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -418,8 +448,33 @@ fidelity:
   builds_clean: true
   builds_clean_date: 2026-08-06
   builds_clean_note: >
-    Merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06 with a
-    Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
+    MUKAI LANE, 2026-08-06, on Windows 11 / x86_64, working tree at branch
+    agent/mukai-lattice off 45f2fba. Three of CI's five gates were run and all
+    three passed: `lake build` completed at 3780 jobs with exit 0;
+    `lake exe runLinter BridgelandStabLean` printed "Linting passed" with no
+    findings; and `lake env lean scripts/Audit.lean | python
+    scripts/check_audit.py` accepted 563 records, all within
+    [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
+    build-log grep also passed.
+
+    THE EMITTER GATE WAS NOT RUN, and this is a platform limit rather than a
+    result. `lake exe emit` cannot LINK on Windows: `supportInterpreter = true`
+    pushes a Mathlib-scale environment past the PE export table, and the link
+    fails with `ld.lld: error: too many exported symbols (got 136406, max
+    65535)`. ci.yml's own comment predicts exactly this and records the figure
+    136406 is the count with this lane added; the previously recorded figure at
+    the same cap was 134112. ELF has no such cap, so the emitter gate remains a
+    CI-only observation. Do not read "three of five gates green on a
+    workstation" as the CI verdict.
+
+    ONE SIMP-NORMAL-FORM DEFECT WAS FOUND AND FIXED BY THE LINTER STEP, which
+    is the reason CLAUDE.md section 1 requires it. `Mukai.pairing_outer` was
+    marked `@[simp]` while `pairing_mk` and `map_zero` already normalise its
+    left-hand side; simpNF rejected it. The attribute is removed and the reason
+    is recorded at the declaration. `lake build` alone had passed it green.
+
+    Earlier: merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06
+    with a Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
     The strict parser accepted all 497 records with no sorryAx, and `lake exe
     emit --out attest/lean-emission.json` completed successfully with
     `mfc-emit: wrote attest/lean-emission.json`.
@@ -451,7 +506,18 @@ fidelity:
     merged at 56c7531.
   human_review: none
   machine_review: >
-    Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
+    THE MUKAI LANE HAS HAD NO REVIEW OF ANY KIND, 2026-08-06. It was written
+    and gate-run in a single session by the same agent (Claude Opus 5); no
+    independent adversarial pass has been made over it, and no human has read
+    it. Three of five CI gates were run locally and passed -- see
+    builds_clean_note for which, and for why the emitter gate could not run on
+    this platform. A green build, a green linter and a green axiom audit are
+    HYGIENE AND AXIOM-CLEANLINESS ONLY; none of the three can tell whether a
+    statement says what it should. Since the lane is uncited and maps to no
+    section of `source`, there is not even a quote for a faithfulness review to
+    check against. Do not quote this entry as review of any kind.
+
+    Earlier: merged main at 56c7531 on 2026-08-06: the local build, the manual audit
     gate at 497 declarations, the environment-wide contract emitter, and YAML
     and JSON parsing all passed. "Attestation reproducibility" was ALSO listed
     here and is withdrawn -- see builds_clean_note; the command that evidenced
@@ -601,6 +667,35 @@ fidelity:
 
     No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
+    Mukai/ MAPS TO NO SECTION OF THIS RECORD'S `source` AT ALL, and that is the
+    most important thing this field says about it. `source` is Bridgeland 2007
+    (math/0212237v3); the Mukai extension and the rank-two wall datum come from
+    Mukai's work on moduli on K3 surfaces and from Bayer-Macri's wall
+    classification, neither of which is the pinned document. The lane therefore
+    carries NO `@[cites]` records and NO entries in registry/bridgeland2007.json,
+    deliberately: minting statement keys against a document the lane is not
+    about would be a false claim, and minting them against a document not in
+    the pinned corpus would require quotes this workstation cannot verify. The
+    lane is currently uncited, and "uncited" is the honest state, not an
+    oversight to be papered over.
+
+    What it contains. Mukai/Lattice.lean defines the extension of an additive
+    group N carrying a symmetric Z-bilinear form b to Z x N x Z with pairing
+    <(r,c,s),(r',c',s')> = b c c' - r s' - r' s, proves bilinearity in each
+    slot, symmetry from symmetry of b, the quadratic refinement
+    <v,v> = b c c - 2 r s, evenness of the extension of an even lattice, the
+    spherical (<v,v> = -2) and isotropic (<v,v> = 0) conditions and their
+    disjointness, and that the outer two summands span a hyperbolic plane --
+    two isotropic generators pairing to -1. Mukai/RankTwo.lean defines the Gram
+    determinant of a pair, proves it transforms by the SQUARE of the
+    change-of-basis determinant for an arbitrary integer 2x2 matrix (not only
+    unimodular ones), defines the negative-Gram hyperbolic-pair condition and
+    proves it basis-independent, and constructs the integral orthogonal witness
+    <v,w> v - <v,v> w, proving it orthogonal to v with self-pairing
+    <v,v> * gram -- hence strictly negative when v has positive square and the
+    pair is hyperbolic. That last result is the signature-(1,1) witness in
+    integral form: no real coefficients, no diagonalisation, no Sylvester.
+
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
     numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
@@ -831,6 +926,38 @@ fidelity:
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    Mukai/ IS THE SAME DIVERGENCE, ONE LEVEL UP, and is recorded separately
+    because the suggestive naming makes it easier to misread. `MukaiLattice N`
+    is the abstract extension Z x N x Z of ANY additive group carrying ANY
+    symmetric Z-bilinear form. It is NOT the Mukai lattice of a K3 surface.
+    Taking N = NS(X) with the intersection form would recover the algebraic
+    Mukai lattice H^0 + NS + H^4, but that identification needs D^b(Coh X),
+    Chern characters and Hirzebruch-Riemann-Roch, none of which exist in
+    Mathlib at the pin, and CLAUDE.md section 4 closes that lane outright. It is
+    an unrealized assumption and is never discharged here. Every theorem in the
+    lane is true of an arbitrary symmetric bilinear Z-lattice and would remain
+    true if no K3 surface existed.
+
+    Three specific names carry a claim they do not prove, and each says so at
+    its declaration. `expectedDim v = <v,v> + 2` is a DEFINITION recording which
+    numerical quantity is tracked; the statement that a moduli space of stable
+    objects with primitive Mukai vector v has that dimension is Mukai's theorem,
+    is geometry, and is NOT asserted. `IsSpherical` is the numerical condition
+    <v,v> = -2, not a claim that any spherical object exists or that such
+    objects have those classes. `IsHyperbolicPair` is the numerical condition
+    that a pair has negative Gram determinant; the correspondence between such
+    rank-two data and actual walls in a space of stability conditions is
+    Bayer-Macri Theorem 5.7, is geometry, and is NOT formalized -- the file's
+    module docstring states this and no declaration depends on it.
+
+    THE WALL CLASSIFICATION ITSELF IS NOT FORMALIZED. What exists is the
+    rank-two numerical substrate the classification is phrased over, plus the
+    two existence predicates HasSphericalClass and HasIsotropicClass. Assigning
+    a wall type -- totally semistable, divisorial, flopping, fake -- to a
+    rank-two datum requires moduli of stable objects and is out of scope by
+    CLAUDE.md section 4. Do not cite this lane as "the Bayer-Macri wall
+    classification is formalized".
 
     GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair presentation
     of GL+(2,R)-tilde. The group, surjective projection, Z fibre, explicit
