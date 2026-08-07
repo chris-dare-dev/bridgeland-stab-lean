@@ -305,6 +305,22 @@ Six claims to keep off the page.
   theorems showing the inherited topology is definitionally the existing one;
   do not replace them with a raw global metric instance. Proposition 8.1
   remains `no_claim` until the mass-triangle proposition is discharged.
+
+  **The mass-triangle obligation is now narrower, and only narrower.**
+  `StabilityMassTriangle.lean` proves
+  `stabilityMassTriangleInequality_of_semistable`: the general
+  `StabilityMassTriangleInequality` follows from
+  `StabilityMassSemistableTriangleInequality`, which is the same inequality
+  restricted to triangles whose first vertex lies in a single `P φ`. The proof
+  inducts on the HN length of the left-hand object, peels its top factor with
+  `exists_headTail_stabilityMass`, and reassembles with the octahedral axiom.
+  This is a THEOREM, so the open obligation really did shrink — but Proposition
+  8.1 is no closer to citable, and `no_claim` stays. What remains is the
+  analytic half: a heart-level short-exact mass inequality, then the
+  semistable-left case through cohomology in the heart. Do not describe the
+  reduction as progress on the *proposition*; it is progress on the *shape of
+  what is owed*.
+
   Independently, `AutPairQuot v` carries a compatible lattice automorphism and
   is not identified with bare `Aut(D)`. Say "the compatible
   autoequivalence group preserves the three-coordinate HN-mass distance" and

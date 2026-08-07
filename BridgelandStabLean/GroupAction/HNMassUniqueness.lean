@@ -553,6 +553,39 @@ theorem stabilityMass_toReal_pos
     0 < (stabilityMass σ E).toReal :=
   ENNReal.toReal_pos (ne_of_gt (stabilityMass_pos σ hE)) (stabilityMass_ne_top σ E)
 
+/-- A semistable object's mass is the norm of its charge, in `ℝ≥0∞`.
+
+The `toReal` form is `stabilityMass_toReal_eq_norm_charge`; this is the
+un-truncated statement, which is what an additive splitting argument needs. -/
+theorem stabilityMass_eq_ofReal_norm_charge
+    (σ : StabilityCondition.WithClassMap C v) {E : C} {φ : ℝ}
+    (hP : σ.slicing.P φ E) :
+    stabilityMass σ E = ENNReal.ofReal ‖σ.charge E‖ := by
+  rw [stabilityMass_eq_mass σ (HNFiltration.single C E φ hP)]
+  simp [HNFiltration.mass, HNFiltration.single, PostnikovTower.factor]
+
+/-- Public head/tail split of the mass, stated entirely in `stabilityMass`.
+
+`exists_headTail` is private and phrased with the private `factorMass`; this is
+the form downstream files can use. The head is the top HN factor, the tail is
+HN-filtered with one fewer factor, and the mass splits additively across the
+distinguished triangle joining them. -/
+theorem exists_headTail_stabilityMass
+    (σ : StabilityCondition.WithClassMap C v) {E : C}
+    (F : HNFiltration C σ.slicing.P E) (hn : 0 < F.n) :
+    ∃ (Y : C) (G : HNFiltration C σ.slicing.P Y)
+      (f : F.factor ⟨0, hn⟩ ⟶ E) (g : E ⟶ Y)
+      (h : Y ⟶ (F.factor ⟨0, hn⟩)⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C ∧
+      stabilityMass σ E =
+        stabilityMass σ (F.factor ⟨0, hn⟩) + stabilityMass σ Y ∧
+      G.n = F.n - 1 := by
+  obtain ⟨Y, G, f, g, h, hT, hmass, hGn, _⟩ := F.exists_headTail σ hn
+  refine ⟨Y, G, f, g, h, hT, ?_, hGn⟩
+  rw [stabilityMass_eq_mass σ F, hmass, stabilityMass_eq_mass σ G,
+    stabilityMass_eq_ofReal_norm_charge σ (F.semistable ⟨0, hn⟩)]
+  rfl
+
 end
 
 end CategoryTheory.Triangulated

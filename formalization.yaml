@@ -782,6 +782,25 @@ fidelity:
 
     What this is NOT is in known_divergences and must be read before citing it.
   known_divergences: >
+    MASS-TRIANGLE OBLIGATION NARROWED 2026-08-07, not discharged.
+    BridgelandStabLean/GroupAction/StabilityMassTriangle.lean proves
+    stabilityMassTriangleInequality_of_semistable: the general
+    StabilityMassTriangleInequality follows from the strictly weaker
+    StabilityMassSemistableTriangleInequality, which restricts to distinguished
+    triangles whose first vertex lies in a single P phi. The proof inducts on
+    the HN length of the left-hand object, peels its top HN factor via the new
+    public exists_headTail_stabilityMass, and reassembles the two resulting
+    triangles with the octahedral axiom. It is sorry-free and axiom-clean.
+
+    THIS DOES NOT MOVE PROPOSITION 8.1. Its second clause is still conditional,
+    every consumer still takes StabilityMassTriangleInequality as an explicit
+    hypothesis, and every @[cites] on prop-8.1 stays no_claim. What changed is
+    the SHAPE of the debt: the open proposition now carries a semistability
+    hypothesis on one vertex, so the two analytic steps that remain -- a
+    heart-level short-exact mass inequality, then the semistable-left case via
+    cohomology in the heart -- are the whole of it. Do not report the reduction
+    as partial proof of the proposition.
+
     DIVERGENCES ADDED BY THE 2026-08-06 MACHINE REVIEW. Six trust-record
     claims in this repo were found FALSE at 56c7531 and are corrected in this
     commit. They are listed here because a corrected record still owes a reader
