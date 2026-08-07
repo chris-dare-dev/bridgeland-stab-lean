@@ -195,4 +195,77 @@ theorem HasSupportProperty.eq_zero_of_charge_eq_zero (h : HasSupportProperty Z S
   rw [hZ, norm_zero, mul_zero] at this
   exact norm_le_zero_iff.mp this
 
+/-! ### Stability under perturbation of the charge
+
+The support property is an **open** condition on `Z`. That is what makes it the
+right hypothesis for a deformation argument: a charge that has it keeps it under
+any sufficiently small change, so the property propagates along a path rather
+than having to be re-established at every point.
+
+None of this uses compactness, the quadratic form, or finite-dimensionality —
+only the triangle inequality and one division — so all three are stated with
+`FiniteDimensional` omitted. The topological statement at the end is the only
+one that needs a norm on the space of charges, and it is a corollary of the
+other two rather than a separate argument. -/
+
+omit [FiniteDimensional ℝ V] in
+/-- **The support property survives a small perturbation of the charge.**
+
+Both the constant and the closeness bound are explicit, because the admissible
+size of the perturbation depends on `C`: an estimate that is only barely true
+tolerates only a barely nonzero change. The perturbed constant is
+`C / (1 - Cε)`, which degrades to `+∞` exactly as `Cε → 1`. -/
+theorem hasSupportProperty_of_norm_sub_le {Z' : V →ₗ[ℝ] W} {C ε : ℝ}
+    (hC : 0 < C) (hb : ∀ v ∈ S, ‖v‖ ≤ C * ‖Z v‖)
+    (hε : ∀ v : V, ‖Z' v - Z v‖ ≤ ε * ‖v‖) (hCε : C * ε < 1) :
+    HasSupportProperty Z' S := by
+  have hden : 0 < 1 - C * ε := by linarith
+  refine ⟨C / (1 - C * ε), div_pos hC hden, fun v hv => ?_⟩
+  have h1 : ‖v‖ ≤ C * ‖Z v‖ := hb v hv
+  have h3 : ‖Z v - Z' v‖ ≤ ε * ‖v‖ := by
+    rw [norm_sub_rev]; exact hε v
+  have h2 : ‖Z v‖ ≤ ‖Z' v‖ + ε * ‖v‖ := by
+    calc ‖Z v‖ = ‖Z' v + (Z v - Z' v)‖ := by congr 1; abel
+      _ ≤ ‖Z' v‖ + ‖Z v - Z' v‖ := norm_add_le _ _
+      _ ≤ ‖Z' v‖ + ε * ‖v‖ := by linarith
+  have h4 : C * ‖Z v‖ ≤ C * (‖Z' v‖ + ε * ‖v‖) := mul_le_mul_of_nonneg_left h2 hC.le
+  rw [div_mul_eq_mul_div, le_div_iff₀ hden]
+  nlinarith [h1, h4]
+
+omit [FiniteDimensional ℝ V] in
+/-- **Openness, stated without a topology on the space of charges.**
+
+Every charge with the support property admits a positive tolerance inside which
+every other charge still has it. `isOpen_hasSupportProperty` is this made
+topological; this form is separated out because it needs no norm on the space of
+maps and so applies to plain linear maps. -/
+theorem HasSupportProperty.exists_tolerance (h : HasSupportProperty Z S) :
+    ∃ ε : ℝ, 0 < ε ∧ ∀ Z' : V →ₗ[ℝ] W,
+      (∀ v : V, ‖Z' v - Z v‖ ≤ ε * ‖v‖) → HasSupportProperty Z' S := by
+  obtain ⟨C, hC, hb⟩ := h
+  refine ⟨(2 * C)⁻¹, by positivity, fun Z' hZ' => ?_⟩
+  refine hasSupportProperty_of_norm_sub_le hC hb hZ' ?_
+  rw [inv_eq_one_div, mul_one_div, div_lt_one (by positivity)]
+  linarith
+
+omit [FiniteDimensional ℝ V] in
+variable (S) in
+/-- **The charges with the support property form an open set.**
+
+`S` is fixed and the charges are topologized by the operator norm. This is the
+`IsOpen` form of `HasSupportProperty.exists_tolerance`; the mathematical content
+is entirely in that lemma, and the only step here is `le_opNorm`. -/
+theorem isOpen_hasSupportProperty :
+    IsOpen {Z : V →L[ℝ] W | HasSupportProperty (Z : V →ₗ[ℝ] W) S} := by
+  rw [Metric.isOpen_iff]
+  rintro Z (hZ : HasSupportProperty _ S)
+  obtain ⟨ε, hε, hmain⟩ := hZ.exists_tolerance
+  refine ⟨ε, hε, fun Z' hZ' => ?_⟩
+  refine hmain (Z' : V →ₗ[ℝ] W) fun v => ?_
+  have hle : ‖Z' - Z‖ ≤ ε := (mem_ball_iff_norm.mp hZ').le
+  calc ‖(Z' : V →ₗ[ℝ] W) v - (Z : V →ₗ[ℝ] W) v‖
+      = ‖(Z' - Z) v‖ := by simp
+    _ ≤ ‖Z' - Z‖ * ‖v‖ := ContinuousLinearMap.le_opNorm _ _
+    _ ≤ ε * ‖v‖ := mul_le_mul_of_nonneg_right hle (norm_nonneg v)
+
 end BridgelandStabLean.Support

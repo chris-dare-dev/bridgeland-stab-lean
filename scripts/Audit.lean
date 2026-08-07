@@ -27,28 +27,62 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-* It names **497** declarations. A direct census of `BridgelandStabLean/` finds
-  **569** top-level declarations, so **72 are outside this gate**.
-* **42 of those are `private`** and are *structurally* unlistable: Lean mangles
-  a private name to `_private.<Module>.<n>.<Name>`, which cannot be written as
-  a short name from an importing module. The instruction below cannot be
-  followed for them, and no amount of diligence changes that.
-* The other **29 are public and simply not added yet** -- 20 of them in
-  `GLTildeSurj.lean` alone.
-* Nothing detects the shortfall. `scripts/check_audit.py` never reads the
-  source tree, and this file fails to build only when a name it ALREADY lists
-  disappears -- never when a name it *should* list appears.
-* **167 of the 497 are not theorems** (121 `def`, 34 `instance`, 7 `abbrev`,
-  5 `structure`). For a `def`, `#print axioms` reports the axiom closure of a
-  CONSTRUCTION and asserts nothing about any proposition. In particular
+RE-MEASURED 2026-08-07. The figures below are no longer a source-text estimate
+and are no longer maintained by arithmetic. They come from a sweep of the
+built environment, so they count what Lean actually has rather than what a
+regex can find at column 0:
+
+```bash
+lake build && lake env lean scripts/Census.lean
+```
+
+The previous revision of this comment said **497 / 569 / 72 / 42 / 29 / 167**.
+Every one of those is now wrong, and two were wrong in kind rather than only in
+size -- see the projection bullet. **Re-run the command; do not adjust the
+numbers.**
+
+* It names **670** declarations. The environment holds **814** authored
+  declarations under `BridgelandStabLean.*`, so **144 are outside this gate**.
+  ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
+  lemmas and internal names, which nobody writes and nobody would list.)
+* **44 are `private`** -- 42 of them theorems -- and are *structurally*
+  unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
+  which cannot be written as a short name from an importing module. The
+  instruction below cannot be followed for them, and no amount of diligence
+  changes that.
+* **41 are structure field projections** emitted by the `structure` command.
+  These are not a coverage gap in any useful sense; listing them would be noise.
+  They are called out because they are 41 of the 100 ungated public names, so a
+  census that does not separate them overstates the real shortfall by two
+  thirds.
+* That leaves **59 public declarations simply not added yet** -- still **20 of
+  them in `GLTildeSurj.lean` alone**, which is the one figure the previous
+  revision got right and which has not moved.
+* Nothing detects the shortfall *automatically*. `scripts/check_audit.py` never
+  reads the source tree, and this file fails to build only when a name it
+  ALREADY lists disappears -- never when a name it *should* list appears.
+  `scripts/Census.lean` is the thing that reports it, but it is a script you
+  run, not a CI gate; a name added without a matching entry here still lands
+  green.
+* **189 of the 670 are not theorems** (9 `structure`, 180 other constructions).
+  For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
+  asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the 330 real theorems, but it is a `def ... : Prop`
-  -- its clean line means the definition is axiom-clean, NOT that the
+  formatted identically to the **481** real theorems, but it is a `def ... :
+  Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
 The environment-wide emitter (`exe/Emit.lean`) sweeps `Environment.constants`
 and therefore does see the private and unlisted names. That, not this file, is
 the gate that closes the hole.
+
+**On Windows the emitter cannot be linked at all** -- `supportInterpreter`
+pushes the PE export table past 65535 symbols, as `exe/Emit.lean` records -- so
+on that platform this file is the only axiom check available. That is *not* a
+reason to believe the environment is unswept there: `scripts/Census.lean` reads
+the same module data through `lake env lean`, which links nothing, and so runs
+where the executable cannot. Use it to size the gap; use the emitter, in CI, to
+gate it.
 
 Adding a declaration to the library means adding it here. This file is not
 derived from the source tree, so it can silently fall behind; `#print axioms`
@@ -262,6 +296,9 @@ import, no geometry. -/
 #print axioms Support.hasSupportProperty_iff
 #print axioms Support.HasSupportProperty.mono
 #print axioms Support.HasSupportProperty.eq_zero_of_charge_eq_zero
+#print axioms Support.hasSupportProperty_of_norm_sub_le
+#print axioms Support.HasSupportProperty.exists_tolerance
+#print axioms Support.isOpen_hasSupportProperty
 
 /-! ## FiniteLength lane — charges on the free lattice of simples
 
