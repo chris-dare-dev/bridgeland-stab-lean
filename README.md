@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these four lanes and not others
+## Why these five lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -351,6 +351,38 @@ theory. The tilt — building a second t-structure whose heart is the extension
 of `T` by `F[1]` — needs `TStructure`'s `exists_triangle_zero_one` field, and
 producing that triangle for the tilted aisles needs the octahedral axiom. None
 of it is attempted. Nothing in this lane connects to a stability condition yet.
+
+### Lane 5 — `Support/` (the Kontsevich–Soibelman reformulation)
+
+The support property — `‖v‖ ≤ C ‖Z v‖` uniformly over a distinguished set `S` —
+is equivalent to the existence of a form `Q` that is nonnegative on `S` and
+negative definite on `ker Z`.
+
+The compactness direction cuts the unit sphere by `Q ≥ 0`, observes that `Z`
+cannot vanish there (a kernel vector would have `Q < 0`), and takes the
+reciprocal of the minimum of `‖Z ·‖` on the resulting compact slice. The
+converse is explicit: `Q v = C²‖Z v‖² - ‖v‖²`.
+
+**Two boundaries, and the second is the sharp one.**
+
+`S` is an **arbitrary subset**. It is not identified with the classes of
+`σ`-semistable objects — nothing in the lane mentions a triangulated category,
+a slicing, or the anchor. That identification is what would make these
+statements about Bridgeland stability, and it is not made.
+
+The equivalence is stated for `IsHomogTwo` (continuous, `Q(a•v) = a²Q(v)`),
+which is **strictly weaker** than being a quadratic form — `Q(x,y) = |xy|` on
+`ℝ²` satisfies it and is not one. That cuts both ways, asymmetrically:
+
+* form ⟹ support property has a *weaker hypothesis*, so it is **stronger** than
+  the literature's version;
+* support property ⟹ form has a *weaker conclusion*, so it is **weaker**. It
+  produces a continuous degree-two homogeneous function, not a bundled
+  `QuadraticForm ℝ V`.
+
+So do not cite `hasSupportProperty_iff` as "the support property is equivalent
+to the existence of a quadratic form". Closing that gap means restricting to an
+inner product space and building an actual `QuadraticMap`; it is not done.
 
 ### Not a lane
 

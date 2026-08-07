@@ -179,6 +179,25 @@ Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
 #print axioms Tilting.TorsionPair.allTors
 #print axioms Tilting.TorsionPair.allFree
 
+/-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
+
+Linear algebra plus one compactness argument over a finite-dimensional real
+normed space. `S` is an ARBITRARY subset; it is not identified with the classes
+of semistable objects, which would need a stability condition. No anchor
+import, no geometry. -/
+
+#print axioms Support.HasSupportProperty
+#print axioms Support.IsHomogTwo
+#print axioms Support.IsCompatible
+#print axioms Support.slice
+#print axioms Support.isCompact_slice
+#print axioms Support.norm_inv_smul_mem_slice
+#print axioms Support.hasSupportProperty_of_isCompatible
+#print axioms Support.exists_isCompatible_of_hasSupportProperty
+#print axioms Support.hasSupportProperty_iff
+#print axioms Support.HasSupportProperty.mono
+#print axioms Support.HasSupportProperty.eq_zero_of_charge_eq_zero
+
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift

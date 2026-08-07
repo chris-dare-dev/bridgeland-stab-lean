@@ -8,6 +8,7 @@ import BridgelandStabLean.Lattice.NumericalK
 import BridgelandStabLean.Mukai.Lattice
 import BridgelandStabLean.Mukai.RankTwo
 import BridgelandStabLean.Tilting.TorsionPair
+import BridgelandStabLean.Support.SupportProperty
 import BridgelandStabLean.GroupAction.NormalizedShift
 import BridgelandStabLean.GroupAction.GLTilde
 import BridgelandStabLean.GroupAction.GLTildeFibre
@@ -56,6 +57,10 @@ Two lanes, both chosen because they need **no** algebraic-geometry substrate:
   `D^b(Coh X)`. See that directory's module docstrings for the frontier.
 * `Tilting/` — torsion pairs in an abelian category, which Mathlib lacks at
   the pin. Abelian-category theory only; the HRS tilt itself is not here.
+* `Support/` — the Kontsevich–Soibelman equivalence between the support
+  property and a quadratic form negative definite on `ker Z`. Linear algebra
+  and one compactness argument; the distinguished set is arbitrary and is not
+  identified with the semistable classes.
 * `GroupAction/` — the §8 `G̃L⁺(2, ℝ)` action the anchor does not cover.
 
 See `README.md` for why the geometric lane is deliberately absent, and
