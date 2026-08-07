@@ -240,6 +240,27 @@ fidelity:
     polygon inequality, and semistable-left inequality are not inhabited; no
     premise is installed as an instance or hidden axiom.
 
+    FOUNDATION UPDATE 2026-08-06: HNPolygon.lean now defines the HN polygon as
+    the convex hull of all subobject charges and realizes an abelian HN
+    filtration as its distinguished complex path. Consecutive edges are proved
+    equal to factor charges, path length is proved equal to factor mass, all
+    HN vertices lie in the polygon, and the endpoint chord is bounded by path
+    length. H0ExactnessBridge.lean packages the heart-source H0 short complex
+    and proves that its exactness is equivalent to monicity of the canonical
+    cokernel comparison into H0(X3). Homological H0 or H0-prime supplies that
+    exactness locally; no global homological instance is installed. These are
+    foundations, not inhabitants of the first two milestone propositions:
+    HN-boundary extremality/perimeter comparison and unconditional H0
+    homologicality (or the equivalent monicity proof) remain open.
+
+    SECONDARY SOURCE NOTE: this two-stage route is the t = 0 specialization
+    of Akishi Ikeda, Mass growth of objects and categorical entropy,
+    arXiv:1612.00995. Lemma 3.8 supplies the boundary-heart polygon inequality;
+    the proof of Proposition 3.3 then uses the H0 long exact sequence and its
+    kernel/image short-exact decompositions. The present files formalize the
+    polygon/path and exactness interfaces needed by that proof, not the two
+    source claims themselves.
+
     This still is NOT a completed formalization of Proposition 8.1 or the
     literal Aut(D)-isometry clause of Lemma 8.2. The topology comparison is
     conditional on the still-unproved distinguished-triangle HN-mass
@@ -393,6 +414,16 @@ fidelity:
     ccf10f0. The two target propositions remain uninhabited; the reduction is
     a theorem and does not assume either target as an instance or axiom.
 
+    COUNT UPDATE (HN polygon and H0 exactness foundations), 2026-08-06. The 21
+    additional records comprise 15 for the convex HN polygon, its
+    distinguished filtration path, edge/factor identification,
+    length-equals-mass formula, endpoint geometry, and charge bounds; plus 6
+    for the heart-source H0 complex, its exactness/cokernel-monicity
+    equivalence, and the local consequences of homological H0-prime or H0.
+    The manual audit now covers 540 declarations, pinned to commit 85acd3d.
+    Every record remains within [propext, Classical.choice, Quot.sound], with
+    no sorryAx.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -427,6 +458,11 @@ fidelity:
     mass-triangle module and root library elaborated successfully. The
     expanded full build against the 519-entry audit completed at 3788 jobs
     with exit 0, and the strict parser accepted all 519 records.
+    At code commit 85acd3d, the HN polygon and H0 exactness foundation modules
+    expanded the full build to 3790 jobs with exit 0. The strict parser
+    accepted all 540 records with no sorryAx. The declaration linter reported
+    exactly the same six inherited findings and none in either new module;
+    the regenerated environment attestation was byte-for-byte unchanged.
   human_review: none
   machine_review: >
     Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
@@ -455,6 +491,14 @@ fidelity:
     and are not supplied by an instance. The environment-wide attestation was
     regenerated successfully and remained byte-for-byte unchanged because
     these declarations add no new formal contract annotations.
+
+    Code commit 85acd3d adds the convex HN-polygon/path library and the exact
+    heart-source H0 cokernel obstruction bridge. The strict audit covers 540
+    declarations with the standard allowlist and no sorryAx; the full build
+    completed at 3790 jobs. The declaration linter remains at exactly the six
+    inherited findings. Neither new module inhabits the boundary-heart or
+    semistable-left milestone: boundary extremality/perimeter comparison and
+    unconditional H0 homologicality remain explicit open inputs.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -744,6 +788,14 @@ fidelity:
     theorem stabilityMassTriangleInequality_of_semistable_obj₁ proves that
     the latter, once supplied, implies the unconditional global triangle
     proposition by head--tail octahedral induction.
+
+    HNPolygon.lean supplies the next algebraic/geometric layer: the convex
+    hull of subobject charges, the HN filtration path inside it, exact
+    edge-charge and length/mass identities, and the endpoint chord bound.
+    H0ExactnessBridge.lean supplies the exact cohomological interface:
+    heart-source exactness iff the canonical cokernel comparison is monic,
+    with local consequences from homological H0 or H0-prime. Neither file
+    hides the remaining extremality or homologicality theorem in an instance.
 
     Independently, AutPairQuot v is not Aut(D): it includes a compatible
     lattice automorphism and is not proved equivalent to the external group of

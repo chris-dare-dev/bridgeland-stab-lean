@@ -25,10 +25,13 @@ Harder--Narasimhan filtrations.  Here we establish its norm-theoretic base:
 * the arbitrary-left case reduces, by head--tail octahedral induction, to the
   semistable-left case.
 
-The remaining mathematical inputs are the phase-one boundary-heart polygon
-inequality and the cohomological reduction from that boundary case to a
-semistable first object.  They are named below but are not assumed as instances
-or axioms.
+`HNPolygon` now supplies the ambient convex hull, the distinguished HN path,
+its edge-charge and length-equals-mass formulas, and the finite-path chord
+inequality. `H0ExactnessBridge` identifies the exact heart-source obstruction
+as a canonical cokernel map being monic and discharges it from homological
+`H⁰`/`H⁰'` data. The remaining mathematical inputs are HN-boundary
+extremality/perimeter comparison and an unconditional proof of that exactness
+obstruction. They are named below but are not assumed as instances or axioms.
 -/
 
 open CategoryTheory CategoryTheory.Limits CategoryTheory.Pretriangulated Complex

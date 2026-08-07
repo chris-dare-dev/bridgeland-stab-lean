@@ -220,10 +220,18 @@ endpoints are semistable of one phase. The same base cases are transported to
 short exact sequences in the canonical heart. A public head--tail theorem now
 splits both an HN filtration and its real mass, and an octahedral induction
 proves that the semistable-left triangle inequality implies the unrestricted
-triangle inequality. Of the three major mass-triangle milestones, this closes
-the third (arbitrary-left assembly). The phase-one boundary-heart polygon
-inequality and its cohomological propagation to the semistable-left case remain
-uninhabited named propositions; neither is installed as an instance or axiom.
+triangle inequality. `HNPolygon` now defines the paper's convex hull of
+subobject charges and the distinguished HN boundary path, proves that its
+successive edges are the HN-factor charges, identifies path length with factor
+mass, and supplies the endpoint chord bound. `H0ExactnessBridge` identifies
+the exact heart-source obstruction as monicity of
+`coker(A → H⁰(X₂)) → H⁰(X₃)` and discharges it from either a homological `H⁰`
+or `H⁰'` structure without installing a global instance. Of the three major
+mass-triangle milestones, the third (arbitrary-left assembly) is complete. The
+first still needs HN-boundary extremality and the perimeter comparison under
+subobject inclusion; the second still needs the unconditional homological
+input (or the equivalent cokernel monicity proof). Their named propositions
+remain uninhabited and are not installed as instances or axioms.
 
 `GLTildeFibre` proves one of the three covering-space facts: the **fibre is
 `ℤ`**. Everything lying over the identity matrix is a deck transformation

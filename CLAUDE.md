@@ -283,10 +283,19 @@ Six claims to keep off the page.
   head--tail mass split, and
   `stabilityMassTriangleInequality_of_semistable_obj₁` closes the
   arbitrary-left octahedral reduction conditional only on the semistable-left
-  milestone. Do not report the three-milestone chain complete:
+  milestone. `HNPolygon.lean` now defines the convex hull of all subobject
+  charges, builds the distinguished HN path, proves edge-charge and
+  length-equals-mass formulas, and supplies the endpoint chord inequality.
+  `H0ExactnessBridge.lean` proves that the heart-source `H⁰` complex is exact
+  exactly when its canonical cokernel comparison is monic; homological `H⁰`
+  or `H⁰'` discharges that obstruction locally, with no global instance.
+  Do not report the three-milestone chain complete:
   `StabilityMassBoundaryHeartInequality` and
   `StabilityMassSemistableLeftTriangleInequality` are named uninhabited
-  propositions, while the arbitrary-left reduction is proved.
+  propositions, while the arbitrary-left reduction is proved. The remaining
+  first-milestone work is HN-boundary extremality/perimeter comparison; the
+  remaining second-milestone work is an unconditional homological `H⁰`
+  construction or the equivalent monicity proof.
   `StabilityMassHeartShortExactInequality` is a named uninhabited proposition,
   and the unrestricted polygonal argument still has to be formalized.
 

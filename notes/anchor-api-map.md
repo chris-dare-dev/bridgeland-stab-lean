@@ -673,13 +673,34 @@ choice-free envelope rather than choosing a filtration non-functorially.
      same-phase semistable endpoints;
    - transports both cases to short exact sequences in `P((0, 1])` and names
      the still-open unrestricted heart short-exact proposition explicitly.
+8. `HNPolygon.lean`
+   - defines the HN polygon as the convex hull of all subobject charges;
+   - realizes an abelian HN filtration as its distinguished complex path;
+   - proves that successive path edges are the factor charges and that path
+     length equals factor mass;
+   - proves the endpoint chord bound needed by future refinement/perimeter
+     arguments, but not yet HN-boundary extremality.
+9. `H0ExactnessBridge.lean`
+   - packages the heart-source `H⁰` short complex;
+   - identifies exactness with monicity of the canonical map from the
+     cokernel of its first arrow;
+   - derives exactness and monicity from homological `H⁰` or `H⁰'` locally,
+     without installing an instance or assuming the missing input.
+
+Items 8--9 follow the `t = 0` proof architecture of Ikeda,
+*Mass growth of objects and categorical entropy*
+([arXiv:1612.00995](https://arxiv.org/abs/1612.00995)): Lemma 3.8 is the
+boundary-heart polygon step, and the proof of Proposition 3.3 is the subsequent
+`H⁰` kernel/image reduction.
 
 The mass bridge, separation clause, analytic topology estimates, and safe
-metric-space construction are now closed.  The remaining Proposition 8.1
-work is still the filtration-assembly proof of HN-mass subadditivity across
-every distinguished triangle. Its norm-theoretic and semistable base cases
-are now closed, but the unrestricted heart polygon argument and the two
-subsequent reductions remain open. All topology comparison results are
+metric-space construction are now closed. The remaining Proposition 8.1 work
+is the completion of HN-mass subadditivity across every distinguished
+triangle. Its norm-theoretic and semistable base cases
+are now closed, and the polygon-path and exactness-obstruction libraries are
+landed. HN-boundary extremality/perimeter comparison and unconditional `H⁰`
+homologicality remain open; the arbitrary-left reduction is already closed.
+All topology comparison results are
 explicitly conditional on the global proposition. The citation to
 Proposition 8.1 therefore remains `no_claim`. The Lemma 8.2 citation also
 remains `no_claim`
