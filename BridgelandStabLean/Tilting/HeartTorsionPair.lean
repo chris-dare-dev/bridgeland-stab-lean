@@ -42,13 +42,15 @@ here, where the usual one is not.
 
 ## Status
 
-Established here: the datum, the two aisles with their isomorphism-closure,
-the factorisation lemma standing in for the counit, the orthogonality
-characterisation of the torsion class, and **the Hom-vanishing axiom `zero'`**
-(`hom_eq_zero_of_tiltLE_of_tiltGE`).
+Established here: the datum, the aisles at every integer level with their
+isomorphism-closure, the factorisation lemma standing in for the counit, the
+orthogonality characterisation of the torsion class, and **five of the six
+non-trivial `TStructure` fields** — both shift axioms, both inclusions, and the
+Hom-vanishing axiom.
 
-`exists_triangle_zero_one` — the remaining and hardest field — is **not**
+**`exists_triangle_zero_one` is the one field not proved**, and it is not
 declared, not even with `sorry`; see §2 of `CLAUDE.md` for why that rule exists.
+So no `TStructure` instance is assembled and there is still no tilt here.
 -/
 
 namespace BridgelandStabLean.Tilting
@@ -216,25 +218,132 @@ theorem hom_eq_zero_of_tiltLE_of_tiltGE [IsTriangulated C] {X Y : C}
   rw [hg, hYorth _ htors g]
   exact comp_zero
 
+/-! ### The indexed families
+
+A `Triangulated.TStructure` needs an aisle at every integer, not just at the
+level the tilt is defined. Splitting the orthogonality condition off as its own
+isomorphism-closed predicate is what keeps the shift axioms to a single
+application of `shiftFunctorAdd'` each. -/
+
+/-- Objects with no nonzero map to a torsion-free object. -/
+def torsOrth : ObjectProperty C := fun Y => ∀ F : C, P.free F → ∀ f : Y ⟶ F, f = 0
+
+/-- Objects with no nonzero map from a torsion object. -/
+def freeOrth : ObjectProperty C := fun Y => ∀ T : C, P.tors T → ∀ f : T ⟶ Y, f = 0
+
+instance torsOrth_isClosedUnderIsomorphisms : P.torsOrth.IsClosedUnderIsomorphisms where
+  of_iso {X Y} e hX F hF f := by
+    have hz := hX F hF (e.hom ≫ f)
+    calc f = e.inv ≫ (e.hom ≫ f) := by simp
+    _ = 0 := by rw [hz, comp_zero]
+
+instance freeOrth_isClosedUnderIsomorphisms : P.freeOrth.IsClosedUnderIsomorphisms where
+  of_iso {X Y} e hX T hT f := by
+    have hz := hX T hT (f ≫ e.inv)
+    calc f = (f ≫ e.inv) ≫ e.hom := by simp
+    _ = 0 := by rw [hz, zero_comp]
+
+/-- The tilted co-aisle at level `n`: `X ∈ D^{≤n}_†` iff `X⟦n⟧ ∈ D^{≤0}_†`. -/
+def tiltLEAt (n : ℤ) : ObjectProperty C :=
+  fun X => t.IsLE X n ∧ P.torsOrth (X⟦n⟧)
+
+/-- The tilted aisle at level `n`: `X ∈ D^{≥n}_†` iff `X⟦n-1⟧ ∈ D^{≥1}_†`,
+and `tiltGE` is the level-one member. -/
+def tiltGEAt (n : ℤ) : ObjectProperty C :=
+  fun X => t.IsGE X (n - 1) ∧ P.freeOrth (X⟦n - 1⟧)
+
+/-! #### Agreement with the level at which the tilt was defined -/
+
+theorem tiltLEAt_zero_iff (X : C) : P.tiltLEAt 0 X ↔ P.tiltLE X := by
+  constructor
+  · rintro ⟨hle, horth⟩
+    exact ⟨hle, ObjectProperty.prop_of_iso P.torsOrth ((shiftFunctorZero C ℤ).app X) horth⟩
+  · rintro ⟨hle, horth⟩
+    exact ⟨hle, ObjectProperty.prop_of_iso P.torsOrth ((shiftFunctorZero C ℤ).app X).symm horth⟩
+
+theorem tiltGEAt_one_iff (X : C) : P.tiltGEAt 1 X ↔ P.tiltGE X := by
+  have h : (1 : ℤ) - 1 = 0 := by ring
+  rw [tiltGEAt, tiltGE, h]
+  constructor
+  · rintro ⟨hge, horth⟩
+    exact ⟨hge, ObjectProperty.prop_of_iso P.freeOrth ((shiftFunctorZero C ℤ).app X) horth⟩
+  · rintro ⟨hge, horth⟩
+    exact ⟨hge, ObjectProperty.prop_of_iso P.freeOrth ((shiftFunctorZero C ℤ).app X).symm horth⟩
+
+/-! #### The shift axioms
+
+Each is one application of `shiftFunctorAdd'` against the orthogonality
+predicate's isomorphism-closure, plus the corresponding `IsLE`/`IsGE` shift. -/
+
+/-- The `le_shift` field for the tilted co-aisle. -/
+theorem tiltLEAt_shift (n a n' : ℤ) (h : a + n' = n) (X : C) (hX : P.tiltLEAt n X) :
+    P.tiltLEAt n' (X⟦a⟧) := by
+  obtain ⟨hle, horth⟩ := hX
+  haveI := hle
+  exact ⟨t.isLE_shift X n a n' h,
+    ObjectProperty.prop_of_iso P.torsOrth ((shiftFunctorAdd' C a n' n h).app X) horth⟩
+
+/-- The `ge_shift` field for the tilted aisle. -/
+theorem tiltGEAt_shift (n a n' : ℤ) (h : a + n' = n) (X : C) (hX : P.tiltGEAt n X) :
+    P.tiltGEAt n' (X⟦a⟧) := by
+  obtain ⟨hge, horth⟩ := hX
+  haveI := hge
+  exact ⟨t.isGE_shift X (n - 1) a (n' - 1) (by lia),
+    ObjectProperty.prop_of_iso P.freeOrth
+      ((shiftFunctorAdd' C a (n' - 1) (n - 1) (by lia)).app X) horth⟩
+
+/-! #### The two inclusions
+
+Both are pure degree counts: neither uses the orthogonality hypothesis it is
+handed, because the shifted object is already separated from the heart by
+`t.zero`. -/
+
+/-- The `le_zero_le` field. -/
+theorem tiltLEAt_zero_le : P.tiltLEAt 0 ≤ P.tiltLEAt 1 := by
+  rintro X ⟨hle, -⟩
+  haveI := hle
+  refine ⟨t.isLE_of_le X 0 1 (by lia), ?_⟩
+  intro F hF f
+  exact t.zero_of_isLE_of_isGE f (-1) 0 (by lia)
+    (t.isLE_shift X 0 1 (-1) (by lia)) (P.free_isGE F hF)
+
+/-- The `ge_one_le` field. -/
+theorem tiltGEAt_one_le : P.tiltGEAt 1 ≤ P.tiltGEAt 0 := by
+  rintro X ⟨hge, -⟩
+  haveI := hge
+  refine ⟨t.isGE_of_ge X (0 - 1) (1 - 1) (by lia), ?_⟩
+  intro T hT f
+  exact t.zero_of_isLE_of_isGE f 0 1 (by lia) (P.tors_isLE T hT)
+    (t.isGE_shift X (1 - 1) (0 - 1) 1 (by lia))
+
+/-- The `zero'` field, transported to the indexed families. -/
+theorem tiltAt_zero' [IsTriangulated C] {X Y : C}
+    (hX : P.tiltLEAt 0 X) (hY : P.tiltGEAt 1 Y) (f : X ⟶ Y) : f = 0 :=
+  P.hom_eq_zero_of_tiltLE_of_tiltGE ((P.tiltLEAt_zero_iff X).mp hX)
+    ((P.tiltGEAt_one_iff Y).mp hY) f
+
 /-! ### TODO — what remains of the tilt, and why it is not here
 
 The two aisles above, together with the shifted family, are meant to assemble
 into a `Triangulated.TStructure C`. Of its fields:
 
+**Five of the six non-trivial fields are proved. One is not.**
+
 * `le_isClosedUnderIsomorphisms` / `ge_isClosedUnderIsomorphisms` — **done**;
-* `zero'` — **done**, as `hom_eq_zero_of_tiltLE_of_tiltGE`, and with no
-  cohomology functor anywhere in the proof. It needs `[IsTriangulated C]`: the
-  octahedral axiom is what makes `τ^{≥0}` preserve `D^{≤0}`, which is how
-  `τ^{≥0}X` gets into the heart. That hypothesis is real and is carried
-  explicitly rather than assumed globally;
-* `free_of_orthogonal` — the dual of `tors_of_orthogonal`, **not done**. It is
-  not needed for `zero'`, and the inverse-rotation bookkeeping it wants is not
-  worth carrying speculatively;
-* `le_shift` / `ge_shift`, `le_zero_le`, `ge_one_le` — index bookkeeping over
-  `shiftFunctorAdd`, not attempted here. Both inclusions reduce to `t.zero`
-  and neither needs a cohomology functor, so these are ordinary work rather
-  than blocked work;
-* `exists_triangle_zero_one` — **the real obstruction.** Producing the
+* `le_shift` / `ge_shift` — **done**, as `tiltLEAt_shift` / `tiltGEAt_shift`;
+* `le_zero_le` / `ge_one_le` — **done**, as `tiltLEAt_zero_le` /
+  `tiltGEAt_one_le`. Neither uses the orthogonality hypothesis it is handed:
+  both are pure degree counts against `t.zero`;
+* `zero'` — **done**, as `hom_eq_zero_of_tiltLE_of_tiltGE`, and transported to
+  the indexed families as `tiltAt_zero'`. No cohomology functor appears in the
+  proof. It needs `[IsTriangulated C]`: the octahedral axiom is what makes
+  `τ^{≥0}` preserve `D^{≤0}`, which is how `τ^{≥0}X` gets into the heart. That
+  hypothesis is real and is carried explicitly rather than assumed globally;
+* `free_of_orthogonal` — not a `TStructure` field, and the dual of
+  `tors_of_orthogonal`. **Not done**: it is not needed for `zero'`, and the
+  inverse-rotation bookkeeping it wants is not worth carrying speculatively;
+* `exists_triangle_zero_one` — **the one remaining field, and the real
+  obstruction.** Producing the
   truncation triangle for the tilted aisles is the octahedral-axiom step, and
   it needs the long exact cohomology sequence of `H⁰`, i.e. that `H⁰` is a
   homological functor. Mathlib has no `H⁰` for a t-structure at all, and the

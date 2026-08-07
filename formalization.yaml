@@ -394,6 +394,15 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (Tilting lane, indexed families), 2026-08-07. The 13
+    additional records are the two orthogonality predicates with their
+    isomorphism-closure instances, the aisles at every integer level, the two
+    agreement lemmas tying them to the level the tilt was defined at, the two
+    shift axioms, the two inclusions, and the transported Hom-vanishing axiom.
+    Audit count 625 -> 638. Coverage complete: the file now has 22 top-level
+    declarations, 0 private, 22 named. Note tiltAt_zero' ends in an apostrophe,
+    the parse hazard scripts/check_audit.py carries a regression test for.
+
     COUNT UPDATE (Tilting lane, heart increment), 2026-08-06. The 9 additional
     records are BridgelandStabLean/Tilting/HeartTorsionPair.lean: the
     HeartTorsionPair datum, the two tilted aisles with their isomorphism-closure
@@ -508,10 +517,11 @@ fidelity:
     3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support added: 3782 jobs, linter clean,
     audit 585 records. With FiniteLength added: 3783 jobs, linter
     clean, audit 595 records. With Wall added: 3784 jobs, linter clean, audit
-    616 records. With the Tilting heart increment added:
+    616 records. With the Tilting heart increment added: 3785 jobs,
+    linter clean, audit 625 records. With the indexed families added:
     `lake build` at 3785 jobs exit 0, `runLinter` printed "Linting passed" with
     no findings, and `lake env lean scripts/Audit.lean | python
-    scripts/check_audit.py` accepted 625 records, all within
+    scripts/check_audit.py` accepted 638 records, all within
     [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
     build-log grep also passed.
 
@@ -571,7 +581,7 @@ fidelity:
   human_review: none
   machine_review: >
     THE MUKAI, TILTING, SUPPORT, FINITELENGTH AND WALL LANES HAVE HAD NO
-    REVIEW OF ANY KIND, 2026-08-06, INCLUDING THE HEART INCREMENT ADDED LAST.
+    REVIEW OF ANY KIND, 2026-08-06 AND 2026-08-07, INCLUDING BOTH TILTING INCREMENTS.
     All of it was written
     and gate-run in a single session by the same agent (Claude Opus 5); no
     independent adversarial pass has been made over it, and no human has read
@@ -1095,19 +1105,27 @@ fidelity:
     the usual one can be stated. But they are not literally the same definition,
     and a reader comparing this file to a textbook must know that.
 
-    TILTING LANE: `zero'` IS PROVED, `exists_triangle_zero_one` IS NOT. Of the
-    fields of a Triangulated.TStructure, this increment supplies the
-    isomorphism-closure of both aisles and the Hom-vanishing axiom
-    (hom_eq_zero_of_tiltLE_of_tiltGE), the latter with no cohomology functor
-    anywhere in its proof. It carries [IsTriangulated C] explicitly: the
-    octahedral axiom is what makes tau^{>=0} preserve D^{<=0}, which is how the
-    truncation lands in the heart. NOT supplied: the shift compatibilities and
-    the two inclusions (ordinary index bookkeeping, not blocked), the dual
-    free_of_orthogonal (not needed for zero', not carried speculatively), and
-    exists_triangle_zero_one. That last is the octahedral-axiom step and needs
-    the long exact cohomology sequence of H^0 -- the same machinery that is
-    missing above. NOTHING IS DECLARED WITH SORRY; per CLAUDE.md section 2 the
-    unproved fields are simply absent.
+    TILTING LANE: FIVE OF THE SIX NON-TRIVIAL TSTRUCTURE FIELDS ARE PROVED, AND
+    exists_triangle_zero_one IS NOT. Supplied: isomorphism-closure of both
+    aisles; both shift axioms (tiltLEAt_shift, tiltGEAt_shift), each one
+    application of shiftFunctorAdd' against the orthogonality predicate's
+    isomorphism-closure; both inclusions (tiltLEAt_zero_le, tiltGEAt_one_le),
+    which are pure degree counts against t.zero and do not use the
+    orthogonality hypothesis they are handed at all; and the Hom-vanishing
+    axiom (hom_eq_zero_of_tiltLE_of_tiltGE, transported to the indexed families
+    as tiltAt_zero'), with no cohomology functor anywhere in its proof.
+
+    zero' carries [IsTriangulated C] EXPLICITLY rather than assuming it
+    globally: the octahedral axiom is what makes tau^{>=0} preserve D^{<=0},
+    which is how the truncation lands in the heart. Mathlib's instance for that
+    sits inside `section variable [IsTriangulated C]`.
+
+    NOT supplied: the dual free_of_orthogonal, which is not a TStructure field,
+    is not needed for zero', and is not carried speculatively; and
+    exists_triangle_zero_one, which is the octahedral-axiom step and needs the
+    long exact cohomology sequence of H^0 -- the same machinery that is missing
+    above. NOTHING IS DECLARED WITH SORRY; per CLAUDE.md section 2 the unproved
+    field is simply absent, and NO TStructure INSTANCE IS ASSEMBLED.
 
     SO THERE IS NO TILT IN THIS REPOSITORY. Do not cite Tilting/ as a
     formalization of Happel-Reiten-Smalo. What exists is the input datum, the

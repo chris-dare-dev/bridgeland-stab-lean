@@ -362,17 +362,25 @@ H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
 The two agree wherever the usual one can be stated, but they are not literally
 the same definition, and a reader comparing to a textbook should know it.
 
-**`zero'` is proved; `exists_triangle_zero_one` is not.** Supplied here:
-isomorphism-closure of both aisles, the factorisation lemma standing in for the
-counit, the orthogonality characterisation of the torsion class, and the
-Hom-vanishing axiom — with no cohomology functor anywhere in the proof. It
-carries `[IsTriangulated C]` explicitly, because the octahedral axiom is what
-makes `τ^{≥0}` preserve `D^{≤0}`.
+**Five of the six non-trivial `TStructure` fields are proved.** The aisles
+exist at every integer level, and:
 
-Not supplied: the shift compatibilities and the two inclusions (ordinary
-bookkeeping, not blocked); the dual of `tors_of_orthogonal`; and
-`exists_triangle_zero_one`, which needs the long exact sequence of `H⁰` — the
-machinery that is missing above. **Nothing is declared with `sorry`.**
+| field | status |
+|---|---|
+| `le_isClosedUnderIsomorphisms` / `ge_…` | proved |
+| `le_shift` / `ge_shift` | proved — one `shiftFunctorAdd'` each |
+| `le_zero_le` / `ge_one_le` | proved — pure degree counts against `t.zero` |
+| `zero'` | proved — no cohomology functor in the proof |
+| `exists_triangle_zero_one` | **not proved** |
+
+`zero'` carries `[IsTriangulated C]` explicitly, because the octahedral axiom is
+what makes `τ^{≥0}` preserve `D^{≤0}` — which is how the truncation lands in the
+heart. Both inclusions turn out not to use the orthogonality hypothesis they're
+handed at all.
+
+The one remaining field needs the long exact sequence of `H⁰` — the machinery
+missing above. **Nothing is declared with `sorry`, and no `TStructure` instance
+is assembled.**
 
 **So there is no tilt in this repository.** Do not cite `Tilting/` as a
 formalization of Happel–Reiten–Smalø. Nothing in the lane connects to a

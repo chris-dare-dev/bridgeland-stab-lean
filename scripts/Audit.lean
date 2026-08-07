@@ -196,6 +196,26 @@ here; `exists_triangle_zero_one` is NOT, and is not declared with `sorry`. -/
 #print axioms Tilting.HeartTorsionPair.tors_of_orthogonal
 #print axioms Tilting.HeartTorsionPair.hom_eq_zero_of_tiltLE_of_tiltGE
 
+/-! ## Tilting lane — the indexed aisle families
+
+The shift and inclusion fields of the tilted t-structure. Note
+`tiltAt_zero'` ends in an apostrophe: `scripts/check_audit.py` has a regression
+test for exactly that parse hazard. -/
+
+#print axioms Tilting.HeartTorsionPair.torsOrth
+#print axioms Tilting.HeartTorsionPair.freeOrth
+#print axioms Tilting.HeartTorsionPair.torsOrth_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.freeOrth_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.tiltLEAt
+#print axioms Tilting.HeartTorsionPair.tiltGEAt
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_iff
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_iff
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_shift
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_shift
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_le
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_le
+#print axioms Tilting.HeartTorsionPair.tiltAt_zero'
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
