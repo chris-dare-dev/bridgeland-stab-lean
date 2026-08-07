@@ -553,6 +553,39 @@ fidelity:
     emit --out attest/lean-emission.json` completed successfully with
     `mfc-emit: wrote attest/lean-emission.json`.
 
+    THE EMITTER GATE IS NOW OBSERVED ON CI, 2026-08-07, AND THIS IS THE FIRST
+    ENTRY IN THIS FILE THAT QUOTES A RUN ID RATHER THAN A WORKSTATION. GitHub
+    Actions run 31147749136 on branch agent/mukai-lattice (PR #69), Ubuntu
+    runner, 29m03s, conclusion success. All five CI gates passed. The three
+    that had also been run locally agree exactly: the axiom audit reported
+    "638 declarations, all within [propext, Classical.choice, Quot.sound], no
+    sorryAx"; runLinter reported "Linting passed for BridgelandStabLean"; the
+    build-log grep reported "ok: no sorry warnings".
+
+    THE FOURTH IS THE ONE THAT COULD NOT RUN ON THE OWNER'S WORKSTATION AT ALL.
+    `lake exe emit` linked and ran: "mfc-emit: wrote attest/lean-emission.json",
+    then "ok: 1331 constants, 809 in scope, 12 cited". That gate sweeps
+    Environment.constants rather than a hand-maintained list, so it sees the
+    private and unlisted names scripts/Audit.lean structurally cannot, and it
+    exits non-zero on sorryAx anywhere in the environment. It exited zero.
+
+    WHAT THAT STRENGTHENS, PRECISELY. "No sorryAx" was previously a claim about
+    the 638 NAMED declarations. It is now a claim about all 1331 constants in
+    the emitted environment. The 638 figure is still the right one to quote for
+    the manual audit's coverage; do not conflate the two numbers.
+
+    WHAT IT DOES NOT STRENGTHEN. 12 constants carry a @[cites] record, and all
+    12 predate this branch -- the five lanes added on it carry none, by
+    decision, see source_mapping. A green emitter says nothing about whether
+    any statement is faithful to a source, and nothing here has had human
+    review.
+
+    THE QUARANTINE BELOW IS NOT YET RETIRED. Run 31147749136 uploaded a
+    lean-emission.json artifact, but the stale local files are still on disk
+    under their `.stale-2026-08-05-20of36modules` names and no one has replaced
+    them with the CI artifact. Retiring them is a separate act; this paragraph
+    records only that a regenerable attestation now demonstrably exists.
+
     THE LOCAL attest/ ARTIFACTS ARE STALE AND HAVE BEEN QUARANTINED,
     2026-08-06. The `attest/*.json` on disk were generated 2026-08-05 and
     attest only 20 of the library's 36 modules -- they predate
@@ -627,6 +660,14 @@ fidelity:
     motivated the repair -- two independent sessions found the same six on the
     same day, from different directions, which is the evidence that the set was
     stable and not an artefact of one tree.
+
+    CI OBSERVED GREEN ON THIS BRANCH, 2026-08-07: run 31147749136, all five
+    gates, including the emitter gate that cannot link on the owner's Windows
+    workstation. See builds_clean_note for the figures. This is a REMOTE CI
+    VERDICT on the committed state and is therefore stronger than the local
+    observations recorded above it -- but it is still only build, hygiene and
+    axiom-cleanliness. It is not a source-faithfulness review, and
+    human_review stays none.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
