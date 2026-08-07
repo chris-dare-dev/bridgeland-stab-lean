@@ -7,7 +7,7 @@ The anchor formalizes Bridgeland 2007 §2–7 — Theorem 1.2 and Corollary 1.3,
 general surjective-class-map form. This repo works on what sits just outside
 it.
 
-## Why these two lanes and not others
+## Why these seven lanes and not others
 
 The anchor's directory tree is worth reading before starting anything here:
 
@@ -33,7 +33,14 @@ decompositions, or Fourier–Mukai transforms.
 So a paper like "Bridgeland stability on K3 surfaces" is not a hard
 formalization target — it is a *blocked* one, behind a multi-year Mathlib
 program. The papers that are reachable are the ones that never leave the
-abstract layer. Both lanes below were chosen on that criterion alone.
+abstract layer. Every lane below was chosen on that criterion alone.
+
+**Lane 3 does not change that.** `Mukai/` formalizes the *lattice* that a K3's
+Mukai lattice is an instance of, which is arithmetic and needs no substrate.
+The identification with `H⁰ ⊕ NS(X) ⊕ H⁴` still needs `D^b(Coh X)`, Chern
+characters and HRR, and is still blocked. Adding the lattice does not move that
+wall an inch; it just means the arithmetic is already there when someone else
+moves it.
 
 ### Lane 1 — `GroupAction/` (the §8 gap)
 
@@ -284,9 +291,212 @@ rank-component non-vanishing. Small, closed, no substrate required. These
 exist to exercise the whole path — build, axiom audit, review record — on
 statements too simple to hide a mistake in.
 
+### Lane 3 — `Mukai/` (lattice arithmetic for the wall literature)
+
+The extension `ℤ ⊕ N ⊕ ℤ` of an additive group `N` carrying a symmetric
+`ℤ`-bilinear form `b`, with
+
+```
+⟪(r, c, s), (r', c', s')⟫ = b c c' - r·s' - r'·s.
+```
+
+`Mukai/Lattice.lean` proves bilinearity, symmetry, the quadratic refinement
+`⟪v,v⟫ = b c c - 2rs`, that the extension of an even lattice is even, the
+disjointness of the spherical (`⟪v,v⟫ = -2`) and isotropic (`⟪v,v⟫ = 0`)
+conditions, and that the two outer summands span a hyperbolic plane — two
+isotropic generators pairing to `-1`.
+
+`Mukai/RankTwo.lean` is the rank-two subpair arithmetic the wall literature is
+organised around. Its two loads:
+
+* **`gram_lincomb`** — the Gram determinant transforms by the *square* of the
+  change-of-basis determinant, for an arbitrary integer `2 × 2` matrix rather
+  than only unimodular ones. This is what makes "hyperbolic" a property of the
+  sublattice and not of a chosen basis.
+* **`selfPairing_orthWitness_neg`** — the explicit integral class
+  `⟪v,w⟫ • v - ⟪v,v⟫ • w` is orthogonal to `v` and has strictly negative
+  square whenever `⟪v,v⟫ > 0` and the pair is hyperbolic. That is the
+  signature-`(1,1)` witness in integral form: no real coefficients, no
+  diagonalisation, no appeal to Sylvester's law.
+
+Three names in this lane are suggestive and each is weaker than it sounds.
+`expectedDim v = ⟪v,v⟫ + 2` is a **definition**, not Mukai's dimension theorem.
+`IsSpherical` is the numerical condition `⟪v,v⟫ = -2`, not a claim that any
+object has that class. `IsHyperbolicPair` is negative Gram determinant, not a
+claim that a wall exists — the correspondence with actual walls is
+Bayer–Macrì Theorem 5.7, which is geometry and is **not** formalized here.
+
+### Lane 4 — `Tilting/` (a gap in Mathlib, not in the anchor)
+
+Torsion pairs on an abelian category: two isomorphism-closed classes `(T, F)`
+with no nonzero map `T → F`, such that every object sits in a short exact
+sequence `0 → tX → X → fX → 0` with `tX ∈ T`, `fX ∈ F`.
+
+**Mathlib does not have this at the pin.** Every `Torsion` file there is about
+torsion in algebra — `Algebra/Group/Torsion.lean`, `GroupTheory/Torsion.lean`,
+`RingTheory/Flat/TorsionFree.lean`. There is no torsion pair, torsion theory,
+or torsion class for abelian categories, so this is built from scratch. It
+imports only Mathlib: no anchor, no triangulated category, no geometry.
+
+Proved: each class is exactly the orthogonal of the other (`tors_iff`,
+`free_iff`); `F` is closed under subobjects and `T` under quotients; both are
+closed under extensions; and a torsion subobject factors through any
+decomposition, so the torsion end is maximal. The two degenerate torsion pairs
+are **constructed**, not assumed — a structure with no inhabitant would make
+every theorem about it vacuously true.
+
+`HeartTorsionPair.lean` then carries the same notion on the heart of a
+t-structure, phrased inside `C`, and builds the tilted aisles.
+
+**The aisles are not defined the usual way, and the deviation is forced.**
+Textbook HRS writes `D^{≤0}_† = {X ∈ D^{≤0} : H⁰(X) ∈ T}`. **Mathlib has no
+`Hⁿ` for a t-structure at the pin** — `TStructure/` has `truncLE`, `truncGE`
+and the truncation triangle, but no cohomology functor into the heart — and the
+anchor's `H0Functor` has its *homological* property only as case-by-case
+fragments in `H0Homological.lean`. So the aisles use **Hom-orthogonality**:
+
+```
+H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
+```
+
+The two agree wherever the usual one can be stated, but they are not literally
+the same definition, and a reader comparing to a textbook should know it.
+
+**Five of the six non-trivial `TStructure` fields are proved.** The aisles
+exist at every integer level, and:
+
+| field | status |
+|---|---|
+| `le_isClosedUnderIsomorphisms` / `ge_…` | proved |
+| `le_shift` / `ge_shift` | proved — one `shiftFunctorAdd'` each |
+| `le_zero_le` / `ge_one_le` | proved — pure degree counts against `t.zero` |
+| `zero'` | proved — no cohomology functor in the proof |
+| `exists_triangle_zero_one` | **not proved** |
+
+`zero'` carries `[IsTriangulated C]` explicitly, because the octahedral axiom is
+what makes `τ^{≥0}` preserve `D^{≤0}` — which is how the truncation lands in the
+heart. Both inclusions turn out not to use the orthogonality hypothesis they're
+handed at all.
+
+The one remaining field needs the long exact sequence of `H⁰` — the machinery
+missing above. **Nothing is declared with `sorry`, and no `TStructure` instance
+is assembled.**
+
+**So there is no tilt in this repository.** Do not cite `Tilting/` as a
+formalization of Happel–Reiten–Smalø. Nothing in the lane connects to a
+stability condition yet.
+
+### Lane 5 — `Support/` (the Kontsevich–Soibelman reformulation)
+
+The support property — `‖v‖ ≤ C ‖Z v‖` uniformly over a distinguished set `S` —
+is equivalent to the existence of a form `Q` that is nonnegative on `S` and
+negative definite on `ker Z`.
+
+The compactness direction cuts the unit sphere by `Q ≥ 0`, observes that `Z`
+cannot vanish there (a kernel vector would have `Q < 0`), and takes the
+reciprocal of the minimum of `‖Z ·‖` on the resulting compact slice. The
+converse is explicit: `Q v = C²‖Z v‖² - ‖v‖²`.
+
+**Two boundaries, and the second is the sharp one.**
+
+`S` is an **arbitrary subset**. It is not identified with the classes of
+`σ`-semistable objects — nothing in the lane mentions a triangulated category,
+a slicing, or the anchor. That identification is what would make these
+statements about Bridgeland stability, and it is not made.
+
+The equivalence is stated for `IsHomogTwo` (continuous, `Q(a•v) = a²Q(v)`),
+which is **strictly weaker** than being a quadratic form — `Q(x,y) = |xy|` on
+`ℝ²` satisfies it and is not one. That cuts both ways, asymmetrically:
+
+* form ⟹ support property has a *weaker hypothesis*, so it is **stronger** than
+  the literature's version;
+* support property ⟹ form has a *weaker conclusion*, so it is **weaker**. It
+  produces a continuous degree-two homogeneous function, not a bundled
+  `QuadraticForm ℝ V`.
+
+So do not cite `hasSupportProperty_iff` as "the support property is equivalent
+to the existence of a quadratic form". Closing that gap means restricting to an
+inner product space and building an actual `QuadraticMap`; it is not done.
+
+### Lane 6 — `FiniteLength/` (the lattice half of Bridgeland's `ℍ̄ⁿ`)
+
+Bridgeland's worked example: for an abelian category of finite length with `n`
+simples, a stability function is a choice of `Z(Sᵢ)` in the semi-closed upper
+half plane, one per simple — so that component of the manifold is `ℍ̄ⁿ`.
+
+What is proved is the lattice half over the model `Fin n → ℤ`:
+
+* the two cone-closure facts the anchor lacks — closure under multiplication by
+  a positive real, and closure under a **nonempty** finite sum;
+* `existsUnique_charge` — a choice of value per basis vector determines a
+  unique additive charge, and every additive charge arises that way;
+* `mem_cone_natCombination` — a nonzero `ℕ`-combination of cone values stays in
+  the cone, hence is nonzero.
+
+The cone `upperHalfPlaneUnion` and its closure under addition are the anchor's.
+This is the first of these lanes to import the anchor at all, and the two new
+cone lemmas are kept in this repo's namespace rather than injected as
+`CategoryTheory.upperHalfPlaneUnion_*` — CLAUDE.md §1 already tracks 21
+dot-notation extensions on anchor types as bump-collision candidates, and
+nothing needs these two by dot notation.
+
+**`Fin n → ℤ` is not `K₀(A)`, and the missing bridge has a name.** Identifying
+them is Jordan–Hölder — that `K₀(A)` is free abelian on the classes of the
+simples — and it exists in **neither Mathlib nor the anchor**.
+`Mathlib/Order/JordanHolder.lean` is about modular lattices and is not
+connected to `K₀` of a category; the anchor's `GrothendieckGroup/` builds `K₀`
+as a quotient and never says that quotient is free on the simples.
+
+So the stability-manifold conclusion is **not** drawn. Do not cite
+`existsUnique_charge` as "Stab of a finite-length heart is `ℍⁿ`".
+
+### Lane 7 — `Wall/` (numerical walls in the `(s, t)` half plane)
+
+For a class `v = (r, c, d)` — a triple of reals, standing for
+`(ch₀, ch₁·H, ch₂)` — the twisted charge at `(s, t)` is
+
+```
+Re Z = -d + s·c - (s²/2)·r + (t²/2)·r,      Im Z = t·(c - s·r).
+```
+
+The whole lane rests on one identity, `wallExpr_eq`: the cross product of two
+charges collapses to
+
+```
+t · ( minC + s·minB + ((s² + t²)/2)·minA )
+```
+
+where `minA, minB, minC` are the three `2 × 2` minors of the matrix with rows
+`v` and `w`. So for `t ≠ 0` the wall is `minA(s²+t²) + 2·minB·s + 2·minC = 0` —
+**a circle centred on the `s`-axis, or a vertical line.** Centre and radius are
+given in cleared form, so no division appears. Each minor is alternating, so a
+wall depends only on `w` modulo `v`.
+
+**No Bogomolov–Gieseker inequality is assumed, and none is axiomatised.** This
+lane was scoped expecting to need one — a numerical-surface structure carrying
+the Hodge index and the discriminant bound as stated hypotheses. It turned out
+none is required: `wallExpr_eq` is a polynomial identity, and the circle and
+line forms need only `t ≠ 0` and a nonvanishing minor, both hypotheses of the
+individual theorems. CLAUDE.md §4's "say so and stop rather than axiomatise the
+gap" was never engaged, because the gap was not on the path.
+
+**There is no surface.** `NumClass` is a triple of reals, not `ch(E)`.
+
+**The nesting theorem is not proved.** The statement usually quoted with this
+picture — two *distinct* walls for the *same* `v` never meet, so walls for a
+fixed `v` are nested — is not here. What is proved is `eq_of_two_walls`: two
+walls meeting at a point pin that point down, when the `(A,B)` cross term is
+nonzero. Full nesting needs that both minor vectors are cross products against
+a common `v`, plus a rank argument in `ℝ³`. Do not cite this lane as "walls are
+nested".
+
 ### Not a lane
 
-Anything requiring `Coh(X)`. See above.
+Anything requiring `Coh(X)`. See above. In particular the Bayer–Macrì wall
+*classification* — assigning a type (totally semistable, divisorial, flopping,
+fake) to a rank-two datum — needs moduli of stable objects and is out of scope.
+Lane 3 supplies the numerical substrate that classification is phrased over,
+and stops there.
 
 ## What this repo is not
 
@@ -295,6 +505,16 @@ there is a theorem about a **rank-2 torsion-free lattice**, not about a
 Kuznetsov component. The identification is geometry, is not expressible in
 Mathlib today, and is tracked as an unrealized assumption. It is never
 discharged here.
+
+`Mukai/` is the same divergence one level up, and the suggestive naming makes
+it easier to misread. `MukaiLattice N` is the abstract extension `ℤ × N × ℤ`
+of **any** additive group with **any** symmetric `ℤ`-bilinear form. It is not
+the Mukai lattice of a K3 surface. Every theorem in the lane is true of an
+arbitrary symmetric bilinear `ℤ`-lattice and would remain true if no K3
+surface existed. The lane also carries **no `@[cites]` records and no registry
+entries** — the pinned source is Bridgeland 2007, which this lane is not
+about, and minting keys against a document outside the pinned corpus would
+require quotes that cannot be verified here. Uncited is the honest state.
 
 Typechecking is not fidelity. TheoremGraph's statement-only experiment had
 22/24 outputs typecheck while 5/24 were semantically faithful. Nothing in this

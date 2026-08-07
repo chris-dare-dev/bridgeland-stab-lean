@@ -22,10 +22,19 @@ artifact:
   name: BridgelandStabLean
   url: https://github.com/chris-dare-dev/bridgeland-stab-lean
   description: >
-    Extensions to mattrobball/BridgelandStability along two lanes that require
-    no algebraic-geometry substrate: rank-2 torsion-free lattice arithmetic,
-    and the Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does
-    not cover.
+    Extensions to mattrobball/BridgelandStability along seven lanes that
+    require no algebraic-geometry substrate: rank-2 torsion-free lattice
+    arithmetic; the Mukai extension Z + N + Z of a symmetric bilinear lattice
+    together with rank-two subpair arithmetic; torsion pairs in an abelian
+    category, which Mathlib lacks at the pin; the Kontsevich-Soibelman
+    quadratic-form reformulation of the support property; charges on the free
+    lattice of simples; numerical walls in the (s,t) half plane; and the
+    Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
+
+    The Mukai, Tilting and Support lanes are NOT scoped to this record's
+    `source`. The Tilting lane does NOT contain the Happel-Reiten-Smalo tilt,
+    and the Support lane's equivalence is asymmetrically stronger and weaker
+    than the literature's. See source_mapping and known_divergences.
   date: 2026-08-03
   authors:
     - Chris Dare
@@ -385,6 +394,90 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (Tilting lane, indexed families), 2026-08-07. The 13
+    additional records are the two orthogonality predicates with their
+    isomorphism-closure instances, the aisles at every integer level, the two
+    agreement lemmas tying them to the level the tilt was defined at, the two
+    shift axioms, the two inclusions, and the transported Hom-vanishing axiom.
+    Audit count 625 -> 638. Coverage complete: the file now has 22 top-level
+    declarations, 0 private, 22 named. Note tiltAt_zero' ends in an apostrophe,
+    the parse hazard scripts/check_audit.py carries a regression test for.
+
+    COUNT UPDATE (Tilting lane, heart increment), 2026-08-06. The 9 additional
+    records are BridgelandStabLean/Tilting/HeartTorsionPair.lean: the
+    HeartTorsionPair datum, the two tilted aisles with their isomorphism-closure
+    instances, the factorisation lemma and its uniqueness counterpart, the
+    orthogonality characterisation of the torsion class, and the Hom-vanishing
+    axiom. Audit count 616 -> 625. Coverage complete: 9 top-level declarations,
+    0 private, 9 named. 5 are theorems; 4 are constructions (1 structure, 2 def,
+    2 instance -- 6 constructions counting the instances, of which tiltLE and
+    tiltGE are `def ... : ObjectProperty C`).
+
+    COUNT UPDATE (Wall lane), 2026-08-06. The 21 additional records are the
+    whole of BridgelandStabLean/Wall/Numerical.lean: the class abbreviation and
+    its three accessors, the two charge components, the three minors, the wall
+    expression, the collapse identity, the circle and line forms, the shift and
+    its four invariance lemmas, the charge-degeneracy criterion, and the
+    two-wall determination. Audit count 595 -> 616. Coverage complete: 21
+    top-level declarations, 0 private, 21 named. 11 are theorems; 10 are
+    constructions (9 def, 1 abbrev).
+
+    COUNT UPDATE (FiniteLength lane), 2026-08-06. The 10 additional records are
+    the whole of BridgelandStabLean/FiniteLength/SimpleCharge.lean: the two
+    cone-closure lemmas the anchor lacks, the charge construction and its two
+    computation lemmas, the freeness/uniqueness pair, and the three half-plane
+    consequences. Audit count 585 -> 595. Coverage complete: 10 top-level
+    declarations, 0 private, 10 named. 9 are theorems; 1 is a construction.
+
+    COUNT UPDATE (Support lane), 2026-08-06. The 11 additional records are the
+    whole of BridgelandStabLean/Support/SupportProperty.lean: the support
+    property, the two hypothesis structures, the compact slice and its
+    compactness, the normalisation lemma, both directions of the equivalence,
+    the equivalence itself, and two elementary consequences. Audit count
+    574 -> 585. Coverage complete: 11 top-level declarations, 0 private, 11
+    named. 7 are theorems; 4 are constructions (2 structure, 2 def) -- and
+    HasSupportProperty is a `def ... : Prop`, so its clean axiom line says
+    nothing about the property holding of anything.
+
+    COUNT UPDATE (Tilting lane), 2026-08-06. The 11 additional records are the
+    whole of BridgelandStabLean/Tilting/TorsionPair.lean: the TorsionPair
+    structure, the zero-intersection lemma, the two orthogonality
+    characterisations, closure of the torsion-free class under subobjects and
+    of the torsion class under quotients, closure of both under extensions, the
+    maximality factorisation, and the two degenerate torsion pairs constructed
+    as non-vacuity witnesses. Audit count 563 -> 574. Coverage of this lane is
+    complete: 11 top-level declarations, 0 private, 11 named. 8 are theorems; 3
+    are constructions (1 structure, 2 def).
+
+    THE TILT ITSELF IS NOT IN THIS COUNT AND IS NOT FORMALIZED. See
+    known_divergences.
+
+    COUNT UPDATE (Mukai lane), 2026-08-06. The 66 additional records are the
+    whole of BridgelandStabLean/Mukai/: 39 from Lattice.lean (the pairing, its
+    bilinearity, symmetry, the quadratic refinement, evenness, the
+    spherical/isotropic conditions, the expectedDim bookkeeping, the outer
+    hyperbolic plane, and the bundled bilinear map) and 27 from RankTwo.lean
+    (the Gram determinant, its change-of-basis law, the hyperbolic-pair
+    predicate and its invariance, the integral orthogonal witness, and the
+    pairSpan wall-datum predicates). Audit count 497 -> 563.
+
+    THIS LANE'S COVERAGE IS COMPLETE, which is NOT true of the record above and
+    is stated separately for that reason. A direct census of
+    BridgelandStabLean/Mukai/ finds exactly 66 top-level declarations and ZERO
+    `private` ones, and scripts/Audit.lean names all 66. There is no shortfall
+    here of the kind the preceding paragraphs describe for GLTildeSurj.lean.
+
+    The second qualification above still applies in proportion: 51 of the 66
+    are theorems and 15 are constructions (14 `def`, 1 `abbrev`). FIVE of those
+    defs are `def ... : Prop` -- IsSpherical, IsIsotropic, IsHyperbolicPair,
+    HasSphericalClass, HasIsotropicClass -- so a clean axiom line for them
+    means the DEFINITION is axiom-clean and asserts nothing about any of those
+    propositions holding of anything.
+
+    This observation is WORKING-TREE-PINNED, not commit-pinned: it was taken
+    before the Mukai lane was committed. Re-take it against the commit hash
+    before quoting it as a commit-level fact.
+
     COUNT CORRECTION, 2026-08-04. Earlier revisions of this field said 174 and
     then 184. Both undercounted, and the cause is worth recording because it is
     the failure mode this whole file exists to catch. The ad-hoc parser used to
@@ -418,11 +511,80 @@ fidelity:
   builds_clean: true
   builds_clean_date: 2026-08-06
   builds_clean_note: >
-    Merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06 with a
-    Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
+    MUKAI AND TILTING LANES, 2026-08-06, on Windows 11 / x86_64, working tree
+    at branch agent/mukai-lattice off 45f2fba. Three of CI's five gates were
+    run and all three passed, at both lanes. With Mukai only: `lake build` at
+    3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support added: 3782 jobs, linter clean,
+    audit 585 records. With FiniteLength added: 3783 jobs, linter
+    clean, audit 595 records. With Wall added: 3784 jobs, linter clean, audit
+    616 records. With the Tilting heart increment added: 3785 jobs,
+    linter clean, audit 625 records. With the indexed families added:
+    `lake build` at 3785 jobs exit 0, `runLinter` printed "Linting passed" with
+    no findings, and `lake env lean scripts/Audit.lean | python
+    scripts/check_audit.py` accepted 638 records, all within
+    [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
+    build-log grep also passed.
+
+    SIMPNF CAUGHT A SECOND REAL DEFECT, in the FiniteLength lane: chargeOf_apply
+    was marked @[simp] and rewrote the left-hand side of chargeOf_single before
+    that lemma could fire. Removed, with the reason recorded at the
+    declaration. `lake build` alone had passed it green, as it had for
+    Mukai.pairing_outer.
+
+    THE EMITTER GATE WAS NOT RUN, and this is a platform limit rather than a
+    result. `lake exe emit` cannot LINK on Windows: `supportInterpreter = true`
+    pushes a Mathlib-scale environment past the PE export table, and the link
+    fails with `ld.lld: error: too many exported symbols (got 136406, max
+    65535)`. ci.yml's own comment predicts exactly this and records the figure
+    136406 is the count with this lane added; the previously recorded figure at
+    the same cap was 134112. ELF has no such cap, so the emitter gate remains a
+    CI-only observation. Do not read "three of five gates green on a
+    workstation" as the CI verdict.
+
+    ONE SIMP-NORMAL-FORM DEFECT WAS FOUND AND FIXED BY THE LINTER STEP, which
+    is the reason CLAUDE.md section 1 requires it. `Mukai.pairing_outer` was
+    marked `@[simp]` while `pairing_mk` and `map_zero` already normalise its
+    left-hand side; simpNF rejected it. The attribute is removed and the reason
+    is recorded at the declaration. `lake build` alone had passed it green.
+
+    Earlier: merged main at 56c7531 was observed on macOS/aarch64 on 2026-08-06
+    with a Mathlib cache present. `lake build` completed at 3780 jobs with exit 0.
     The strict parser accepted all 497 records with no sorryAx, and `lake exe
     emit --out attest/lean-emission.json` completed successfully with
     `mfc-emit: wrote attest/lean-emission.json`.
+
+    THE EMITTER GATE IS NOW OBSERVED ON CI, 2026-08-07, AND THIS IS THE FIRST
+    ENTRY IN THIS FILE THAT QUOTES A RUN ID RATHER THAN A WORKSTATION. GitHub
+    Actions run 31147749136 on branch agent/mukai-lattice (PR #69), Ubuntu
+    runner, 29m03s, conclusion success. All five CI gates passed. The three
+    that had also been run locally agree exactly: the axiom audit reported
+    "638 declarations, all within [propext, Classical.choice, Quot.sound], no
+    sorryAx"; runLinter reported "Linting passed for BridgelandStabLean"; the
+    build-log grep reported "ok: no sorry warnings".
+
+    THE FOURTH IS THE ONE THAT COULD NOT RUN ON THE OWNER'S WORKSTATION AT ALL.
+    `lake exe emit` linked and ran: "mfc-emit: wrote attest/lean-emission.json",
+    then "ok: 1331 constants, 809 in scope, 12 cited". That gate sweeps
+    Environment.constants rather than a hand-maintained list, so it sees the
+    private and unlisted names scripts/Audit.lean structurally cannot, and it
+    exits non-zero on sorryAx anywhere in the environment. It exited zero.
+
+    WHAT THAT STRENGTHENS, PRECISELY. "No sorryAx" was previously a claim about
+    the 638 NAMED declarations. It is now a claim about all 1331 constants in
+    the emitted environment. The 638 figure is still the right one to quote for
+    the manual audit's coverage; do not conflate the two numbers.
+
+    WHAT IT DOES NOT STRENGTHEN. 12 constants carry a @[cites] record, and all
+    12 predate this branch -- the five lanes added on it carry none, by
+    decision, see source_mapping. A green emitter says nothing about whether
+    any statement is faithful to a source, and nothing here has had human
+    review.
+
+    THE QUARANTINE BELOW IS NOT YET RETIRED. Run 31147749136 uploaded a
+    lean-emission.json artifact, but the stale local files are still on disk
+    under their `.stale-2026-08-05-20of36modules` names and no one has replaced
+    them with the CI artifact. Retiring them is a separate act; this paragraph
+    records only that a regenerable attestation now demonstrably exists.
 
     THE LOCAL attest/ ARTIFACTS ARE STALE AND HAVE BEEN QUARANTINED,
     2026-08-06. The `attest/*.json` on disk were generated 2026-08-05 and
@@ -451,7 +613,20 @@ fidelity:
     merged at 56c7531.
   human_review: none
   machine_review: >
-    Merged main at 56c7531 on 2026-08-06: the local build, the manual audit
+    THE MUKAI, TILTING, SUPPORT, FINITELENGTH AND WALL LANES HAVE HAD NO
+    REVIEW OF ANY KIND, 2026-08-06 AND 2026-08-07, INCLUDING BOTH TILTING INCREMENTS.
+    All of it was written
+    and gate-run in a single session by the same agent (Claude Opus 5); no
+    independent adversarial pass has been made over it, and no human has read
+    it. Three of five CI gates were run locally and passed -- see
+    builds_clean_note for which, and for why the emitter gate could not run on
+    this platform. A green build, a green linter and a green axiom audit are
+    HYGIENE AND AXIOM-CLEANLINESS ONLY; none of the three can tell whether a
+    statement says what it should. Since the lane is uncited and maps to no
+    section of `source`, there is not even a quote for a faithfulness review to
+    check against. Do not quote this entry as review of any kind.
+
+    Earlier: merged main at 56c7531 on 2026-08-06: the local build, the manual audit
     gate at 497 declarations, the environment-wide contract emitter, and YAML
     and JSON parsing all passed. "Attestation reproducibility" was ALSO listed
     here and is withdrawn -- see builds_clean_note; the command that evidenced
@@ -485,6 +660,14 @@ fidelity:
     motivated the repair -- two independent sessions found the same six on the
     same day, from different directions, which is the evidence that the set was
     stable and not an artefact of one tree.
+
+    CI OBSERVED GREEN ON THIS BRANCH, 2026-08-07: run 31147749136, all five
+    gates, including the emitter gate that cannot link on the owner's Windows
+    workstation. See builds_clean_note for the figures. This is a REMOTE CI
+    VERDICT on the committed state and is therefore stronger than the local
+    observations recorded above it -- but it is still only build, hygiene and
+    axiom-cleanliness. It is not a source-faithfulness review, and
+    human_review stays none.
 
     CI, since 2026-08-04: .github/workflows/ci.yml, the first in this repo's
     history. lean-action build with the Mathlib cache, then scripts/Audit.lean
@@ -601,6 +784,122 @@ fidelity:
 
     No human has reviewed any statement for faithfulness to a source.
   source_mapping: >
+    Wall/ MAPS TO NO SECTION OF `source`. Numerical walls in the (s,t) half
+    plane are tilt-stability material (Arcara-Bertram, Maciocia,
+    Bayer-Macri-Toda), not Bridgeland 2007. No @[cites], no registry entries.
+
+    Wall/Numerical.lean works with NumClass = R x R x R, a triple `(r, c, d)`
+    standing for (ch0, ch1.H, ch2), and the twisted charge
+    Re Z = -d + s c - (s^2/2) r + (t^2/2) r, Im Z = t (c - s r). The wall
+    expression is the cross product of two charges. The central result,
+    wallExpr_eq, is that it collapses to
+    t * (minC + s minB + ((s^2+t^2)/2) minA), where minA, minB, minC are the
+    three 2x2 minors of the matrix with rows v and w. Hence for t nonzero the
+    wall is minA (s^2+t^2) + 2 minB s + 2 minC = 0: a circle centred on the
+    s-axis when minA is nonzero, a vertical line when minA vanishes and minB
+    does not. Centre and radius are given in cleared form so no division
+    appears. Each minor is alternating, so the wall depends only on w modulo v
+    (wallExpr_shift). charge_eq_zero_iff locates the single degenerate point.
+
+    FiniteLength/ IS THE FIRST NEW LANE THAT DOES TARGET `source` -- Bridgeland
+    2007's finite-length worked example, where a stability function on an
+    abelian category of finite length with n simples is a choice of charge in
+    the semi-closed upper half plane for each simple, so that component of the
+    stability manifold is H-bar^n. IT STILL CARRIES NO @[cites] RECORD, and the
+    reason is procedural rather than mathematical: registry/bridgeland2007.json
+    has nine entries and none covers the section 5 example, and minting a new
+    statement key requires a verbatim quote from the pinned document, which
+    needs the arXMCP corpus. That corpus was not reachable from the session
+    that wrote this lane. Uncited is the honest state; the fix is to mint the
+    key, not to attach an existing one that does not fit.
+
+    What the lane proves is the LATTICE HALF only, over the model `Fin n -> Z`.
+    It supplies the two cone-closure facts the anchor lacks -- closure under
+    multiplication by a positive real, and closure under a nonempty finite sum
+    -- then builds the additive charge determined by a choice of value per
+    basis vector, proves that choice free and unique (existsUnique_charge), and
+    proves that a nonzero N-combination of cone values stays in the cone
+    (mem_cone_natCombination), hence is nonzero. The cone itself,
+    CategoryTheory.upperHalfPlaneUnion, and its closure under addition are the
+    anchor's; this is the first of the lanes added in this series to import the
+    anchor at all.
+
+    The two new cone lemmas are deliberately placed in this repo's own
+    namespace rather than injected as CategoryTheory.upperHalfPlaneUnion_*.
+    CLAUDE.md section 1 tracks 21 dot-notation extensions on anchor types as
+    collision candidates for a future anchor bump; nothing needs these two by
+    dot notation, so the list is not lengthened.
+
+    Support/ MAPS TO NO SECTION OF `source` EITHER. The support property is
+    Kontsevich-Soibelman, and the quadratic-form reformulation is the one used
+    by Bayer-Macri-Stellari; neither is Bridgeland 2007. No @[cites] records,
+    no registry entries.
+
+    Support/SupportProperty.lean works over a finite-dimensional real normed
+    space V, a linear charge Z : V -> W into a normed space, and an arbitrary
+    subset S. It defines the support property as the uniform comparison
+    ||v|| <= C ||Z v|| on S, and proves it equivalent to the existence of a
+    continuous degree-two homogeneous Q that is nonnegative on S and negative
+    definite on ker Z. The compactness direction cuts the unit sphere by
+    Q >= 0, observes Z is nonvanishing there because a kernel vector would have
+    negative Q, and takes the reciprocal of the minimum of ||Z .||. The
+    converse is explicit: Q v = C^2 ||Z v||^2 - ||v||^2. Read the asymmetric
+    strength divergence in known_divergences before citing the equivalence.
+
+    Tilting/ ALSO MAPS TO NO SECTION OF `source`. A torsion pair is
+    Happel-Reiten-Smalo/Dickson material, not Bridgeland 2007, so like Mukai/
+    it carries no @[cites] records and no registry entries.
+
+    Tilting/TorsionPair.lean defines a torsion pair on an abelian category as
+    two isomorphism-closed ObjectProperties with (i) every map from a torsion
+    object to a torsion-free object zero and (ii) every object fitting in a
+    short exact sequence with torsion sub and torsion-free quotient. MATHLIB
+    HAS NO SUCH NOTION AT THE PIN -- every `Torsion` file in Mathlib is about
+    torsion in algebra (Algebra/Group/Torsion.lean, GroupTheory/Torsion.lean,
+    RingTheory/Flat/TorsionFree.lean and the rest); there is no torsion pair,
+    torsion theory or torsion class for abelian categories. So this is built
+    from scratch, and it imports only Mathlib -- no anchor, no triangulated
+    category, no geometry.
+
+    What is proved: each class is exactly the orthogonal of the other
+    (tors_iff, free_iff), which is the rigidity that makes the decomposition
+    axiom do real work rather than merely coexist with the orthogonality
+    axiom; the torsion-free class is closed under subobjects and the torsion
+    class under quotients; both are closed under extensions; and a torsion
+    subobject factors through any decomposition, so the torsion end is maximal.
+    Two degenerate torsion pairs are CONSTRUCTED (allTors, allFree) rather than
+    asserted to exist, because a structure with no inhabitant makes every
+    theorem about it vacuously true.
+
+    Mukai/ MAPS TO NO SECTION OF THIS RECORD'S `source` AT ALL, and that is the
+    most important thing this field says about it. `source` is Bridgeland 2007
+    (math/0212237v3); the Mukai extension and the rank-two wall datum come from
+    Mukai's work on moduli on K3 surfaces and from Bayer-Macri's wall
+    classification, neither of which is the pinned document. The lane therefore
+    carries NO `@[cites]` records and NO entries in registry/bridgeland2007.json,
+    deliberately: minting statement keys against a document the lane is not
+    about would be a false claim, and minting them against a document not in
+    the pinned corpus would require quotes this workstation cannot verify. The
+    lane is currently uncited, and "uncited" is the honest state, not an
+    oversight to be papered over.
+
+    What it contains. Mukai/Lattice.lean defines the extension of an additive
+    group N carrying a symmetric Z-bilinear form b to Z x N x Z with pairing
+    <(r,c,s),(r',c',s')> = b c c' - r s' - r' s, proves bilinearity in each
+    slot, symmetry from symmetry of b, the quadratic refinement
+    <v,v> = b c c - 2 r s, evenness of the extension of an even lattice, the
+    spherical (<v,v> = -2) and isotropic (<v,v> = 0) conditions and their
+    disjointness, and that the outer two summands span a hyperbolic plane --
+    two isotropic generators pairing to -1. Mukai/RankTwo.lean defines the Gram
+    determinant of a pair, proves it transforms by the SQUARE of the
+    change-of-basis determinant for an arbitrary integer 2x2 matrix (not only
+    unimodular ones), defines the negative-Gram hyperbolic-pair condition and
+    proves it basis-independent, and constructs the integral orthogonal witness
+    <v,w> v - <v,v> w, proving it orthogonal to v with self-pairing
+    <v,v> * gram -- hence strictly negative when v has positive square and the
+    pair is hyperbolic. That last result is the signature-(1,1) witness in
+    integral form: no real coefficients, no diagonalisation, no Sylvester.
+
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
     numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
@@ -831,6 +1130,177 @@ fidelity:
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    TILTING LANE, HEART INCREMENT: THE AISLES ARE NOT DEFINED THE USUAL WAY,
+    AND THE DEVIATION IS FORCED. The Happel-Reiten-Smalo aisles are normally
+    written with cohomology functors, D^{<=0}_dagger = {X in D^{<=0} : H^0(X) in
+    T}. MATHLIB HAS NO H^n FOR A T-STRUCTURE AT THE PIN -- TStructure/ carries
+    truncLE, truncGE and the truncation triangle but no cohomology functor into
+    the heart -- and the anchor's H0Functor has its homological property only as
+    case-by-case fragments in HeartEquivalence/H0Homological.lean, never
+    unconditionally. So the aisles are defined by HOM-ORTHOGONALITY instead,
+    which needs no cohomology functor: for X in D^{<=0} and F in the heart the
+    counit gives Hom(X,F) = Hom(H^0 X, F), and the torsion class is the left
+    orthogonal of the torsion-free class, so "H^0(X) in T" is equivalent to
+    "Hom(X,F) = 0 for every torsion-free F". The two formulations agree wherever
+    the usual one can be stated. But they are not literally the same definition,
+    and a reader comparing this file to a textbook must know that.
+
+    TILTING LANE: FIVE OF THE SIX NON-TRIVIAL TSTRUCTURE FIELDS ARE PROVED, AND
+    exists_triangle_zero_one IS NOT. Supplied: isomorphism-closure of both
+    aisles; both shift axioms (tiltLEAt_shift, tiltGEAt_shift), each one
+    application of shiftFunctorAdd' against the orthogonality predicate's
+    isomorphism-closure; both inclusions (tiltLEAt_zero_le, tiltGEAt_one_le),
+    which are pure degree counts against t.zero and do not use the
+    orthogonality hypothesis they are handed at all; and the Hom-vanishing
+    axiom (hom_eq_zero_of_tiltLE_of_tiltGE, transported to the indexed families
+    as tiltAt_zero'), with no cohomology functor anywhere in its proof.
+
+    zero' carries [IsTriangulated C] EXPLICITLY rather than assuming it
+    globally: the octahedral axiom is what makes tau^{>=0} preserve D^{<=0},
+    which is how the truncation lands in the heart. Mathlib's instance for that
+    sits inside `section variable [IsTriangulated C]`.
+
+    NOT supplied: the dual free_of_orthogonal, which is not a TStructure field,
+    is not needed for zero', and is not carried speculatively; and
+    exists_triangle_zero_one, which is the octahedral-axiom step and needs the
+    long exact cohomology sequence of H^0 -- the same machinery that is missing
+    above. NOTHING IS DECLARED WITH SORRY; per CLAUDE.md section 2 the unproved
+    field is simply absent, and NO TStructure INSTANCE IS ASSEMBLED.
+
+    SO THERE IS NO TILT IN THIS REPOSITORY. Do not cite Tilting/ as a
+    formalization of Happel-Reiten-Smalo. What exists is the input datum, the
+    aisles, and five of the six non-trivial axioms' worth of groundwork.
+
+    WALL LANE: NO BOGOMOLOV-GIESEKER INEQUALITY IS ASSUMED, AND NONE IS
+    AXIOMATISED. This is worth stating because the lane was SCOPED expecting to
+    need one -- the plan was a numerical-surface structure carrying the Hodge
+    index and the discriminant bound as stated hypotheses. It turned out no
+    such hypothesis is required: wallExpr_eq is a polynomial IDENTITY, true of
+    every triple of reals, and the circle and line forms need only `t` nonzero
+    and a nonvanishing minor, both of which are hypotheses of the individual
+    theorems rather than standing assumptions. So CLAUDE.md section 4's rule --
+    say so and stop rather than axiomatising the gap -- was never engaged,
+    because the gap was not on the path.
+
+    WALL LANE: THERE IS NO SURFACE. NumClass is a triple of reals, not ch(E) for
+    a sheaf. No coherent sheaf, Chern character, polarisation or Neron-Severi
+    lattice appears anywhere in the lane, and nothing identifies the triple with
+    the numerical invariants of an object. That identification is geometry and
+    is not made.
+
+    WALL LANE: THE NESTING THEOREM IS NOT PROVED. The statement the picture is
+    usually quoted by -- that two DISTINCT walls for the SAME v never meet, so
+    the walls for a fixed v are nested semicircles -- is NOT here. What is
+    proved is eq_of_two_walls: if two walls meet at a point and the (A,B) cross
+    term minA1 minB2 - minA2 minB1 is nonzero, that meeting point is pinned
+    down. The full nesting statement additionally needs that both minor vectors
+    are cross products against a common v, plus a rank argument in R^3, and
+    neither is done. Do not cite this lane as "walls are nested".
+
+    FINITELENGTH LANE: `Fin n -> Z` IS NOT `K_0(A)`, AND THE MISSING BRIDGE IS
+    NAMED. Identifying the model with the Grothendieck group of a finite-length
+    abelian category is the Jordan-Holder theorem -- that K_0(A) is free
+    abelian on the classes of the simples. IT EXISTS IN NEITHER MATHLIB NOR THE
+    ANCHOR at the pin. Mathlib's Order/JordanHolder.lean is about modular
+    lattices and is not connected to K_0 of a category, and a search of the
+    whole anchor for jordan/holder/compositionSeries/free-on-simples returns
+    nothing; the anchor's GrothendieckGroup/ builds K_0 as a quotient of a free
+    abelian group by a relation subgroup and never says that quotient is free
+    on the simples. So this is an unrealized assumption of exactly the kind
+    Lattice/NumericalK.lean already records, and it is never discharged.
+
+    CONSEQUENTLY THE STABILITY-MANIFOLD CLAIM IS NOT MADE. Bridgeland's example
+    concludes that a component of Stab is H-bar^n. What is proved here is that
+    the charges of the basis vectors freely and uniquely determine an additive
+    map, and that the cone absorbs nonzero N-combinations. The step from there
+    to "these are exactly the stability functions on A", and the further step
+    to a component of a stability manifold, both need the Jordan-Holder bridge
+    and neither is formalized. Do not cite existsUnique_charge as "Stab of a
+    finite-length heart is H^n".
+
+    SUPPORT LANE: ONE DIRECTION IS STRONGER THAN THE LITERATURE STATEMENT AND
+    THE OTHER IS WEAKER. This is the sharpest divergence added by this work and
+    it is asymmetric, so both halves are stated.
+
+    Both directions are phrased with `IsHomogTwo Q` -- continuity plus
+    `Q (a . v) = a^2 Q v` -- rather than with a bundled quadratic form.
+    IsHomogTwo is STRICTLY WEAKER than being a quadratic form: `Q (x,y) =
+    |x * y|` on R^2 satisfies both conditions and is not a quadratic form.
+
+    Consequence for hasSupportProperty_of_isCompatible (form implies support
+    property): the hypothesis is weaker than the literature's, so the theorem
+    is STRONGER. Nothing is owed.
+
+    Consequence for exists_isCompatible_of_hasSupportProperty (support property
+    implies form): the conclusion is weaker than the literature's, so the
+    theorem is WEAKER. What is produced is a continuous degree-two homogeneous
+    function, NOT a bundled `QuadraticForm R V`. The explicit witness
+    `Q v = C^2 ||Z v||^2 - ||v||^2` IS a genuine quadratic form when the norm
+    comes from an inner product, but the lane is stated over a general normed
+    space where `||v||^2` need not be quadratic, and no declaration proves the
+    inner-product refinement. So DO NOT cite hasSupportProperty_iff as "the
+    support property is equivalent to the existence of a quadratic form". It is
+    equivalent to the existence of a continuous degree-two homogeneous function
+    with those sign conditions. Closing the gap means restricting to an inner
+    product space and building an actual QuadraticMap with its
+    `exists_companion'` field; that is not done.
+
+    SUPPORT LANE: `S` IS AN ARBITRARY SET. It is not identified with the
+    classes of sigma-semistable objects, and nothing in the lane mentions a
+    triangulated category, a slicing, a stability condition, or the anchor. The
+    identification is what would make these theorems statements about
+    Bridgeland stability, and it is not made. Every result holds verbatim for
+    any other subset of the space.
+
+    THE HAPPEL-REITEN-SMALO TILT IS NOT FORMALIZED, and the directory name
+    `Tilting/` invites the opposite reading, so it is stated here rather than
+    left to a docstring. What exists is the torsion pair -- the INPUT datum --
+    and its elementary theory. The tilt is the construction, from a torsion
+    pair in the heart of a t-structure, of a second t-structure whose heart is
+    the extension of the torsion class by the shifted torsion-free class. It is
+    a much larger obligation: Mathlib's `Triangulated.TStructure` requires an
+    `exists_triangle_zero_one` field, and producing that triangle for the
+    tilted aisles needs the octahedral axiom. None of it is attempted here and
+    no declaration below asserts it.
+
+    A consequence worth being explicit about: NOTHING IN Tilting/ CONNECTS TO
+    A STABILITY CONDITION YET. The reason a torsion pair is interesting for
+    this repo is that the tilt is the engine behind every construction of
+    stability conditions on a surface. That motivation is recorded in the
+    module docstring as motivation, not as a formalized link.
+
+    Mukai/ IS THE SAME DIVERGENCE, ONE LEVEL UP, and is recorded separately
+    because the suggestive naming makes it easier to misread. `MukaiLattice N`
+    is the abstract extension Z x N x Z of ANY additive group carrying ANY
+    symmetric Z-bilinear form. It is NOT the Mukai lattice of a K3 surface.
+    Taking N = NS(X) with the intersection form would recover the algebraic
+    Mukai lattice H^0 + NS + H^4, but that identification needs D^b(Coh X),
+    Chern characters and Hirzebruch-Riemann-Roch, none of which exist in
+    Mathlib at the pin, and CLAUDE.md section 4 closes that lane outright. It is
+    an unrealized assumption and is never discharged here. Every theorem in the
+    lane is true of an arbitrary symmetric bilinear Z-lattice and would remain
+    true if no K3 surface existed.
+
+    Three specific names carry a claim they do not prove, and each says so at
+    its declaration. `expectedDim v = <v,v> + 2` is a DEFINITION recording which
+    numerical quantity is tracked; the statement that a moduli space of stable
+    objects with primitive Mukai vector v has that dimension is Mukai's theorem,
+    is geometry, and is NOT asserted. `IsSpherical` is the numerical condition
+    <v,v> = -2, not a claim that any spherical object exists or that such
+    objects have those classes. `IsHyperbolicPair` is the numerical condition
+    that a pair has negative Gram determinant; the correspondence between such
+    rank-two data and actual walls in a space of stability conditions is
+    Bayer-Macri Theorem 5.7, is geometry, and is NOT formalized -- the file's
+    module docstring states this and no declaration depends on it.
+
+    THE WALL CLASSIFICATION ITSELF IS NOT FORMALIZED. What exists is the
+    rank-two numerical substrate the classification is phrased over, plus the
+    two existence predicates HasSphericalClass and HasIsotropicClass. Assigning
+    a wall type -- totally semistable, divisorial, flopping, fake -- to a
+    rank-two datum requires moduli of stable objects and is out of scope by
+    CLAUDE.md section 4. Do not cite this lane as "the Bayer-Macri wall
+    classification is formalized".
 
     GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair presentation
     of GL+(2,R)-tilde. The group, surjective projection, Z fibre, explicit

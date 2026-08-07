@@ -85,6 +85,201 @@ open BridgelandStabLean
 #print axioms Lattice.ne_zero_of_apply_ne_zero
 #print axioms Lattice.eq_zero_of_two_zsmul_eq_zero_num
 
+/-! ## Mukai lane — the extension `ℤ ⊕ N ⊕ ℤ` of a symmetric bilinear lattice
+
+Pure lattice arithmetic. Nothing here is a statement about a K3 surface, a
+Mukai lattice of a variety, or any geometric object; see the module docstrings
+in `BridgelandStabLean/Mukai/`. -/
+
+#print axioms Mukai.MukaiLattice
+#print axioms Mukai.pairing
+#print axioms Mukai.pairing_mk
+#print axioms Mukai.pairing_add_left
+#print axioms Mukai.pairing_add_right
+#print axioms Mukai.pairing_smul_left
+#print axioms Mukai.pairing_smul_right
+#print axioms Mukai.pairing_neg_left
+#print axioms Mukai.pairing_neg_right
+#print axioms Mukai.pairing_sub_left
+#print axioms Mukai.pairing_sub_right
+#print axioms Mukai.pairing_zero_left
+#print axioms Mukai.pairing_zero_right
+#print axioms Mukai.pairing_comm
+#print axioms Mukai.selfPairing
+#print axioms Mukai.selfPairing_eq_pairing
+#print axioms Mukai.selfPairing_mk
+#print axioms Mukai.selfPairing_smul
+#print axioms Mukai.selfPairing_zero
+#print axioms Mukai.selfPairing_neg
+#print axioms Mukai.even_selfPairing
+#print axioms Mukai.IsSpherical
+#print axioms Mukai.IsIsotropic
+#print axioms Mukai.isSpherical_iff
+#print axioms Mukai.isIsotropic_iff
+#print axioms Mukai.IsSpherical.neg
+#print axioms Mukai.IsIsotropic.neg
+#print axioms Mukai.not_isSpherical_and_isIsotropic
+#print axioms Mukai.expectedDim
+#print axioms Mukai.expectedDim_eq_zero_iff
+#print axioms Mukai.expectedDim_eq_two_iff
+#print axioms Mukai.rankUnit
+#print axioms Mukai.corankUnit
+#print axioms Mukai.pairing_outer
+#print axioms Mukai.isIsotropic_rankUnit
+#print axioms Mukai.isIsotropic_corankUnit
+#print axioms Mukai.pairing_rankUnit_corankUnit
+#print axioms Mukai.pairingBilin
+#print axioms Mukai.pairingBilin_apply
+
+/-! ## Mukai lane — rank-two subpairs -/
+
+#print axioms Mukai.gram
+#print axioms Mukai.gram_comm
+#print axioms Mukai.gram_zero_left
+#print axioms Mukai.gram_zero_right
+#print axioms Mukai.pairing_lincomb
+#print axioms Mukai.selfPairing_lincomb
+#print axioms Mukai.gram_lincomb
+#print axioms Mukai.IsHyperbolicPair
+#print axioms Mukai.isHyperbolicPair_iff
+#print axioms Mukai.discr_pos_of_isHyperbolicPair
+#print axioms Mukai.gram_ne_zero_of_isHyperbolicPair
+#print axioms Mukai.ne_zero_left_of_isHyperbolicPair
+#print axioms Mukai.ne_zero_right_of_isHyperbolicPair
+#print axioms Mukai.isHyperbolicPair_comm
+#print axioms Mukai.isHyperbolicPair_lincomb
+#print axioms Mukai.orthWitness
+#print axioms Mukai.pairing_orthWitness
+#print axioms Mukai.selfPairing_orthWitness
+#print axioms Mukai.selfPairing_orthWitness_neg
+#print axioms Mukai.orthWitness_ne_zero
+#print axioms Mukai.pairSpan
+#print axioms Mukai.mem_pairSpan_left
+#print axioms Mukai.mem_pairSpan_right
+#print axioms Mukai.orthWitness_mem_pairSpan
+#print axioms Mukai.HasSphericalClass
+#print axioms Mukai.HasIsotropicClass
+#print axioms Mukai.exists_neg_selfPairing_of_isHyperbolicPair
+
+/-! ## Tilting lane — torsion pairs in an abelian category
+
+Mathlib has no torsion pair for abelian categories at the pin, so this is built
+from scratch. Pure abelian-category theory: no anchor import, no geometry. The
+Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
+
+#print axioms Tilting.TorsionPair
+#print axioms Tilting.TorsionPair.isZero_of_tors_of_free
+#print axioms Tilting.TorsionPair.tors_iff
+#print axioms Tilting.TorsionPair.free_iff
+#print axioms Tilting.TorsionPair.free_of_mono
+#print axioms Tilting.TorsionPair.tors_of_epi
+#print axioms Tilting.TorsionPair.tors_of_shortExact
+#print axioms Tilting.TorsionPair.free_of_shortExact
+#print axioms Tilting.TorsionPair.exists_factor_of_tors
+#print axioms Tilting.TorsionPair.allTors
+#print axioms Tilting.TorsionPair.allFree
+
+/-! ## Tilting lane — torsion pairs on a heart, and the tilted aisles
+
+The aisles are defined by HOM-ORTHOGONALITY, not with a cohomology functor:
+Mathlib has no `H^n` for a t-structure at the pin, and the anchor's `H0Functor`
+has its homological property only as case-by-case fragments. `zero'` is proved
+here; `exists_triangle_zero_one` is NOT, and is not declared with `sorry`. -/
+
+#print axioms Tilting.HeartTorsionPair
+#print axioms Tilting.HeartTorsionPair.tiltLE
+#print axioms Tilting.HeartTorsionPair.tiltGE
+#print axioms Tilting.HeartTorsionPair.tiltLE_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.tiltGE_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.exists_factor_truncGE
+#print axioms Tilting.HeartTorsionPair.factor_truncGE_unique
+#print axioms Tilting.HeartTorsionPair.tors_of_orthogonal
+#print axioms Tilting.HeartTorsionPair.hom_eq_zero_of_tiltLE_of_tiltGE
+
+/-! ## Tilting lane — the indexed aisle families
+
+The shift and inclusion fields of the tilted t-structure. Note
+`tiltAt_zero'` ends in an apostrophe: `scripts/check_audit.py` has a regression
+test for exactly that parse hazard. -/
+
+#print axioms Tilting.HeartTorsionPair.torsOrth
+#print axioms Tilting.HeartTorsionPair.freeOrth
+#print axioms Tilting.HeartTorsionPair.torsOrth_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.freeOrth_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.tiltLEAt
+#print axioms Tilting.HeartTorsionPair.tiltGEAt
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_iff
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_iff
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_shift
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_shift
+#print axioms Tilting.HeartTorsionPair.tiltLEAt_zero_le
+#print axioms Tilting.HeartTorsionPair.tiltGEAt_one_le
+#print axioms Tilting.HeartTorsionPair.tiltAt_zero'
+
+/-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
+
+Linear algebra plus one compactness argument over a finite-dimensional real
+normed space. `S` is an ARBITRARY subset; it is not identified with the classes
+of semistable objects, which would need a stability condition. No anchor
+import, no geometry. -/
+
+#print axioms Support.HasSupportProperty
+#print axioms Support.IsHomogTwo
+#print axioms Support.IsCompatible
+#print axioms Support.slice
+#print axioms Support.isCompact_slice
+#print axioms Support.norm_inv_smul_mem_slice
+#print axioms Support.hasSupportProperty_of_isCompatible
+#print axioms Support.exists_isCompatible_of_hasSupportProperty
+#print axioms Support.hasSupportProperty_iff
+#print axioms Support.HasSupportProperty.mono
+#print axioms Support.HasSupportProperty.eq_zero_of_charge_eq_zero
+
+/-! ## FiniteLength lane — charges on the free lattice of simples
+
+`Fin n -> Z` is a MODEL of `K_0(A)` for a finite-length abelian category, not
+an identification: that is Jordan-Holder, which exists in neither Mathlib nor
+the anchor. Every result is a theorem about `Fin n -> Z`. -/
+
+#print axioms FiniteLength.mem_cone_smul
+#print axioms FiniteLength.mem_cone_sum
+#print axioms FiniteLength.chargeOf
+#print axioms FiniteLength.chargeOf_apply
+#print axioms FiniteLength.chargeOf_single
+#print axioms FiniteLength.eq_chargeOf
+#print axioms FiniteLength.existsUnique_charge
+#print axioms FiniteLength.mem_cone_natCombination
+#print axioms FiniteLength.chargeOf_mem_cone
+#print axioms FiniteLength.chargeOf_ne_zero
+
+/-! ## Wall lane — numerical walls in the (s, t) half plane
+
+Arithmetic on triples of reals. There is NO surface: no coherent sheaf, no
+Chern character, no polarisation, and no Bogomolov-Gieseker inequality -- and
+none is axiomatised, because the wall equation is an identity and needs none. -/
+
+#print axioms Wall.NumClass
+#print axioms Wall.NumClass.rk
+#print axioms Wall.NumClass.deg
+#print axioms Wall.NumClass.ch2
+#print axioms Wall.reZ
+#print axioms Wall.imZ
+#print axioms Wall.minA
+#print axioms Wall.minB
+#print axioms Wall.minC
+#print axioms Wall.wallExpr
+#print axioms Wall.wallExpr_eq
+#print axioms Wall.wall_iff_circle
+#print axioms Wall.wall_circle_eq
+#print axioms Wall.wall_line_eq
+#print axioms Wall.shift
+#print axioms Wall.minA_shift
+#print axioms Wall.minB_shift
+#print axioms Wall.minC_shift
+#print axioms Wall.wallExpr_shift
+#print axioms Wall.charge_eq_zero_iff
+#print axioms Wall.eq_of_two_walls
+
 /-! ## GroupAction lane — NormalizedShift (step 1) -/
 
 #print axioms GroupAction.NormalizedShift
