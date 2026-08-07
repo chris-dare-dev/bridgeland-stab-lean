@@ -42,8 +42,11 @@ here, where the usual one is not.
 
 ## Status
 
-What this file establishes is the *datum* and the *aisles*, plus the
-factorisation lemma that the Hom-vanishing axiom of a t-structure will need.
+Established here: the datum, the two aisles with their isomorphism-closure,
+the factorisation lemma standing in for the counit, the orthogonality
+characterisation of the torsion class, and **the Hom-vanishing axiom `zero'`**
+(`hom_eq_zero_of_tiltLE_of_tiltGE`).
+
 `exists_triangle_zero_one` — the remaining and hardest field — is **not**
 declared, not even with `sorry`; see §2 of `CLAUDE.md` for why that rule exists.
 -/
@@ -159,18 +162,78 @@ theorem factor_truncGE_unique {X F : C} (hF : t.IsGE F 0)
       (t.isLE_shift _ (0 - 1) 1 (0 - 1 - 1) (by lia)) hF
   rw [hh', hzero, comp_zero]
 
+/-! ### Orthogonality characterisations
+
+Each class is the orthogonal of the other *inside the heart*. The forward
+direction is the `hom_eq_zero` axiom; the converse is where the decomposition
+axiom earns its place, and it needs no cohomology functor — only that a
+distinguished triangle whose second map vanishes has a zero third object, which
+here follows from a degree count. -/
+
+/-- An object of the heart with no nonzero map to a torsion-free object is
+torsion. -/
+theorem tors_of_orthogonal {A : C} (hle : t.IsLE A 0) (hge : t.IsGE A 0)
+    (h : ∀ Y : C, P.free Y → ∀ u : A ⟶ Y, u = 0) : P.tors A := by
+  obtain ⟨T, Y, hT, hY, i, p, d, hdist⟩ := P.exists_triangle A hle hge
+  haveI := P.tors_isLE T hT
+  have hYzero : IsZero Y := by
+    obtain ⟨k, hk⟩ := Triangle.yoneda_exact₃ _ hdist (𝟙 Y) (by show p ≫ 𝟙 Y = 0; simpa using h Y hY p)
+    have hk0 : k = 0 :=
+      t.zero_of_isLE_of_isGE k (-1) 0 (by lia)
+        (t.isLE_shift T 0 1 (-1) (by lia)) (P.free_isGE Y hY)
+    rw [IsZero.iff_id_eq_zero, hk, hk0]
+    exact comp_zero
+  haveI : IsIso i := (Triangle.isZero₃_iff_isIso₁ _ hdist).mp hYzero
+  exact ObjectProperty.prop_of_iso P.tors (asIso i) hT
+
+/-! ### The Hom-vanishing axiom
+
+`zero'` for the tilted t-structure, proved without any cohomology functor: the
+factorisation lemma moves the orthogonality hypothesis from `X` onto
+`τ^{≥0}X`, and `tors_of_orthogonal` then puts that truncation in the torsion
+class, where the second aisle's hypothesis kills it. -/
+
+/-- **No nonzero map from the tilted co-aisle to the tilted aisle.** -/
+theorem hom_eq_zero_of_tiltLE_of_tiltGE [IsTriangulated C] {X Y : C}
+    (hX : P.tiltLE X) (hY : P.tiltGE Y) (f : X ⟶ Y) : f = 0 := by
+  obtain ⟨hXle, hXorth⟩ := hX
+  obtain ⟨hYge, hYorth⟩ := hY
+  haveI := hXle
+  obtain ⟨g, hg⟩ := exists_factor_truncGE hYge f
+  -- `τ^{≥0}X` lies in the heart: `IsGE` by construction, `IsLE` because `X` is.
+  have hobj : ((t.triangleLTGE 0).obj X).obj₃ = (t.truncGE 0).obj X := rfl
+  have hle3 : t.IsLE (((t.triangleLTGE 0).obj X).obj₃) 0 := by
+    rw [hobj]; infer_instance
+  have hge3 : t.IsGE (((t.triangleLTGE 0).obj X).obj₃) 0 := inferInstance
+  have hTorth : ∀ Z : C, P.free Z →
+      ∀ u : ((t.triangleLTGE 0).obj X).obj₃ ⟶ Z, u = 0 := by
+    intro Z hZ u
+    refine factor_truncGE_unique (P.free_isGE Z hZ) ?_
+    rw [comp_zero]
+    exact hXorth Z hZ _
+  have htors : P.tors (((t.triangleLTGE 0).obj X).obj₃) :=
+    P.tors_of_orthogonal hle3 hge3 hTorth
+  rw [hg, hYorth _ htors g]
+  exact comp_zero
+
 /-! ### TODO — what remains of the tilt, and why it is not here
 
 The two aisles above, together with the shifted family, are meant to assemble
 into a `Triangulated.TStructure C`. Of its fields:
 
-* `le_isClosedUnderIsomorphisms` / `ge_isClosedUnderIsomorphisms` — done above;
+* `le_isClosedUnderIsomorphisms` / `ge_isClosedUnderIsomorphisms` — **done**;
+* `zero'` — **done**, as `hom_eq_zero_of_tiltLE_of_tiltGE`, and with no
+  cohomology functor anywhere in the proof. It needs `[IsTriangulated C]`: the
+  octahedral axiom is what makes `τ^{≥0}` preserve `D^{≤0}`, which is how
+  `τ^{≥0}X` gets into the heart. That hypothesis is real and is carried
+  explicitly rather than assumed globally;
+* `free_of_orthogonal` — the dual of `tors_of_orthogonal`, **not done**. It is
+  not needed for `zero'`, and the inverse-rotation bookkeeping it wants is not
+  worth carrying speculatively;
 * `le_shift` / `ge_shift`, `le_zero_le`, `ge_one_le` — index bookkeeping over
-  `shiftFunctorAdd`, not attempted here;
-* `zero'` — reduces to `exists_factor_truncGE` plus the orthogonality
-  characterisation of `tors` (the `C`-phrased analogue of
-  `TorsionPair.tors_iff`), which in turn needs the splitting of a distinguished
-  triangle whose second map vanishes;
+  `shiftFunctorAdd`, not attempted here. Both inclusions reduce to `t.zero`
+  and neither needs a cohomology functor, so these are ordinary work rather
+  than blocked work;
 * `exists_triangle_zero_one` — **the real obstruction.** Producing the
   truncation triangle for the tilted aisles is the octahedral-axiom step, and
   it needs the long exact cohomology sequence of `H⁰`, i.e. that `H⁰` is a

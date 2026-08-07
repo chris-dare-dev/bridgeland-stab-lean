@@ -345,12 +345,38 @@ decomposition, so the torsion end is maximal. The two degenerate torsion pairs
 are **constructed**, not assumed — a structure with no inhabitant would make
 every theorem about it vacuously true.
 
-**The Happel–Reiten–Smalø tilt is not here.** The directory name invites the
-opposite reading, so: what exists is the *input datum* and its elementary
-theory. The tilt — building a second t-structure whose heart is the extension
-of `T` by `F[1]` — needs `TStructure`'s `exists_triangle_zero_one` field, and
-producing that triangle for the tilted aisles needs the octahedral axiom. None
-of it is attempted. Nothing in this lane connects to a stability condition yet.
+`HeartTorsionPair.lean` then carries the same notion on the heart of a
+t-structure, phrased inside `C`, and builds the tilted aisles.
+
+**The aisles are not defined the usual way, and the deviation is forced.**
+Textbook HRS writes `D^{≤0}_† = {X ∈ D^{≤0} : H⁰(X) ∈ T}`. **Mathlib has no
+`Hⁿ` for a t-structure at the pin** — `TStructure/` has `truncLE`, `truncGE`
+and the truncation triangle, but no cohomology functor into the heart — and the
+anchor's `H0Functor` has its *homological* property only as case-by-case
+fragments in `H0Homological.lean`. So the aisles use **Hom-orthogonality**:
+
+```
+H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
+```
+
+The two agree wherever the usual one can be stated, but they are not literally
+the same definition, and a reader comparing to a textbook should know it.
+
+**`zero'` is proved; `exists_triangle_zero_one` is not.** Supplied here:
+isomorphism-closure of both aisles, the factorisation lemma standing in for the
+counit, the orthogonality characterisation of the torsion class, and the
+Hom-vanishing axiom — with no cohomology functor anywhere in the proof. It
+carries `[IsTriangulated C]` explicitly, because the octahedral axiom is what
+makes `τ^{≥0}` preserve `D^{≤0}`.
+
+Not supplied: the shift compatibilities and the two inclusions (ordinary
+bookkeeping, not blocked); the dual of `tors_of_orthogonal`; and
+`exists_triangle_zero_one`, which needs the long exact sequence of `H⁰` — the
+machinery that is missing above. **Nothing is declared with `sorry`.**
+
+**So there is no tilt in this repository.** Do not cite `Tilting/` as a
+formalization of Happel–Reiten–Smalø. Nothing in the lane connects to a
+stability condition yet.
 
 ### Lane 5 — `Support/` (the Kontsevich–Soibelman reformulation)
 

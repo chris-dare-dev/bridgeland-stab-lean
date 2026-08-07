@@ -179,6 +179,23 @@ Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
 #print axioms Tilting.TorsionPair.allTors
 #print axioms Tilting.TorsionPair.allFree
 
+/-! ## Tilting lane — torsion pairs on a heart, and the tilted aisles
+
+The aisles are defined by HOM-ORTHOGONALITY, not with a cohomology functor:
+Mathlib has no `H^n` for a t-structure at the pin, and the anchor's `H0Functor`
+has its homological property only as case-by-case fragments. `zero'` is proved
+here; `exists_triangle_zero_one` is NOT, and is not declared with `sorry`. -/
+
+#print axioms Tilting.HeartTorsionPair
+#print axioms Tilting.HeartTorsionPair.tiltLE
+#print axioms Tilting.HeartTorsionPair.tiltGE
+#print axioms Tilting.HeartTorsionPair.tiltLE_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.tiltGE_isClosedUnderIsomorphisms
+#print axioms Tilting.HeartTorsionPair.exists_factor_truncGE
+#print axioms Tilting.HeartTorsionPair.factor_truncGE_unique
+#print axioms Tilting.HeartTorsionPair.tors_of_orthogonal
+#print axioms Tilting.HeartTorsionPair.hom_eq_zero_of_tiltLE_of_tiltGE
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real

@@ -394,6 +394,16 @@ fidelity:
     declarations. This count is pinned to commit 160f0f3 and was reproduced
     after merge on main at 56c7531.
 
+    COUNT UPDATE (Tilting lane, heart increment), 2026-08-06. The 9 additional
+    records are BridgelandStabLean/Tilting/HeartTorsionPair.lean: the
+    HeartTorsionPair datum, the two tilted aisles with their isomorphism-closure
+    instances, the factorisation lemma and its uniqueness counterpart, the
+    orthogonality characterisation of the torsion class, and the Hom-vanishing
+    axiom. Audit count 616 -> 625. Coverage complete: 9 top-level declarations,
+    0 private, 9 named. 5 are theorems; 4 are constructions (1 structure, 2 def,
+    2 instance -- 6 constructions counting the instances, of which tiltLE and
+    tiltGE are `def ... : ObjectProperty C`).
+
     COUNT UPDATE (Wall lane), 2026-08-06. The 21 additional records are the
     whole of BridgelandStabLean/Wall/Numerical.lean: the class abbreviation and
     its three accessors, the two charge components, the three minors, the wall
@@ -497,10 +507,11 @@ fidelity:
     run and all three passed, at both lanes. With Mukai only: `lake build` at
     3780 jobs exit 0, `runLinter` clean, audit 563 records. With Tilting added: 3781 jobs, linter clean, audit 574 records. With Support added: 3782 jobs, linter clean,
     audit 585 records. With FiniteLength added: 3783 jobs, linter
-    clean, audit 595 records. With Wall added:
-    `lake build` at 3784 jobs exit 0, `runLinter` printed "Linting passed" with
+    clean, audit 595 records. With Wall added: 3784 jobs, linter clean, audit
+    616 records. With the Tilting heart increment added:
+    `lake build` at 3785 jobs exit 0, `runLinter` printed "Linting passed" with
     no findings, and `lake env lean scripts/Audit.lean | python
-    scripts/check_audit.py` accepted 616 records, all within
+    scripts/check_audit.py` accepted 625 records, all within
     [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
     build-log grep also passed.
 
@@ -560,7 +571,8 @@ fidelity:
   human_review: none
   machine_review: >
     THE MUKAI, TILTING, SUPPORT, FINITELENGTH AND WALL LANES HAVE HAD NO
-    REVIEW OF ANY KIND, 2026-08-06. All five were written
+    REVIEW OF ANY KIND, 2026-08-06, INCLUDING THE HEART INCREMENT ADDED LAST.
+    All of it was written
     and gate-run in a single session by the same agent (Claude Opus 5); no
     independent adversarial pass has been made over it, and no human has read
     it. Three of five CI gates were run locally and passed -- see
@@ -1067,6 +1079,39 @@ fidelity:
     lattice, NOT about a Kuznetsov component. The identification is geometry,
     is not expressible in Mathlib today, and is tracked as an unrealized
     assumption -- never discharged in this repo.
+
+    TILTING LANE, HEART INCREMENT: THE AISLES ARE NOT DEFINED THE USUAL WAY,
+    AND THE DEVIATION IS FORCED. The Happel-Reiten-Smalo aisles are normally
+    written with cohomology functors, D^{<=0}_dagger = {X in D^{<=0} : H^0(X) in
+    T}. MATHLIB HAS NO H^n FOR A T-STRUCTURE AT THE PIN -- TStructure/ carries
+    truncLE, truncGE and the truncation triangle but no cohomology functor into
+    the heart -- and the anchor's H0Functor has its homological property only as
+    case-by-case fragments in HeartEquivalence/H0Homological.lean, never
+    unconditionally. So the aisles are defined by HOM-ORTHOGONALITY instead,
+    which needs no cohomology functor: for X in D^{<=0} and F in the heart the
+    counit gives Hom(X,F) = Hom(H^0 X, F), and the torsion class is the left
+    orthogonal of the torsion-free class, so "H^0(X) in T" is equivalent to
+    "Hom(X,F) = 0 for every torsion-free F". The two formulations agree wherever
+    the usual one can be stated. But they are not literally the same definition,
+    and a reader comparing this file to a textbook must know that.
+
+    TILTING LANE: `zero'` IS PROVED, `exists_triangle_zero_one` IS NOT. Of the
+    fields of a Triangulated.TStructure, this increment supplies the
+    isomorphism-closure of both aisles and the Hom-vanishing axiom
+    (hom_eq_zero_of_tiltLE_of_tiltGE), the latter with no cohomology functor
+    anywhere in its proof. It carries [IsTriangulated C] explicitly: the
+    octahedral axiom is what makes tau^{>=0} preserve D^{<=0}, which is how the
+    truncation lands in the heart. NOT supplied: the shift compatibilities and
+    the two inclusions (ordinary index bookkeeping, not blocked), the dual
+    free_of_orthogonal (not needed for zero', not carried speculatively), and
+    exists_triangle_zero_one. That last is the octahedral-axiom step and needs
+    the long exact cohomology sequence of H^0 -- the same machinery that is
+    missing above. NOTHING IS DECLARED WITH SORRY; per CLAUDE.md section 2 the
+    unproved fields are simply absent.
+
+    SO THERE IS NO TILT IN THIS REPOSITORY. Do not cite Tilting/ as a
+    formalization of Happel-Reiten-Smalo. What exists is the input datum, the
+    aisles, and five of the six non-trivial axioms' worth of groundwork.
 
     WALL LANE: NO BOGOMOLOV-GIESEKER INEQUALITY IS ASSUMED, AND NONE IS
     AXIOMATISED. This is worth stating because the lane was SCOPED expecting to
