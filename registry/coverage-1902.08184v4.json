@@ -1,0 +1,191 @@
+{
+  "_readme": [
+    "Coverage map for arXiv:1902.08184v4 -- 'Stability conditions in families',",
+    "Bayer, Lahoz, Macri, Nuer, Perry, Stellari. Created for issue #87 under",
+    "epic #79 (stability-families).",
+    "",
+    "THIS IS NOT A TRUST RECORD AND NOT A MINT SURFACE. It is a zero-claim map",
+    "of the paper's structure onto statuses. formalization.yaml's `source`",
+    "remains the Bridgeland 2007 record, and registry/bridgeland2007.json",
+    "remains the only mint surface; nothing in this file changes either, and",
+    "nothing in this file may be cited as theorem coverage. The only status",
+    "that ever counts as coverage is 'formalized', and every entry below is",
+    "'target'.",
+    "",
+    "Validation: python scripts/check_coverage_map.py",
+    "Run it before and after every edit to this file. It fails on any status",
+    "outside the vocabulary, any non-target status without complete evidence,",
+    "and any corpus-derived identifier key.",
+    "",
+    "Update ownership: the owner (Chris Dare) promotes statuses; agents may",
+    "propose a promotion only by PR carrying the evidence fields the validator",
+    "demands, and 'formalized' additionally requires explicit owner acceptance",
+    "recorded in the entry. Adding sections, fixing titles against the pinned",
+    "PDF, and adding tracking links are ordinary edits; status promotion is",
+    "not.",
+    "",
+    "Quotes: none are minted here. When a quote is later needed it must be",
+    "checked directly against the v4 artifact identified in `source` -- never",
+    "against the arXMCP corpus, whose rows carry no arXiv version (see",
+    "`corpus_note`)."
+  ],
+  "schema": "coverage-map/1",
+  "created": "2026-08-08",
+  "issue": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/87",
+  "related_infrastructure": {
+    "registry": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/6",
+    "corpus_version_backfill": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/44"
+  },
+  "source": {
+    "title": "Stability conditions in families",
+    "authors": [
+      "Arend Bayer",
+      "Marti Lahoz",
+      "Emanuele Macri",
+      "Howard Nuer",
+      "Alexander Perry",
+      "Paolo Stellari"
+    ],
+    "arxiv_id": "1902.08184",
+    "arxiv_version": "v4",
+    "version_submitted_utc": "2022-01-25T12:16:53Z",
+    "version_history": [
+      { "version": "v1", "submitted_utc": "2019-02-21T18:53:42Z", "source_size": "145 KB" },
+      { "version": "v2", "submitted_utc": "2020-12-16T09:59:40Z", "source_size": "150 KB" },
+      { "version": "v3", "submitted_utc": "2021-03-19T10:47:46Z", "source_size": "156 KB" },
+      { "version": "v4", "submitted_utc": "2022-01-25T12:16:53Z", "source_size": "156 KB" }
+    ],
+    "latest_version_at_pin_time": "v4",
+    "journal_ref": "Publ. Math. IHES 133, 157-325 (2021)",
+    "doi": "10.1007/s10240-021-00124-6",
+    "msc_2010": "14A22, 14D20, 14F05, 14J28, 14M20, 14N35, 18E30",
+    "primary_category": "math.AG",
+    "pinned_from": "https://arxiv.org/abs/1902.08184 (version history, journal ref, DOI) and https://arxiv.org/pdf/1902.08184v4 (table of contents, read from the PDF whose margin banner reads 'arXiv:1902.08184v4 [math.AG] 25 Jan 2022'), both fetched 2026-08-08.",
+    "pdf_sha256": "6bf21d3f2db0852f910cd88790349a2e605adefe3d93185460272afa30af46c0",
+    "pdf_bytes": 1693653,
+    "pdf_pin_caveat": "The hash pins the artifact as served on 2026-08-08. arXiv PDFs are rendered from source and a re-render can change bytes without changing content; the DURABLE identity is (arxiv_id, v4, version_submitted_utc, doi). If a future fetch hashes differently, verify the margin banner and version_submitted_utc, then update the hash with a dated note rather than treating the mismatch as corruption."
+  },
+  "corpus_note": {
+    "notebook": "the local arXMCP bridgeland-stability corpus",
+    "chunk_count": 548,
+    "chunk_count_verified": "2026-08-08 against the live server (corpus_version 5636, metadata_status hydrated); the stored abstract matches the arXiv abstract",
+    "arxiv_version_in_corpus": "empty -- the corpus records arxiv_version = '' for every row in every notebook (issue #44), so no corpus row is evidence about v4 specifically",
+    "mint_rule": "No durable key in this repository may be derived from a chunk ID or a notebook slug. This file contains neither, and the validator fails if either kind of key is added. Rationale: chunk IDs are sha256(NFC(body_text))[:16] over corpus bytes of an UNVERSIONED fetch, so they are neither stable across corpus rebuilds nor attributable to v4."
+  },
+  "status_vocabulary": {
+    "target": "Named for future work. NO claim of any kind -- not mapped, not related, not partially done. This is the default and the only status any entry carries today.",
+    "mapped": "Specific Lean declarations have been identified as candidate counterparts of a specific v4 statement, with notes. Still no coverage claim; a mapping is a hypothesis. Requires evidence fields.",
+    "reviewed": "A binding to a v4 statement has been reviewed against the pinned artifact, quote checked directly against v4. Requires evidence fields naming the review document, reviewer, and date.",
+    "formalized": "Reviewed AND accepted by the owner, recorded in the entry. The only status that counts as coverage anywhere downstream."
+  },
+  "parts": [
+    {
+      "part": "front",
+      "title": "Front matter",
+      "status": "target",
+      "sections": [
+        { "n": 1, "title": "Introduction" },
+        { "n": 2, "title": "Setup, notation, and some terminology" }
+      ]
+    },
+    {
+      "part": "I",
+      "title": "Semiorthogonal decompositions and t-structures in families",
+      "status": "target",
+      "sections": [
+        { "n": 3, "title": "Semiorthogonal decompositions and base change" },
+        { "n": 4, "title": "Local t-structures" },
+        { "n": 5, "title": "Base change of local t-structures" },
+        { "n": 6, "title": "Flat, torsion, and torsion free objects" },
+        { "n": 7, "title": "Inducing local t-structures on semiorthogonal components" }
+      ]
+    },
+    {
+      "part": "II",
+      "title": "Moduli spaces",
+      "status": "target",
+      "sections": [
+        { "n": 8, "title": "Moduli of complexes" },
+        { "n": 9, "title": "Moduli of objects in a subcategory" },
+        { "n": 10, "title": "Fiberwise t-structures" },
+        { "n": 11, "title": "Quot spaces" }
+      ]
+    },
+    {
+      "part": "III",
+      "title": "Harder-Narasimhan structures over a curve",
+      "status": "target",
+      "sections": [
+        { "n": 12, "title": "Stability conditions and base change" },
+        { "n": 13, "title": "Harder-Narasimhan structures over a curve" },
+        { "n": 14, "title": "Weak stability conditions, tilting, and base change" },
+        { "n": 15, "title": "Weak Harder-Narasimhan structures over a curve" },
+        { "n": 16, "title": "Semistable reduction" },
+        { "n": 17, "title": "Torsion theories and Harder-Narasimhan structures" },
+        { "n": 18, "title": "Harder-Narasimhan structures via stability conditions on fibers" },
+        { "n": 19, "title": "Tilting weak Harder-Narasimhan structures over a curve" }
+      ]
+    },
+    {
+      "part": "IV",
+      "title": "Stability conditions over a higher-dimensional base",
+      "status": "target",
+      "sections": [
+        { "n": 20, "title": "Flat families of fiberwise (weak) stability conditions" },
+        { "n": 21, "title": "Stability conditions over S" },
+        { "n": 22, "title": "Deforming stability conditions over S" },
+        { "n": 23, "title": "Inducing stability conditions over S" }
+      ]
+    },
+    {
+      "part": "V",
+      "title": "Construction",
+      "status": "target",
+      "sections": [
+        { "n": 24, "title": "Main construction statements" },
+        { "n": 25, "title": "Tilting slope-stability in families" },
+        { "n": 26, "title": "Tilting tilt-stability in families of threefolds" },
+        { "n": 27, "title": "Stability conditions from degeneration" },
+        { "n": 28, "title": "Donaldson-Thomas invariants" }
+      ]
+    },
+    {
+      "part": "VI",
+      "title": "Moduli spaces for Kuznetsov components of cubic fourfolds",
+      "status": "target",
+      "sections": [
+        { "n": 29, "title": "Main applications to cubic fourfolds" },
+        { "n": 30, "title": "Stability conditions on families of Kuznetsov components" },
+        { "n": 31, "title": "Generalized Mukai's theorem" },
+        { "n": 32, "title": "Specializing Kuznetsov components to twisted K3 surfaces" },
+        { "n": 33, "title": "Proofs of the main results" }
+      ]
+    }
+  ],
+  "near_term_coordinates": [
+    {
+      "id": "sec-14-weak-stability-tilting",
+      "sections": [14],
+      "part": "III",
+      "status": "target",
+      "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/81",
+      "note": "Weak stability conditions and HRS tilting. The repository holds abstract HRS-tilt machinery (Tilting/HeartTorsionPair.lean, reviewed under #86 with agreement theorems from #94), but that machinery binds to NO statement of this paper and its review explicitly disclaimed any such connection. Promotion past 'target' starts from a specific v4 statement, not from the existence of related machinery."
+    },
+    {
+      "id": "sec-18-21-uniform-support",
+      "sections": [18, 21],
+      "part": "III/IV",
+      "status": "target",
+      "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/82",
+      "note": "Uniform quadratic support across a family. The repository's Support lane (Kontsevich-Soibelman reformulation, openness in the charge) is single-space and binds to no statement of this paper; its own trust text says it asserts nothing about semistable objects."
+    },
+    {
+      "id": "sec-20-23-families-interfaces",
+      "sections": [20, 21, 22, 23],
+      "part": "IV",
+      "status": "target",
+      "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/83",
+      "note": "The stability-conditions-over-S interfaces (flat families of fiberwise conditions, the over-S definition, deformation, induction). Nothing in the repository approaches these; every ingredient needs the geometric lane, which is closed. Recorded so the interface work of #83 has a fixed coordinate to aim at."
+    }
+  ]
+}

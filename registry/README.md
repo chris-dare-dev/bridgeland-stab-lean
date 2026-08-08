@@ -1,7 +1,9 @@
 # The statement registry
 
-`bridgeland2007.json` is the only hand-authored contract artifact in this repo,
-and the only place a citation key is minted. Everything else is measured.
+`bridgeland2007.json` is the only contract artifact in this repo, and the only
+place a citation key is minted. Everything else is measured. (One other
+hand-authored file lives in this directory — the `1902.08184v4` coverage map
+below — and it mints nothing.)
 
 Validate it with the contract package:
 
@@ -9,6 +11,29 @@ Validate it with the contract package:
 mfc registry validate registry/bridgeland2007.json \
   --frontier-kind-labels mathlib-gap,unproved-here,definitional-divergence
 ```
+
+## The 1902.08184v4 coverage map — not a mint surface
+
+`coverage-1902.08184v4.json` (issue #87) pins arXiv:1902.08184**v4**
+("Stability conditions in families", Bayer–Lahoz–Macrì–Nuer–Perry–Stellari,
+v4 of 2022-01-25, DOI 10.1007/s10240-021-00124-6) and maps its Parts I–VI and
+the near-term section coordinates (§14, §§18/21, §§20–23) onto statuses.
+**Every entry is `target`, which is a zero-claim status**; the only status
+that ever counts as coverage is `formalized`, which requires review evidence
+plus explicit owner acceptance, and nothing has it. The map does not touch
+`formalization.yaml`'s `source` (still the Bridgeland 2007 record), mints no
+key, and contains no corpus-derived identifier — the local arXMCP notebook
+holds 548 chunks of this paper but records no arXiv version (#44), so quotes,
+when they are eventually added, are checked directly against the pinned v4
+artifact, never against the corpus. Validate with:
+
+```sh
+python scripts/check_coverage_map.py
+```
+
+It fails on any status outside the vocabulary, any promotion without complete
+evidence, and any `chunk_id`/notebook-slug key. Status promotion is owned by
+the owner; agents propose it only by PR carrying the evidence fields.
 
 `kind_label` is a free per-topic string and `mfc lint` checks it against exactly
 the list you pass here, so **a new label must be added to this command in the
