@@ -70,7 +70,7 @@ today -- PR #97 moved the first two to 677 / 821 and nothing else.
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **481** real theorems, but it is a `def ... :
+  formatted identically to the **488** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
