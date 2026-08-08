@@ -299,34 +299,64 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-06 at 56c7531
-    via `scripts/check_audit.py` over the 497 declarations named in
+    No axiom declarations. Transitive closure enumerated 2026-08-07 at 418d423
+    via `scripts/check_audit.py` over the 670 declarations named in
     scripts/Audit.lean: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
-    Allowlist verdict: pass.
+    Allowlist verdict: pass. Observed both locally and on CI run 31225686077.
 
-    WHAT THIS COUNT IS AND IS NOT, corrected 2026-08-06. It is 497 NAMED
-    declarations, not "every declaration this project introduces". A direct
-    census of BridgelandStabLean/ finds 569 top-level declarations, so 72 are
-    outside the gate. 42 of those are `private` and are STRUCTURALLY
-    unlistable: Lean mangles a private name to
-    `_private.<Module>.<n>.<Name>`, so it cannot be written as a short name
-    from an importing module, and `scripts/Audit.lean`'s instruction "adding a
-    declaration to the library means adding it here" cannot be followed for
-    them. The other 29 (whose full list is in the review dossier for this
-    commit) are public declarations simply not yet added -- 20 of them in
-    GLTildeSurj.lean alone. Nothing detects the shortfall: check_audit.py never
-    reads the source tree, and Audit.lean fails to build only when a name it
-    ALREADY lists disappears, never when a name it should list appears.
+    This lead was last carried at "2026-08-06 at 56c7531 ... 497 declarations",
+    which was accurate as history and stale as a headline: the counts below had
+    moved seven times since. The lead states the CURRENT figure and its commit;
+    the COUNT UPDATE chain further down is the history and is not rewritten.
 
-    SECOND QUALIFICATION: 167 of the 497 entries are not theorems -- 121 def,
-    34 instance, 7 abbrev, 5 structure. For a `def`, `#print axioms` reports
+    WHAT THIS COUNT IS AND IS NOT, corrected 2026-08-06 and RE-MEASURED
+    2026-08-07 at 418d423. The figures below are no longer a source-text
+    estimate and are no longer maintained by arithmetic; they come from a sweep
+    of the built environment via `lake env lean scripts/Census.lean`, which
+    counts what Lean actually has rather than what a regex finds at column 0.
+    Re-run that command; do not adjust the numbers.
+
+    The previous revision of this block said 497 / 569 / 72 / 42 / 29 / 167.
+    Every one of those is now wrong, and two were wrong IN KIND rather than
+    only in size -- see the projection paragraph.
+
+    It is 670 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 814 AUTHORED declarations under
+    BridgelandStabLean.* -- authored excluding constructors, recursors,
+    casesOn, matchers, equation lemmas and internal names, none of which anyone
+    writes -- so 144 are outside the gate.
+
+    44 of those are `private` (42 of them theorems) and are STRUCTURALLY
+    unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
+    so it cannot be written as a short name from an importing module, and
+    `scripts/Audit.lean`'s instruction "adding a declaration to the library
+    means adding it here" cannot be followed for them. The earlier figure 42
+    was counting private THEOREMS; there are 44 private DECLARATIONS.
+
+    41 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
+    These are not a coverage gap in any useful sense and listing them would be
+    noise -- but they are 41 of the 100 ungated public names, so a census that
+    does not separate them overstates the real shortfall by two thirds. The
+    previous revision did not separate them and did not know they were there.
+
+    That leaves 59 public declarations simply not yet added -- still 20 of them
+    in GLTildeSurj.lean alone, which is the one figure the previous revision
+    got right and which has not moved. Nothing detects the shortfall
+    AUTOMATICALLY: check_audit.py never reads the source tree, and Audit.lean
+    fails to build only when a name it ALREADY lists disappears, never when a
+    name it should list appears. scripts/Census.lean reports it, but it is a
+    script someone runs, not a CI gate; a name added without a matching entry
+    still lands green.
+
+    SECOND QUALIFICATION: 189 of the 670 entries are not theorems -- 9
+    structure, 180 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "497 established
-    results".
+    that the proposition holds. Do not read this count as "670 established
+    results"; the theorem figure is 481.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -401,6 +431,19 @@ fidelity:
     lemmas. Audit count 659 -> 667. `tilt` is a `def`, so its clean axiom line
     reports the closure of a CONSTRUCTION; the propositions are the six field
     theorems it is built from.
+
+    COUNT UPDATE (Support lane, openness in the charge), 2026-08-07. The 3
+    additional records are hasSupportProperty_of_norm_sub_le (the perturbation
+    estimate, new constant C / (1 - C*eps)), HasSupportProperty.exists_tolerance
+    (openness with no topology on the space of charges), and
+    isOpen_hasSupportProperty (the IsOpen statement over V ->L[R] W). Audit
+    count 667 -> 670, pinned to commit 418d423. All three are theorems, so
+    unlike the Tilting entry below there is no construction among them. None
+    uses compactness or finite-dimensionality; all three are stated with
+    FiniteDimensional omitted, which makes them strictly more general than the
+    surrounding file. S remains an arbitrary subset and no anchor type,
+    triangulated category or geometric object appears, so this lane still
+    asserts nothing about semistable objects.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
@@ -544,7 +587,7 @@ fidelity:
     paragraph whose whole point is "do not quote a stale number" had quoted
     three of them.
   builds_clean: true
-  builds_clean_date: 2026-08-06
+  builds_clean_date: 2026-08-07
   builds_clean_note: >
     MUKAI AND TILTING LANES, 2026-08-06, on Windows 11 / x86_64, working tree
     at branch agent/mukai-lattice off 45f2fba. Three of CI's five gates were
@@ -554,12 +597,53 @@ fidelity:
     clean, audit 595 records. With Wall added: 3784 jobs, linter clean, audit
     616 records. With the Tilting heart increment added: 3785 jobs,
     linter clean, audit 625 records. With the indexed families added: 3785 jobs, linter
-    clean, audit 638 records. With the tilt completed, on main at 3ca176b:
+    clean, audit 638 records. With the tilt completed, on main at a3bfb8a:
     `lake build` at 3786 jobs exit 0, `runLinter` printed "Linting passed" with
     no findings, and `lake env lean scripts/Audit.lean | python
     scripts/check_audit.py` accepted 667 records, all within
     [propext, Classical.choice, Quot.sound], with no sorryAx. The no-sorry
     build-log grep also passed.
+
+    COMMIT PIN CORRECTED, 2026-08-07. The paragraph above said "on main at
+    3ca176b" for the 667-record observation. 3ca176b carries 659 records, not
+    667; 667 first appears at a3bfb8a, the merge of PR #76, which is the commit
+    the observation actually belongs to. Remeasured across the whole chain with
+    the file's own command, `git show <commit>:scripts/Audit.lean | grep -c
+    '^#print axioms '`: 2ab9a9b 655, aefda82 659, 3ca176b 659, 6941c85 659,
+    a3bfb8a 667, 7bf9c8a 667, 418d423 670. This is the SECOND time a count in
+    this file has been quoted against the wrong commit -- the note at the end of
+    the axiom_details chain records the first, and its closing line was "a
+    paragraph whose whole point is 'do not quote a stale number' had quoted
+    three of them". The lesson did not take. Pin a count by running the command
+    against the commit, not by carrying the number forward from the branch it
+    was observed on.
+
+    SUPPORT LANE OPENNESS, 2026-08-07, on main at 418d423. GitHub Actions run
+    31225686077, event push, conclusion success, ALL ELEVEN STEPS success with
+    none skipped -- lean-action, axiom gate, environment linters, no-sorry
+    build-log grep, `emit` with its non-zero-on-sorryAx behaviour, and both
+    uploads. The axiom gate reported "670 declarations, all within [propext,
+    Classical.choice, Quot.sound], no sorryAx". This is a merge-commit
+    observation, not a PR-branch one: PR #78's own run (31223798188) was also
+    green on all eleven, and both are recorded because a green PR does not
+    establish a green merge commit.
+
+    THE SAME FOUR GATES WERE RUN LOCALLY FIRST, on Windows 11 / x86_64, and
+    agree exactly: `lake build` 3786 jobs exit 0, audit elaboration exit 0,
+    check_audit "ok: 670 declarations", runLinter "Linting passed", zero
+    occurrences of "sorry" in the build log. The FIFTH, `lake exe emit`, again
+    could not be run locally -- it cannot LINK on Windows, per the PE
+    export-table limit recorded above -- so the emitter remains a CI-only
+    observation on this platform.
+
+    WHAT CHANGED ABOUT THAT LIMIT, AND WHAT DID NOT. The emitter still cannot be
+    linked on Windows and that has not been worked around. But the SWEEP it
+    performs is not blocked by the link failure: `lake env lean` runs the same
+    module-data walk through the interpreter and links nothing, which is what
+    scripts/Census.lean does and why the coverage figures above could be
+    measured on this workstation at all. Do not read this as the emitter gate
+    being available on Windows -- Census reports, it does not gate, and it does
+    not check axiom closures.
 
     SIMPNF CAUGHT A SECOND REAL DEFECT, in the FiniteLength lane: chargeOf_apply
     was marked @[simp] and rewrote the left-hand side of chargeOf_single before
