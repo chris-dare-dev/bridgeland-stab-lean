@@ -247,8 +247,7 @@ statable at the pin and not stated. For the aisle side (`H⁰(X) ∈ F` for
 `τ^{≤0}` and `free_of_orthogonal` — are both absent; the absence of
 `free_of_orthogonal` is disclosed, the absence of the dual factorisation is
 not. No Lean statement overclaims; the gap is between prose and formalized
-support. *Severity: low. Disposition: **separately tracked** — follow-up
-issue filed (see the issue-tracker cross-reference in the #86 thread) for the
+support. *Severity: low. Disposition: **separately tracked** — issue #94, for the
 named agreement lemma and, optionally, the dual pair.*
 
 **F2 — live trust text on `main` still denies the tilt exists.**
