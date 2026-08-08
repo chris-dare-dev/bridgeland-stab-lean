@@ -27,9 +27,9 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-08 after the H0 bridge port atop 91892c5. The figures below
-are no longer a source-text estimate and are no longer maintained by
-arithmetic. They come from a sweep of the built environment, so they count
+RE-MEASURED 2026-08-08 after the mass-triangle proof port atop 91892c5. The
+figures below are no longer a source-text estimate and are no longer maintained
+by arithmetic. They come from a sweep of the built environment, so they count
 what Lean actually has rather than what a regex can find at column 0:
 
 ```bash
@@ -39,11 +39,13 @@ lake build && lake env lean scripts/Census.lean
 The 2026-08-06 revision of this comment said **497 / 569 / 72 / 42 / 29 /
 167**; the 2026-08-07 one said 670 / 814. At the 91892c5 base, PR #97 moved
 those first two figures to 677 / 821 and the gated-theorem figure to 488. The
-polygon layer measured 773 / 930; the H0 bridge changes the environment to the
-figures below while the projection and pre-existing public-gap counts remain
-unchanged. **Re-run the command; do not adjust the numbers.**
+polygon and H0 layers measured 773 / 930 and then 800 / 957. The mass-triangle
+port adds 42 explicit public declarations, and Lean emits two public
+`congr_simp` companions in the module as well. The projection and pre-existing
+public-gap counts remain unchanged. **Re-run the command; do not adjust the
+numbers.**
 
-* It names **800** declarations. The environment holds **957** authored
+* It names **844** declarations. The environment holds **1001** authored
   declarations under `BridgelandStabLean.*`, so **157 are outside this gate**.
   ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
   lemmas and internal names, which nobody writes and nobody would list.)
@@ -68,11 +70,11 @@ unchanged. **Re-run the command; do not adjust the numbers.**
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **216 of the 800 are not theorems** (9 `structure`, 207 other constructions).
+* **221 of the 844 are not theorems** (9 `structure`, 212 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **584** real theorems, but it is a `def ... :
+  formatted identically to the **623** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -1083,9 +1085,56 @@ These extend the anchor's own namespace, since they are API for its types. -/
 /-! ## The octahedral reduction of the mass triangle inequality -/
 
 #print axioms CategoryTheory.Triangulated.stabilityMass_eq_ofReal_norm_charge
+#print axioms CategoryTheory.Triangulated.HNFiltration.exists_headTail_mass
 #print axioms CategoryTheory.Triangulated.exists_headTail_stabilityMass
 #print axioms CategoryTheory.Triangulated.StabilityMassSemistableTriangleInequality
 #print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable
+
+/-! ## StabilityMassTriangle — polygonal and heart proof -/
+
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_slicing
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_charge
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_Zobj
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_hasHN
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.mem_slicing_of_heart_isSemistable
+#print axioms CategoryTheory.Triangulated.norm_charge_le_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_one
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.actC_rotationGLPos
+#print axioms CategoryTheory.Triangulated.norm_actC_rotationGLPos
+#print axioms CategoryTheory.Triangulated.HNFiltration.rotateStability
+#print axioms CategoryTheory.Triangulated.HNFiltration.unrotateStability
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_rotateStability
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_unrotateStability
+#print axioms CategoryTheory.Triangulated.stabilityMass_liftedRotation
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_appendFactor
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_appendFactor
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_hn_separated
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_gtProp_leProp
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_heartCoh_negOne_add_zero
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_triangle
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₂_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_same_phase
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_same_phase
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one_of_obj₃_le_one
+#print axioms CategoryTheory.Triangulated.StabilityMassBoundaryHeartInequality
+#print axioms CategoryTheory.Triangulated.heartShortExact_exists_distinguished_triangle
+#print axioms CategoryTheory.Triangulated.phaseOne_endpoints_of_heart_shortExact
+#print axioms CategoryTheory.Triangulated.AbelianHNFiltration.mass_eq_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.stabilityMassBoundaryHeartInequality
+#print axioms CategoryTheory.Triangulated.stabilityMass_H0FunctorShift_negOne_zero_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_heartCoh_negOne_zero_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one_of_amplitude
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.stabilityMassSemistableTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityDistanceTopologyCompatible
+#print axioms CategoryTheory.Triangulated.someOctahedron'.congr_simp
+#print axioms CategoryTheory.Abelian.image.congr_simp
 
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 
