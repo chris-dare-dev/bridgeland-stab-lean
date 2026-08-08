@@ -358,29 +358,54 @@ the private and unlisted names `scripts/Audit.lean` structurally cannot.
 
 ---
 
-### 3.5 `gh pr merge --auto` does not gate anything on this repo
+### 3.5 `--auto` gated on nothing — until `main` was protected on 2026-08-07
 
-**`main` is not branch-protected.** `gh api repos/OWNER/REPO/branches/main/protection`
-returns `404 Branch not protected`.
+> **RESOLVED 2026-08-07 (later).** `main` is now branch-protected: the `build`
+> check is **required** and **`enforce_admins` is `true`**. The hazard below is
+> history. It is kept because the *shape* of the mistake recurs, and because the
+> first fix proposed for it would not have worked.
 
-Auto-merge only waits on *required status checks*. With no protection rule
-there are none, so `gh pr merge --auto` **merges immediately** and reports
-success. The second session used it specifically to avoid merging before CI
-finished, and it merged before CI finished. The run happened to be green.
+**What was wrong.** `gh pr merge --auto` waits only on *required status checks*.
+With no protection rule there were none, so it **merged immediately** and
+reported success. A session used it specifically to avoid merging before CI
+finished, and it merged before CI finished. The run happened to be green — luck,
+not verification.
 
-This is §3.3 in a third costume: a construct was trusted to enforce something
-it was not enforcing. The one-line check before relying on it:
+That was §3.3 in a second costume: a construct trusted to enforce something it
+was not enforcing. A third followed within the hour — a PR's latest run was
+`success`, but for its *first* commit, while the second had triggered no run at
+all. Three mechanisms, one outcome, and the prose fix for each did not prevent
+the next.
+
+**`enforce_admins` is the part that matters, and the first fix missed it.**
+"Require the `build` check" is not sufficient on its own: with
+`enforce_admins: false`, administrators **bypass required checks**. The token
+these sessions run under has `admin: true`, so protection configured that way
+would have been decorative for exactly the actor that caused every incident.
+It is set to `true` here, which also means **direct pushes to `main` are
+blocked** — everything goes through a PR, including the owner's.
+
+Verify the current state rather than trusting this paragraph:
 
 ```bash
-gh api repos/chris-dare-dev/bridgeland-stab-lean/branches/main/protection --jq '.required_status_checks.contexts'
+gh api repos/chris-dare-dev/bridgeland-stab-lean/branches/main/protection \
+  --jq '{contexts: .required_status_checks.contexts, enforce_admins: .enforce_admins.enabled}'
 ```
 
-Until that returns a check name, the only safe sequence is **wait, read the
-per-step list, then merge** — §3.3's command, not a flag.
+Expect `{"contexts": ["build"], "enforce_admins": true}`. **If it ever returns
+404 again, the protection was removed and every hazard above is live.**
 
-The durable fix is branch protection with the CI check required, which would
-also have made the 2026-08-07 breakage mechanically impossible. That is a repo
-settings change and belongs to the owner; an agent should not make it.
+**The discipline has not changed, only its backstop.** Protection stops a merge
+over a red or missing run; it does not tell you what failed, and it does not read
+the per-step list for you. An overall `success` with steps showing `-` (skipped)
+is still not everything passing — §3.3. Still: wait, read the steps, confirm the
+run's `headSha` matches the PR head, then merge.
+
+**One claim here is documented, not measured.** That `enforce_admins: false`
+lets admins bypass is GitHub's documented behaviour; nobody on this repo has
+observed it. What *was* measured is the settings reading back correctly after
+they were applied. Tracking in **#98**, which stays open until a merge is
+actually refused over a failing or unfinished check.
 
 ### 3.6 The environment sweep works on Windows even though the emitter does not
 
@@ -556,8 +581,9 @@ From `CLAUDE.md` and the owner's own rules. Not suggestions.
 - **Never `mkdir` + `git init` a repository anywhere** without an explicit OK for
   that specific repo.
 - **Push is per-event authorization.** One "yes, push" does not authorize the
-  next. Re-ask. Same for merge. And **`--auto` is not a substitute for waiting**
-  — on this unprotected repo it merges immediately, §3.5.
+  next. Re-ask. Same for merge. **`--auto` now has something real to wait on** —
+  `main` was protected on 2026-08-07 with `build` required and `enforce_admins`
+  true — but that is a backstop, not a substitute for reading the run. §3.5.
 - **Never `--no-verify`, never `--no-gpg-sign`.**
 - **No bare "verified."** No single token may collapse distinct trust axes.
 - **Local-LLM policy:** qwen produces, Claude reviews. Claude is always the
