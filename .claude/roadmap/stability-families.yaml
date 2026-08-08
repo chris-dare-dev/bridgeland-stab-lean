@@ -1,0 +1,196 @@
+schema: roadmap/1
+slug: stability-families
+project: bridgeland-stab-lean
+title: "Stability conditions in families — from absolute foundations to relative moduli"
+status: active
+phase: sequenced
+brief: |
+  Treat Bayer–Lahoz–Macrì–Nuer–Perry–Stellari, Stability conditions in
+  families, arXiv:1902.08184v4, as a program-level north star rather than a
+  single theorem milestone. The current repository has strong absolute and
+  numerical foundations: group actions, the stability distance, an
+  independently reviewed HRS t-structure, an abstract support-property lane,
+  and numerical wall nesting away from the charge-zero locus. A reviewed draft
+  stack now recovers ordinary HN-mass subadditivity at t = 0, but it has not
+  landed on main.
+
+  The repository does not have the coherent-sheaf, relative derived-category,
+  boundedness, Quot, stack, or moduli infrastructure required by the paper.
+  This roadmap lands the recovered absolute layer while beginning the paper's
+  weak-stability/tilting spine, and keeps every geometric dependency visible
+  and owned outside this repository.
+
+goal:
+  hmw: "How might we advance from an honest absolute Bridgeland foundation to stability conditions in families while making every geometric and moduli dependency explicit?"
+  objective: "Formalize the reusable abstract spine of arXiv:1902.08184v4, recover the unfinished absolute proof chain, and establish typed cross-repository boundaries for the geometric and moduli program."
+  key_results:
+    - "The absolute stability topology no longer accepts HN-mass subadditivity as an external premise, and the recovered proof has current CI plus independent mathematical review."
+    - "The HRS t-structure is reviewed, its heart is related to the textbook extension closure under explicit hypotheses, and §14 weak-stability tilting is formalized without geometric assumptions."
+    - "Support is expressed by a genuine bundled quadratic form on semistable classes and has an explicitly separate uniform-in-families layer."
+    - "The five conditions in Definitions 20.5 and 21.15 are represented separately and have a concrete constant-family nonvacuity witness before Theorem 22.2 is targeted."
+    - "Every result mapped to this program is pinned to 1902.08184v4 and defaults to target/no-claim until its statement and proof have been reviewed."
+    - "Coherent-sheaf, derived, Quot, boundedness, stack, and good-moduli work is tracked in its owning repository or upstream package, never hidden behind an axiom here."
+  assumptions:
+    - tier: must
+      text: "The dormant HN mass-triangle branch contains reusable correct mathematics after it is ported onto current main."
+      validation: "Validated slice-by-slice in signed draft PRs #95, #100, and #103. Exact refreshed heads 950d51e, 20cad85, and ae5c369 passed independent review and GitHub CI; the stack remains unmerged."
+    - tier: must
+      text: "The Hom-orthogonal HRS aisles agree with the textbook cohomological formulation under hypotheses expressible at the pinned anchor."
+      validation: "Validated by the independent PR #76 review merged in PR #93 and the two-sided textbook-agreement theorems merged in PR #97; issue #94 is closed. The tilted-heart extension characterization remains separately scoped as #106."
+    - tier: should
+      text: "Useful relative-HN interfaces can be stated abstractly before the full geometric substrate exists."
+      validation: "Require a constant-family model and explicit type-level premises; a structure with no inhabitant does not count."
+    - tier: should
+      text: "Quot, algebraic stacks, and good-moduli foundations should be reusable beyond this paper."
+      validation: "The parked cross-repo epic must select an upstream or separate-package owner before implementation begins."
+  wont:
+    - "No wholesale merge of origin/agent/hn-mass-triangle-chain; only reviewed current-main slices."
+    - "No coherent-sheaf, derived-category, semiorthogonal-decomposition, or moduli implementation in bridgeland-stab-lean while CLAUDE.md §4 closes that lane."
+    - "No placeholder axiom, sorry-backed instance, or vacuous structure to make a paper definition typecheck."
+    - "No claim that ingestion in arXMCP establishes paper coverage or source-version identity."
+    - "No claim of Theorems 22.2, 24.1, or 29.2 until their geometric, boundedness, and moduli prerequisites are formalized."
+  evidence:
+    - "arXiv:1902.08184v4 — authoritative paper version, 146 pages, Parts I–VI."
+    - "PR #93 — independent declaration-by-declaration review of PR #76's HRS t-structure; owner dispositions recorded in issue #86."
+    - "PR #97 — both Hom-orthogonal aisles connected to the textbook truncation formulation; issue #94 closed."
+    - "PRs #95, #100, and #103 — signed, independently reviewed mass-triangle recovery stack with exact-head CI at 950d51e, 20cad85, and ae5c369."
+    - "PR #101 — 1902.08184v4 source pin and zero-claim coverage map; all theorem promotions remain review-gated."
+    - "coherent-sheaves-lean/ROADMAP.md — B1–B5 geometric substrate and explicit HRR trust boundary."
+    - "arXMCP bridgeland-stability notebook — paper present with 548 chunks; ingestion alone is not a source-binding claim."
+
+generated_by: { agent: codex, at: "2026-08-08" }
+generations:
+  - { rev: 1, at: "2026-08-07", note: "Initial program materialized as GitHub milestones #6–#9, epics #79–#84, and active SF0 children #85–#90." }
+  - { rev: 2, at: "2026-08-08", note: "Refreshed after #85–#87 and #94 completed, the #88–#90 recovery stack reached reviewed green drafts, and SF1 children #106–#111 were materialized." }
+retired: []
+
+# GitHub milestones are roadmap phases. Epic issues live inside them, and
+# gh_sub_issues records native GitHub sub-issue relationships. IDs are
+# write-once; retire an item instead of reusing its id.
+items:
+  - id: stability-families-m0
+    gh_milestone: 6
+    kind: milestone
+    title: "SF0 — Stabilize and recover"
+    status: in_progress
+    lane: now
+    acceptance:
+      - "Current trust prose agrees with merged HRS, wall, support, and census declarations."
+      - "The HRS tilt has an independent, commit-pinned mathematical review."
+      - "The paper target is pinned as 1902.08184v4 without altering the Bridgeland 2007 source record."
+      - "The mass-triangle chain is recovered as reviewed slices, merged in dependency order, and the global proposition is inhabited on main."
+
+  - id: stability-families-e1
+    gh_issue: 79
+    gh_sub_issues: [85, 86, 87]
+    kind: epic
+    parent: stability-families-m0
+    title: "Stabilize the current abstract foundation"
+    status: done
+    summary: "Issues #85, #86, and #87 are closed; the independent HRS review, two-sided aisle-agreement theorems, and versioned zero-claim paper map are on main. Follow-up #94 is closed; residual stale HRS commentary in formalization.yaml and scripts/Audit.lean remains outside this roadmap-only refresh."
+    priority: must
+    size: M
+    tags: [trust, review, source-pin]
+    links:
+      issues: [6, 44, 51, 60, 94]
+
+  - id: stability-families-e2
+    gh_issue: 80
+    gh_sub_issues: [88, 89, 90]
+    kind: epic
+    parent: stability-families-m0
+    title: "Recover the mass-triangle chain and uncondition the topology"
+    status: in_progress
+    summary: "The three reviewed slices are published as draft PRs #95, #100, and #103 with refreshed exact-head CI. They must still merge in dependency order before #80 and SF0 can close."
+    priority: must
+    size: XL
+    tags: [lean, hn, topology, recovery]
+    links:
+      branch: ["origin/agent/hn-mass-triangle-chain@716c0d1"]
+      pull_requests: [95, 100, 103]
+
+  - id: stability-families-m1
+    gh_milestone: 7
+    kind: milestone
+    title: "SF1 — Weak stability and tilting (§14)"
+    status: in_progress
+    lane: now
+    acceptance:
+      - "Weak stability, zero-charge subcategories, and the tilting property are formalized."
+      - "The current HRS heart is connected to the textbook extension-closure formulation under explicit hypotheses."
+      - "Proposition 14.16 and Lemma 14.17 have reviewed v4 source bindings."
+
+  - id: stability-families-e3
+    gh_issue: 81
+    gh_sub_issues: []
+    kind: epic
+    parent: stability-families-m1
+    title: "Formalize weak stability and HRS tilting from §14"
+    status: in_progress
+    summary: "The §14 program is decomposed into the tilted-heart bridge (#106), weak structures and zero-charge subcategory (#107), termination results (#108), slope torsion pair (#109), tilted weak stability (#110), and source-promotion protocol (#111). The six issues exist and name #81 as parent in prose; native GitHub sub-issue linkage is still pending."
+    priority: must
+    size: XL
+    tags: [stability, tilting, paper-spine]
+    links:
+      issues: [106, 107, 108, 109, 110, 111]
+
+  - id: stability-families-m2
+    gh_milestone: 8
+    kind: milestone
+    title: "SF2 — Uniform support and families (§§18–23)"
+    status: planned
+    lane: later
+    acceptance:
+      - "A genuine quadratic form controls semistable classes and is packaged uniformly over an indexed family."
+      - "Definitions 20.5 and 21.15 are decomposed into separately auditable fields."
+      - "A concrete constant-family model prevents vacuity."
+      - "Theorem 22.2 remains conditional on every named geometric and moduli premise until those premises exist."
+
+  - id: stability-families-e4
+    gh_issue: 82
+    gh_sub_issues: []
+    kind: epic
+    parent: stability-families-m2
+    title: "Upgrade to uniform quadratic support (§§18, 21)"
+    status: planned
+    summary: "Replace the current homogeneous-function/arbitrary-set boundary with the quadratic and semistable-class structures the paper actually uses, reusing PR #78 only for perturbation openness."
+    priority: must
+    size: L
+    tags: [support, quadratic-form, uniformity]
+
+  - id: stability-families-e5
+    gh_issue: 83
+    gh_sub_issues: []
+    kind: epic
+    parent: stability-families-m2
+    title: "Define nonvacuous stability-in-families interfaces (§§20–23)"
+    status: blocked
+    summary: "Represent the five family conditions and relative HN interfaces with concrete nonvacuity, while keeping Theorem 22.2's geometric and moduli inputs explicit."
+    priority: should
+    size: XL
+    tags: [families, relative-hn, blocked]
+
+  - id: stability-families-m3
+    gh_milestone: 9
+    kind: milestone
+    title: "SF3 — Geometry and moduli prerequisites"
+    status: planned
+    lane: later
+    acceptance:
+      - "coherent-sheaves-lean has crossed the required B1–B5 gates with linked evidence."
+      - "Ownership and reusable APIs are chosen for Quot, stacks, boundedness, semistable reduction, and good moduli."
+      - "Only then are Theorems 22.2, 24.1, and the Part VI applications decomposed into implementation milestones."
+
+  - id: stability-families-e6
+    gh_issue: 84
+    gh_sub_issues: []
+    kind: epic
+    parent: stability-families-m3
+    title: "Coordinate geometric and moduli prerequisites across repositories"
+    status: blocked
+    summary: "Parked cross-repository coordination epic. No geometric implementation or placeholder axiom belongs in this repository."
+    priority: should
+    size: XL
+    tags: [cross-repo, parked, geometry, moduli]
+    links:
+      repositories: [coherent-sheaves-lean, mathlib4]
