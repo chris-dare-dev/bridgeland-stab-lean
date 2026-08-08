@@ -71,11 +71,11 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **733** declarations (707 at the #105 gap closure, plus the 3
-  tilted-heart theorems of #106 and the 23 WeakStability records of #107).
-  The environment holds **825** authored declarations under
-  `BridgelandStabLean.*`, so **92 are outside this gate**, all of them
-  private or projections. ("Authored" excludes constructors,
+* It names **743** declarations (707 at the #105 gap closure, plus the 3
+  tilted-heart theorems of #106, the 23 WeakStability records of #107, and
+  the 10 noetherian-torsion records of #108). The environment holds **844**
+  authored declarations under `BridgelandStabLean.*`, so **101 are outside
+  this gate**, all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
@@ -84,8 +84,8 @@ this comment are unaffected by it:
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **48 are structure field projections** emitted by the `structure` command
-  (41 before the three WeakStability structures).
+* **57 are structure field projections** emitted by the `structure` command
+  (41 before the five WeakStability structures).
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -107,12 +107,12 @@ this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **201 of the 733 are not theorems** (12 `structure`, 189 other
+* **208 of the 743 are not theorems** (14 `structure`, 194 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **532** real theorems, but it is a `def ... :
+  formatted identically to the **535** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -382,6 +382,25 @@ docstring and #111). -/
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge_left
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge_right
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge_extension
+
+/-! ## WeakStability lane -- noetherian torsion subcategories
+
+Definition 14.6 in Remark 14.7's chain form (the design decision is in the
+module docstring), the free = B-perp identification riding on
+free_of_orthogonal, and the zero-subcategory nonvacuity witness. Lemmas
+14.8 and 14.11 are deliberately UNDECLARED with their gaps named in the
+module -- absent beats sorry-backed. Closes #108. -/
+
+#print axioms WeakStability.IsHeartMono
+#print axioms WeakStability.SubobjectChain
+#print axioms WeakStability.SubobjectChain.Terminates
+#print axioms WeakStability.NoetherianTorsionSubcategory
+#print axioms WeakStability.rightOrthogonal
+#print axioms WeakStability.free_iff_rightOrthogonal
+#print axioms WeakStability.isIso_of_isZero
+#print axioms WeakStability.zeroTorsionPair
+#print axioms WeakStability.zeroNoetherianTorsion
+#print axioms WeakStability.noetherian_mono
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

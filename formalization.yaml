@@ -342,14 +342,15 @@ fidelity:
     taken at this tree, not a property the build maintains; the next
     declaration added anywhere lands green without an entry. #107's
     WeakStability lane then adds 23 records and 7 structure field
-    projections: 733 named, 825 authored, 92 outside, gap still zero.
+    projections, and #108's noetherian-torsion layer 10 records and 9 more
+    projections: 743 named, 844 authored, 101 outside, gap still zero.
 
-    It is 733 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 825 AUTHORED declarations under
+    It is 743 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 844 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas, internal names, and the four
-    generated families #105's census correction filters -- so 92 are outside
-    the gate.
+    generated families #105's census correction filters -- so 101 are
+    outside the gate.
 
     44 of those are `private` (42 of them theorems) and are STRUCTURALLY
     unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
@@ -358,7 +359,7 @@ fidelity:
     means adding it here" cannot be followed for them. The earlier figure 42
     was counting private THEOREMS; there are 44 private DECLARATIONS.
 
-    48 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
+    57 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
     These are not a coverage gap in any useful sense and listing them would be
     noise.
 
@@ -372,14 +373,14 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 201 of the 733 entries are not theorems -- 12
-    structure, 189 other constructions. For a `def`, `#print axioms` reports
+    SECOND QUALIFICATION: 208 of the 743 entries are not theorems -- 14
+    structure, 194 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "733 established
-    results"; the theorem figure is 532.
+    that the proposition holds. Do not read this count as "743 established
+    results"; the theorem figure is 535.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -513,6 +514,26 @@ fidelity:
     report axiom closures of DEFINITIONS. No statement of 1902.08184v4 is
     claimed as covered; the coverage map stays all-target pending #111's
     protocol.
+
+    COUNT UPDATE (WeakStability lane, noetherian torsion), 2026-08-08. The
+    10 additional records close #108: heart monomorphisms (cone-in-heart),
+    subobject chains with their termination predicate,
+    NoetherianTorsionSubcategory -- Definition 14.6 with Remark 14.7's chain
+    characterisation AS the definition, the recorded decision being that the
+    pin has no abelian instance on the heart and every section-14 use runs
+    on chain termination -- the right orthogonal, the theorem
+    free_iff_rightOrthogonal identifying a torsion pair's free class with
+    B-perp (the #94 dual's payoff), the zero-object iso lemma, the
+    degenerate zeroTorsionPair, the zeroNoetherianTorsion nonvacuity
+    witness, and chain-condition inheritance along sub-properties. Audit
+    733 -> 743, measured on the #108 branch. 3 are theorems, 7
+    constructions (2 structure, 5 def); 0 private, 10 named; 9 new
+    projections (48 -> 57). LEMMAS 14.8 AND 14.11 ARE DELIBERATELY
+    UNDECLARED, with what their proofs need named in the module docstring:
+    heart kernel/image machinery (the abelian instance, Mathlib's own
+    TODO), the weak-HN existence layer (Lemma 14.4's content), and a
+    formalization decision for "Z over Q[i]". Absent beats sorry-backed. No
+    statement of 1902.08184v4 is claimed as covered.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three

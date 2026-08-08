@@ -538,6 +538,16 @@ subcategory `A⁰` is closed under subobjects, quotients and extensions, by
 slicing and charge definitionally (`ofPre_slicing`, `ofPre_Z`), and `toWeak`
 weakens strict stability functions.
 
+**Noetherian torsion subcategories** (#108): Definition 14.6, with Remark
+14.7's chain condition *as* the definition — the pin has no abelian instance
+on the heart, and every §14 use runs on chain termination. A torsion pair's
+free class is proved to be `B^⊥` (`free_iff_rightOrthogonal`, the payoff of
+#94's `free_of_orthogonal`), and the zero subcategory is the nonvacuity
+witness. **Lemmas 14.8 and 14.11 are deliberately undeclared** — statable,
+but their proofs need heart kernel/image machinery, the weak-HN layer, and a
+`ℚ[i]`-discreteness decision; the gaps are named in the module. Absent beats
+sorry-backed.
+
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
 heart triangle, as in the Tilting lane — the pin has no abelian instance on
 the heart. And the paper's `K(A)` is the ambient `K₀ C` here, positivity
