@@ -306,6 +306,39 @@ under the #81 weak-stability epic; abstract, bound to no source coordinate. -/
 #print axioms Tilting.HeartTorsionPair.exists_triangle_of_tilt_heart
 #print axioms Tilting.HeartTorsionPair.tilt_heart_iff
 
+/-! ## WeakStability lane -- the section-14 definitions
+
+Definitions 14.1-14.3 of 1902.08184v4 on the abstract layer, plus the
+ordinary-into-weak embeddings and the closure properties of the zero-charge
+subcategory. The three `structure`s and the constructions among these report
+axiom closures of DEFINITIONS; the embedding and closure results are the
+theorems. Closes #107; no source binding is claimed (see the module
+docstring and #111). -/
+
+#print axioms WeakStability.WeakPreStabilityCondition
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre_slicing
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre_Z
+#print axioms WeakStability.WeakStabilityFunction
+#print axioms WeakStability.StabilityFunction
+#print axioms WeakStability.StabilityFunction.toWeak
+#print axioms WeakStability.StabilityFunction.toWeak_Z
+#print axioms WeakStability.WeakStabilityFunction.charge
+#print axioms WeakStability.WeakStabilityFunction.charge_triangle
+#print axioms WeakStability.WeakStabilityFunction.charge_triangle'
+#print axioms WeakStability.WeakStabilityFunction.charge_isZero
+#print axioms WeakStability.WeakStabilityFunction.slope
+#print axioms WeakStability.WeakStabilityFunction.slope_of_im_pos
+#print axioms WeakStability.WeakStabilityFunction.slope_of_im_nonpos
+#print axioms WeakStability.WeakStabilityFunction.IsSemistable
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_def
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_isClosedUnderIsomorphisms
+#print axioms WeakStability.WeakStabilityFunction.charge_eq_zero_pair
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_left
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_right
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_extension
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
