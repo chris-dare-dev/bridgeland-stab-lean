@@ -41,13 +41,17 @@ H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every F ∈ F.
 
 The right-hand side is what `tiltLE` says. It is equivalent to the usual
 definition wherever the usual definition can be stated, and it is available
-here, where the usual one is not.
+here, where the usual one is not. That equivalence is not only prose: with
+`τ^{≥0}` (resp. `τ^{≤0}`) in the role of `H⁰`, it is the theorems
+`tiltLE_iff_tors_truncGE` and `tiltGE_iff_free_truncLE` at the end of this
+file.
 
 ## Status
 
 Established here: the datum, the aisles at every integer level with their
-isomorphism-closure, the factorisation lemma standing in for the counit, and
-the orthogonality characterisation of the torsion class.
+isomorphism-closure, both factorisation lemmas standing in for the two counit
+isomorphisms, the orthogonality characterisations of both classes, and the
+agreement of both aisles with the textbook `H⁰` formulation.
 
 All six non-trivial `TStructure` fields are proved, and `tilt` assembles them.
 `exists_triangle_zero_one` — the last and hardest — is `exists_tilt_triangle`,
@@ -134,10 +138,13 @@ instance tiltGE_isClosedUnderIsomorphisms : P.tiltGE.IsClosedUnderIsomorphisms w
     calc f = (f ≫ e.inv) ≫ e.hom := by simp
     _ = 0 := by rw [this, zero_comp]
 
-/-! ### The factorisation lemma
+/-! ### The factorisation lemmas
 
 Everything the Hom-vanishing axiom needs, and the substitute for the counit
-isomorphism `Hom(X, F) ≅ Hom(H⁰X, F)` that a cohomology functor would supply. -/
+isomorphism `Hom(X, F) ≅ Hom(H⁰X, F)` that a cohomology functor would supply.
+The dual pair below it is the substitute for the other adjunction's
+`Hom(T, X) ≅ Hom(T, H⁰X)`, and is what the aisle-side textbook agreement
+(`freeOrth_iff_free_truncLE`) runs on. -/
 
 /-- **Every map into `D^{≥0}` factors through the truncation `τ^{≥0}`.**
 
@@ -170,6 +177,42 @@ theorem factor_truncGE_unique {X F : C} (hF : t.IsGE F 0)
       (t.isLE_shift _ (0 - 1) 1 (0 - 1 - 1) (by lia)) hF
   rw [hh', hzero, comp_zero]
 
+/-- **Every map from `D^{≤0}` factors through the truncation `τ^{≤0}`.**
+
+The dual of `exists_factor_truncGE`. When additionally `X ∈ D^{≥0}` the source
+`τ^{≤0}X` lies in the heart and plays the role of `H⁰(X)`, so this is what
+lets an orthogonality hypothesis on `X` be transported to one on `H⁰(X)` from
+the torsion side.
+
+As with its dual, no hypothesis on `X` is needed: the truncation triangle
+exists for every object, and `Hom(A, τ^{≥1}X)` vanishes for degree reasons
+alone. -/
+theorem exists_factor_truncLE {A X : C} (hA : t.IsLE A 0) (f : A ⟶ X) :
+    ∃ g : A ⟶ ((t.triangleLTGE 1).obj X).obj₁,
+      f = g ≫ ((t.triangleLTGE 1).obj X).mor₁ := by
+  refine Triangle.coyoneda_exact₂ _ (t.triangleLTGE_distinguished 1 X) f ?_
+  exact t.zero_of_isLE_of_isGE _ 0 1 (by lia) hA inferInstance
+
+/-- The factorisation is unique: `τ^{≤0}X` really does represent maps from
+`D^{≤0}` into `X`, not merely dominate them. The inverse rotation replaces
+the rotation of the dual proof, and no rotation sign is ever inspected. -/
+theorem factor_truncLE_unique {A X : C} (hA : t.IsLE A 0)
+    {g₁ g₂ : A ⟶ ((t.triangleLTGE 1).obj X).obj₁}
+    (h : g₁ ≫ ((t.triangleLTGE 1).obj X).mor₁
+       = g₂ ≫ ((t.triangleLTGE 1).obj X).mor₁) :
+    g₁ = g₂ := by
+  rw [← sub_eq_zero]
+  obtain ⟨k, hk⟩ := Triangle.coyoneda_exact₂ _
+    (inv_rot_of_distTriang _ (t.triangleLTGE_distinguished 1 X)) (g₁ - g₂)
+    (by
+      show (g₁ - g₂) ≫ ((t.triangleLTGE 1).obj X).mor₁ = 0
+      rw [Preadditive.sub_comp, h, sub_self])
+  have hk0 : k = 0 :=
+    t.zero_of_isLE_of_isGE k 0 2 (by lia) hA
+      (t.isGE_shift _ 1 (-1) 2 (by lia))
+  rw [hk, hk0]
+  exact zero_comp
+
 /-! ### Orthogonality characterisations
 
 Each class is the orthogonal of the other *inside the heart*. The forward
@@ -193,6 +236,27 @@ theorem tors_of_orthogonal {A : C} (hle : t.IsLE A 0) (hge : t.IsGE A 0)
     exact comp_zero
   haveI : IsIso i := (Triangle.isZero₃_iff_isIso₁ _ hdist).mp hYzero
   exact ObjectProperty.prop_of_iso P.tors (asIso i) hT
+
+/-- An object of the heart with no nonzero map from a torsion object is
+torsion-free. The dual of `tors_of_orthogonal`: the inverse rotation replaces
+the rotation, and no rotation sign is ever inspected. -/
+theorem free_of_orthogonal {A : C} (hle : t.IsLE A 0) (hge : t.IsGE A 0)
+    (h : ∀ T : C, P.tors T → ∀ u : T ⟶ A, u = 0) : P.free A := by
+  obtain ⟨T, F, hT, hF, i, p, d, hdist⟩ := P.exists_triangle A hle hge
+  haveI := P.free_isGE F hF
+  have hTzero : IsZero T := by
+    obtain ⟨k, hk⟩ := Triangle.coyoneda_exact₂ _ (inv_rot_of_distTriang _ hdist) (𝟙 T)
+      (by
+        show 𝟙 T ≫ i = 0
+        rw [Category.id_comp]
+        exact h T hT i)
+    have hk0 : k = 0 :=
+      t.zero_of_isLE_of_isGE k 0 1 (by lia) (P.tors_isLE T hT)
+        (t.isGE_shift F 0 (-1) 1 (by lia))
+    rw [IsZero.iff_id_eq_zero, hk, hk0]
+    exact zero_comp
+  haveI : IsIso p := (Triangle.isZero₁_iff_isIso₂ _ hdist).mp hTzero
+  exact ObjectProperty.prop_of_iso P.free (asIso p).symm hF
 
 /-! ### The Hom-vanishing axiom
 
@@ -513,6 +577,82 @@ check on the indexing rather than as a result. -/
 theorem tilt_le_zero_iff [IsTriangulated C] (X : C) :
     (P.tilt).le 0 X ↔ (t.IsLE X 0 ∧ P.torsOrth (X⟦(0 : ℤ)⟧)) := Iff.rfl
 
+/-! ### Agreement with the textbook aisles
+
+The module docstring claims the Hom-orthogonal aisles agree with the textbook
+`H⁰` formulation wherever the latter can be stated. At this pin the textbook
+side **is** statable, with `τ^{≥0}` (resp. `τ^{≤0}`) in the role of `H⁰` on
+`D^{≤0}` (resp. `D^{≥0}`), and the four theorems below are that claim. Each
+direction is the factorisation lemma on one side and the orthogonality
+characterisation or the `hom_eq_zero` axiom on the other; `[IsTriangulated C]`
+is what puts the truncation in the heart, exactly as in `zero'`. -/
+
+/-- **The co-aisle orthogonality condition is the textbook `H⁰` condition**:
+for `X ∈ D^{≤0}`, orthogonality to the torsion-free class is torsionness of
+`τ^{≥0}X`. -/
+theorem torsOrth_iff_tors_truncGE [IsTriangulated C] {X : C} (hX : t.IsLE X 0) :
+    P.torsOrth X ↔ P.tors ((t.truncGE 0).obj X) := by
+  haveI := hX
+  have hobj : ((t.triangleLTGE 0).obj X).obj₃ = (t.truncGE 0).obj X := rfl
+  rw [← hobj]
+  constructor
+  · intro horth
+    have hle3 : t.IsLE (((t.triangleLTGE 0).obj X).obj₃) 0 := by
+      rw [hobj]; infer_instance
+    refine P.tors_of_orthogonal hle3 inferInstance ?_
+    intro Z hZ u
+    refine factor_truncGE_unique (P.free_isGE Z hZ) ?_
+    rw [comp_zero]
+    exact horth Z hZ _
+  · intro htors F hF f
+    obtain ⟨g, hg⟩ := exists_factor_truncGE (P.free_isGE F hF) f
+    rw [hg, P.hom_eq_zero htors hF g]
+    exact comp_zero
+
+/-- **The aisle orthogonality condition is the textbook `H⁰` condition**: for
+`X ∈ D^{≥0}`, orthogonality to the torsion class is torsion-freeness of
+`τ^{≤0}X`. -/
+theorem freeOrth_iff_free_truncLE [IsTriangulated C] {X : C} (hX : t.IsGE X 0) :
+    P.freeOrth X ↔ P.free ((t.truncLE 0).obj X) := by
+  haveI := hX
+  have hobj : ((t.triangleLTGE 1).obj X).obj₁ = (t.truncLE 0).obj X := rfl
+  rw [← hobj]
+  constructor
+  · intro horth
+    have hge1 : t.IsGE (((t.triangleLTGE 1).obj X).obj₁) 0 := by
+      rw [hobj]; infer_instance
+    have hle1 : t.IsLE (((t.triangleLTGE 1).obj X).obj₁) 0 :=
+      t.isLE_of_le _ (1 - 1) 0 (by lia)
+    refine P.free_of_orthogonal hle1 hge1 ?_
+    intro T hT u
+    refine factor_truncLE_unique (P.tors_isLE T hT) ?_
+    rw [zero_comp]
+    exact horth T hT _
+  · intro hfree T hT f
+    obtain ⟨g, hg⟩ := exists_factor_truncLE (P.tors_isLE T hT) f
+    rw [hg, P.hom_eq_zero hT hfree g]
+    exact zero_comp
+
+/-- **The tilted co-aisle is the textbook one**: `X ∈ D^{≤0}_†` iff
+`X ∈ D^{≤0}` and `H⁰(X) ∈ T`, with `τ^{≥0}X` in the role of `H⁰(X)`. -/
+theorem tiltLE_iff_tors_truncGE [IsTriangulated C] (X : C) :
+    P.tiltLE X ↔ t.IsLE X 0 ∧ P.tors ((t.truncGE 0).obj X) := by
+  constructor
+  · rintro ⟨hle, horth⟩
+    exact ⟨hle, (P.torsOrth_iff_tors_truncGE hle).mp horth⟩
+  · rintro ⟨hle, htors⟩
+    exact ⟨hle, (P.torsOrth_iff_tors_truncGE hle).mpr htors⟩
+
+/-- **The tilted aisle is the textbook one**: `X ∈ D^{≥1}_†` iff `X ∈ D^{≥0}`
+and `H⁰(X) ∈ F`, with `τ^{≤0}X` in the role of `H⁰(X)`. -/
+theorem tiltGE_iff_free_truncLE [IsTriangulated C] (X : C) :
+    P.tiltGE X ↔ t.IsGE X 0 ∧ P.free ((t.truncLE 0).obj X) := by
+  constructor
+  · rintro ⟨hge, horth⟩
+    exact ⟨hge, (P.freeOrth_iff_free_truncLE hge).mp horth⟩
+  · rintro ⟨hge, hfree⟩
+    exact ⟨hge, (P.freeOrth_iff_free_truncLE hge).mpr hfree⟩
+
 /-! ### What is proved, and what is not
 
 **Every field of `Triangulated.TStructure` is proved**, and `tilt` is the
@@ -531,9 +671,14 @@ pure degree counts against `t.zero`.
 
 ### What is still not here
 
-* **`free_of_orthogonal`**, the dual of `tors_of_orthogonal`. Not a
-  `TStructure` field, not needed for `zero'`, and its inverse-rotation
-  bookkeeping is not worth carrying speculatively.
+`free_of_orthogonal` is no longer on this list: the independent review of the
+tilt (#86, finding F1) observed that the textbook-agreement claim above was
+prose-only on the aisle side, and the dual pair — `exists_factor_truncLE` /
+`factor_truncLE_unique` and `free_of_orthogonal` — now exists, together with
+the four agreement theorems. Its inverse-rotation bookkeeping turned out to
+cost nothing: `coyoneda_exact₂` on the inverse rotation never inspects a
+rotated map, so no sign appears.
+
 * **Any connection to a stability condition.** `tilt` is a t-structure on a
   triangulated category. That the tilted heart is the heart of a stability
   condition, or that tilting is how stability conditions on surfaces are

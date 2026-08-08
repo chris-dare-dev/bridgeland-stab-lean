@@ -445,6 +445,19 @@ fidelity:
     triangulated category or geometric object appears, so this lane still
     asserts nothing about semistable objects.
 
+    COUNT UPDATE (Tilting lane, textbook agreement), 2026-08-07. The 7
+    additional records close finding F1 of the independent tilt review (#86,
+    tracked as #94): the dual factorisation pair exists_factor_truncLE /
+    factor_truncLE_unique, the dual orthogonality characterisation
+    free_of_orthogonal, the two orthogonality-transport equivalences
+    torsOrth_iff_tors_truncGE / freeOrth_iff_free_truncLE, and the two
+    headline agreement theorems tiltLE_iff_tors_truncGE /
+    tiltGE_iff_free_truncLE, which state that the Hom-orthogonal aisles are
+    the textbook H^0 aisles with the truncations in the role of H^0. Audit
+    count 670 -> 677, measured on main at 1149c52 plus this change. All 7 are
+    theorems; 0 private, 7 named. The module docstring's agreement claim is
+    now theorem-backed on both sides rather than prose on one.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
@@ -1374,9 +1387,10 @@ fidelity:
     the tilted heart. Both are further theorems and neither is attempted. Do
     not cite this lane as "stability conditions on surfaces", or as any
     statement about hearts beyond `tilt.heart` being whatever the general
-    TStructure API says it is. Also still absent: free_of_orthogonal, the dual
-    of tors_of_orthogonal, which is not a TStructure field and which zero' does
-    not need.
+    TStructure API says it is. (free_of_orthogonal, formerly listed here as
+    absent, exists as of the #94 textbook-agreement work -- see that COUNT
+    UPDATE. zero' still does not need it; it is carried for the aisle-side
+    agreement theorem, not for any TStructure field.)
 
     WALL LANE: NO BOGOMOLOV-GIESEKER INEQUALITY IS ASSUMED, AND NONE IS
     AXIOMATISED. This is worth stating because the lane was SCOPED expecting to
