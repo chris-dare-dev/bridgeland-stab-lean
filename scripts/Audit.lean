@@ -71,10 +71,11 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **710** declarations (707 at the #105 gap closure, plus the 3
-  tilted-heart theorems of #106). The environment holds **795** authored
-  declarations under `BridgelandStabLean.*`, so **85 are outside this gate**,
-  all of them private or projections. ("Authored" excludes constructors,
+* It names **733** declarations (707 at the #105 gap closure, plus the 3
+  tilted-heart theorems of #106 and the 23 WeakStability records of #107).
+  The environment holds **825** authored declarations under
+  `BridgelandStabLean.*`, so **92 are outside this gate**, all of them
+  private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
@@ -83,7 +84,8 @@ this comment are unaffected by it:
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **41 are structure field projections** emitted by the `structure` command.
+* **48 are structure field projections** emitted by the `structure` command
+  (41 before the three WeakStability structures).
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,11 +107,12 @@ this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **192 of the 710 are not theorems** (9 `structure`, 183 other constructions).
+* **201 of the 733 are not theorems** (12 `structure`, 189 other
+  constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **518** real theorems, but it is a `def ... :
+  formatted identically to the **532** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -346,6 +349,39 @@ under the #81 weak-stability epic; abstract, bound to no source coordinate. -/
 #print axioms Tilting.HeartTorsionPair.tilt_heart_of_triangle
 #print axioms Tilting.HeartTorsionPair.exists_triangle_of_tilt_heart
 #print axioms Tilting.HeartTorsionPair.tilt_heart_iff
+
+/-! ## WeakStability lane -- the section-14 definitions
+
+Definitions 14.1-14.3 of 1902.08184v4 on the abstract layer, plus the
+ordinary-into-weak embeddings and the closure properties of the zero-charge
+subcategory. The three `structure`s and the constructions among these report
+axiom closures of DEFINITIONS; the embedding and closure results are the
+theorems. Closes #107; no source binding is claimed (see the module
+docstring and #111). -/
+
+#print axioms WeakStability.WeakPreStabilityCondition
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre_slicing
+#print axioms WeakStability.WeakPreStabilityCondition.ofPre_Z
+#print axioms WeakStability.WeakStabilityFunction
+#print axioms WeakStability.StabilityFunction
+#print axioms WeakStability.StabilityFunction.toWeak
+#print axioms WeakStability.StabilityFunction.toWeak_Z
+#print axioms WeakStability.WeakStabilityFunction.charge
+#print axioms WeakStability.WeakStabilityFunction.charge_triangle
+#print axioms WeakStability.WeakStabilityFunction.charge_triangle'
+#print axioms WeakStability.WeakStabilityFunction.charge_isZero
+#print axioms WeakStability.WeakStabilityFunction.slope
+#print axioms WeakStability.WeakStabilityFunction.slope_of_im_pos
+#print axioms WeakStability.WeakStabilityFunction.slope_of_im_nonpos
+#print axioms WeakStability.WeakStabilityFunction.IsSemistable
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_def
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_isClosedUnderIsomorphisms
+#print axioms WeakStability.WeakStabilityFunction.charge_eq_zero_pair
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_left
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_right
+#print axioms WeakStability.WeakStabilityFunction.zeroCharge_extension
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
