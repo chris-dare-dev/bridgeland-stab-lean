@@ -55,11 +55,25 @@ Earlier revisions said **497 / 569 / 72 / 42 / 29 / 167**, then
 **670 / 814 / 144 / 44 / 59 / 189**. **Re-run the command; do not adjust the
 numbers.**
 
-* It names **697** declarations. The environment holds **792** authored
-  declarations under `BridgelandStabLean.*`, so **95 are outside this gate**.
-  ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
-  lemmas, internal names, and the four generated families named above -- none
-  of which anybody writes or could list.)
+**THE GAP IS NOW ZERO, as of 2026-08-07.** Every public declaration in this
+library that is not a structure field projection is named below. Be precise
+about what that does and does not mean -- three of the four qualifications in
+this comment are unaffected by it:
+
+* it does NOT cover the **44 private** declarations, which remain structurally
+  unlistable;
+* it does NOT make this file a gate -- `#print axioms` still exits 0 on
+  `[sorryAx]`, and nothing here fails on a missing name;
+* it does NOT stay true on its own. The next declaration added anywhere lands
+  green without an entry here. Zero is a measurement taken at a commit, not a
+  property the build maintains.
+
+* It names **707** declarations. The environment holds **792** authored
+  declarations under `BridgelandStabLean.*`, so **85 are outside this gate**,
+  all of them private or projections. ("Authored" excludes constructors,
+  recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
+  generated families named above -- none of which anybody writes or could
+  list.)
 * **44 are `private`** -- 42 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
@@ -69,14 +83,16 @@ numbers.**
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
-* That leaves **10 public declarations simply not added yet**: 5 in
-  `AutPairAction.lean`, 3 in `GLTildeFibre.lean`, 1 in
-  `PolarDecomposition.lean`, 1 in `NumericalK.lean`.
-* **`GLTildeSurj.lean` is COMPLETE as of 2026-08-07.** It held **20** of the
-  shortfall -- the largest single block, quoted in this comment since
-  2026-08-06 without moving -- and all 20 were added. Five of them had escaped
-  every earlier source-text pass because they are `@[simp] theorem` on ONE
-  line, which a regex anchored on `^theorem` cannot see.
+* That leaves **0**. The shortfall was closed in two steps on 2026-08-07:
+  **20** in `GLTildeSurj.lean` -- the largest single block, quoted in this
+  comment since 2026-08-06 without moving -- then the last **10**, spread over
+  `AutPairAction.lean` (5), `GLTildeFibre.lean` (3), `PolarDecomposition.lean`
+  (1) and `NumericalK.lean` (1).
+* **The residue was dominated by one syntactic shape.** Five of the first 20
+  and **seven of the last 10** are `@[simp] theorem` on ONE line, which a regex
+  anchored on `^theorem` cannot see. That is 12 of the 30, and it is why the
+  count is taken from the environment rather than from source text: the names
+  hardest to notice by eye were, systematically, the ones left out.
 * Nothing detects the shortfall *automatically*. `scripts/check_audit.py` reads
   THIS file, but only to count its `#print axioms` lines against the output's
   record count (its truncation check, added 2026-08-08) -- it never reads the
@@ -85,11 +101,11 @@ numbers.**
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **190 of the 697 are not theorems** (9 `structure`, 181 other constructions).
+* **192 of the 707 are not theorems** (9 `structure`, 183 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **507** real theorems, but it is a `def ... :
+  formatted identically to the **515** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -121,6 +137,7 @@ open BridgelandStabLean
 #print axioms Matrix.polarFactor_mul_self
 #print axioms Matrix.polarFactor_isHermitian
 #print axioms Matrix.det_polarFactor_ne_zero
+#print axioms Matrix.isUnit_det_polarFactor
 #print axioms Matrix.polarFactor_posDef
 #print axioms Matrix.polarUnitary
 #print axioms Matrix.polarUnitary_mul_polarFactor
@@ -132,6 +149,7 @@ open BridgelandStabLean
 
 /-! ## Lattice lane -/
 
+#print axioms Lattice.NumLattice
 #print axioms Lattice.eq_zero_of_zsmul_eq_zero
 #print axioms Lattice.eq_zero_of_two_zsmul_eq_zero
 #print axioms Lattice.zsmul_injective
@@ -570,8 +588,11 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.rayVec_eq_iff
 #print axioms BridgelandStabLean.GroupAction.rayVec_eq_of_onRay
 #print axioms BridgelandStabLean.GroupAction.deckShift
+#print axioms BridgelandStabLean.GroupAction.deckShift_apply
 #print axioms BridgelandStabLean.GroupAction.compat_one_deckShift
 #print axioms BridgelandStabLean.GroupAction.deck
+#print axioms BridgelandStabLean.GroupAction.deck_mat
+#print axioms BridgelandStabLean.GroupAction.deck_shift
 #print axioms BridgelandStabLean.GroupAction.exists_deckShift_of_mat_eq_one
 #print axioms BridgelandStabLean.GroupAction.deckHom
 #print axioms BridgelandStabLean.GroupAction.deckHom_injective
@@ -763,12 +784,17 @@ this against the file by eye. -/
 #print axioms BridgelandStabLean.GroupAction.AutPair.inv
 #print axioms BridgelandStabLean.GroupAction.AutPair.setoid
 #print axioms BridgelandStabLean.GroupAction.AutPair.act
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_slicing
+#print axioms BridgelandStabLean.GroupAction.AutPair.act_Z
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_id
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_mul
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_congr
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.mk
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.group
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.mulAction
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.mk_smul_slicing
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.mk_smul_Z
 #print axioms BridgelandStabLean.GroupAction.AutPairQuot.toAutQuot
 
 /-! ## Normalized quotient, combined action, and topological action layer -/
