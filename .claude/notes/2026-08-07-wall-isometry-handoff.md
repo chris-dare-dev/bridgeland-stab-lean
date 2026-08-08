@@ -1,34 +1,50 @@
 # Handoff — the isometry clause, the nested wall theorem, and two ways I broke things
 
-**Date:** 2026-08-07 · **Repo:** `bridgeland-stab-lean` @ `6941c85` (main, clean, pushed)
+**Written:** 2026-08-07 @ `6941c85` · **Updated:** 2026-08-07 (later) @ `1149c52`
 
 Read this if you are picking up the **Lean formalization** lanes. It is written
 for a session with no memory of the one that produced it, and it assumes you
-will verify rather than believe. Two of the sections below are corrections of
-things this session got wrong in ways that reached `main`.
+will verify rather than believe. Several sections below are corrections of
+things a session got wrong in ways that reached `main`.
 
 If you are picking up the **contract / registry / arXMCP** work instead, read
 [`2026-08-05-mfc-cli-handoff.md`](2026-08-05-mfc-cli-handoff.md) first — it is
 still current and this note does not supersede it.
 
+> ## UPDATE 2026-08-07 (later) — read this before §1
+>
+> A second session picked this note up, and **§1 was wrong in five places within
+> hours of being written.** What changed:
+>
+> - **PR #76 merged.** §1 listed it as the open PR. There were then zero open
+>   PRs; by the time this update was committed there were **two** again, both
+>   another session's. Do not read any PR count here as current.
+> - **Audit records: 659 → 667 (the tilt) → 670 (Support openness).**
+> - **The shared checkout was not on `main`.** It sat on `agent/tilt-complete`,
+>   a merged and dead branch, with `.lake` artefacts to match.
+> - **A ` M CLAUDE.md` that looks like another session's edit is a phantom.**
+>   Its blob hash equals the index (`88be71d5`); the `obsidian-strip`
+>   clean/smudge filter makes the file permanently un-stat-cacheable, so
+>   `git status` always shows it modified while `git diff` shows nothing.
+>   **Do not stage it, and do not read it as evidence that someone is working.**
+> - **`Support/` is no longer quiet** and the §4.2 lane ranking moved.
+>
+> **The lesson is the shape, not the numbers.** A state table in a handoff rots
+> in hours in this repo. §1 has been rewritten to give the *commands* first and
+> the snapshot second, pinned to a commit. Run the commands; treat the table as
+> archaeology.
+>
+> New findings from that session are in **§3.5–§3.7** and its work in **§2.3**.
+
 ---
 
-## 1. State in one table
+## 1. State — commands first, snapshot second
 
-| | |
-|---|---|
-| `main` | `6941c85`, CI green from `2ab9a9b` onward |
-| Lean modules | **44**, across 8 lanes |
-| Audit records | **659** (`scripts/Audit.lean`) |
-| Source census | **713** top-level declarations → **54 outside the gate** |
-| `sorry_count` | **0** |
-| Registry entries | **9** (`registry/bridgeland2007.json`) |
-| `@[cites]` bindings | **11** — 8 on `lem-8.2`, 2 on `prop-8.1`, 1 on `def-5.7` |
-| `human_review` | **`none`** — no statement has ever had one |
-| Open PRs | **#76** (Tilting, another session's) |
-| Open issues | 44, almost all contract/registry/arXMCP rather than Lean |
+**Run these. Do not trust the table below it.**
 
-Reproduce the numbers:
+```bash
+git show origin/main:scripts/Audit.lean | grep -c '^#print axioms '
+```
 
 ```bash
 lake build && lake env lean scripts/Audit.lean > audit.txt 2>&1 && python scripts/check_audit.py audit.txt
@@ -38,32 +54,70 @@ lake build && lake env lean scripts/Audit.lean > audit.txt 2>&1 && python script
 lake exe runLinter BridgelandStabLean
 ```
 
-Both are CI gates now. The second one is new as of 2026-08-05 and matters more
-than it looks — see §3.2.
+```bash
+lake build && lake env lean scripts/Census.lean
+```
+
+The first is the audit count pinned to a commit — the *only* honest way to
+quote one, and `formalization.yaml` has now been burned twice by carrying a
+number forward instead. The second and third are CI gates. The fourth is new
+(2026-08-07) and reports how much of the library the audit actually covers.
+
+Snapshot, **pinned to `1149c52`** and stale the moment another session pushes:
+
+| | |
+|---|---|
+| `main` | `1149c52`, CI green |
+| Lean modules | **44**, across 8 lanes |
+| Audit records | **670** (`scripts/Audit.lean`) |
+| Environment census | **814** authored → **144 outside the gate** |
+| ↳ of those | 44 private (unlistable) · 41 structure projections · **59 real gap** |
+| `sorry_count` | **0** |
+| Registry entries | **9** (`registry/bridgeland2007.json`) |
+| `@[cites]` bindings | **11** — 8 on `lem-8.2`, 2 on `prop-8.1`, 1 on `def-5.7` |
+| `human_review` | **`none`** — no statement has ever had one |
+| Open PRs / issues | 2 / 57 — **both moved during the writing of this line** |
+
+**The census numbers are not the ones this note first carried.** It said "713
+top-level declarations → 54 outside the gate", from a regex over source text.
+The environment sweep says 814 → 144, and the difference is not drift: a regex
+cannot see private names, and it counts structure projections it should not.
+See §3.6.
 
 ### The lanes, and which are hot
 
 | lane | files | last touched | who |
 |---|---|---|---|
 | `GroupAction/` | 34 | 2026-08-07 | **hot** — the §8 programme |
-| `Tilting/` | 2 | 2026-08-07 | **hot** — PR #76 open right now |
+| `Tilting/` | 2 | 2026-08-07 | **hot** — merged, then reviewed; issue #94 open |
+| `Support/` | 1 | 2026-08-07 | **openness added**; quiet again now |
+| `Wall/` | 1 | 2026-08-07 | quiet |
 | `Mukai/` | 2 | 2026-08-06 | quiet |
-| `Support/` | 1 | 2026-08-06 | quiet |
 | `FiniteLength/` | 1 | 2026-08-06 | quiet |
-| `Wall/` | 1 | 2026-08-07 | **this session**; quiet again now |
 | `Lattice/` | 2 | 2026-08-04 | dormant |
 | `ForMathlib/` | 1 | 2026-08-04 | dormant, and see CLAUDE.md §1 |
 
+Regenerate that column rather than trusting it:
+
+```bash
+for d in GroupAction Tilting Mukai Support FiniteLength Wall Lattice ForMathlib; do
+  echo "$d $(git log -1 --format=%ad --date=short origin/main -- BridgelandStabLean/$d)"
+done
+```
+
 **Multiple sessions work this repo concurrently and share one checkout.** That
-is not a hypothetical; it broke `main` today. See §3.1 before you commit
-anything.
+is not a hypothetical; it broke `main` on 2026-08-07, and on the same day the
+tree silently sat on a dead branch through an entire session's work. See §3.1
+before you commit anything.
 
 ---
 
-## 2. What this session added
+## 2. What was added
 
-Two theorems, in two different lanes, both chosen because nobody else was in
-them.
+**§2.1–2.2 are the first session's** (the one that wrote this note): two
+theorems in two lanes, both chosen because nobody else was in them.
+**§2.3–2.4 are the second session's**, on the same day, added when it picked
+this note up. All four merged to `main` and are CI-green.
 
 ### 2.1 The isometry clause of Lemma 8.2 — `GroupAction/AutIsometry.lean`
 
@@ -136,6 +190,57 @@ line `s = 0`, and `(0,2)` separates them.
 asserts the walls it orders are walls of *actual stability*, which needs
 `NumClass = ch(E)` — CLAUDE.md §4. Say "numerical walls for a fixed class are
 disjoint" and stop there.
+
+---
+
+### 2.3 The support property is open in the charge — `Support/SupportProperty.lean`
+
+Added by the second session, merged as #78 (`418d423`).
+
+```
+hasSupportProperty_of_norm_sub_le    perturbed constant C / (1 - Cε)
+HasSupportProperty.exists_tolerance  openness, no topology on charges
+isOpen_hasSupportProperty            IsOpen {Z : V →L[ℝ] W | …}
+```
+
+**§4.2 below predicted this would need "linear algebra plus compactness, and
+the file already has the compactness argument." It needs neither compactness
+nor finite-dimensionality** — the triangle inequality and one division. The
+compactness in that file belongs to the *quadratic-form* direction
+(`hasSupportProperty_of_isCompatible`); carrying it into perturbation would
+have weakened all three statements for nothing. All three are stated with
+`omit [FiniteDimensional ℝ V]`.
+
+`exists_tolerance` must *choose* the tolerance from `C` rather than accept one:
+the admissible perturbation depends on how tight the estimate already is, and
+the constant degrades as `Cε → 1`. `isOpen_` is then a corollary whose only new
+step is `le_opNorm`.
+
+`S` stays an arbitrary subset. No anchor import, no triangulated category, no
+geometry — CLAUDE.md §3 and §4 untouched by construction. **No `@[cites]`
+binding**: this corresponds to no numbered claim in Bridgeland 2007, so the
+review bench is unchanged.
+
+### 2.4 The audit's coverage claim, re-measured — `scripts/Census.lean`
+
+Merged as #92 (`0b19f9d`). This is §4.4 of this note, which the first session
+left undone because the tree was being written by someone else.
+
+The figures in `scripts/Audit.lean` and in `formalization.yaml` were **wrong in
+kind, not only in size**:
+
+| | was | now |
+|---|---|---|
+| audit names | 497 | **670** |
+| authored declarations | 569 | **814** |
+| outside the gate | 72 | **144** |
+| private | 42 | **44** (42 of them theorems) |
+| structure projections | *uncounted* | **41** |
+| real gap | 29 | **59** |
+| not theorems | 167/497 | **189/670** |
+
+`20 in GLTildeSurj.lean` is the one old figure that was right and has not moved.
+It is still the largest single block of the real gap.
 
 ---
 
@@ -253,6 +358,79 @@ the private and unlisted names `scripts/Audit.lean` structurally cannot.
 
 ---
 
+### 3.5 `gh pr merge --auto` does not gate anything on this repo
+
+**`main` is not branch-protected.** `gh api repos/OWNER/REPO/branches/main/protection`
+returns `404 Branch not protected`.
+
+Auto-merge only waits on *required status checks*. With no protection rule
+there are none, so `gh pr merge --auto` **merges immediately** and reports
+success. The second session used it specifically to avoid merging before CI
+finished, and it merged before CI finished. The run happened to be green.
+
+This is §3.3 in a third costume: a construct was trusted to enforce something
+it was not enforcing. The one-line check before relying on it:
+
+```bash
+gh api repos/chris-dare-dev/bridgeland-stab-lean/branches/main/protection --jq '.required_status_checks.contexts'
+```
+
+Until that returns a check name, the only safe sequence is **wait, read the
+per-step list, then merge** — §3.3's command, not a flag.
+
+The durable fix is branch protection with the CI check required, which would
+also have made the 2026-08-07 breakage mechanically impossible. That is a repo
+settings change and belongs to the owner; an agent should not make it.
+
+### 3.6 The environment sweep works on Windows even though the emitter does not
+
+`exe/Emit.lean` records that `lake exe emit` **cannot be linked** on Windows —
+`supportInterpreter` pushes the PE export table past 65535 symbols — and both
+that file and `formalization.yaml` treat this as "no environment-level check on
+this platform."
+
+**Linking is not what the sweep needs.** `lake env lean scripts/Census.lean`
+walks the same `ModuleData` through the interpreter and links nothing, so it
+runs where the executable cannot. That is the only reason §4.4 was closable at
+all on the owner's workstation.
+
+Be precise about what this does and does not change: **Census reports, it does
+not gate, and it does not check axiom closures.** The emitter is exactly as
+unlinkable as before. Do not describe the emitter gate as available on Windows.
+
+**One trap inside it, which cost real time.** `isPrivateName` must be tested
+**before** `Name.isInternal`. Lean mangles a private name to
+`_private.<Module>.<n>.<Name>`, whose first component starts with `_`, so
+`isInternal` swallows every private declaration and the census cheerfully
+reports **`private: 0`**. That number looks entirely plausible. If it had been
+believed, the corrected docstring would have carried a fresh error in place of
+the stale one.
+
+Also: `String.trim` and `String.drop` are mid-deprecation at v4.29.0 and return
+`String` in one position and `String.Slice` in another. `Census.lean` carries
+its own trim and tokenises rather than fighting it.
+
+### 3.7 ` M CLAUDE.md` is a phantom, not another session
+
+`git status` in this checkout permanently shows `CLAUDE.md` modified while
+`git diff` shows nothing. It is not someone's uncommitted work:
+
+```bash
+git hash-object CLAUDE.md          # 88be71d5…
+git ls-files -s CLAUDE.md          # same blob
+git check-attr -a CLAUDE.md        # filter: obsidian-strip
+```
+
+A file with a clean/smudge filter cannot be stat-cached, so it is re-checked
+and reported as possibly-modified forever. `git update-index --really-refresh`
+says `needs update` and changes nothing.
+
+Two consequences. **Never stage it** — that is exactly the §3.1 accident.
+And **do not read it as a signal that another session is live in the tree**;
+use `git log`, `gh pr list`, and the branch the tree is actually on instead.
+
+---
+
 ## 4. Where to pick up
 
 ### 4.1 The live front is the mass-triangle obligation — and it is someone else's
@@ -297,11 +475,13 @@ shape of what is owed*, not on Proposition 8.1, which stays `no_claim`.
 
 Ranked by how much is reachable without touching the geometric lane:
 
-1. **`Support/SupportProperty.lean`** (198 lines, one file, untouched since
-   2026-08-06). Has the Kontsevich–Soibelman equivalence. The natural next
-   result is the **openness/deformation consequence** — that the support
-   property is stable under small perturbation of `Z`. Linear algebra plus
-   compactness; the file already has the compactness argument.
+1. ~~**`Support/SupportProperty.lean`** — the openness/deformation
+   consequence.~~ **Done** 2026-08-07, §2.3 above, merged as #78. Note the
+   prediction in this entry was wrong twice over: it needs neither compactness
+   nor finite-dimensionality. What is left in this lane is smaller — the
+   *quantitative* direction (how the constant `C` degrades along a path of
+   charges) is stated pointwise but never integrated, and nothing yet connects
+   `HasSupportProperty` to `Lattice/`.
 2. **`Mukai/`** (2 files). Rank-two subpairs are done. Spherical and isotropic
    classes are defined but nothing computes with them yet.
 3. **`Wall/`** — now has the nesting theorem. Natural next: the **totally
@@ -316,29 +496,46 @@ Ranked by how much is reachable without touching the geometric lane:
 
 ### 4.3 Lean-side issues actually worth doing
 
-Most of the 44 open issues are contract/registry/arXMCP, not Lean. The ones
-that are Lean:
+Most of the open issues (**57** at `1149c52`, up from 44) are
+contract/registry/arXMCP, not Lean. The ones that are Lean:
 
+- **#94 The co-aisle textbook-agreement lemma** — *new, 2026-08-07*, from the
+  independent review of the HRS tilt (`.claude/reviews/2026-08-07-pr76-hrs-tilt-independent-review.md`).
+  Discloses an aisle-side gap. Freshest and most specific item on this list.
 - **#41 `@[discharges]`** — anchor frontier discharge in the environment rather
   than in prose. Directly useful now that `gltilde-universal-cover` was
   discharged by hand.
 - **#38 Mechanize CLAUDE.md §3** — import allowlist + forbidden vocabulary. Would
-  have caught nothing this session, but it is the rule most likely to erode.
+  have caught nothing so far, but it is the rule most likely to erode.
 - **#46 Cut v0.1.0** — the first release. Blocked on nothing technical.
 - **#25 Sort every emitted array** — `agent-ready`, small, in the emitter.
 
-### 4.4 The one thing I left undone
+Not an issue yet, and worth one: **branch protection on `main`** with the CI
+check required. §3.5 — merges can currently land over a red or unfinished run,
+which is the mechanism behind the 2026-08-07 breakage. Owner's call; an agent
+should not change repo settings.
 
-`scripts/Audit.lean`'s own docstring is stale. It says:
+### 4.4 ~~The one thing I left undone~~ — done 2026-08-07
 
-> It names **497** declarations. A direct census finds **569** … **42 of those
-> are `private`** … **167 of the 497 are not theorems**
+`scripts/Audit.lean`'s docstring was stale and is now re-measured, along with
+the same claim in `formalization.yaml`. See §2.4 for the figures and
+`scripts/Census.lean` for the command that regenerates them.
 
-Measured today: **659** named, **713** census, **54** outside the gate. I did
-not correct it because the file was being actively rewritten by another session
-and I had just been burned by exactly that. Correct it when the tree is quiet,
-and **measure rather than arithmetic** — the private/public split and the
-theorem/construction split both need recounting, not adjusting.
+**Two things worth keeping from how it went.**
+
+The instruction in this section was *"measure rather than arithmetic — the
+private/public split and the theorem/construction split both need recounting,
+not adjusting."* That was right, and it was not enough: the *first* measurement
+was also wrong. A regex over source text cannot see private names and
+overcounts by including structure projections, and the first environment sweep
+reported `private: 0` because of the `isInternal` trap in §3.6. **Measuring is
+not one step. Check the measurement against something that would notice if it
+were wrong** — here, that the parts sum to the whole:
+`670 gated + 41 projections + 59 gap = 770 public`, and `770 + 44 private = 814`.
+
+And the numbers here were themselves stale within hours — **659/713/54** in the
+original text, against **670/814/144** measured. The lesson §1 now leads with:
+ship the command, not the figure.
 
 ---
 
@@ -359,7 +556,8 @@ From `CLAUDE.md` and the owner's own rules. Not suggestions.
 - **Never `mkdir` + `git init` a repository anywhere** without an explicit OK for
   that specific repo.
 - **Push is per-event authorization.** One "yes, push" does not authorize the
-  next. Re-ask. Same for merge.
+  next. Re-ask. Same for merge. And **`--auto` is not a substitute for waiting**
+  — on this unprotected repo it merges immediately, §3.5.
 - **Never `--no-verify`, never `--no-gpg-sign`.**
 - **No bare "verified."** No single token may collapse distinct trust axes.
 - **Local-LLM policy:** qwen produces, Claude reviews. Claude is always the
@@ -409,3 +607,24 @@ From `CLAUDE.md` and the owner's own rules. Not suggestions.
   coverage note.
 - **`formalization.yaml` is the highest-contention file in the repo.** Expect to
   race. Write it last, from a worktree, and pin every count to a commit.
+
+  **It has now been burned twice by counts pinned to the wrong commit.** The
+  second, found 2026-08-07: it recorded 667 audit records observed "on main at
+  `3ca176b`", but `3ca176b` carries 659 — 667 first appears at `a3bfb8a`. The
+  first is recorded at the end of its own `axiom_details` chain and closes with
+  *"a paragraph whose whole point is 'do not quote a stale number' had quoted
+  three of them."* Pin a count by **running the command against the commit**,
+  never by carrying it forward from the branch you observed it on:
+  ```bash
+  git show <commit>:scripts/Audit.lean | grep -c '^#print axioms '
+  ```
+- **The review directory is now two files, and one is a real independent
+  review.** `.claude/reviews/2026-08-07-pr76-hrs-tilt-independent-review.md`
+  (332 lines) with `2026-08-07-TiltNonvacuity.lean` beside it, from a review of
+  the merged HRS tilt. Its finding F1 became **issue #94**. If you touch
+  `Tilting/`, read that review before the source.
+- **A reviewer's checkbox is not an agent's to tick.** The sign-off box in that
+  review was ticked in its own commit — *"at the owner's explicit instruction"*
+  — and the commit message says so precisely because the alternative reads as
+  an agent self-certifying. ADR-0005 keeps `faithfulness` human-only; the same
+  logic covers any box that stands for a human judgement.
