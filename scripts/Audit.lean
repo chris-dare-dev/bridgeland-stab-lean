@@ -27,21 +27,21 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-07. The figures below are no longer a source-text estimate
-and are no longer maintained by arithmetic. They come from a sweep of the
-built environment, so they count what Lean actually has rather than what a
-regex can find at column 0:
+RE-MEASURED 2026-08-08 at 91892c5. The figures below are no longer a
+source-text estimate and are no longer maintained by arithmetic. They come
+from a sweep of the built environment, so they count what Lean actually has
+rather than what a regex can find at column 0:
 
 ```bash
 lake build && lake env lean scripts/Census.lean
 ```
 
-The previous revision of this comment said **497 / 569 / 72 / 42 / 29 / 167**.
-Every one of those is now wrong, and two were wrong in kind rather than only in
-size -- see the projection bullet. **Re-run the command; do not adjust the
-numbers.**
+The 2026-08-06 revision of this comment said **497 / 569 / 72 / 42 / 29 /
+167**; the 2026-08-07 one said 670 / 814 with the same derived figures as
+today -- PR #97 moved the first two to 677 / 821 and nothing else.
+**Re-run the command; do not adjust the numbers.**
 
-* It names **670** declarations. The environment holds **814** authored
+* It names **677** declarations. The environment holds **821** authored
   declarations under `BridgelandStabLean.*`, so **144 are outside this gate**.
   ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
   lemmas and internal names, which nobody writes and nobody would list.)
@@ -66,7 +66,7 @@ numbers.**
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **189 of the 670 are not theorems** (9 `structure`, 180 other constructions).
+* **189 of the 677 are not theorems** (9 `structure`, 180 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
