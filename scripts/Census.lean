@@ -38,11 +38,22 @@ def isGenerated (env : Environment) (n : Name) (ci : ConstantInfo) : Bool :=
     || isAuxRecursor env n
     || isNoConfusion env n
     || isRecCore env n
+    -- `<Struct>.mk.inj`, emitted for every structure
+    || (match n with
+        | .str (.str _ "mk") "inj" => true
+        | _ => false)
     || (match n with
         | .str _ s =>
           s ∈ ["recOn", "casesOn", "brecOn", "below", "ibelow", "binductionOn",
                "ndrec", "ndrecOn", "noConfusionType", "injEq", "sizeOf_spec",
-               "toCtorIdx", "eq_def", "eq_1", "eq_2", "eq_3", "sizeOf_inst"]
+               "toCtorIdx", "eq_def", "eq_1", "eq_2", "eq_3", "sizeOf_inst",
+               -- Added 2026-08-07. Each of these families was verified to
+               -- occur ZERO times in BridgelandStabLean/ source, so they are
+               -- emitted, not written:
+               --   ctorIdx     one per structure
+               --   congr_simp  congruence lemma for a def
+               --   ext'_iff    from `@[ext] theorem ext'` (the ext' IS written)
+               "ctorIdx", "congr_simp", "ext'_iff"]
           || "match_".isPrefixOf s || "proof_".isPrefixOf s
         | _ => true)
 

@@ -36,15 +36,30 @@ regex can find at column 0:
 lake build && lake env lean scripts/Census.lean
 ```
 
-The previous revision of this comment said **497 / 569 / 72 / 42 / 29 / 167**.
-Every one of those is now wrong, and two were wrong in kind rather than only in
-size -- see the projection bullet. **Re-run the command; do not adjust the
+**REVISED AGAIN 2026-08-07 (later), and the correction is the useful part.**
+The revision below reported a real gap of **59**. The true figure was **29**.
+The other 30 were compiler-generated names the sweep did not recognise --
+`<Struct>.ctorIdx`, `<Struct>.mk.inj`, `<def>.congr_simp`, and `ext'_iff` from
+`@[ext] theorem ext'`. Each family was then grepped for in
+`BridgelandStabLean/` and occurs there **zero** times, so none is a declaration
+anyone wrote or could list. `scripts/Census.lean` now filters all four.
+
+The lesson is not that a number moved. It is that **a filter is itself a claim
+about what Lean emits, and it needs the same check as any other claim here.**
+The projection bullet below was written immediately after this exact mistake
+was caught once. Catching it a second time, in the same file, on generated
+names of a different shape, means the check has to be *grep the source for the
+family* -- not *remember which families exist*.
+
+Earlier revisions said **497 / 569 / 72 / 42 / 29 / 167**, then
+**670 / 814 / 144 / 44 / 59 / 189**. **Re-run the command; do not adjust the
 numbers.**
 
-* It names **670** declarations. The environment holds **814** authored
-  declarations under `BridgelandStabLean.*`, so **144 are outside this gate**.
+* It names **697** declarations. The environment holds **792** authored
+  declarations under `BridgelandStabLean.*`, so **95 are outside this gate**.
   ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
-  lemmas and internal names, which nobody writes and nobody would list.)
+  lemmas, internal names, and the four generated families named above -- none
+  of which anybody writes or could list.)
 * **44 are `private`** -- 42 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
@@ -52,12 +67,16 @@ numbers.**
   changes that.
 * **41 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
-  They are called out because they are 41 of the 100 ungated public names, so a
-  census that does not separate them overstates the real shortfall by two
-  thirds.
-* That leaves **59 public declarations simply not added yet** -- still **20 of
-  them in `GLTildeSurj.lean` alone**, which is the one figure the previous
-  revision got right and which has not moved.
+  They are called out because a census that does not separate them reports a
+  shortfall five times the real one.
+* That leaves **10 public declarations simply not added yet**: 5 in
+  `AutPairAction.lean`, 3 in `GLTildeFibre.lean`, 1 in
+  `PolarDecomposition.lean`, 1 in `NumericalK.lean`.
+* **`GLTildeSurj.lean` is COMPLETE as of 2026-08-07.** It held **20** of the
+  shortfall -- the largest single block, quoted in this comment since
+  2026-08-06 without moving -- and all 20 were added. Five of them had escaped
+  every earlier source-text pass because they are `@[simp] theorem` on ONE
+  line, which a regex anchored on `^theorem` cannot see.
 * Nothing detects the shortfall *automatically*. `scripts/check_audit.py` reads
   THIS file, but only to count its `#print axioms` lines against the output's
   record count (its truncation check, added 2026-08-08) -- it never reads the
@@ -66,11 +85,11 @@ numbers.**
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **189 of the 670 are not theorems** (9 `structure`, 180 other constructions).
+* **190 of the 697 are not theorems** (9 `structure`, 181 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **481** real theorems, but it is a `def ... :
+  formatted identically to the **507** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -559,33 +578,75 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms BridgelandStabLean.GroupAction.range_deckHom_eq_ker
 #print axioms BridgelandStabLean.GroupAction.kerEquiv
 
-/-! ## GLTildeSurj — the projection is surjective -/
+/-! ## GLTildeSurj — the projection is surjective
+
+COVERAGE COMPLETE as of 2026-08-07. This section was the single largest gap in
+the file: `scripts/Census.lean` reported **20** ungated public declarations
+here, more than in any other module and more than a third of the whole
+shortfall, and the figure had been quoted in this file's docstring since
+2026-08-06 without moving.
+
+The 20 added are, in source order: `cexpI_re`, `cexpI_im`, `cexpI_add`,
+`norm_cexpI`, `cexpI_ne_zero`, `cplxCoord_cexpI`, `det_toMat_pos`,
+`normSq_cB_lt_normSq_cA`, `cA_ne_zero`, `ratio`, `norm_ratio_lt_one`,
+`Wmap_ne_zero`, `cexpI_neg_two_pi`, `pi_mul_lift`, `lift_scale_pos`,
+`cross_smul`, `abs_arg_Wmap_lt`, `lift_add_nat`, `liftShift_apply`, `sect_mat`.
+
+Five of them were missed by every earlier source-text pass because they are
+`@[simp] theorem` on ONE line -- a regex anchored on `^theorem` never sees
+them. That is the same class of miss the docstring's projection paragraph
+records, and it is why the count is now taken from the environment.
+
+The list below is in SOURCE ORDER and is complete: 49 public declarations, plus
+`sin_pos_unique` and `lift_lt_of_sub_lt_nat` which are `private` and therefore
+structurally unlistable here. Keep the order when adding, so a reader can diff
+this against the file by eye. -/
 
 #print axioms BridgelandStabLean.GroupAction.cexpI
+#print axioms BridgelandStabLean.GroupAction.cexpI_re
+#print axioms BridgelandStabLean.GroupAction.cexpI_im
+#print axioms BridgelandStabLean.GroupAction.cexpI_add
+#print axioms BridgelandStabLean.GroupAction.norm_cexpI
+#print axioms BridgelandStabLean.GroupAction.cexpI_ne_zero
 #print axioms BridgelandStabLean.GroupAction.cplxCoord_apply
+#print axioms BridgelandStabLean.GroupAction.cplxCoord_cexpI
 #print axioms BridgelandStabLean.GroupAction.cA
 #print axioms BridgelandStabLean.GroupAction.cB
 #print axioms BridgelandStabLean.GroupAction.mulVec_rayVec_eq
 #print axioms BridgelandStabLean.GroupAction.normSq_cA_sub_normSq_cB
+#print axioms BridgelandStabLean.GroupAction.det_toMat_pos
+#print axioms BridgelandStabLean.GroupAction.normSq_cB_lt_normSq_cA
+#print axioms BridgelandStabLean.GroupAction.cA_ne_zero
 #print axioms BridgelandStabLean.GroupAction.norm_cB_lt_norm_cA
+#print axioms BridgelandStabLean.GroupAction.ratio
+#print axioms BridgelandStabLean.GroupAction.norm_ratio_lt_one
 #print axioms BridgelandStabLean.GroupAction.Wmap
 #print axioms BridgelandStabLean.GroupAction.Wmap_re_pos
+#print axioms BridgelandStabLean.GroupAction.Wmap_ne_zero
+#print axioms BridgelandStabLean.GroupAction.cexpI_neg_two_pi
 #print axioms BridgelandStabLean.GroupAction.Wmap_add_one
 #print axioms BridgelandStabLean.GroupAction.lift
+#print axioms BridgelandStabLean.GroupAction.pi_mul_lift
 #print axioms BridgelandStabLean.GroupAction.mulVec_rayVec_lift
+#print axioms BridgelandStabLean.GroupAction.lift_scale_pos
 #print axioms BridgelandStabLean.GroupAction.compatible_lift
 #print axioms BridgelandStabLean.GroupAction.lift_add_one
 #print axioms BridgelandStabLean.GroupAction.cross
 #print axioms BridgelandStabLean.GroupAction.cross_rayVec
 #print axioms BridgelandStabLean.GroupAction.cross_mulVec
+#print axioms BridgelandStabLean.GroupAction.cross_smul
+#print axioms BridgelandStabLean.GroupAction.abs_arg_Wmap_lt
 #print axioms BridgelandStabLean.GroupAction.lift_lt_lift_of_lt_of_sub_lt_one
+#print axioms BridgelandStabLean.GroupAction.lift_add_nat
 #print axioms BridgelandStabLean.GroupAction.lift_strictMono
 #print axioms BridgelandStabLean.GroupAction.lift_continuous
 #print axioms BridgelandStabLean.GroupAction.lift_surjective
 #print axioms BridgelandStabLean.GroupAction.liftShift
+#print axioms BridgelandStabLean.GroupAction.liftShift_apply
 #print axioms BridgelandStabLean.GroupAction.compatible_liftShift
 #print axioms BridgelandStabLean.GroupAction.toMatHom_surjective
 #print axioms BridgelandStabLean.GroupAction.sect
+#print axioms BridgelandStabLean.GroupAction.sect_mat
 #print axioms BridgelandStabLean.GroupAction.toMatHom_comp_sect
 #print axioms BridgelandStabLean.GroupAction.deck_injective
 #print axioms BridgelandStabLean.GroupAction.existsUnique_deck_mul_sect
