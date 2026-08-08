@@ -27,8 +27,8 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-08 after the HN polygon port atop 91892c5. The figures
-below are no longer a source-text estimate and are no longer maintained by
+RE-MEASURED 2026-08-08 after the H0 bridge port atop 91892c5. The figures below
+are no longer a source-text estimate and are no longer maintained by
 arithmetic. They come from a sweep of the built environment, so they count
 what Lean actually has rather than what a regex can find at column 0:
 
@@ -39,11 +39,11 @@ lake build && lake env lean scripts/Census.lean
 The 2026-08-06 revision of this comment said **497 / 569 / 72 / 42 / 29 /
 167**; the 2026-08-07 one said 670 / 814. At the 91892c5 base, PR #97 moved
 those first two figures to 677 / 821 and the gated-theorem figure to 488. The
-polygon port changes the measured environment to the figures below while the
-projection and pre-existing public-gap counts remain unchanged. **Re-run the
-command; do not adjust the numbers.**
+polygon layer measured 773 / 930; the H0 bridge changes the environment to the
+figures below while the projection and pre-existing public-gap counts remain
+unchanged. **Re-run the command; do not adjust the numbers.**
 
-* It names **773** declarations. The environment holds **930** authored
+* It names **800** declarations. The environment holds **957** authored
   declarations under `BridgelandStabLean.*`, so **157 are outside this gate**.
   ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
   lemmas and internal names, which nobody writes and nobody would list.)
@@ -955,6 +955,36 @@ These extend the anchor's own namespace, since they are API for its types. -/
 #print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional_interior_eq_cross
 #print axioms CategoryTheory.ComplexPolygonalPath.unitDirection
 #print axioms CategoryTheory.ComplexPolygonalPath.unitDirection_eq_unitRay_arg
+
+/-! ## H0ExactnessBridge — unconditional heart-cohomology exactness -/
+
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_iff_mono_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeObjIsoTruncGEOfIsLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeObjIsoTruncGEOfIsLE.congr_simp
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE.congr_simp
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE.congr_simp
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_toH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_fromH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_zero
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_comp
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_comp_assoc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_naturality
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_naturality_assoc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_map_distinguished_exact_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.isIso_H0primeFunctor_map_truncLEι
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_map_distinguished_exact_of_obj₁_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_H0primeFunctor_map_mor₂_of_obj₁_isGE_one
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_isHomological_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0Functor_isHomological_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_H0Functor_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_of_H0Functor
 
 /-! ## StabilityDistance — the three-coordinate extended pseudodistance -/
 
