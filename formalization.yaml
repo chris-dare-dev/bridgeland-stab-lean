@@ -303,18 +303,18 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-07 at 9c34a2a
-    via `scripts/check_audit.py` over the 677 declarations named in
+    No axiom declarations. Transitive closure enumerated 2026-08-08 on the
+    #106 branch (parent 43f3d72; the reviewed module is the only Lean source
+    that moved) via `scripts/check_audit.py` over the 680 declarations named
+    in
     scripts/Audit.lean: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
-    Allowlist verdict: pass. Observed locally against this tree; the same
-    verdict at the same count was observed locally on the PR #97 branch, whose
-    merge 04aea18 is the commit that took the count to 677 (Lean sources are
-    identical from 04aea18 through 9c34a2a -- the #96 merge between them
-    touched a handoff note only).
+    Allowlist verdict: pass, with check_audit's truncation cross-check (PR
+    #102) confirming the record count against Audit.lean's own commands.
 
-    This lead was previously carried at "2026-08-07 at 418d423 ... 670", and
-    before that at "2026-08-06 at 56c7531 ... 497" -- each accurate as history
+    This lead was previously carried at "2026-08-07 at 9c34a2a ... 677",
+    before that at "2026-08-07 at 418d423 ... 670", and before that at
+    "2026-08-06 at 56c7531 ... 497" -- each accurate as history
     and stale as a headline once the counts below moved. The lead states the
     CURRENT figure and its commit; the COUNT UPDATE chain further down is the
     history and is not rewritten.
@@ -328,13 +328,14 @@ fidelity:
 
     The 2026-08-06 revision of this block said 497 / 569 / 72 / 42 / 29 / 167;
     the 418d423 re-measure replaced those with 670 / 814 / 144 / 44 / 41 / 59.
-    At 9c34a2a the moving figures are the first two: PR #97 added 7 audited
-    theorems, so 670 -> 677 and 814 -> 821, while every derived figure below
-    (144 outside, 44 private, 41 projections, 59 real gap) is unchanged --
-    all 7 newcomers are named in the gate.
+    The moving figures are the first two: PR #97 added 7 audited theorems
+    (670 -> 677, 814 -> 821) and #106 adds 3 more (677 -> 680, 821 -> 824),
+    while every derived figure below (144 outside, 44 private, 41
+    projections, 59 real gap) is unchanged -- every newcomer is named in the
+    gate.
 
-    It is 677 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 821 AUTHORED declarations under
+    It is 680 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 824 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas and internal names, none of which anyone
     writes -- so 144 are outside the gate.
@@ -361,14 +362,14 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 189 of the 677 entries are not theorems -- 9
+    SECOND QUALIFICATION: 189 of the 680 entries are not theorems -- 9
     structure, 180 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "677 established
-    results"; the theorem figure is 488.
+    that the proposition holds. Do not read this count as "680 established
+    results"; the theorem figure is 491.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -469,6 +470,20 @@ fidelity:
     count 670 -> 677, measured on main at 1149c52 plus this change. All 7 are
     theorems; 0 private, 7 named. The module docstring's agreement claim is
     now theorem-backed on both sides rather than prose on one.
+
+    COUNT UPDATE (Tilting lane, the tilted heart), 2026-08-08. The 3
+    additional records close #106, the first child of the #81 weak-stability
+    epic: tilt_heart_of_triangle (extensions land in the tilted heart),
+    exists_triangle_of_tilt_heart (every heart object is such an extension,
+    from the truncation triangle with tau^{>=0}X torsion via
+    torsOrth_iff_tors_truncGE and (tau^{<0}X)[-1] torsion-free via
+    free_of_orthogonal), and tilt_heart_iff -- the textbook A-dagger =
+    <F[1], T> in the single-step form exact for a torsion pair, so no
+    extension-closure operator appears. Audit count 677 -> 680, measured on
+    the #106 branch off 43f3d72. All 3 are theorems; 0 private, 3 named. The
+    statement is abstract -- the HeartTorsionPair datum, not the paper's
+    slope pair -- and is bound to no source coordinate; the coverage map
+    stays all-target.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
@@ -1415,15 +1430,18 @@ fidelity:
     last field.
 
     WHAT THE TILT IS NOT. `tilt` is a t-structure on a triangulated category.
-    NOTHING connects it to a stability condition, and NOTHING identifies its
-    heart with the extension closure of T and F[1] -- the usual description of
-    the tilted heart. Both are further theorems and neither is attempted. Do
-    not cite this lane as "stability conditions on surfaces", or as any
-    statement about hearts beyond `tilt.heart` being whatever the general
-    TStructure API says it is. (free_of_orthogonal, formerly listed here as
-    absent, exists as of the #94 textbook-agreement work -- see that COUNT
-    UPDATE. zero' still does not need it; it is carried for the aisle-side
-    agreement theorem, not for any TStructure field.)
+    NOTHING connects it to a stability condition -- that is a further theorem,
+    targeted by the #81 weak-stability program and not attempted here. Do not
+    cite this lane as "stability conditions on surfaces". The HEART, by
+    contrast, IS identified as of #106: tilt_heart_iff says membership in
+    `tilt.heart` is exactly being an extension of a torsion object by a
+    shifted torsion-free one -- the textbook extension closure of T and F[1],
+    in the single-step form that is exact for a torsion pair. Cite hearts
+    through that theorem, not beyond it: it is an abstract statement about the
+    HeartTorsionPair datum, bound to no source coordinate. (free_of_orthogonal,
+    formerly listed here as absent, exists as of the #94 textbook-agreement
+    work -- see that COUNT UPDATE. zero' still does not need it; it is carried
+    for the aisle-side agreement theorem, not for any TStructure field.)
 
     WALL LANE: NO BOGOMOLOV-GIESEKER INEQUALITY IS ASSUMED, AND NONE IS
     AXIOMATISED. This is worth stating because the lane was SCOPED expecting to

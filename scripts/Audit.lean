@@ -27,7 +27,7 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-08 at 91892c5. The figures below are no longer a
+RE-MEASURED 2026-08-08, second measure, on the #106 branch (parent 43f3d72). The figures below are no longer a
 source-text estimate and are no longer maintained by arithmetic. They come
 from a sweep of the built environment, so they count what Lean actually has
 rather than what a regex can find at column 0:
@@ -37,11 +37,11 @@ lake build && lake env lean scripts/Census.lean
 ```
 
 The 2026-08-06 revision of this comment said **497 / 569 / 72 / 42 / 29 /
-167**; the 2026-08-07 one said 670 / 814 with the same derived figures as
-today -- PR #97 moved the first two to 677 / 821 and nothing else.
+167**; the 2026-08-07 one said 670 / 814; PR #97 took those to 677 / 821 and #106
+takes them to 680 / 824, the derived figures below unmoved throughout.
 **Re-run the command; do not adjust the numbers.**
 
-* It names **677** declarations. The environment holds **821** authored
+* It names **680** declarations. The environment holds **824** authored
   declarations under `BridgelandStabLean.*`, so **144 are outside this gate**.
   ("Authored" excludes constructors, recursors, `casesOn`, matchers, equation
   lemmas and internal names, which nobody writes and nobody would list.)
@@ -66,11 +66,11 @@ today -- PR #97 moved the first two to 677 / 821 and nothing else.
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **189 of the 677 are not theorems** (9 `structure`, 180 other constructions).
+* **189 of the 680 are not theorems** (9 `structure`, 180 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **488** real theorems, but it is a `def ... :
+  formatted identically to the **491** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -294,6 +294,17 @@ Hom-orthogonal aisles to the textbook `H⁰` formulation, with `τ^{≥0}` and
 #print axioms Tilting.HeartTorsionPair.freeOrth_iff_free_truncLE
 #print axioms Tilting.HeartTorsionPair.tiltLE_iff_tors_truncGE
 #print axioms Tilting.HeartTorsionPair.tiltGE_iff_free_truncLE
+
+/-! ## Tilting lane — the tilted heart identified
+
+`tilt_heart_iff` is the textbook `A† = ⟨F⟦1⟧, T⟩` in the single-step form
+exact for a torsion pair: membership in the tilted heart is exactly being an
+extension of a torsion object by a shifted torsion-free one. Closes #106
+under the #81 weak-stability epic; abstract, bound to no source coordinate. -/
+
+#print axioms Tilting.HeartTorsionPair.tilt_heart_of_triangle
+#print axioms Tilting.HeartTorsionPair.exists_triangle_of_tilt_heart
+#print axioms Tilting.HeartTorsionPair.tilt_heart_iff
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

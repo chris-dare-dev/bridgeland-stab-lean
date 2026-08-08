@@ -50,8 +50,9 @@ file.
 
 Established here: the datum, the aisles at every integer level with their
 isomorphism-closure, both factorisation lemmas standing in for the two counit
-isomorphisms, the orthogonality characterisations of both classes, and the
-agreement of both aisles with the textbook `H⁰` formulation.
+isomorphisms, the orthogonality characterisations of both classes, the
+agreement of both aisles with the textbook `H⁰` formulation, and the
+identification of the tilted heart with the extensions of `T` by `F⟦1⟧`.
 
 All six non-trivial `TStructure` fields are proved, and `tilt` assembles them.
 `exists_triangle_zero_one` — the last and hardest — is `exists_tilt_triangle`,
@@ -653,6 +654,117 @@ theorem tiltGE_iff_free_truncLE [IsTriangulated C] (X : C) :
   · rintro ⟨hge, hfree⟩
     exact ⟨hge, (P.freeOrth_iff_free_truncLE hge).mpr hfree⟩
 
+/-! ### The tilted heart
+
+The textbook description `A† = ⟨F⟦1⟧, T⟩`. Because `(T, F)` is a torsion
+pair the extension closure collapses to a single step, so the identification
+is an iff: an object lies in the tilted heart exactly when it is an extension
+of a torsion object by a shifted torsion-free one. No cohomology functor and
+no truncation–shift commutation appears anywhere: the forward direction reads
+both memberships off the truncation triangle of `X` and its `⟦-1⟧`-shift, and
+the backward direction is the two recognition lemmas, once directly and once
+through the `⟦-1⟧`-shift of the given triangle. -/
+
+/-- **An extension of a torsion object by a shifted torsion-free object lies
+in the tilted heart.** -/
+theorem tilt_heart_of_triangle [IsTriangulated C] {F₀ X T₀ : C}
+    (hF : P.free F₀) (hT : P.tors T₀)
+    {f : F₀⟦(1 : ℤ)⟧ ⟶ X} {g : X ⟶ T₀} {h : T₀ ⟶ F₀⟦(1 : ℤ)⟧⟦(1 : ℤ)⟧}
+    (hdist : Triangle.mk f g h ∈ distTriang C) : (P.tilt).heart X := by
+  haveI := P.free_isLE F₀ hF
+  haveI := P.free_isGE F₀ hF
+  rw [TStructure.mem_heart_iff]
+  refine ⟨⟨?_⟩, ⟨?_⟩⟩
+  · show P.tiltLEAt 0 X
+    exact P.tiltLEAt_zero_of_triangle (t.isLE_shift F₀ 0 1 (-1) (by lia)) hT hdist
+  · show P.tiltGEAt 0 X
+    have hdist' := Triangle.shift_distinguished _ hdist (-1)
+    have hF' : P.free ((F₀⟦(1 : ℤ)⟧)⟦(-1 : ℤ)⟧) :=
+      ObjectProperty.prop_of_iso P.free
+        (((shiftFunctorCompIsoId C (1 : ℤ) (-1 : ℤ) (by lia)).app F₀).symm) hF
+    have hW : t.IsGE (T₀⟦(-1 : ℤ)⟧) 1 := by
+      haveI := P.tors_isGE T₀ hT
+      exact t.isGE_shift T₀ 0 (-1) 1 (by lia)
+    have h1 : P.tiltGEAt 1 (X⟦(-1 : ℤ)⟧) :=
+      (P.tiltGEAt_one_iff _).mpr (P.tiltGE_of_triangle hF' hW hdist')
+    exact ObjectProperty.prop_of_iso (P.tiltGEAt 0)
+      ((shiftFunctorCompIsoId C (-1 : ℤ) (1 : ℤ) (by lia)).app X)
+      (P.tiltGEAt_shift 1 1 0 (by lia) _ h1)
+
+/-- **Every object of the tilted heart is an extension of a torsion object by
+a shifted torsion-free one** — the truncation triangle of `X`, with `τ^{≥0}X`
+torsion by `torsOrth_iff_tors_truncGE` and `(τ^{<0}X)⟦-1⟧` torsion-free by
+`free_of_orthogonal` and one coyoneda factorisation. -/
+theorem exists_triangle_of_tilt_heart [IsTriangulated C] {X : C}
+    (hX : (P.tilt).heart X) :
+    ∃ (F₀ T₀ : C) (_ : P.free F₀) (_ : P.tors T₀) (f : F₀⟦(1 : ℤ)⟧ ⟶ X)
+      (g : X ⟶ T₀) (h : T₀ ⟶ F₀⟦(1 : ℤ)⟧⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C := by
+  rw [TStructure.mem_heart_iff] at hX
+  obtain ⟨⟨hle⟩, ⟨hge⟩⟩ := hX
+  obtain ⟨hXle, horth⟩ := hle
+  obtain ⟨hXge, hforth⟩ := hge
+  haveI := hXle
+  haveI := hXge
+  have hdist := t.triangleLTGE_distinguished 0 X
+  -- `τ^{≥0}X` is torsion.
+  have htors : P.tors (((t.triangleLTGE 0).obj X).obj₃) :=
+    (P.torsOrth_iff_tors_truncGE hXle).mp
+      (ObjectProperty.prop_of_iso P.torsOrth ((shiftFunctorZero C ℤ).app X) horth)
+  -- `(τ^{<0}X)⟦-1⟧` lies in the heart.
+  have hobj₁ : ((t.triangleLTGE 0).obj X).obj₁ = (t.truncLT 0).obj X := rfl
+  haveI : t.IsLE (((t.triangleLTGE 0).obj X).obj₁) (0 - 1) := inferInstance
+  haveI : t.IsGE (((t.triangleLTGE 0).obj X).obj₁) (0 - 1) := by
+    rw [hobj₁]; infer_instance
+  have hle₀ : t.IsLE ((((t.triangleLTGE 0).obj X).obj₁)⟦(-1 : ℤ)⟧) 0 :=
+    t.isLE_shift _ (0 - 1) (-1) 0 (by lia)
+  have hge₀ : t.IsGE ((((t.triangleLTGE 0).obj X).obj₁)⟦(-1 : ℤ)⟧) 0 :=
+    t.isGE_shift _ (0 - 1) (-1) 0 (by lia)
+  -- `(τ^{<0}X)⟦-1⟧` is torsion-free: a torsion map into it composes to a map
+  -- into `X⟦-1⟧`, which dies by the aisle membership, and the composition is
+  -- injective for degree reasons via the shifted truncation triangle.
+  have hfree : P.free ((((t.triangleLTGE 0).obj X).obj₁)⟦(-1 : ℤ)⟧) := by
+    refine P.free_of_orthogonal hle₀ hge₀ ?_
+    intro T hT u
+    have hdist' := Triangle.shift_distinguished _ hdist (-1)
+    obtain ⟨k, hk⟩ := Triangle.coyoneda_exact₂ _ (inv_rot_of_distTriang _ hdist') u
+      (hforth T hT _)
+    have hk0 : k = 0 := by
+      have hobj₃ : ((shiftFunctor (Triangle C) (-1 : ℤ)).obj
+            ((t.triangleLTGE 0).obj X)).obj₃
+          = (((t.triangleLTGE 0).obj X).obj₃)⟦(-1 : ℤ)⟧ := rfl
+      haveI : t.IsGE (((shiftFunctor (Triangle C) (-1 : ℤ)).obj
+          ((t.triangleLTGE 0).obj X)).obj₃) 1 := by
+        rw [hobj₃]; exact t.isGE_shift _ 0 (-1) 1 (by lia)
+      exact t.zero_of_isLE_of_isGE k 0 2 (by lia) (P.tors_isLE T hT)
+        (t.isGE_shift _ 1 (-1) 2 (by lia))
+    rw [hk, hk0]
+    exact zero_comp
+  -- assemble the triangle along `(τ^{<0}X)⟦-1⟧⟦1⟧ ≅ τ^{<0}X`.
+  have e := (shiftFunctorCompIsoId C (-1 : ℤ) (1 : ℤ) (by lia)).app
+    (((t.triangleLTGE 0).obj X).obj₁)
+  refine ⟨(((t.triangleLTGE 0).obj X).obj₁)⟦(-1 : ℤ)⟧,
+    ((t.triangleLTGE 0).obj X).obj₃, hfree, htors,
+    e.hom ≫ ((t.triangleLTGE 0).obj X).mor₁, ((t.triangleLTGE 0).obj X).mor₂,
+    ((t.triangleLTGE 0).obj X).mor₃ ≫ e.inv⟦(1 : ℤ)⟧', ?_⟩
+  refine isomorphic_distinguished _ hdist _ ?_
+  exact Triangle.isoMk _ _ e (Iso.refl _) (Iso.refl _) (by simp) (by simp)
+    (by simp [← Functor.map_comp])
+
+/-- **The tilted heart is the textbook one**: extensions of `T` by `F⟦1⟧`.
+The single-step form is exact because `(T, F)` is a torsion pair, so this is
+the identification `A† = ⟨F⟦1⟧, T⟩` with no extension-closure operator
+needed. -/
+theorem tilt_heart_iff [IsTriangulated C] (X : C) :
+    (P.tilt).heart X ↔
+      ∃ (F₀ T₀ : C) (_ : P.free F₀) (_ : P.tors T₀) (f : F₀⟦(1 : ℤ)⟧ ⟶ X)
+        (g : X ⟶ T₀) (h : T₀ ⟶ F₀⟦(1 : ℤ)⟧⟦(1 : ℤ)⟧),
+        Triangle.mk f g h ∈ distTriang C := by
+  constructor
+  · exact P.exists_triangle_of_tilt_heart
+  · rintro ⟨F₀, T₀, hF, hT, f, g, h, hdist⟩
+    exact P.tilt_heart_of_triangle hF hT hdist
+
 /-! ### What is proved, and what is not
 
 **Every field of `Triangulated.TStructure` is proved**, and `tilt` is the
@@ -683,9 +795,11 @@ rotated map, so no sign appears.
   triangulated category. That the tilted heart is the heart of a stability
   condition, or that tilting is how stability conditions on surfaces are
   built, is *motivation* for this file and is not formalised in it.
-* **Any identification of the tilted heart.** The heart of `tilt` is
-  `tilt.heart`, and nothing here proves it is the extension closure of `T` and
-  `F⟦1⟧` — the usual description. That is a further theorem.
+
+The identification of the tilted heart, formerly on this list, is
+`tilt_heart_iff` (#106): the heart is exactly the extensions of `T` by
+`F⟦1⟧`, the single-step form of the extension closure `⟨F⟦1⟧, T⟩`, exact
+here because `(T, F)` is a torsion pair.
 
 ### The correction that made this possible
 
