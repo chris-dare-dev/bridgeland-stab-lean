@@ -27,10 +27,10 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-07. The figures below are no longer a source-text estimate
-and are no longer maintained by arithmetic. They come from a sweep of the
-built environment, so they count what Lean actually has rather than what a
-regex can find at column 0:
+RE-MEASURED 2026-08-08 at 91892c5. The figures below are no longer a
+source-text estimate and are no longer maintained by arithmetic. They come
+from a sweep of the built environment, so they count what Lean actually has
+rather than what a regex can find at column 0:
 
 ```bash
 lake build && lake env lean scripts/Census.lean
@@ -51,9 +51,12 @@ was caught once. Catching it a second time, in the same file, on generated
 names of a different shape, means the check has to be *grep the source for the
 family* -- not *remember which families exist*.
 
-Earlier revisions said **497 / 569 / 72 / 42 / 29 / 167**, then
-**670 / 814 / 144 / 44 / 59 / 189**. **Re-run the command; do not adjust the
-numbers.**
+Earlier revisions said **497 / 569 / 72 / 42 / 29 / 167** (2026-08-06), then
+**670 / 814 / 144 / 44 / 59 / 189** (2026-08-07). PR #97 moved the first two of
+those to **677 / 821** and nothing else; PR #104 corrected the theorem figure
+to **488**. Both were right against the filter of the day, and both are
+superseded here -- the 821 in particular counted the 30 generated names
+described above. **Re-run the command; do not adjust the numbers.**
 
 **THE GAP IS NOW ZERO, as of 2026-08-07.** Every public declaration in this
 library that is not a structure field projection is named below. Be precise
