@@ -524,6 +524,28 @@ at `(0,1)`; *every* wall of `v` passes through that point, and two explicit
 walls meet there and differ at `(0,2)`. Cite the theorem with its hypotheses —
 and still with no surface behind it (above).
 
+### Lane 8 — `WeakStability/` (the §14 definitions)
+
+Definitions 14.1–14.3 of `1902.08184v4` on the abstract layer, opened for the
+weak-stability epic (#81). A **weak** prestability condition is the anchor's
+datum with the compatibility ray *closed* at integer phases — the charge of a
+nonzero semistable object may vanish there — and open elsewhere; on a heart,
+values land in `ℍ ⊔ ℝ_{≤0}` instead of `ℍ ⊔ ℝ_{<0}`. The zero-charge
+subcategory `A⁰` is closed under subobjects, quotients and extensions, by
+`K₀` additivity and half-plane arithmetic.
+
+**Ordinary stability embeds by theorems, not prose**: `ofPre` keeps the
+slicing and charge definitionally (`ofPre_slicing`, `ofPre_Z`), and `toWeak`
+weakens strict stability functions.
+
+**Two boundaries.** The heart is carried inside `C` and subobject data is a
+heart triangle, as in the Tilting lane — the pin has no abelian instance on
+the heart. And the paper's `K(A)` is the ambient `K₀ C` here, positivity
+quantified over heart objects; `K(A) ≅ K(D)` is neither available at the pin
+nor assumed. **No statement of the paper is claimed as covered** — the
+coverage map stays all-`target` until #111's evidence-gated protocol moves
+it.
+
 ### Not a lane
 
 Anything requiring `Coh(X)`. See above. In particular the Bayer–Macrì wall

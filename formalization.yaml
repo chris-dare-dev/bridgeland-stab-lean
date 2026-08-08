@@ -31,8 +31,10 @@ artifact:
     lattice of simples; numerical walls in the (s,t) half plane; and the
     Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
 
-    The Mukai, Tilting and Support lanes are NOT scoped to this record's
-    `source`. The Tilting lane DOES contain the Happel-Reiten-Smalo tilt as of
+    The Mukai, Tilting, Support and WeakStability lanes are NOT scoped to
+    this record's `source`; the WeakStability lane is motivated by
+    1902.08184v4 (section 14) and bound to nothing yet -- see
+    registry/coverage-1902.08184v4.json. The Tilting lane DOES contain the Happel-Reiten-Smalo tilt as of
     PR #76 (HeartTorsionPair.tilt, a full Triangulated.TStructure, with the
     textbook-agreement theorems added under #94), but the tilt carries no
     binding to this record's source and no connection to any stability
@@ -338,13 +340,15 @@ fidelity:
     named, 795 authored, 85 outside the gate, ALL of them private (44) or
     structure field projections (41). THE REAL GAP IS ZERO -- a measurement
     taken at this tree, not a property the build maintains; the next
-    declaration added anywhere lands green without an entry.
+    declaration added anywhere lands green without an entry. #107's
+    WeakStability lane then adds 23 records and 7 structure field
+    projections: 733 named, 825 authored, 92 outside, gap still zero.
 
-    It is 710 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 795 AUTHORED declarations under
+    It is 733 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 825 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas, internal names, and the four
-    generated families #105's census correction filters -- so 85 are outside
+    generated families #105's census correction filters -- so 92 are outside
     the gate.
 
     44 of those are `private` (42 of them theorems) and are STRUCTURALLY
@@ -354,7 +358,7 @@ fidelity:
     means adding it here" cannot be followed for them. The earlier figure 42
     was counting private THEOREMS; there are 44 private DECLARATIONS.
 
-    41 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
+    48 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
     These are not a coverage gap in any useful sense and listing them would be
     noise.
 
@@ -368,14 +372,14 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 192 of the 710 entries are not theorems -- 9
-    structure, 183 other constructions. For a `def`, `#print axioms` reports
+    SECOND QUALIFICATION: 201 of the 733 entries are not theorems -- 12
+    structure, 189 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "710 established
-    results"; the theorem figure is 518.
+    that the proposition holds. Do not read this count as "733 established
+    results"; the theorem figure is 532.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -492,6 +496,23 @@ fidelity:
     statement is abstract -- the HeartTorsionPair datum, not the paper's
     slope pair -- and is bound to no source coordinate; the coverage map
     stays all-target.
+
+    COUNT UPDATE (WeakStability lane, the section-14 definitions),
+    2026-08-08. The 23 additional records open the lane for the #81 epic and
+    close #107: WeakPreStabilityCondition with the ofPre embedding and its
+    two definitional computation lemmas, the weak and ordinary stability
+    functions on a heart with the toWeak embedding, charge additivity on
+    triangles with its Triangle.mk specialisation and the zero-object
+    computation, the slope with its two evaluation lemmas, Z-semistability,
+    and the zero-charge subcategory A^0 with isomorphism-closure, the
+    half-plane splitting lemma, and closure under subobjects, quotients and
+    extensions. Audit 710 -> 733, measured on the #107 branch with main's
+    #105 census filter. 13 are theorems, 10 constructions (3 structure, 1
+    instance, 6 def/abbrev); 0 private, 23 named; 7 new structure field
+    projections (41 -> 48). The three structures and the constructions
+    report axiom closures of DEFINITIONS. No statement of 1902.08184v4 is
+    claimed as covered; the coverage map stays all-target pending #111's
+    protocol.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
