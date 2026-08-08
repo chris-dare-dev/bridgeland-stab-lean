@@ -312,8 +312,9 @@ fidelity:
     Allowlist verdict: pass, with check_audit's truncation cross-check (PR
     #102) confirming the record count against Audit.lean's own commands.
 
-    This lead was previously carried at "2026-08-07 at 9c34a2a ... 677",
-    before that at "2026-08-07 at 418d423 ... 670", and before that at
+    This lead was previously carried at "2026-08-08 ... 680" (the #106
+    branch before the merge), at "2026-08-07 at 9c34a2a ... 677",
+    at "2026-08-07 at 418d423 ... 670", and at
     "2026-08-06 at 56c7531 ... 497" -- each accurate as history
     and stale as a headline once the counts below moved. The lead states the
     CURRENT figure and its commit; the COUNT UPDATE chain further down is the
@@ -328,17 +329,23 @@ fidelity:
 
     The 2026-08-06 revision of this block said 497 / 569 / 72 / 42 / 29 / 167;
     the 418d423 re-measure replaced those with 670 / 814 / 144 / 44 / 41 / 59.
-    The moving figures are the first two: PR #97 added 7 audited theorems
-    (670 -> 677, 814 -> 821) and #106 adds 3 more (677 -> 680, 821 -> 824),
-    while every derived figure below (144 outside, 44 private, 41
-    projections, 59 real gap) is unchanged -- every newcomer is named in the
-    gate.
+    Two things moved since the 677 measure, in opposite directions. PR #105
+    closed the audit gap outright -- every listable public name is now in the
+    gate -- and corrected the census filter, which had been counting four
+    families of compiler-generated names (ctorIdx, mk.inj, congr_simp,
+    ext'_iff) as authored; the honest authored count DROPPED accordingly.
+    #106 then adds 3 tilted-heart theorems. Merged and re-measured: 710
+    named, 795 authored, 85 outside the gate, ALL of them private (44) or
+    structure field projections (41). THE REAL GAP IS ZERO -- a measurement
+    taken at this tree, not a property the build maintains; the next
+    declaration added anywhere lands green without an entry.
 
-    It is 680 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 824 AUTHORED declarations under
+    It is 710 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 795 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
-    casesOn, matchers, equation lemmas and internal names, none of which anyone
-    writes -- so 144 are outside the gate.
+    casesOn, matchers, equation lemmas, internal names, and the four
+    generated families #105's census correction filters -- so 85 are outside
+    the gate.
 
     44 of those are `private` (42 of them theorems) and are STRUCTURALLY
     unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
@@ -349,27 +356,26 @@ fidelity:
 
     41 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
     These are not a coverage gap in any useful sense and listing them would be
-    noise -- but they are 41 of the 100 ungated public names, so a census that
-    does not separate them overstates the real shortfall by two thirds. The
-    previous revision did not separate them and did not know they were there.
+    noise.
 
-    That leaves 59 public declarations simply not yet added -- still 20 of them
-    in GLTildeSurj.lean alone, which is the one figure the previous revision
-    got right and which has not moved. Nothing detects the shortfall
-    AUTOMATICALLY: check_audit.py never reads the source tree, and Audit.lean
+    That leaves ZERO public declarations not yet added: the 59 quoted here
+    previously (with 20 in GLTildeSurj.lean) were closed by #105 in two steps
+    on 2026-08-07. Nothing detects a NEW shortfall automatically:
+    check_audit.py cross-checks output count against Audit.lean's commands
+    (the #102 truncation fix) but never reads the source tree, and Audit.lean
     fails to build only when a name it ALREADY lists disappears, never when a
     name it should list appears. scripts/Census.lean reports it, but it is a
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 189 of the 680 entries are not theorems -- 9
-    structure, 180 other constructions. For a `def`, `#print axioms` reports
+    SECOND QUALIFICATION: 192 of the 710 entries are not theorems -- 9
+    structure, 183 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "680 established
-    results"; the theorem figure is 491.
+    that the proposition holds. Do not read this count as "710 established
+    results"; the theorem figure is 518.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -480,7 +486,9 @@ fidelity:
     free_of_orthogonal), and tilt_heart_iff -- the textbook A-dagger =
     <F[1], T> in the single-step form exact for a torsion pair, so no
     extension-closure operator appears. Audit count 677 -> 680, measured on
-    the #106 branch off 43f3d72. All 3 are theorems; 0 private, 3 named. The
+    the #106 branch off 43f3d72; after merging main's #105 gap closure the
+    merged tree measures 707 -> 710, with the census-filter correction
+    recorded in the headline. All 3 are theorems; 0 private, 3 named. The
     statement is abstract -- the HeartTorsionPair datum, not the paper's
     slope pair -- and is bound to no source coordinate; the coverage map
     stays all-target.
