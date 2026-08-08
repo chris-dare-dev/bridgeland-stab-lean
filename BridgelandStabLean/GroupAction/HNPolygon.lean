@@ -3,7 +3,6 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStability.StabilityFunction.Uniqueness
-import Mathlib.Analysis.Convex.Exposed
 import Mathlib.Analysis.Convex.Hull
 import Mathlib.Analysis.Convex.Jensen
 import Mathlib.Data.Fin.SuccPredOrder
