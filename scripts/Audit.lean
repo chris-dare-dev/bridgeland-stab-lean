@@ -278,6 +278,21 @@ and below. -/
 #print axioms Tilting.HeartTorsionPair.tilt_ge
 #print axioms Tilting.HeartTorsionPair.tilt_le_zero_iff
 
+/-! ## Tilting lane — textbook agreement for the tilted aisles
+
+The dual factorisation pair and `free_of_orthogonal` complete the counit
+substitutes on both sides, and the four agreement theorems tie the
+Hom-orthogonal aisles to the textbook `H⁰` formulation, with `τ^{≥0}` and
+`τ^{≤0}` in the role of `H⁰`. Closes the review finding F1 of #86 (#94). -/
+
+#print axioms Tilting.HeartTorsionPair.exists_factor_truncLE
+#print axioms Tilting.HeartTorsionPair.factor_truncLE_unique
+#print axioms Tilting.HeartTorsionPair.free_of_orthogonal
+#print axioms Tilting.HeartTorsionPair.torsOrth_iff_tors_truncGE
+#print axioms Tilting.HeartTorsionPair.freeOrth_iff_free_truncLE
+#print axioms Tilting.HeartTorsionPair.tiltLE_iff_tors_truncGE
+#print axioms Tilting.HeartTorsionPair.tiltGE_iff_free_truncLE
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real
