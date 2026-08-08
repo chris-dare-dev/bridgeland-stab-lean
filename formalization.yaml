@@ -32,9 +32,13 @@ artifact:
     Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
 
     The Mukai, Tilting and Support lanes are NOT scoped to this record's
-    `source`. The Tilting lane does NOT contain the Happel-Reiten-Smalo tilt,
-    and the Support lane's equivalence is asymmetrically stronger and weaker
-    than the literature's. See source_mapping and known_divergences.
+    `source`. The Tilting lane DOES contain the Happel-Reiten-Smalo tilt as of
+    PR #76 (HeartTorsionPair.tilt, a full Triangulated.TStructure, with the
+    textbook-agreement theorems added under #94), but the tilt carries no
+    binding to this record's source and no connection to any stability
+    condition -- see the Tilting paragraphs under known_divergences. The
+    Support lane's equivalence is asymmetrically stronger and weaker than the
+    literature's. See source_mapping and known_divergences.
   date: 2026-08-03
   authors:
     - Chris Dare
@@ -299,30 +303,38 @@ fidelity:
     the action on StabilityCondition.WithClassMap (step 3c).
   axiom_count: 0
   axiom_details: >
-    No axiom declarations. Transitive closure enumerated 2026-08-07 at 418d423
-    via `scripts/check_audit.py` over the 670 declarations named in
+    No axiom declarations. Transitive closure enumerated 2026-08-07 at 9c34a2a
+    via `scripts/check_audit.py` over the 677 declarations named in
     scripts/Audit.lean: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
-    Allowlist verdict: pass. Observed both locally and on CI run 31225686077.
+    Allowlist verdict: pass. Observed locally against this tree; the same
+    verdict at the same count was observed locally on the PR #97 branch, whose
+    merge 04aea18 is the commit that took the count to 677 (Lean sources are
+    identical from 04aea18 through 9c34a2a -- the #96 merge between them
+    touched a handoff note only).
 
-    This lead was last carried at "2026-08-06 at 56c7531 ... 497 declarations",
-    which was accurate as history and stale as a headline: the counts below had
-    moved seven times since. The lead states the CURRENT figure and its commit;
-    the COUNT UPDATE chain further down is the history and is not rewritten.
+    This lead was previously carried at "2026-08-07 at 418d423 ... 670", and
+    before that at "2026-08-06 at 56c7531 ... 497" -- each accurate as history
+    and stale as a headline once the counts below moved. The lead states the
+    CURRENT figure and its commit; the COUNT UPDATE chain further down is the
+    history and is not rewritten.
 
     WHAT THIS COUNT IS AND IS NOT, corrected 2026-08-06 and RE-MEASURED
-    2026-08-07 at 418d423. The figures below are no longer a source-text
+    2026-08-07 at 9c34a2a. The figures below are no longer a source-text
     estimate and are no longer maintained by arithmetic; they come from a sweep
     of the built environment via `lake env lean scripts/Census.lean`, which
     counts what Lean actually has rather than what a regex finds at column 0.
     Re-run that command; do not adjust the numbers.
 
-    The previous revision of this block said 497 / 569 / 72 / 42 / 29 / 167.
-    Every one of those is now wrong, and two were wrong IN KIND rather than
-    only in size -- see the projection paragraph.
+    The 2026-08-06 revision of this block said 497 / 569 / 72 / 42 / 29 / 167;
+    the 418d423 re-measure replaced those with 670 / 814 / 144 / 44 / 41 / 59.
+    At 9c34a2a the moving figures are the first two: PR #97 added 7 audited
+    theorems, so 670 -> 677 and 814 -> 821, while every derived figure below
+    (144 outside, 44 private, 41 projections, 59 real gap) is unchanged --
+    all 7 newcomers are named in the gate.
 
-    It is 670 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 814 AUTHORED declarations under
+    It is 677 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 821 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas and internal names, none of which anyone
     writes -- so 144 are outside the gate.
@@ -349,14 +361,14 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 189 of the 670 entries are not theorems -- 9
+    SECOND QUALIFICATION: 189 of the 677 entries are not theorems -- 9
     structure, 180 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "670 established
-    results"; the theorem figure is 481.
+    that the proposition holds. Do not read this count as "677 established
+    results"; the theorem figure is 488.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -744,6 +756,24 @@ fidelity:
     work and was merged at 326d72b. PR #67 carried the full-metric,
     separation, and Proposition 8.1 topology-infrastructure chain and was
     merged at 56c7531.
+
+    TRUST-PROSE RECONCILIATION, 2026-08-07, on Windows 11 / x86_64, working
+    tree at 9c34a2a plus prose-only changes (README.md, formalization.yaml,
+    registry/README.md -- zero Lean sources touched, so the Lean environment
+    IS 9c34a2a's, which is 04aea18's). The four locally runnable gates, all
+    green: `lake build` 3786 jobs exit 0, audit elaboration exit 0 with
+    check_audit "ok: 677 declarations, all within [propext, Classical.choice,
+    Quot.sound], no sorryAx", runLinter "Linting passed", `git diff --check`
+    clean. The audit elaboration FAILED TWICE before succeeding, truncating
+    mid-output at 661 and then 558 records with a concurrent Lean build
+    saturating memory on the same machine; the failure mode is a truncated
+    output file, which check_audit cannot distinguish from a smaller audit,
+    so on this workstation check the file ends cleanly -- or trust CI, which
+    runs alone. At the time this note was written CI runs 31235096164 (on
+    04aea18, the merge that took the audit to 677) and 31235112715 (on
+    9c34a2a) were IN PROGRESS; the latest completed main run was 31232834933
+    on 1149c52, success. The PR carrying this note must not merge unless its
+    own CI run and both of those conclude success.
   human_review: none
   machine_review: >
     THE MUKAI, TILTING, SUPPORT, FINITELENGTH AND WALL LANES HAVE HAD NO
@@ -1409,14 +1439,22 @@ fidelity:
     the numerical invariants of an object. That identification is geometry and
     is not made.
 
-    WALL LANE: THE NESTING THEOREM IS NOT PROVED. The statement the picture is
-    usually quoted by -- that two DISTINCT walls for the SAME v never meet, so
-    the walls for a fixed v are nested semicircles -- is NOT here. What is
-    proved is eq_of_two_walls: if two walls meet at a point and the (A,B) cross
-    term minA1 minB2 - minA2 minB1 is nonzero, that meeting point is pinned
-    down. The full nesting statement additionally needs that both minor vectors
-    are cross products against a common v, plus a rank argument in R^3, and
-    neither is done. Do not cite this lane as "walls are nested".
+    WALL LANE: THE NESTING THEOREM IS PROVED, WITH A CHARGE HYPOTHESIS THAT IS
+    PROVED NECESSARY. This paragraph previously said the theorem was NOT here
+    and that only eq_of_two_walls (a meeting point pinned down under a nonzero
+    (A,B) cross term) was available. That became false at PR #71:
+    wall_eq_of_meet states that two walls for the SAME v with nonzero minor
+    vectors, meeting at a single point where v's own charge does not vanish,
+    agree at EVERY point of the half plane -- contrapositively, distinct
+    numerical walls for a fixed v are disjoint away from the degenerate locus,
+    which is the statement the "nested semicircles" picture rests on. The
+    charge hypothesis is not decorative: wall_eq_of_meet_needs_charge exhibits
+    v = (2,0,1), where the charge vanishes at (0,1), ALL walls of v pass
+    through that point, and two explicit walls meet there and differ at (0,2).
+    Cite the theorem with its hypotheses: same v, nonzero minor vectors, a
+    nondegenerate meeting point. What has NOT changed: there is still no
+    surface and no sheaf (previous paragraph), so "walls in the (s,t) plane
+    for a numerical triple", not "walls for objects on a surface".
 
     FINITELENGTH LANE: `Fin n -> Z` IS NOT `K_0(A)`, AND THE MISSING BRIDGE IS
     NAMED. Identifying the model with the Grothendieck group of a finite-length

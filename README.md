@@ -360,7 +360,10 @@ H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
 ```
 
 The two agree wherever the usual one can be stated, but they are not literally
-the same definition, and a reader comparing to a textbook should know it.
+the same definition, and a reader comparing to a textbook should know it. As
+of #94 the agreement is itself a theorem on both sides, with the truncations
+in the role of `H⁰`: `tiltLE_iff_tors_truncGE` and `tiltGE_iff_free_truncLE`,
+via the dual factorisation pair and `free_of_orthogonal`.
 
 **Every `TStructure` field is proved, and `tilt` assembles them** into a
 genuine `Triangulated.TStructure`:
@@ -422,6 +425,24 @@ which is **strictly weaker** than being a quadratic form — `Q(x,y) = |xy|` on
 So do not cite `hasSupportProperty_iff` as "the support property is equivalent
 to the existence of a quadratic form". Closing that gap means restricting to an
 inner product space and building an actual `QuadraticMap`; it is not done.
+
+**The support property is open in the charge** (PR #78), in three forms of
+increasing packaging and *decreasing* hypotheses — all three are stated with
+`FiniteDimensional` omitted, and none uses compactness:
+
+* `hasSupportProperty_of_norm_sub_le` — the quantitative estimate. A charge
+  `ε`-close to `Z` (pointwise, `‖Z'v - Zv‖ ≤ ε‖v‖`) with `Cε < 1` has the
+  property with constant `C / (1 - Cε)`, which degrades to `+∞` exactly as
+  `Cε → 1`: a barely-true estimate tolerates a barely-nonzero perturbation.
+* `HasSupportProperty.exists_tolerance` — openness with **no topology on the
+  space of charges**: a positive tolerance exists around any charge with the
+  property, stated for plain linear maps.
+* `isOpen_hasSupportProperty` — the `IsOpen` form, for `S` fixed and charges
+  `V →L[ℝ] W` under the operator norm. The mathematical content is entirely in
+  the previous lemma; the only added step is `le_opNorm`.
+
+`S` stays an arbitrary subset throughout, so none of this asserts anything
+about semistable objects — the boundary above applies unchanged.
 
 ### Lane 6 — `FiniteLength/` (the lattice half of Bridgeland's `ℍ̄ⁿ`)
 
@@ -487,13 +508,16 @@ gap" was never engaged, because the gap was not on the path.
 
 **There is no surface.** `NumClass` is a triple of reals, not `ch(E)`.
 
-**The nesting theorem is not proved.** The statement usually quoted with this
-picture — two *distinct* walls for the *same* `v` never meet, so walls for a
-fixed `v` are nested — is not here. What is proved is `eq_of_two_walls`: two
-walls meeting at a point pin that point down, when the `(A,B)` cross term is
-nonzero. Full nesting needs that both minor vectors are cross products against
-a common `v`, plus a rank argument in `ℝ³`. Do not cite this lane as "walls are
-nested".
+**The nesting theorem is proved, and its charge hypothesis is proved
+necessary.** `wall_eq_of_meet`: two walls for the *same* `v` with nonzero
+minor vectors, meeting at one point where `v`'s own charge does not vanish,
+agree at every point of the half plane — contrapositively, distinct walls for
+a fixed `v` are disjoint away from the degenerate locus. That is the statement
+the "nested semicircles" picture rests on. The hypothesis is load-bearing:
+`wall_eq_of_meet_needs_charge` exhibits `v = (2,0,1)`, whose charge vanishes
+at `(0,1)`; *every* wall of `v` passes through that point, and two explicit
+walls meet there and differ at `(0,2)`. Cite the theorem with its hypotheses —
+and still with no surface behind it (above).
 
 ### Not a lane
 
