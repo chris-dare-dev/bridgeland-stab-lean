@@ -68,11 +68,11 @@ unchanged. **Re-run the command; do not adjust the numbers.**
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **212 of the 773 are not theorems** (9 `structure`, 203 other constructions).
+* **216 of the 800 are not theorems** (9 `structure`, 207 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **561** real theorems, but it is a `def ... :
+  formatted identically to the **584** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
