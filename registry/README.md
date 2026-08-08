@@ -91,11 +91,17 @@ declared `quote_sha256` recomputes from it, and the corpus `chunk_id` itself
 still recomputes as `sha256(NFC(body_text))[:16]` (every chunk of this paper has
 `preamble_ref = NULL`, so the id reduces to that).
 
-The second obligation, `obl-stability-mass-triangle`, was **drafted by a machine
-review on 2026-08-06 and has not been signed off**. Its `minted_by` says so, and
-that field must be corrected when a human accepts it. No `quote` was minted for
-it, so the three-way verification above does not apply and nothing corpus-derived
-entered the key. The `informal` field of `lem-3.4` was corrected in the same pass:
+The second obligation, `obl-stability-mass-triangle`, was drafted by a machine
+review on 2026-08-06 and **accepted by the owner on 2026-08-07**, at which point
+`minted_by` was corrected from the draft marker to the owner. Two distinct
+things must not be conflated here: the acceptance is of the **mint** — that the
+obligation is well-posed and belongs in the registry — and is **not** a
+discharge of the proof. The frontier item `stability-mass-triangle` remains
+open (`discharged_by: null`); it was narrowed on 2026-08-07 to the
+semistable-left case via `stabilityMassTriangleInequality_of_semistable`, and
+Proposition 8.1 stays non-`exact` under E-05 until it is discharged. No `quote`
+was minted for the obligation, so the three-way verification above does not
+apply and nothing corpus-derived entered the key. The `informal` field of `lem-3.4` was corrected in the same pass:
 it had described Bridgeland's Lemma 4.3 (`P(I)` quasi-abelian) rather than the
 extreme-phase monotonicity its own stored quote states.
 
