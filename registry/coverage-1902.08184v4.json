@@ -50,10 +50,26 @@
     "arxiv_version": "v4",
     "version_submitted_utc": "2022-01-25T12:16:53Z",
     "version_history": [
-      { "version": "v1", "submitted_utc": "2019-02-21T18:53:42Z", "source_size": "145 KB" },
-      { "version": "v2", "submitted_utc": "2020-12-16T09:59:40Z", "source_size": "150 KB" },
-      { "version": "v3", "submitted_utc": "2021-03-19T10:47:46Z", "source_size": "156 KB" },
-      { "version": "v4", "submitted_utc": "2022-01-25T12:16:53Z", "source_size": "156 KB" }
+      {
+        "version": "v1",
+        "submitted_utc": "2019-02-21T18:53:42Z",
+        "source_size": "145 KB"
+      },
+      {
+        "version": "v2",
+        "submitted_utc": "2020-12-16T09:59:40Z",
+        "source_size": "150 KB"
+      },
+      {
+        "version": "v3",
+        "submitted_utc": "2021-03-19T10:47:46Z",
+        "source_size": "156 KB"
+      },
+      {
+        "version": "v4",
+        "submitted_utc": "2022-01-25T12:16:53Z",
+        "source_size": "156 KB"
+      }
     ],
     "latest_version_at_pin_time": "v4",
     "journal_ref": "Publ. Math. IHES 133, 157-325 (2021)",
@@ -84,8 +100,14 @@
       "title": "Front matter",
       "status": "target",
       "sections": [
-        { "n": 1, "title": "Introduction" },
-        { "n": 2, "title": "Setup, notation, and some terminology" }
+        {
+          "n": 1,
+          "title": "Introduction"
+        },
+        {
+          "n": 2,
+          "title": "Setup, notation, and some terminology"
+        }
       ]
     },
     {
@@ -93,11 +115,26 @@
       "title": "Semiorthogonal decompositions and t-structures in families",
       "status": "target",
       "sections": [
-        { "n": 3, "title": "Semiorthogonal decompositions and base change" },
-        { "n": 4, "title": "Local t-structures" },
-        { "n": 5, "title": "Base change of local t-structures" },
-        { "n": 6, "title": "Flat, torsion, and torsion free objects" },
-        { "n": 7, "title": "Inducing local t-structures on semiorthogonal components" }
+        {
+          "n": 3,
+          "title": "Semiorthogonal decompositions and base change"
+        },
+        {
+          "n": 4,
+          "title": "Local t-structures"
+        },
+        {
+          "n": 5,
+          "title": "Base change of local t-structures"
+        },
+        {
+          "n": 6,
+          "title": "Flat, torsion, and torsion free objects"
+        },
+        {
+          "n": 7,
+          "title": "Inducing local t-structures on semiorthogonal components"
+        }
       ]
     },
     {
@@ -105,10 +142,22 @@
       "title": "Moduli spaces",
       "status": "target",
       "sections": [
-        { "n": 8, "title": "Moduli of complexes" },
-        { "n": 9, "title": "Moduli of objects in a subcategory" },
-        { "n": 10, "title": "Fiberwise t-structures" },
-        { "n": 11, "title": "Quot spaces" }
+        {
+          "n": 8,
+          "title": "Moduli of complexes"
+        },
+        {
+          "n": 9,
+          "title": "Moduli of objects in a subcategory"
+        },
+        {
+          "n": 10,
+          "title": "Fiberwise t-structures"
+        },
+        {
+          "n": 11,
+          "title": "Quot spaces"
+        }
       ]
     },
     {
@@ -116,14 +165,38 @@
       "title": "Harder-Narasimhan structures over a curve",
       "status": "target",
       "sections": [
-        { "n": 12, "title": "Stability conditions and base change" },
-        { "n": 13, "title": "Harder-Narasimhan structures over a curve" },
-        { "n": 14, "title": "Weak stability conditions, tilting, and base change" },
-        { "n": 15, "title": "Weak Harder-Narasimhan structures over a curve" },
-        { "n": 16, "title": "Semistable reduction" },
-        { "n": 17, "title": "Torsion theories and Harder-Narasimhan structures" },
-        { "n": 18, "title": "Harder-Narasimhan structures via stability conditions on fibers" },
-        { "n": 19, "title": "Tilting weak Harder-Narasimhan structures over a curve" }
+        {
+          "n": 12,
+          "title": "Stability conditions and base change"
+        },
+        {
+          "n": 13,
+          "title": "Harder-Narasimhan structures over a curve"
+        },
+        {
+          "n": 14,
+          "title": "Weak stability conditions, tilting, and base change"
+        },
+        {
+          "n": 15,
+          "title": "Weak Harder-Narasimhan structures over a curve"
+        },
+        {
+          "n": 16,
+          "title": "Semistable reduction"
+        },
+        {
+          "n": 17,
+          "title": "Torsion theories and Harder-Narasimhan structures"
+        },
+        {
+          "n": 18,
+          "title": "Harder-Narasimhan structures via stability conditions on fibers"
+        },
+        {
+          "n": 19,
+          "title": "Tilting weak Harder-Narasimhan structures over a curve"
+        }
       ]
     },
     {
@@ -131,10 +204,22 @@
       "title": "Stability conditions over a higher-dimensional base",
       "status": "target",
       "sections": [
-        { "n": 20, "title": "Flat families of fiberwise (weak) stability conditions" },
-        { "n": 21, "title": "Stability conditions over S" },
-        { "n": 22, "title": "Deforming stability conditions over S" },
-        { "n": 23, "title": "Inducing stability conditions over S" }
+        {
+          "n": 20,
+          "title": "Flat families of fiberwise (weak) stability conditions"
+        },
+        {
+          "n": 21,
+          "title": "Stability conditions over S"
+        },
+        {
+          "n": 22,
+          "title": "Deforming stability conditions over S"
+        },
+        {
+          "n": 23,
+          "title": "Inducing stability conditions over S"
+        }
       ]
     },
     {
@@ -142,11 +227,26 @@
       "title": "Construction",
       "status": "target",
       "sections": [
-        { "n": 24, "title": "Main construction statements" },
-        { "n": 25, "title": "Tilting slope-stability in families" },
-        { "n": 26, "title": "Tilting tilt-stability in families of threefolds" },
-        { "n": 27, "title": "Stability conditions from degeneration" },
-        { "n": 28, "title": "Donaldson-Thomas invariants" }
+        {
+          "n": 24,
+          "title": "Main construction statements"
+        },
+        {
+          "n": 25,
+          "title": "Tilting slope-stability in families"
+        },
+        {
+          "n": 26,
+          "title": "Tilting tilt-stability in families of threefolds"
+        },
+        {
+          "n": 27,
+          "title": "Stability conditions from degeneration"
+        },
+        {
+          "n": 28,
+          "title": "Donaldson-Thomas invariants"
+        }
       ]
     },
     {
@@ -154,26 +254,52 @@
       "title": "Moduli spaces for Kuznetsov components of cubic fourfolds",
       "status": "target",
       "sections": [
-        { "n": 29, "title": "Main applications to cubic fourfolds" },
-        { "n": 30, "title": "Stability conditions on families of Kuznetsov components" },
-        { "n": 31, "title": "Generalized Mukai's theorem" },
-        { "n": 32, "title": "Specializing Kuznetsov components to twisted K3 surfaces" },
-        { "n": 33, "title": "Proofs of the main results" }
+        {
+          "n": 29,
+          "title": "Main applications to cubic fourfolds"
+        },
+        {
+          "n": 30,
+          "title": "Stability conditions on families of Kuznetsov components"
+        },
+        {
+          "n": 31,
+          "title": "Generalized Mukai's theorem"
+        },
+        {
+          "n": 32,
+          "title": "Specializing Kuznetsov components to twisted K3 surfaces"
+        },
+        {
+          "n": 33,
+          "title": "Proofs of the main results"
+        }
       ]
     }
   ],
   "near_term_coordinates": [
     {
       "id": "sec-14-weak-stability-tilting",
-      "sections": [14],
+      "sections": [
+        14
+      ],
       "part": "III",
-      "status": "target",
+      "status": "mapped",
       "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/81",
-      "note": "Weak stability conditions and HRS tilting. The repository holds abstract HRS-tilt machinery (Tilting/HeartTorsionPair.lean, reviewed under #86 with agreement theorems from #94), but that machinery binds to NO statement of this paper and its review explicitly disclaimed any such connection. Promotion past 'target' starts from a specific v4 statement, not from the existence of related machinery."
+      "note": "Weak stability conditions and HRS tilting. The repository holds abstract HRS-tilt machinery (Tilting/HeartTorsionPair.lean, reviewed under #86 with agreement theorems from #94), but that machinery binds to NO statement of this paper and its review explicitly disclaimed any such connection. Promotion past 'target' starts from a specific v4 statement, not from the existence of related machinery. PROMOTED target -> mapped 2026-08-08 with the #109 landing: slicingTorsionPair and its heart identification are the named candidates for display (14.1), with the slope-phase translation recorded as the open gap in the evidence. Definitions 14.1-14.3 candidates (#107) and the Def 14.6 chain layer (#108) are named in their COUNT UPDATE entries; they remain part of this same mapped hypothesis, not separate claims.",
+      "evidence": {
+        "review_doc": "PR closing issue #109 (branch agent/issue-109-slope-torsion-pair); declarations named in the note below",
+        "reviewer": "claude-fable-5 (Claude Code), the #81 epic implementation session",
+        "reviewed_at": "2026-08-08",
+        "v4_check": "Display (14.1) and its surrounding text read from the pinned v4 PDF (sha256 in source.pdf_sha256), page 73: T^beta and F^beta are defined by slope bounds mu^- > beta / mu^+ <= beta on the heart of a weak stability condition, and A^sharp-beta = <F^beta[1], T^beta> is the tilted heart. The formalized pair (BridgelandStabLean.WeakStability.slicingTorsionPair, with phaseTors / phaseFree and slicingTilt_heart_iff) is the same construction in PHASE language on the slicing heart P((0,1]); the slope-phase reparametrisation mu = -cot(pi*phi) is order-preserving and NOT formalized. mapped records this correspondence as a hypothesis with that named gap; it is not a coverage claim."
+      }
     },
     {
       "id": "sec-18-21-uniform-support",
-      "sections": [18, 21],
+      "sections": [
+        18,
+        21
+      ],
       "part": "III/IV",
       "status": "target",
       "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/82",
@@ -181,7 +307,12 @@
     },
     {
       "id": "sec-20-23-families-interfaces",
-      "sections": [20, 21, 22, 23],
+      "sections": [
+        20,
+        21,
+        22,
+        23
+      ],
       "part": "IV",
       "status": "target",
       "tracking": "https://github.com/chris-dare-dev/bridgeland-stab-lean/issues/83",

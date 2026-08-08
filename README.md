@@ -538,6 +538,16 @@ subcategory `A⁰` is closed under subobjects, quotients and extensions, by
 slicing and charge definitionally (`ofPre_slicing`, `ofPre_Z`), and `toWeak`
 weakens strict stability functions.
 
+**The torsion pair at a phase cutoff** (#109): `slicingTorsionPair` — display
+(14.1) in phase language, `(P((β,1]), P((0,β]))` as a `HeartTorsionPair` on
+the slicing heart, unconditional on the slicing axioms: the HN cut is the
+decomposition and the slicing's phase-ordered vanishing is the orthogonality.
+The reviewed tilt applies, and `slicingTilt_heart_iff` identifies the tilted
+heart with extensions of `P((β,1])` by `P((0,β])⟦1⟧` — the `A^{♯β}` of the
+paper, **up to the slope–phase reparametrisation `μ = -cot(πφ)`, which is not
+formalized**; the coverage map records `mapped`, a hypothesis with that named
+gap, not a claim.
+
 **Noetherian torsion subcategories** (#108): Definition 14.6, with Remark
 14.7's chain condition *as* the definition — the pin has no abelian instance
 on the heart, and every §14 use runs on chain termination. A torsion pair's

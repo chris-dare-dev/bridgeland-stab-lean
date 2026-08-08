@@ -342,11 +342,12 @@ fidelity:
     taken at this tree, not a property the build maintains; the next
     declaration added anywhere lands green without an entry. #107's
     WeakStability lane then adds 23 records and 7 structure field
-    projections, and #108's noetherian-torsion layer 10 records and 9 more
-    projections: 743 named, 844 authored, 101 outside, gap still zero.
+    projections, #108's noetherian-torsion layer 10 records and 9 more
+    projections, and #109's phase-cutoff torsion pair 9 records with no new
+    structures: 752 named, 853 authored, 101 outside, gap still zero.
 
-    It is 743 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 844 AUTHORED declarations under
+    It is 752 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 853 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas, internal names, and the four
     generated families #105's census correction filters -- so 101 are
@@ -373,14 +374,14 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 208 of the 743 entries are not theorems -- 14
-    structure, 194 other constructions. For a `def`, `#print axioms` reports
+    SECOND QUALIFICATION: 211 of the 752 entries are not theorems -- 14
+    structure, 197 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
     so its clean axiom line means only that the DEFINITION is axiom-clean, not
-    that the proposition holds. Do not read this count as "743 established
-    results"; the theorem figure is 535.
+    that the proposition holds. Do not read this count as "752 established
+    results"; the theorem figure is 541.
 
     The environment-wide emitter (exe/Emit.lean) sweeps Environment.constants
     and therefore does see the private and unlisted names. It is the gate that
@@ -534,6 +535,25 @@ fidelity:
     TODO), the weak-HN existence layer (Lemma 14.4's content), and a
     formalization decision for "Z over Q[i]". Absent beats sorry-backed. No
     statement of 1902.08184v4 is claimed as covered.
+
+    COUNT UPDATE (WeakStability lane, the phase-cutoff torsion pair),
+    2026-08-08. The 9 additional records close #109, the display-(14.1)
+    child of the #81 epic: phaseTors and phaseFree (P((b,1]) and P((0,b])),
+    the leProp/gtProp isomorphism-closure lemmas, heart membership from the
+    two interval bounds, slicingTorsionPair -- the pair as a genuine
+    HeartTorsionPair on Slicing.toTStructure, UNCONDITIONAL on the slicing
+    axioms: hom-vanishing is zero_of_gtProp_leProp_general and the
+    decomposition is exists_split_at_cutoff on a filtration manufactured by
+    intervalProp_of_intrinsic_phases, with the two bounds the cut does not
+    hand over recovered by rotating the split triangle into the
+    leProp/gtProp extension closures -- its two rfl computation lemmas, and
+    slicingTilt_heart_iff, which composes with tilt_heart_iff (#106) to
+    identify the tilted heart with extensions of P((b,1]) by P((0,b])[1].
+    Audit 743 -> 752, measured on the #109 branch. 8 are theorems, 1
+    construction (slicingTorsionPair, a def); 0 private, 9 named. The
+    coverage map's sec-14 coordinate moves target -> mapped in the same
+    commit, with the slope-phase reparametrisation named as the open gap in
+    the evidence; mapped is a hypothesis, not a coverage claim.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
