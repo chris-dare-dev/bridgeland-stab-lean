@@ -767,9 +767,12 @@ fidelity:
     clean. The audit elaboration FAILED TWICE before succeeding, truncating
     mid-output at 661 and then 558 records with a concurrent Lean build
     saturating memory on the same machine; the failure mode is a truncated
-    output file, which check_audit cannot distinguish from a smaller audit,
-    so on this workstation check the file ends cleanly -- or trust CI, which
-    runs alone. At the time this note was written CI runs 31235096164 (on
+    output file, which check_audit at that date could not distinguish from a
+    smaller audit, so the note said to check the file ends cleanly -- or
+    trust CI, which runs alone. CLOSED 2026-08-08: check_audit.py now counts
+    the `#print axioms` commands in scripts/Audit.lean and fails when the
+    output's record count disagrees, so both truncations above would now
+    fail loudly instead of printing "ok: 661 declarations". At the time this note was written CI runs 31235096164 (on
     04aea18, the merge that took the audit to 677) and 31235112715 (on
     9c34a2a) were IN PROGRESS; the latest completed main run was 31232834933
     on 1149c52, success. The PR carrying this note must not merge unless its

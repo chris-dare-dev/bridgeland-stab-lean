@@ -58,12 +58,14 @@ numbers.**
 * That leaves **59 public declarations simply not added yet** -- still **20 of
   them in `GLTildeSurj.lean` alone**, which is the one figure the previous
   revision got right and which has not moved.
-* Nothing detects the shortfall *automatically*. `scripts/check_audit.py` never
-  reads the source tree, and this file fails to build only when a name it
-  ALREADY lists disappears -- never when a name it *should* list appears.
-  `scripts/Census.lean` is the thing that reports it, but it is a script you
-  run, not a CI gate; a name added without a matching entry here still lands
-  green.
+* Nothing detects the shortfall *automatically*. `scripts/check_audit.py` reads
+  THIS file, but only to count its `#print axioms` lines against the output's
+  record count (its truncation check, added 2026-08-08) -- it never reads the
+  source tree, so it cannot see a name that should be listed and is not. This
+  file fails to build only when a name it ALREADY lists disappears -- never
+  when a name it *should* list appears. `scripts/Census.lean` is the thing that
+  reports it, but it is a script you run, not a CI gate; a name added without a
+  matching entry here still lands green.
 * **189 of the 670 are not theorems** (9 `structure`, 180 other constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
