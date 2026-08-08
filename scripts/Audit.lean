@@ -71,11 +71,11 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **743** declarations (707 at the #105 gap closure, plus the 3
-  tilted-heart theorems of #106, the 23 WeakStability records of #107, and
-  the 10 noetherian-torsion records of #108). The environment holds **844**
-  authored declarations under `BridgelandStabLean.*`, so **101 are outside
-  this gate**, all of them private or projections. ("Authored" excludes constructors,
+* It names **752** declarations (707 at the #105 gap closure, plus 3 for
+  #106, 23 for #107, 10 for #108, and the 9 phase-cutoff records of #109).
+  The environment holds **853** authored declarations under
+  `BridgelandStabLean.*`, so **101 are outside this gate**, all of them
+  private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
@@ -107,12 +107,12 @@ this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **208 of the 743 are not theorems** (14 `structure`, 194 other
+* **211 of the 752 are not theorems** (14 `structure`, 197 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **535** real theorems, but it is a `def ... :
+  formatted identically to the **541** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -401,6 +401,26 @@ module -- absent beats sorry-backed. Closes #108. -/
 #print axioms WeakStability.zeroTorsionPair
 #print axioms WeakStability.zeroNoetherianTorsion
 #print axioms WeakStability.noetherian_mono
+
+/-! ## WeakStability lane -- the torsion pair at a phase cutoff
+
+Display (14.1) in phase language, unconditional on the slicing axioms: the
+pair (P((b,1]), P((0,b])) as a HeartTorsionPair on the slicing-induced
+t-structure, with the HN cut as decomposition and the slicing's own
+hom-vanishing as the orthogonality. slicingTilt_heart_iff composes with
+tilt_heart_iff (#106) to identify the tilted heart. The slope-phase
+reparametrisation is NOT formalized; the coverage map records `mapped`, a
+hypothesis, not a claim. Closes #109. -/
+
+#print axioms WeakStability.phaseTors
+#print axioms WeakStability.phaseFree
+#print axioms WeakStability.leProp_of_iso
+#print axioms WeakStability.gtProp_of_iso
+#print axioms WeakStability.mem_heart_of_bounds
+#print axioms WeakStability.slicingTorsionPair
+#print axioms WeakStability.slicingTorsionPair_tors
+#print axioms WeakStability.slicingTorsionPair_free
+#print axioms WeakStability.slicingTilt_heart_iff
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
