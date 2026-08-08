@@ -389,10 +389,15 @@ consume.
 
 **Nothing is declared with `sorry`.**
 
-**What is still not here.** `tilt` is a t-structure on a triangulated category.
-Nothing in the lane connects it to a stability condition, and nothing
-identifies the tilted heart with the extension closure of `T` and `F⟦1⟧` — the
-usual description. Both are further theorems.
+**The tilted heart is identified** (#106): `tilt_heart_iff` says `X` lies in
+`tilt.heart` exactly when it is an extension of a torsion object by a shifted
+torsion-free one — the textbook `A† = ⟨F⟦1⟧, T⟩`, in the single-step form
+that is exact for a torsion pair, so no extension-closure operator appears.
+
+**What is still not here.** `tilt` is a t-structure on a triangulated
+category. Nothing in the lane connects it to a stability condition — that is
+a further theorem, and the weak-stability program (#81) is where it would
+land.
 
 ### Lane 5 — `Support/` (the Kontsevich–Soibelman reformulation)
 
