@@ -323,7 +323,10 @@ authoritative whole-tree evidence is the two CI runs above.
 
 This review is machine-produced and does not constitute owner sign-off.
 
-- [ ] Owner has read the findings and accepts the dispositions of F1–F3.
+- [x] Owner has read the findings and accepts the dispositions of F1–F3.
+  Sign-off given by the owner on 2026-08-07: first as the instruction to merge
+  PR #93 and close #86, then as the explicit instruction to tick this box
+  (recorded in the #86 closing comment).
 
 `reviewer: claude-fable-5 (Claude Code), session independent of PR #76`
 `reviewed_at: 2026-08-07`
