@@ -24,10 +24,11 @@ properties under subobjects, quotients and extensions are proved here from
 ## Phrasing choices, stated for the reviewer
 
 * The heart is carried inside `C` as `t.heart`, following
-  `Tilting/HeartTorsionPair.lean`: the pinned Mathlib has no abelian-category
-  instance on the heart, so subobject data is carried by distinguished
-  triangles with all three vertices in the heart — for heart objects that is
-  the same thing as a short exact sequence.
+  `Tilting/HeartTorsionPair.lean`.  The pinned Mathlib does supply
+  `t.heartFullSubcategoryAbelian`; triangle-form subobject data is retained
+  here because it stays in the ambient category where the charge and slicing
+  live.  `TStructure.heartFullSubcategory_shortExact_of_distTriang` identifies
+  those heart triangles with short exact sequences in the abelian heart.
 * The paper's `K(A)` is replaced by the ambient `K₀ C`, on which the anchor's
   charges already live; the positivity conditions quantify over heart objects
   only. The comparison `K(A) ≅ K(D)` for a bounded t-structure is **not**

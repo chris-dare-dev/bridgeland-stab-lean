@@ -572,6 +572,24 @@ fidelity:
     The section-14 coverage coordinate remains mapped; the phase/slope
     correspondence is still an explicit hypothesis, not a reviewed claim.
 
+    COUNT UPDATE (weak heart equivalence, HN, and heart cohomology),
+    2026-08-09. The two stacked weak-stability commits 6dbb425 and b699ff6
+    add 34 authored public declarations: the forward slicing-to-heart bridge,
+    isomorphism transport, and abelian weak HN filtrations with existence for
+    the induced heart function. Tilting/HeartCohomology.lean adds 29 more: a
+    t-structure-only cohomology functor usable for both hearts, the canonical
+    torsion-free H-minus-one and torsion H-zero factors of a tilted-heart
+    object, their distinguished triangle and tilted-heart short exact
+    sequence, and kernel/cokernel witnesses for its maps. Audit 757 -> 820;
+    the environment census is 934 authored declarations, with 45 private and
+    69 structure-field projections, leaving 0 authored public declarations
+    outside the hand audit. Of the 63 additions, 41 are theorems and 22 are
+    constructions (including 1 structure). The arbitrary-short-exact
+    six-term original-cohomology sequence, weak support-property transport,
+    Proposition 14.16, and Lemma 14.17 remain undeclared. This update does not
+    promote the section-14 coverage coordinate: it remains mapped, with no
+    new human faithfulness review or owner signoff inferred from compilation.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,

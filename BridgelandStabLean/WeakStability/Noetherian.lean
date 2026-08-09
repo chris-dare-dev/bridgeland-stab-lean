@@ -18,9 +18,11 @@ built for.
 
 Definition 14.6 calls `B ⊆ A` a *noetherian torsion subcategory* if `B` is an
 abelian subcategory, `B` is a noetherian abelian category, and `(B, B^⊥)` is
-a torsion pair in `A`. At the pin there is no abelian-category instance on
-the heart (Mathlib's own TODO), so "noetherian abelian category" is not
-directly statable. Remark 14.7 characterises the notion for extension-closed
+a torsion pair in `A`. The pin supplies an abelian instance on the full heart,
+but `B` here is an object property inside the ambient category; there is no
+bundled abelian-category/noetherian structure on that property whose
+equivalence with the chain condition is available. Remark 14.7 characterises
+the notion for extension-closed
 `B`: **every increasing chain of `B`-subobjects of a fixed `E ∈ A`
 terminates.** That chain condition is statable — a subobject is a heart
 monomorphism, which is a map whose cone is again in the heart — and it is

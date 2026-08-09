@@ -365,6 +365,16 @@ of #94 the agreement is itself a theorem on both sides, with the truncations
 in the role of `H⁰`: `tiltLE_iff_tors_truncGE` and `tiltGE_iff_free_truncLE`,
 via the dual factorisation pair and `free_of_orthogonal`.
 
+`HeartCohomology.lean` now adds the complementary object-level bridge without
+changing that construction: `originalHeartCohFunctor` depends only on a
+t-structure, so it applies to both the original and tilted hearts. For every
+tilted-heart object it identifies the canonical torsion-free `H⁻¹` and torsion
+`H⁰` factors and proves
+`0 → H⁻¹(E)[1] → E → H⁰(E) → 0` short exact in the tilted heart, with the two
+maps exposed as a kernel and a cokernel. It does **not** claim the still-open
+six-term original-cohomology sequence for an arbitrary tilted-heart short
+exact sequence; that requires the homologicality gap above.
+
 **Every `TStructure` field is proved, and `tilt` assembles them** into a
 genuine `Triangulated.TStructure`:
 
@@ -566,8 +576,9 @@ formalized**; the coverage map records `mapped`, a hypothesis with that named
 gap, not a claim.
 
 **Noetherian torsion subcategories** (#108): Definition 14.6, with Remark
-14.7's chain condition *as* the definition — the pin has no abelian instance
-on the heart, and every §14 use runs on chain termination. A torsion pair's
+14.7's chain condition *as* the definition — the full heart is abelian, but
+an arbitrary object property `B` has no bundled noetherian abelian-subcategory
+structure at the pin, and every §14 use runs on chain termination. A torsion pair's
 free class is proved to be `B^⊥` (`free_iff_rightOrthogonal`, the payoff of
 #94's `free_of_orthogonal`), and the zero subcategory is the nonvacuity
 witness. **Lemmas 14.8 and 14.11 are deliberately undeclared** — statable,
@@ -584,12 +595,15 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
 explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
 undeclared**: their proofs still require weak support-property transport and
-heart kernel/image/cohomology machinery.
+the arbitrary-short-exact long cohomology bridge. The canonical two-term
+original/tilted-heart kernel--cokernel bridge is now in
+`Tilting/HeartCohomology.lean`.
 The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
 
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
-heart triangle, as in the Tilting lane — the pin has no abelian instance on
-the heart. And the paper's `K(A)` is the ambient `K₀ C` here, positivity
+heart triangle, as in the Tilting lane; the available abelian full-heart
+instance converts these triangles to short exact sequences when needed. And
+the paper's `K(A)` is the ambient `K₀ C` here, positivity
 quantified over heart objects; `K(A) ≅ K(D)` is neither available at the pin
 nor assumed. The section-14 coverage coordinate stays `mapped`: its
 phase-language correspondence is a recorded hypothesis, not a reviewed or
