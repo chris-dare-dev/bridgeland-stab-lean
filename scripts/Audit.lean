@@ -27,10 +27,10 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-08 on the #110 branch (parent 7524f06). The figures below are no longer a
-source-text estimate and are no longer maintained by arithmetic. They come
-from a sweep of the built environment, so they count what Lean actually has
-rather than what a regex can find at column 0:
+RE-MEASURED 2026-08-08 after the #88 HN-polygon port on main at b0b90ed. The
+figures below are no longer a source-text estimate and are no longer maintained
+by arithmetic. They come from a sweep of the built environment, so they count
+what Lean actually has rather than what a regex can find at column 0:
 
 ```bash
 lake build && lake env lean scripts/Census.lean
@@ -58,12 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, as of 2026-08-07.** Every public declaration in this
-library that is not a structure field projection is named below. Be precise
-about what that does and does not mean -- three of the four qualifications in
-this comment are unaffected by it:
+**THE GAP IS NOW ZERO, re-measured after merging the #88 and weak-stability
+branches on 2026-08-09.** Every
+public declaration in this library that is not a structure field projection is
+named below. Be precise about what that does and does not mean -- three of the
+four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **82 private** declarations, which remain structurally
+* it does NOT cover the **95 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -71,19 +72,17 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **852** declarations (707 at the #105 gap closure, plus 3 for
-  #106, 23 for #107, 10 for #108, 9 for #109, and the 5 Definition-14.12
-  records of #110, then 34 for the weak heart-equivalence/HN stack and 29 for
-  the original/tilted-heart cohomology bridge, 31 for the six-term sequence
-  boundary, and 1 for unconditional t-structure cohomology homologicality).
-  The environment holds **1003** authored declarations under
-  `BridgelandStabLean.*`, so **151 are outside
-  this gate**, all of them
-  private or projections. ("Authored" excludes constructors,
+* It names **946** declarations (757 through #110, plus 94 public declarations
+  independently censused for #88, then 34 for the weak heart-equivalence/HN
+  stack, 29 for the original/tilted-heart cohomology bridge, 31 for the
+  six-term sequence boundary, and 1 for unconditional t-structure cohomology
+  homologicality). The environment holds **1110** authored declarations under
+  `BridgelandStabLean.*`, so **164 are outside this gate**, all of them private
+  or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **82 are `private`** -- 72 of them theorems -- and are *structurally*
+* **95 are `private`** -- 83 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
@@ -112,12 +111,12 @@ this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **216 of the 757 are not theorems** (15 `structure`, 201 other
+* **279 of the 946 are not theorems** (16 `structure`, 263 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **541** real theorems, but it is a `def ... :
+  formatted identically to the **667** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -1169,6 +1168,106 @@ this against the file by eye. -/
 #print axioms BridgelandStabLean.GroupAction.AutPair.mass_map_functor
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass
 #print axioms BridgelandStabLean.GroupAction.AutPair.act_stabilityMass_functor_obj
+
+/-! ## HNPolygon — abelian HN paths and positive-angle support -/
+
+#print axioms CategoryTheory.AbelianHNFiltration.factorObj
+#print axioms CategoryTheory.AbelianHNFiltration.hnPolygon_le_of_polygonVertex_isMax
+#print axioms CategoryTheory.AbelianHNFiltration.last_le_phase
+#print axioms CategoryTheory.AbelianHNFiltration.last_prefix_le_quotient_phase
+#print axioms CategoryTheory.AbelianHNFiltration.mass
+#print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_mass
+#print axioms CategoryTheory.AbelianHNFiltration.norm_charge_le_polygonLength
+#print axioms CategoryTheory.AbelianHNFiltration.phase_last_prefix_le_of_ne_zero_to_semistable
+#print axioms CategoryTheory.AbelianHNFiltration.phase_le_first
+#print axioms CategoryTheory.AbelianHNFiltration.polygonEdge
+#print axioms CategoryTheory.AbelianHNFiltration.polygonEdge_arg
+#print axioms CategoryTheory.AbelianHNFiltration.polygonEdge_arg_strictAnti
+#print axioms CategoryTheory.AbelianHNFiltration.polygonEdge_mem_upperHalfPlaneUnion
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_eq_mass
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_exists_strict_support
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_exists_strict_support_hnPolygon
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_last
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_mem_hnPolygon
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_succ_sub
+#print axioms CategoryTheory.AbelianHNFiltration.polygonVertex_zero
+#print axioms CategoryTheory.AbelianHNFiltration.quotientHNFiltration
+#print axioms CategoryTheory.AbelianHNFiltration.quotientInfToCokernel
+#print axioms CategoryTheory.AbelianHNFiltration.quotientInfToCokernel_mono
+#print axioms CategoryTheory.AbelianHNFiltration.quotient_inf_phase_le
+#print axioms CategoryTheory.AbelianHNFiltration.semistable_le_chain_of_phase_gt
+#print axioms CategoryTheory.AbelianHNFiltration.semistable_phase_le_first
+#print axioms CategoryTheory.AbelianHNFiltration.subobjectCharge_exists_strict_support
+#print axioms CategoryTheory.AbelianHNFiltration.subobjectCharge_le_of_polygonVertex_isMax
+#print axioms CategoryTheory.AbelianHNFiltration.subobject_phase_le_first
+#print axioms CategoryTheory.ComplexPolygonalPath.arg_last_edge_le_arg_last_sub_zero
+#print axioms CategoryTheory.ComplexPolygonalPath.arg_last_sub_zero_le_arg_first
+#print axioms CategoryTheory.ComplexPolygonalPath.arg_unitRay
+#print axioms CategoryTheory.ComplexPolygonalPath.crossFunctional
+#print axioms CategoryTheory.ComplexPolygonalPath.crossFunctional_apply
+#print axioms CategoryTheory.ComplexPolygonalPath.crossFunctional_neg_of_arg_lt
+#print axioms CategoryTheory.ComplexPolygonalPath.crossFunctional_pos_of_arg_lt
+#print axioms CategoryTheory.ComplexPolygonalPath.exists_strict_support_at_interior
+#print axioms CategoryTheory.ComplexPolygonalPath.length
+#print axioms CategoryTheory.ComplexPolygonalPath.norm_last_sub_zero_le_length
+#print axioms CategoryTheory.ComplexPolygonalPath.sum_edges_eq_last_sub_zero
+#print axioms CategoryTheory.ComplexPolygonalPath.unitRay
+#print axioms CategoryTheory.ComplexPolygonalPath.unitRay_im
+#print axioms CategoryTheory.ComplexPolygonalPath.unitRay_mem_upperHalfPlaneUnion
+#print axioms CategoryTheory.ComplexPolygonalPath.unitRay_re
+#print axioms CategoryTheory.StabilityFunction.hnPolygon
+#print axioms CategoryTheory.StabilityFunction.hnPolygon_mono
+#print axioms CategoryTheory.StabilityFunction.subobjectCharge_mem_hnPolygon
+
+/-! ## ConvexPolygonPerimeter — finite perimeter and short-exact mass bounds -/
+
+#print axioms CategoryTheory.AbelianHNFiltration.mass_eq_mass
+#print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_cokernel_of_mono
+#print axioms CategoryTheory.AbelianHNFiltration.mass_le_add_norm_of_shortExact
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_add_norm_charge_sub_of_mono
+#print axioms CategoryTheory.AbelianHNFiltration.polygonLength_le_of_vertexHull_subset
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_comp_monotone_le
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_cons_cons
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_mono_sublist
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_nil
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_ofFn_eq_length
+#print axioms CategoryTheory.ComplexPolygonalPath.chainLength_singleton
+#print axioms CategoryTheory.ComplexPolygonalPath.closedEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_comp_monotone_le
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_length_add_chord
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_eq_sum_turning
+#print axioms CategoryTheory.ComplexPolygonalPath.closedLength_le_of_monotone_support
+#print axioms CategoryTheory.ComplexPolygonalPath.closedTangent
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex_max
+#print axioms CategoryTheory.ComplexPolygonalPath.crossMaxIndex_mono_of_angle_gt
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_apply
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_le_norm_mul
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_sub_left
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_sub_right
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_unitDirection_self
+#print axioms CategoryTheory.ComplexPolygonalPath.dotFunctional_unitRay_sub
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector_mem_Ioo
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorBisector_strictAnti
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorNextEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorPrevEdge
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorTurnScale
+#print axioms CategoryTheory.ComplexPolygonalPath.interiorTurnScale_pos
+#print axioms CategoryTheory.ComplexPolygonalPath.last_sub_zero_mem_upperHalfPlaneUnion
+#print axioms CategoryTheory.ComplexPolygonalPath.length_le_of_convexHull_subset
+#print axioms CategoryTheory.ComplexPolygonalPath.length_snoc
+#print axioms CategoryTheory.ComplexPolygonalPath.norm_unitDirection_le_one
+#print axioms CategoryTheory.ComplexPolygonalPath.sub_mem_upperHalfPlaneUnion_of_lt
+#print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional
+#print axioms CategoryTheory.ComplexPolygonalPath.turningFunctional_interior_eq_cross
+#print axioms CategoryTheory.ComplexPolygonalPath.unitDirection
+#print axioms CategoryTheory.ComplexPolygonalPath.unitDirection_eq_unitRay_arg
 
 /-! ## StabilityDistance — the three-coordinate extended pseudodistance -/
 
