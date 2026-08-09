@@ -558,13 +558,25 @@ but their proofs need heart kernel/image machinery, the weak-HN layer, and a
 `ℚ[i]`-discreteness decision; the gaps are named in the module. Absent beats
 sorry-backed.
 
+**The tilting property** (#110): `TiltingProperty` packages Definition
+14.12 in the same phase-language model. Its zero-charge class is explicitly
+the torsion class of a `NoetherianTorsionSubcategory`; for every heart object
+with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
+`F -> Ftilde -> F0` with `F0` of zero charge and every map
+`A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
+`muPlus < +infinity`; the unformalized slope--phase correspondence remains an
+explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
+undeclared**: their proofs require the missing weak-HN heart equivalence,
+weak support-property transport, and heart kernel/image/cohomology machinery.
+The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
+
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
 heart triangle, as in the Tilting lane — the pin has no abelian instance on
 the heart. And the paper's `K(A)` is the ambient `K₀ C` here, positivity
 quantified over heart objects; `K(A) ≅ K(D)` is neither available at the pin
-nor assumed. **No statement of the paper is claimed as covered** — the
-coverage map stays all-`target` until #111's evidence-gated protocol moves
-it.
+nor assumed. The section-14 coverage coordinate stays `mapped`: its
+phase-language correspondence is a recorded hypothesis, not a reviewed or
+formalized source claim, and promotion remains owner-gated under #111.
 
 ### Not a lane
 

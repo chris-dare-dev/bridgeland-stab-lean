@@ -27,7 +27,7 @@ Reading the output: a declaration is clean iff its axiom list is a subset of
 CORRECTED 2026-08-06. The first line of this comment used to read "over every
 declaration this project introduces". It is not, and cannot be.
 
-RE-MEASURED 2026-08-08, second measure, on the #106 branch (parent 43f3d72). The figures below are no longer a
+RE-MEASURED 2026-08-08 on the #110 branch (parent 7524f06). The figures below are no longer a
 source-text estimate and are no longer maintained by arithmetic. They come
 from a sweep of the built environment, so they count what Lean actually has
 rather than what a regex can find at column 0:
@@ -71,10 +71,10 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **752** declarations (707 at the #105 gap closure, plus 3 for
-  #106, 23 for #107, 10 for #108, and the 9 phase-cutoff records of #109).
-  The environment holds **853** authored declarations under
-  `BridgelandStabLean.*`, so **101 are outside this gate**, all of them
+* It names **757** declarations (707 at the #105 gap closure, plus 3 for
+  #106, 23 for #107, 10 for #108, 9 for #109, and the 5 Definition-14.12
+  records of #110). The environment holds **860** authored declarations under
+  `BridgelandStabLean.*`, so **103 are outside this gate**, all of them
   private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
@@ -84,8 +84,8 @@ this comment are unaffected by it:
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **57 are structure field projections** emitted by the `structure` command
-  (41 before the five WeakStability structures).
+* **59 are structure field projections** emitted by the `structure` command
+  (41 before the six WeakStability structures).
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -107,7 +107,7 @@ this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **211 of the 752 are not theorems** (14 `structure`, 197 other
+* **216 of the 757 are not theorems** (15 `structure`, 201 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
@@ -421,6 +421,22 @@ hypothesis, not a claim. Closes #109. -/
 #print axioms WeakStability.slicingTorsionPair_tors
 #print axioms WeakStability.slicingTorsionPair_free
 #print axioms WeakStability.slicingTilt_heart_iff
+
+/-! ## WeakStability lane -- the tilting property
+
+Definition 14.12 in phase language: A0 is the torsion class of a noetherian
+torsion subcategory, and every heart object with phiPlus below the boundary
+has a heart-triangle envelope with zero-charge quotient and shifted
+Hom-vanishing. Proposition 14.16 and Lemma 14.17 are deliberately UNDECLARED;
+the module docstring names the missing weak-HN/support and heart
+kernel/image/cohomology infrastructure. The coverage map stays `mapped`.
+Closes #110 with the honest subset allowed by its acceptance criteria. -/
+
+#print axioms WeakStability.IsNoetherianTorsionSubcategory
+#print axioms WeakStability.WeakPreStabilityCondition.zeroCharge
+#print axioms WeakStability.WeakPreStabilityCondition.HasFiniteMaxSlope
+#print axioms WeakStability.WeakPreStabilityCondition.HasTiltingEnvelope
+#print axioms WeakStability.WeakPreStabilityCondition.TiltingProperty
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
