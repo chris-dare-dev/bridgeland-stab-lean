@@ -47,6 +47,7 @@ import BridgelandStabLean.GroupAction.PeriodMapEquivariance
 import BridgelandStabLean.GroupAction.EffectiveAction
 import BridgelandStabLean.GroupAction.StabilityMassTriangle
 import BridgelandStabLean.WeakStability.Basic
+import BridgelandStabLean.WeakStability.HeartEquivalence
 import BridgelandStabLean.WeakStability.Noetherian
 import BridgelandStabLean.WeakStability.SlopeTorsionPair
 import BridgelandStabLean.WeakStability.TiltingProperty

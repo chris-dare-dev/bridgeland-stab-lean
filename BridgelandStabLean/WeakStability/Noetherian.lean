@@ -40,9 +40,9 @@ rule that absent beats sorry-backed. What their proofs need, precisely:
   noetherian): the proof runs on surjection chains, kernels of composites,
   maximal subobjects with `ℑZ = 0` extracted from HN filtrations, and a
   discreteness argument for the charge image. Missing at the pin: kernel and
-  image machinery in the heart (the abelian instance again), an HN-existence
-  theory for weak stability functions on a heart (Definition 12.5's analogue
-  — Lemma 14.4's content, deliberately excluded from #107), and a
+  image machinery in the heart, a packaged HN-existence theory for weak
+  stability functions on a heart (the semistable-object comparison is now in
+  `HeartEquivalence.lean`, but the abelian HN filtration is not), and a
   formalization decision for "Z defined over ℚ[i]" that makes the
   discreteness step honest.
 * **Lemma 14.11** (bounded-slope chains terminate): the statement needs only
@@ -50,8 +50,8 @@ rule that absent beats sorry-backed. What their proofs need, precisely:
   compact-parallelogram argument, and the finitely-many-HN-classes input of
   Remark 12.3, which is support-property infrastructure.
 
-When the weak-HN layer exists, both lemmas should be attempted under a
-dedicated issue; #108 records the definitions and the boundary.
+When the heart-level weak-HN package exists, both lemmas should be attempted
+under a dedicated issue; #108 records the definitions and the boundary.
 -/
 
 namespace BridgelandStabLean.WeakStability
