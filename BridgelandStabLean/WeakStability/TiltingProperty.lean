@@ -33,16 +33,17 @@ heart-level weak stability function and identifies its semistable nonzero
 heart objects with slicing semistability;
 `WeakStability/HarderNarasimhan.lean` now packages the abelian weak HN
 filtration and proves its existence for that induced function.  What remains
-absent is weak support-property transport and the general theorem that
-original-heart cohomology is homological.  `Tilting/HeartCohomology.lean`
-supplies the common
+is to assemble the semistable-object classification and transport the weak
+support property.  `Tilting/HeartCohomology.lean` supplies the common
 cohomology functor, the canonical `H⁻¹[1] → E → H⁰` short exact sequence, and
 its kernel/cokernel witnesses.  `Tilting/HeartCohomologySequence.lean`
 constructs the arbitrary-short-exact six-term sequence, identifies all six
-canonical factors, and proves exactness plus the two endpoint properties from
-the explicitly named `OriginalHeartCohomologyIsHomological` boundary.  The
-pin does not yet discharge that general category-theoretic proposition, so
-declaring either paper result would still require an unproved hypothesis.
+canonical factors, and proves exactness plus the two endpoint properties
+unconditionally.  The underlying general theorem is supplied by
+`Tilting/HeartCohomologyHomological.lean`, which proves degree-zero
+cohomology homological for every t-structure without stability or HN data.
+Thus the cohomological blocker is closed, but neither remaining paper result
+is declared before its own classification/support argument is formalized.
 -/
 
 namespace BridgelandStabLean.WeakStability

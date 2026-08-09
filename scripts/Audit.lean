@@ -63,7 +63,7 @@ library that is not a structure field projection is named below. Be precise
 about what that does and does not mean -- three of the four qualifications in
 this comment are unaffected by it:
 
-* it does NOT cover the **44 private** declarations, which remain structurally
+* it does NOT cover the **82 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -71,18 +71,19 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **851** declarations (707 at the #105 gap closure, plus 3 for
+* It names **852** declarations (707 at the #105 gap closure, plus 3 for
   #106, 23 for #107, 10 for #108, 9 for #109, and the 5 Definition-14.12
   records of #110, then 34 for the weak heart-equivalence/HN stack and 29 for
-  the original/tilted-heart cohomology bridge, and 31 for the six-term
-  sequence boundary). The environment holds **965** authored declarations
-  under `BridgelandStabLean.*`, so **114 are outside
+  the original/tilted-heart cohomology bridge, 31 for the six-term sequence
+  boundary, and 1 for unconditional t-structure cohomology homologicality).
+  The environment holds **1003** authored declarations under
+  `BridgelandStabLean.*`, so **151 are outside
   this gate**, all of them
   private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **45 are `private`** -- 43 of them theorems -- and are *structurally*
+* **82 are `private`** -- 72 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
@@ -394,13 +395,13 @@ cohomology sequence remains deliberately undeclared. -/
 
 /-! ## Tilting lane — six-term original-heart cohomology sequence
 
-The six-term sequence is constructed for any triangle and specialized to a
-short exact sequence in the tilted heart, with canonical identifications of
-all six terms.  Exactness and the endpoint mono/epi statements are proved
-from the explicitly named general t-structure homologicality boundary; no
-instance of that boundary is asserted here. -/
+Degree-zero cohomology of an arbitrary t-structure is proved homological.
+The six-term sequence is then constructed for any triangle and specialized
+to a short exact sequence in the tilted heart, with canonical identifications
+of all six terms and unconditional exactness plus endpoint mono/epi. -/
 
 #print axioms Tilting.OriginalHeartCohomologyIsHomological
+#print axioms Tilting.originalHeartCohFunctor_isHomological
 #print axioms Tilting.originalHeartCohFunctor_zero_shiftSequence
 #print axioms Tilting.originalHeartCohShiftIso
 #print axioms Tilting.originalHeartCoh_isZero_of_isGE

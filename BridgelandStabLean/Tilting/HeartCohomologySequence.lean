@@ -2,8 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
-import BridgelandStabLean.Tilting.HeartCohomology
-import BridgelandStability.HeartEquivalence.H0Homological
+import BridgelandStabLean.Tilting.HeartCohomologyHomological
 
 /-!
 # Six-term original-heart cohomology sequences
@@ -15,13 +14,10 @@ six terms are
 `H⁻¹_t(X₁) ⟶ H⁻¹_t(X₂) ⟶ H⁻¹_t(X₃) ⟶
   H⁰_t(X₁) ⟶ H⁰_t(X₂) ⟶ H⁰_t(X₃)`.
 
-The construction is unconditional.  Exactness is proved from the standard
-`Functor.IsHomological` interface for degree-zero heart cohomology.  That
-interface is named explicitly by `OriginalHeartCohomologyIsHomological`:
-the pinned dependencies construct the relevant functor but do not yet prove
-this general t-structure theorem.  Consequently, no hidden axiom or paper
-hypothesis is introduced here; the remaining boundary is a single reusable
-category-theoretic proposition.
+The construction and exactness proof are unconditional.  The
+`originalHeartCohFunctor_isHomological` instance proves that degree-zero
+cohomology of any t-structure sends distinguished triangles to exact short
+complexes, without stability-function or Harder--Narasimhan hypotheses.
 
 For objects of an HRS-tilted heart, the amplitude bounds supplied by
 `HeartCohomology.lean` also show that the first arrow is monic and the last is
@@ -38,12 +34,7 @@ variable {C : Type*} [Category C] [Preadditive C] [HasZeroObject C] [HasShift C 
 
 attribute [local instance] TStructure.heartFullSubcategoryAbelian
 
-/-! ## The homologicality boundary and degree comparison -/
-
-/-- The remaining general category-theoretic boundary: degree-zero
-cohomology of `t` sends distinguished triangles to exact short complexes. -/
-abbrev OriginalHeartCohomologyIsHomological (t : TStructure C) : Prop :=
-  Functor.IsHomological (originalHeartCohFunctor t 0)
+/-! ## Degree comparison -/
 
 /-- The tautological shift sequence on degree-zero original-heart
 cohomology. -/
@@ -175,24 +166,20 @@ noncomputable def originalHeartCohomologySixTermSequence_obj₅Iso
       originalHeartCoh t 0 T.obj₃ :=
   originalHeartCohShiftIso t 0 T.obj₃
 
-/-- Once degree-zero heart cohomology is homological, the explicit six-term
-sequence is exact at all four interior junctions. -/
+/-- The explicit six-term sequence is exact at all four interior
+junctions. -/
 theorem originalHeartCohomologySixTermSequence_exact
-    (t : TStructure C) (hH : OriginalHeartCohomologyIsHomological t)
-    (T : Triangle C) (hT : T ∈ distTriang C) :
+    (t : TStructure C) (T : Triangle C) (hT : T ∈ distTriang C) :
     (originalHeartCohomologySixTermSequence t T).Exact := by
-  letI : Functor.IsHomological (originalHeartCohFunctor t 0) := hH
   exact (originalHeartCohFunctor t 0).homologySequenceComposableArrows₅_exact
     T hT (-1) 0 rfl
 
 /-- If the third vertex has no cohomology below degree `-1`, the first map of
 the six-term sequence is monic. -/
 theorem originalHeartCohomologySixTermSequence_mono_first
-    (t : TStructure C) (hH : OriginalHeartCohomologyIsHomological t)
-    (T : Triangle C) (hT : T ∈ distTriang C)
+    (t : TStructure C) (T : Triangle C) (hT : T ∈ distTriang C)
     (hX₃ : t.IsGE T.obj₃ (-1)) :
     Mono ((originalHeartCohomologySixTermSequence t T).map' 0 1) := by
-  letI : Functor.IsHomological (originalHeartCohFunctor t 0) := hH
   apply ((originalHeartCohFunctor t 0).homologySequence_mono_shift_map_mor₁_iff
     T hT (-2) (-1) rfl).2
   have hZero : IsZero
@@ -203,11 +190,9 @@ theorem originalHeartCohomologySixTermSequence_mono_first
 /-- If the first vertex has no cohomology above degree zero, the last map of
 the six-term sequence is epic. -/
 theorem originalHeartCohomologySixTermSequence_epi_last
-    (t : TStructure C) (hH : OriginalHeartCohomologyIsHomological t)
-    (T : Triangle C) (hT : T ∈ distTriang C)
+    (t : TStructure C) (T : Triangle C) (hT : T ∈ distTriang C)
     (hX₁ : t.IsLE T.obj₁ 0) :
     Epi ((originalHeartCohomologySixTermSequence t T).map' 4 5) := by
-  letI : Functor.IsHomological (originalHeartCohFunctor t 0) := hH
   apply ((originalHeartCohFunctor t 0).homologySequence_epi_shift_map_mor₂_iff
     T hT (0 : ℤ) 1 rfl).2
   have hZero : IsZero
@@ -309,23 +294,21 @@ noncomputable def HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact
       (P.triangleOfShortExact S hS) ≪≫
     P.originalHeartCohIsoHZero S.X₃.property
 
-/-- Under the explicit homologicality boundary, a tilted-heart short exact
-sequence induces an exact six-term sequence in the original heart. -/
+/-- A tilted-heart short exact sequence induces an exact six-term sequence
+in the original heart. -/
 theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact
-    (hH : OriginalHeartCohomologyIsHomological t)
     (S : ShortComplex (P.tilt).heart.FullSubcategory) (hS : S.ShortExact) :
     (P.originalCohomologySixTermSequenceOfShortExact S hS).Exact :=
-  originalHeartCohomologySixTermSequence_exact t hH
+  originalHeartCohomologySixTermSequence_exact t
     (P.triangleOfShortExact S hS)
     (P.triangleOfShortExact_distinguished S hS)
 
 /-- The first map in the six-term sequence induced by a tilted-heart short
 exact sequence is monic. -/
 theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_mono_first
-    (hH : OriginalHeartCohomologyIsHomological t)
     (S : ShortComplex (P.tilt).heart.FullSubcategory) (hS : S.ShortExact) :
     Mono ((P.originalCohomologySixTermSequenceOfShortExact S hS).map' 0 1) :=
-  originalHeartCohomologySixTermSequence_mono_first t hH
+  originalHeartCohomologySixTermSequence_mono_first t
     (P.triangleOfShortExact S hS)
     (P.triangleOfShortExact_distinguished S hS)
     (P.isGE_neg_one_of_tilt_heart S.X₃.property)
@@ -333,10 +316,9 @@ theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_mono_firs
 /-- The last map in the six-term sequence induced by a tilted-heart short
 exact sequence is epic. -/
 theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_epi_last
-    (hH : OriginalHeartCohomologyIsHomological t)
     (S : ShortComplex (P.tilt).heart.FullSubcategory) (hS : S.ShortExact) :
     Epi ((P.originalCohomologySixTermSequenceOfShortExact S hS).map' 4 5) :=
-  originalHeartCohomologySixTermSequence_epi_last t hH
+  originalHeartCohomologySixTermSequence_epi_last t
     (P.triangleOfShortExact S hS)
     (P.triangleOfShortExact_distinguished S hS)
     (P.isLE_zero_of_tilt_heart S.X₁.property)
@@ -345,13 +327,12 @@ theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_epi_last
 and ends with an epi.  Equivalently it may be displayed with zero objects at
 both ends. -/
 theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact_with_endpoints
-    (hH : OriginalHeartCohomologyIsHomological t)
     (S : ShortComplex (P.tilt).heart.FullSubcategory) (hS : S.ShortExact) :
     (P.originalCohomologySixTermSequenceOfShortExact S hS).Exact ∧
       Mono ((P.originalCohomologySixTermSequenceOfShortExact S hS).map' 0 1) ∧
       Epi ((P.originalCohomologySixTermSequenceOfShortExact S hS).map' 4 5) :=
-  ⟨P.originalCohomologySixTermSequenceOfShortExact_exact hH S hS,
-    P.originalCohomologySixTermSequenceOfShortExact_mono_first hH S hS,
-    P.originalCohomologySixTermSequenceOfShortExact_epi_last hH S hS⟩
+  ⟨P.originalCohomologySixTermSequenceOfShortExact_exact S hS,
+    P.originalCohomologySixTermSequenceOfShortExact_mono_first S hS,
+    P.originalCohomologySixTermSequenceOfShortExact_epi_last S hS⟩
 
 end BridgelandStabLean.Tilting
