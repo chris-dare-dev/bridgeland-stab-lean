@@ -171,6 +171,17 @@ theorem slope_of_im_nonpos {E : C} (h : ¬0 < (W.charge E).im) :
     W.slope E = ⊤ :=
   if_neg h
 
+/-- The charge is invariant under isomorphism of ambient objects. -/
+theorem charge_eq_of_iso {E E' : C} (e : E ≅ E') :
+    W.charge E = W.charge E' := by
+  simp only [charge, K₀.of_iso C e]
+
+/-- The weak slope is invariant under isomorphism of ambient objects. -/
+theorem slope_eq_of_iso {E E' : C} (e : E ≅ E') :
+    W.slope E = W.slope E' := by
+  unfold slope
+  rw [W.charge_eq_of_iso e]
+
 /-- `Z`-semistability (Definition 14.2): every subobject has slope at most
 the slope of the corresponding quotient. Subobject data is a distinguished
 triangle with all three vertices in the heart — for heart objects that is a
@@ -180,6 +191,25 @@ def IsSemistable (E : C) : Prop :=
   t.heart E ∧ ∀ ⦃A B : C⦄, t.heart A → t.heart B → ¬IsZero A → ¬IsZero B →
     ∀ (f : A ⟶ E) (g : E ⟶ B) (h : B ⟶ A⟦(1 : ℤ)⟧),
       Triangle.mk f g h ∈ distTriang C → W.slope A ≤ W.slope B
+
+/-- Weak semistability is invariant under isomorphism of ambient heart
+objects. -/
+theorem isSemistable_of_iso {E E' : C} (e : E ≅ E')
+    (hE : W.IsSemistable E) : W.IsSemistable E' := by
+  refine ⟨ObjectProperty.prop_of_iso t.heart e hE.1, ?_⟩
+  intro A B hA hB hA0 hB0 f g d hdist
+  let f' : A ⟶ E := f ≫ e.inv
+  let g' : E ⟶ B := e.hom ≫ g
+  have hdist' : Triangle.mk f' g' d ∈ distTriang C := by
+    refine isomorphic_distinguished _ hdist _ ?_
+    exact Triangle.isoMk _ _ (Iso.refl A) e (Iso.refl B)
+      (by simp [f']) (by simp [g']) (by simp)
+  exact hE.2 hA hB hA0 hB0 f' g' d hdist'
+
+/-- Isomorphism-invariant reformulation of weak semistability. -/
+theorem isSemistable_iff_of_iso {E E' : C} (e : E ≅ E') :
+    W.IsSemistable E ↔ W.IsSemistable E' :=
+  ⟨W.isSemistable_of_iso e, W.isSemistable_of_iso e.symm⟩
 
 /-! ### Definition 14.3: the zero-charge subcategory -/
 
