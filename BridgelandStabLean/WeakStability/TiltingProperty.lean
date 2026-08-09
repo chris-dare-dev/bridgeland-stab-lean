@@ -42,8 +42,14 @@ canonical factors, and proves exactness plus the two endpoint properties
 unconditionally.  The underlying general theorem is supplied by
 `Tilting/HeartCohomologyHomological.lean`, which proves degree-zero
 cohomology homological for every t-structure without stability or HN data.
-Thus the cohomological blocker is closed, but neither remaining paper result
-is declared before its own classification/support argument is formalized.
+`WeakStability/TiltSemistable.lean` now constructs the rotated weak function,
+identifies its zero-charge subcategory, defines both source-shaped classes in
+Lemma 14.17, and proves that every object in either class is tilted-semistable.
+The converse classification (extracting the unique charged old HN factor)
+and the stable part of the lemma's final `moreover` clause remain.  Thus the
+cohomological blocker and the constructive half of the classification are
+closed, but neither remaining paper result is declared before its full
+classification/support argument is formalized.
 -/
 
 namespace BridgelandStabLean.WeakStability
