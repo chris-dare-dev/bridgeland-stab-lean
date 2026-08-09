@@ -547,6 +547,14 @@ weak slope-semistability predicate. The converse is proved by splitting a
 non-semistable HN filtration at a midpoint phase and obtaining a strict slope
 contradiction.
 
+**Weak Harder--Narasimhan filtrations on the heart**:
+`WeakAbelianHNFiltration` packages a strict finite subobject chain in the
+abelian full heart whose weak-semistable quotients have strictly decreasing
+`WithTop ℝ` slopes. The phase--slope comparison treats phase `1` as the
+`+infinity` boundary, including zero charge, and
+`weakStabilityFunctionOnHeart_hasHN` converts slicing HN towers into these
+abelian filtrations while removing zero factors.
+
 **The torsion pair at a phase cutoff** (#109): `slicingTorsionPair` — display
 (14.1) in phase language, `(P((β,1]), P((0,β]))` as a `HeartTorsionPair` on
 the slicing heart, unconditional on the slicing axioms: the HN cut is the
@@ -575,9 +583,8 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
 explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
-undeclared**: their proofs require the missing heart-level weak HN filtration
-package, weak support-property transport, and heart kernel/image/cohomology
-machinery.
+undeclared**: their proofs still require weak support-property transport and
+heart kernel/image/cohomology machinery.
 The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
 
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
