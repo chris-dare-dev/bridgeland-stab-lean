@@ -538,6 +538,15 @@ subcategory `A⁰` is closed under subobjects, quotients and extensions, by
 slicing and charge definitionally (`ofPre_slicing`, `ofPre_Z`), and `toWeak`
 weakens strict stability functions.
 
+**Weak stability restricts to the slicing heart**: `weakStabilityFunctionOnHeart`
+composes the lattice charge with the class map, including the closed
+phase-`1` boundary. Charge and zero-charge compatibility are definitional,
+and `weakStabilityFunctionOnHeart_isSemistable_iff` identifies nonzero
+slicing-heart objects that are slicing-semistable with the triangle-based
+weak slope-semistability predicate. The converse is proved by splitting a
+non-semistable HN filtration at a midpoint phase and obtaining a strict slope
+contradiction.
+
 **The torsion pair at a phase cutoff** (#109): `slicingTorsionPair` — display
 (14.1) in phase language, `(P((β,1]), P((0,β]))` as a `HeartTorsionPair` on
 the slicing heart, unconditional on the slicing axioms: the HN cut is the
@@ -566,8 +575,9 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
 explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
-undeclared**: their proofs require the missing weak-HN heart equivalence,
-weak support-property transport, and heart kernel/image/cohomology machinery.
+undeclared**: their proofs require the missing heart-level weak HN filtration
+package, weak support-property transport, and heart kernel/image/cohomology
+machinery.
 The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
 
 **Two boundaries.** The heart is carried inside `C` and subobject data is a

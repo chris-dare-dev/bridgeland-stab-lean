@@ -28,15 +28,14 @@ triangle whose three vertices lie in the heart, following the convention of
 **Proposition 14.16 and Lemma 14.17 are left undeclared.**  Their paper proof
 uses the weak-HN heart equivalence of Lemma 14.4, kernels, images and
 cohomology objects in both hearts, and the support-property transport of
-Remark 14.9.  The current weak layer has a slicing and a heart-level weak
-stability function, but no theorem identifying their semistable objects or
-HN filtrations, no weak support-property package, and the pinned Mathlib has
-no abelian-category instance on a t-structure heart.  In particular, the
-classification in Lemma 14.17 cannot be proved from the present
-`WeakStabilityFunction.IsSemistable`, and the HN-modification argument and
-maximal-subobject step of Proposition 14.16 cannot be expressed honestly.
-Declaring either result would therefore require new axioms or hypotheses not
-present in the paper.
+Remark 14.9.  `WeakStability/HeartEquivalence.lean` now constructs the
+heart-level weak stability function and identifies its semistable nonzero
+heart objects with slicing semistability.  What remains absent is a packaged
+heart-level weak HN filtration, weak support-property transport, and the
+kernel/image/cohomology bridges needed simultaneously for the original and
+tilted hearts.  Those missing bridges still block the HN-modification,
+classification, and maximal-subobject arguments.  Declaring either result
+would therefore require new axioms or hypotheses not present in the paper.
 -/
 
 namespace BridgelandStabLean.WeakStability
