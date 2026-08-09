@@ -606,10 +606,14 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `F -> Ftilde -> F0` with `F0` of zero charge and every map
 `A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
-explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
-undeclared**: the reusable cohomological infrastructure is now complete, but
-the paper's semistable-object classification still has to be assembled from
-it, and Proposition 14.16 still requires weak support-property transport.
+explicit coverage gap. `WeakStability/TiltSemistable.lean` now proves both
+directions of Lemma 14.17's **phase-language** semistable-object
+classification, using the canonical original-cohomology sequence, and proves
+the positive-imaginary/stable Hom-vanishing refinement by factoring through
+tilted-heart images. The exact slope-language source statement stays under
+the existing `mapped` hypothesis. **Proposition 14.16 remains deliberately
+undeclared** and still requires the weak-HN/noetherian assembly and weak
+support-property transport.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

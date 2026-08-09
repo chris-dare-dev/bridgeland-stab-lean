@@ -64,7 +64,7 @@ public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **105 private** declarations, which remain structurally
+* it does NOT cover the **114 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **963** declarations (757 through #110, plus 94 public declarations
+* It names **973** declarations (757 through #110, plus 94 public declarations
   independently censused for #88, then 34 for the weak heart-equivalence/HN
   stack, 29 for the original/tilted-heart cohomology bridge, 31 for the
   six-term sequence boundary, and 1 for unconditional t-structure cohomology
-  homologicality, then 17 for the constructive phase-tilt classification).
-  The environment holds **1137** authored declarations under
-  `BridgelandStabLean.*`, so **174 are outside this gate**, all of them private
+  homologicality, then 27 for the full phase-tilt classification and stable
+  refinement).  The environment holds **1156** authored declarations under
+  `BridgelandStabLean.*`, so **183 are outside this gate**, all of them private
   or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **105 are `private`** -- 91 of them theorems -- and are *structurally*
+* **114 are `private`** -- 100 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
@@ -112,12 +112,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **284 of the 963 are not theorems** (16 `structure`, 268 other
+* **285 of the 973 are not theorems** (16 `structure`, 269 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **679** real theorems, but it is a `def ... :
+  formatted identically to the **688** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -458,6 +458,8 @@ docstring and #111). -/
 #print axioms WeakStability.WeakStabilityFunction.slope_of_im_pos
 #print axioms WeakStability.WeakStabilityFunction.slope_of_im_nonpos
 #print axioms WeakStability.WeakStabilityFunction.IsSemistable
+#print axioms WeakStability.WeakStabilityFunction.IsStable
+#print axioms WeakStability.WeakStabilityFunction.IsStable.isSemistable
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge_def
 #print axioms WeakStability.WeakStabilityFunction.zeroCharge_isClosedUnderIsomorphisms
@@ -532,6 +534,8 @@ heart function.  These declarations make no new source-coverage claim. -/
 #print axioms WeakStability.WeakStabilityFunction.isSemistable_of_iso
 #print axioms WeakStability.WeakStabilityFunction.slope_eq_of_iso
 #print axioms WeakStability.WeakStabilityFunction.isSemistable_iff_of_iso
+#print axioms WeakStability.WeakStabilityFunction.isStable_of_iso
+#print axioms WeakStability.WeakStabilityFunction.isStable_iff_of_iso
 #print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart
 #print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_Z
 #print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_charge
@@ -563,12 +567,12 @@ heart function.  These declarations make no new source-coverage claim. -/
 #print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean
 #print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_1
 
-/-! ## WeakStability lane -- constructive phase-tilt classification
+/-! ## WeakStability lane -- phase-tilt semistable classification
 
-The rotated weak stability function on the HRS tilt and the constructive
-direction of the phase-language counterpart of Lemma 14.17.  The reverse
-classification and stable-object refinement remain deliberately undeclared;
-these entries make no source-coverage promotion. -/
+The rotated weak stability function on the HRS tilt, both directions of the
+phase-language counterpart of Lemma 14.17, and the positive-imaginary/stable
+Hom-vanishing refinement.  These entries make no source-coverage promotion:
+the slope--phase reparameterisation remains the mapped boundary. -/
 
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltRotation
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltRotation_apply
@@ -581,12 +585,18 @@ these entries make no source-coverage promotion. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_charge
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge_mem_P_one
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_zeroCharge_iff
+#print axioms WeakStability.WeakPreStabilityCondition.hom_eq_zero_of_zeroCharge_to_phaseTiltSemistable
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_isSemistable_left_of_zeroCharge_right
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_isSemistable_of_phaseTors_phaseTiltSemistable
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_isSemistable_of_phaseFree_shiftSemistable
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_isSemistable_of_ray
 #print axioms WeakStability.WeakPreStabilityCondition.IsPhaseTiltTypeOne
 #print axioms WeakStability.WeakPreStabilityCondition.IsPhaseTiltTypeTwo
 #print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_isPhaseTiltTypeOne
 #print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_isPhaseTiltTypeTwo
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltClassification_of_isSemistable
 #print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_phaseTiltClassification
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_isSemistable_iff_classification
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

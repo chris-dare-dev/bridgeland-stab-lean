@@ -193,6 +193,20 @@ def IsSemistable (E : C) : Prop :=
     ∀ (f : A ⟶ E) (g : E ⟶ B) (h : B ⟶ A⟦(1 : ℤ)⟧),
       Triangle.mk f g h ∈ distTriang C → W.slope A ≤ W.slope B
 
+/-- `Z`-stability: every proper nonzero subobject has slope strictly smaller
+than the corresponding nonzero quotient.  This is the strict counterpart of
+`IsSemistable`, expressed using the same ambient distinguished triangles. -/
+def IsStable (E : C) : Prop :=
+  t.heart E ∧ ∀ ⦃A B : C⦄, t.heart A → t.heart B → ¬IsZero A → ¬IsZero B →
+    ∀ (f : A ⟶ E) (g : E ⟶ B) (h : B ⟶ A⟦(1 : ℤ)⟧),
+      Triangle.mk f g h ∈ distTriang C → W.slope A < W.slope B
+
+/-- A weak-stable object is weak-semistable. -/
+theorem IsStable.isSemistable {E : C} (hE : W.IsStable E) : W.IsSemistable E := by
+  refine ⟨hE.1, ?_⟩
+  intro A B hA hB hA0 hB0 f g d hdist
+  exact (hE.2 hA hB hA0 hB0 f g d hdist).le
+
 /-- Weak semistability is invariant under isomorphism of ambient heart
 objects. -/
 theorem isSemistable_of_iso {E E' : C} (e : E ≅ E')
@@ -211,6 +225,24 @@ theorem isSemistable_of_iso {E E' : C} (e : E ≅ E')
 theorem isSemistable_iff_of_iso {E E' : C} (e : E ≅ E') :
     W.IsSemistable E ↔ W.IsSemistable E' :=
   ⟨W.isSemistable_of_iso e, W.isSemistable_of_iso e.symm⟩
+
+/-- Weak stability is invariant under isomorphism of ambient heart objects. -/
+theorem isStable_of_iso {E E' : C} (e : E ≅ E')
+    (hE : W.IsStable E) : W.IsStable E' := by
+  refine ⟨ObjectProperty.prop_of_iso t.heart e hE.1, ?_⟩
+  intro A B hA hB hA0 hB0 f g d hdist
+  let f' : A ⟶ E := f ≫ e.inv
+  let g' : E ⟶ B := e.hom ≫ g
+  have hdist' : Triangle.mk f' g' d ∈ distTriang C := by
+    refine isomorphic_distinguished _ hdist _ ?_
+    exact Triangle.isoMk _ _ (Iso.refl A) e (Iso.refl B)
+      (by simp [f']) (by simp [g']) (by simp)
+  exact hE.2 hA hB hA0 hB0 f' g' d hdist'
+
+/-- Isomorphism-invariant reformulation of weak stability. -/
+theorem isStable_iff_of_iso {E E' : C} (e : E ≅ E') :
+    W.IsStable E ↔ W.IsStable E' :=
+  ⟨W.isStable_of_iso e, W.isStable_of_iso e.symm⟩
 
 /-! ### Definition 14.3: the zero-charge subcategory -/
 
