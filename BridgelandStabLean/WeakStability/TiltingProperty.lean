@@ -23,18 +23,16 @@ triangle whose three vertices lie in the heart, following the convention of
 `Basic.lean` and `Noetherian.lean`.  The condition
 `Hom(A0, Ftilde[1]) = 0` is stated literally as vanishing of every such map.
 
-## What is deliberately not declared
+## What remains deliberately undeclared
 
-**Proposition 14.16 and Lemma 14.17 are left undeclared.**  Their paper proof
-uses the weak-HN heart equivalence of Lemma 14.4, kernels, images and
-cohomology objects in both hearts, and the support-property transport of
-Remark 14.9.  `WeakStability/HeartEquivalence.lean` now constructs the
+**Proposition 14.16 is left undeclared.**  Its paper proof uses the weak-HN
+heart equivalence of Lemma 14.4 and the support-property transport of
+Remark 14.9.  `WeakStability/HeartEquivalence.lean` constructs the
 heart-level weak stability function and identifies its semistable nonzero
 heart objects with slicing semistability;
 `WeakStability/HarderNarasimhan.lean` now packages the abelian weak HN
-filtration and proves its existence for that induced function.  What remains
-is to assemble the semistable-object classification and transport the weak
-support property.  `Tilting/HeartCohomology.lean` supplies the common
+filtration and proves its existence for that induced function.
+`Tilting/HeartCohomology.lean` supplies the common
 cohomology functor, the canonical `H⁻¹[1] → E → H⁰` short exact sequence, and
 its kernel/cokernel witnesses.  `Tilting/HeartCohomologySequence.lean`
 constructs the arbitrary-short-exact six-term sequence, identifies all six
@@ -42,14 +40,14 @@ canonical factors, and proves exactness plus the two endpoint properties
 unconditionally.  The underlying general theorem is supplied by
 `Tilting/HeartCohomologyHomological.lean`, which proves degree-zero
 cohomology homological for every t-structure without stability or HN data.
-`WeakStability/TiltSemistable.lean` now constructs the rotated weak function,
-identifies its zero-charge subcategory, defines both source-shaped classes in
-Lemma 14.17, and proves that every object in either class is tilted-semistable.
-The converse classification (extracting the unique charged old HN factor)
-and the stable part of the lemma's final `moreover` clause remain.  Thus the
-cohomological blocker and the constructive half of the classification are
-closed, but neither remaining paper result is declared before its full
-classification/support argument is formalized.
+`WeakStability/TiltSemistable.lean` constructs the rotated weak function,
+identifies its zero-charge subcategory, and proves both directions of the
+phase-language classification in Lemma 14.17.  It also defines weak stability
+and proves the lemma's positive-imaginary/stable `moreover` clause via images
+in the tilted heart.  The exact slope-language source statement remains under
+the registry's existing `mapped` hypothesis until the slope--phase
+reparameterisation is formalized and reviewed.  Proposition 14.16 still
+requires the noetherian/weak-HN assembly and weak support-property transport.
 -/
 
 namespace BridgelandStabLean.WeakStability
