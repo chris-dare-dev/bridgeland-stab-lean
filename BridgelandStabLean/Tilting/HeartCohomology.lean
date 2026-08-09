@@ -238,7 +238,7 @@ noncomputable def originalCohomologyTriangle (t : TStructure C) (X : C) : Triang
     (((t.triangleLTGE 0).obj X).mor₃ ≫ e.inv⟦(1 : ℤ)⟧')
 
 /-- The canonical original-cohomology triangle is distinguished. -/
-theorem originalCohomologyTriangle_distinguished [IsTriangulated C]
+theorem originalCohomologyTriangle_distinguished
     (t : TStructure C) (X : C) : originalCohomologyTriangle t X ∈ distTriang C := by
   dsimp [originalCohomologyTriangle]
   refine isomorphic_distinguished _ (t.triangleLTGE_distinguished 0 X) _ ?_
