@@ -58,12 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured on the #88 branch on 2026-08-08.** Every
+**THE GAP IS NOW ZERO, re-measured after merging the #88 and weak-stability
+branches on 2026-08-09.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **57 private** declarations, which remain structurally
+* it does NOT cover the **58 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -71,20 +72,23 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **851** declarations (757 through #110, plus the 94 public
-  declarations independently censused for #88). The environment holds **967**
-  authored declarations under `BridgelandStabLean.*`, so **116 are outside
-  this gate**, all of them private or projections. ("Authored" excludes constructors,
+* It names **914** declarations (757 through #110, plus 94 public declarations
+  independently censused for #88, then 34 for the weak heart-equivalence/HN
+  stack and 29 for the original/tilted-heart cohomology bridge). The
+  environment holds **1041** authored declarations under
+  `BridgelandStabLean.*`, so **127 are outside this gate**, all of them private
+  or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **57 are `private`** -- 53 of them theorems -- and are *structurally*
+* **58 are `private`** -- 54 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **59 are structure field projections** emitted by the `structure` command
-  (41 before the six WeakStability structures).
+* **69 are structure field projections** emitted by the `structure` command
+  (41 before the six original WeakStability structures, 59 after those six,
+  then 10 from `WeakAbelianHNFiltration`).
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -106,12 +110,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **239 of the 851 are not theorems** (15 `structure`, 224 other
+* **261 of the 914 are not theorems** (16 `structure`, 245 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **612** real theorems, but it is a `def ... :
+  formatted identically to the **653** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -349,6 +353,44 @@ under the #81 weak-stability epic; abstract, bound to no source coordinate. -/
 #print axioms Tilting.HeartTorsionPair.exists_triangle_of_tilt_heart
 #print axioms Tilting.HeartTorsionPair.tilt_heart_iff
 
+/-! ## Tilting lane — original and tilted heart cohomology bridge
+
+The t-structure-only cohomology functor applies to both hearts.  A tilted-heart
+object has the canonical torsion-free `H⁻¹` and torsion `H⁰` factors, whose
+truncation triangle is a short exact sequence in the tilted heart; its maps
+are exposed as a kernel and a cokernel.  The arbitrary-short-exact six-term
+cohomology sequence remains deliberately undeclared. -/
+
+#print axioms Tilting.originalHeartCohFunctor
+#print axioms Tilting.originalHeartCohFunctor_additive
+#print axioms Tilting.originalHeartCoh
+#print axioms Tilting.originalHeartCohIsoOfHeart
+#print axioms Tilting.HeartTorsionPair.tiltedHeartCohFunctor
+#print axioms Tilting.HeartTorsionPair.tors_zero
+#print axioms Tilting.HeartTorsionPair.free_zero
+#print axioms Tilting.HeartTorsionPair.isLE_zero_of_tilt_heart
+#print axioms Tilting.HeartTorsionPair.isGE_neg_one_of_tilt_heart
+#print axioms Tilting.HeartTorsionPair.tors_truncGE_zero_of_tilt_heart
+#print axioms Tilting.HeartTorsionPair.free_truncLT_zero_shift_of_tilt_heart
+#print axioms Tilting.HeartTorsionPair.originalHMinusOne
+#print axioms Tilting.HeartTorsionPair.originalHZero
+#print axioms Tilting.HeartTorsionPair.originalHMinusOne_free
+#print axioms Tilting.HeartTorsionPair.originalHZero_tors
+#print axioms Tilting.HeartTorsionPair.originalHeartCohIsoHMinusOne
+#print axioms Tilting.HeartTorsionPair.originalHeartCohIsoHZero
+#print axioms Tilting.originalCohomologyShiftIso
+#print axioms Tilting.originalCohomologyTriangle
+#print axioms Tilting.originalCohomologyTriangle_distinguished
+#print axioms Tilting.HeartTorsionPair.free_shift_mem_tilt_heart
+#print axioms Tilting.HeartTorsionPair.tors_mem_tilt_heart
+#print axioms Tilting.HeartTorsionPair.originalHMinusOneShiftInTiltHeart
+#print axioms Tilting.HeartTorsionPair.objectInTiltHeart
+#print axioms Tilting.HeartTorsionPair.originalHZeroInTiltHeart
+#print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex
+#print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_shortExact
+#print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_f_isKernel
+#print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_g_isCokernel
+
 /-! ## WeakStability lane -- the section-14 definitions
 
 Definitions 14.1-14.3 of 1902.08184v4 on the abstract layer, plus the
@@ -436,6 +478,48 @@ Closes #110 with the honest subset allowed by its acceptance criteria. -/
 #print axioms WeakStability.WeakPreStabilityCondition.HasFiniteMaxSlope
 #print axioms WeakStability.WeakPreStabilityCondition.HasTiltingEnvelope
 #print axioms WeakStability.WeakPreStabilityCondition.TiltingProperty
+
+/-! ## WeakStability lane -- heart equivalence and weak HN infrastructure
+
+The two stacked weak-stability milestones following #110: isomorphism
+transport for weak stability functions, the slicing-to-heart forward bridge,
+and abelian weak Harder--Narasimhan filtrations with existence for the induced
+heart function.  These declarations make no new source-coverage claim. -/
+
+#print axioms WeakStability.WeakStabilityFunction.charge_eq_of_iso
+#print axioms WeakStability.WeakStabilityFunction.isSemistable_of_iso
+#print axioms WeakStability.WeakStabilityFunction.slope_eq_of_iso
+#print axioms WeakStability.WeakStabilityFunction.isSemistable_iff_of_iso
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_Z
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_charge
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_zeroCharge_iff
+#print axioms WeakStability.WeakPreStabilityCondition.charge_mem_upperHalfPlane_and_arg_le_phiPlus
+#print axioms WeakStability.WeakPreStabilityCondition.pi_mul_phiMinus_le_charge_arg_of_im_pos
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_isSemistable_of_mem_P_phi
+#print axioms WeakStability.WeakPreStabilityCondition.mem_P_phiPlus_of_weakStabilityFunctionOnHeart_isSemistable
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_isSemistable_iff
+#print axioms WeakStability.SlicingBridge.phiPlus_le_of_heart_subobject
+#print axioms WeakStability.WeakStabilityFunction.heartSlope
+#print axioms WeakStability.heartSlope_cokernel_ofLE_congr
+#print axioms WeakStability.heartSlope_cokernel_mapMono_eq
+#print axioms WeakStability.heartSemistable_cokernel_ofLE_congr
+#print axioms WeakStability.heartSemistable_cokernel_mapMono_iff
+#print axioms WeakStability.WeakAbelianHNFiltration
+#print axioms WeakStability.WeakAbelianHNFiltration.factor
+#print axioms WeakStability.WeakAbelianHNFiltration.factor_not_isZero
+#print axioms WeakStability.WeakAbelianHNFiltration.factor_obj_not_isZero
+#print axioms WeakStability.WeakStabilityFunction.HeartSemistable
+#print axioms WeakStability.WeakStabilityFunction.HasHNProperty
+#print axioms WeakStability.WeakStabilityFunction.append_hn_filtration_of_mono
+#print axioms WeakStability.WeakStabilityFunction.exists_hn_with_last_slope_of_semistable
+#print axioms WeakStability.WeakPreStabilityCondition.charge_arg_eq_pi_mul_of_mem_P_phi_lt_one
+#print axioms WeakStability.WeakPreStabilityCondition.charge_im_pos_of_mem_P_phi_lt_one
+#print axioms WeakStability.WeakPreStabilityCondition.slope_lt_of_mem_P_of_phase_lt
+#print axioms WeakStability.WeakPreStabilityCondition.slope_eq_top_of_mem_P_one
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_hasHN
+#print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean
+#print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_1
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

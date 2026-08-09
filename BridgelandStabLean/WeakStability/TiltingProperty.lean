@@ -33,11 +33,14 @@ heart-level weak stability function and identifies its semistable nonzero
 heart objects with slicing semistability;
 `WeakStability/HarderNarasimhan.lean` now packages the abelian weak HN
 filtration and proves its existence for that induced function.  What remains
-absent is weak support-property transport and the kernel/image/cohomology
-bridges needed simultaneously for the original and tilted hearts.  Those
-missing bridges still block the classification and maximal-subobject
-arguments.  Declaring either result would therefore require new axioms or
-hypotheses not present in the paper.
+absent is weak support-property transport and the six-term original-heart
+cohomology sequence induced by an arbitrary short exact sequence in the
+tilted heart.  `Tilting/HeartCohomology.lean` now supplies the common
+cohomology functor, the canonical `H⁻¹[1] → E → H⁰` short exact sequence, and
+its kernel/cokernel witnesses; the arbitrary-short-exact long-exact bridge is
+the remaining cohomological blocker for the classification and
+maximal-subobject arguments.  Declaring either result would therefore still
+require new axioms or hypotheses not present in the paper.
 -/
 
 namespace BridgelandStabLean.WeakStability
