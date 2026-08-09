@@ -71,11 +71,12 @@ this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **820** declarations (707 at the #105 gap closure, plus 3 for
+* It names **851** declarations (707 at the #105 gap closure, plus 3 for
   #106, 23 for #107, 10 for #108, 9 for #109, and the 5 Definition-14.12
   records of #110, then 34 for the weak heart-equivalence/HN stack and 29 for
-  the original/tilted-heart cohomology bridge). The environment holds **934**
-  authored declarations under `BridgelandStabLean.*`, so **114 are outside
+  the original/tilted-heart cohomology bridge, and 31 for the six-term
+  sequence boundary). The environment holds **965** authored declarations
+  under `BridgelandStabLean.*`, so **114 are outside
   this gate**, all of them
   private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
@@ -390,6 +391,46 @@ cohomology sequence remains deliberately undeclared. -/
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_shortExact
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_f_isKernel
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_g_isCokernel
+
+/-! ## Tilting lane — six-term original-heart cohomology sequence
+
+The six-term sequence is constructed for any triangle and specialized to a
+short exact sequence in the tilted heart, with canonical identifications of
+all six terms.  Exactness and the endpoint mono/epi statements are proved
+from the explicitly named general t-structure homologicality boundary; no
+instance of that boundary is asserted here. -/
+
+#print axioms Tilting.OriginalHeartCohomologyIsHomological
+#print axioms Tilting.originalHeartCohFunctor_zero_shiftSequence
+#print axioms Tilting.originalHeartCohShiftIso
+#print axioms Tilting.originalHeartCoh_isZero_of_isGE
+#print axioms Tilting.originalHeartCoh_isZero_of_isLE
+#print axioms Tilting.originalHeartCohFunctor_shift_isZero_of_isGE
+#print axioms Tilting.originalHeartCohFunctor_shift_isZero_of_isLE
+#print axioms Tilting.originalHeartCohomologySixTermSequence
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₀Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₁Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₂Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₃Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₄Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₅Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_exact
+#print axioms Tilting.originalHeartCohomologySixTermSequence_mono_first
+#print axioms Tilting.originalHeartCohomologySixTermSequence_epi_last
+#print axioms Tilting.HeartTorsionPair.exists_distinguished_triangle_of_shortExact
+#print axioms Tilting.HeartTorsionPair.triangleOfShortExact
+#print axioms Tilting.HeartTorsionPair.triangleOfShortExact_distinguished
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₀Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₁Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₂Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₃Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₄Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₅Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_mono_first
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_epi_last
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact_with_endpoints
 
 /-! ## WeakStability lane -- the section-14 definitions
 

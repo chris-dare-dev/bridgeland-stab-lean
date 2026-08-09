@@ -375,6 +375,17 @@ maps exposed as a kernel and a cokernel. It does **not** claim the still-open
 six-term original-cohomology sequence for an arbitrary tilted-heart short
 exact sequence; that requires the homologicality gap above.
 
+`HeartCohomologySequence.lean` now isolates that gap precisely.  It constructs
+the six terms and connecting map, identifies them with the canonical
+`H⁻¹(P), H⁻¹(E), H⁻¹(Q), H⁰(P), H⁰(E), H⁰(Q)` objects, and converts any short
+exact sequence in the tilted heart to the required ambient distinguished
+triangle.  Under the named boundary
+`OriginalHeartCohomologyIsHomological`, it proves exactness at all four
+interior terms, monicity at the left endpoint, and epicity at the right.
+The pin does not yet prove that general t-structure homologicality statement,
+so this is an executable reduction of the blocker, not an extra hypothesis
+silently attributed to the paper.
+
 **Every `TStructure` field is proved, and `tilt` assembles them** into a
 genuine `Triangulated.TStructure`:
 
@@ -595,9 +606,11 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
 explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
 undeclared**: their proofs still require weak support-property transport and
-the arbitrary-short-exact long cohomology bridge. The canonical two-term
-original/tilted-heart kernel--cokernel bridge is now in
-`Tilting/HeartCohomology.lean`.
+the homologicality of original-heart cohomology. The canonical two-term
+original/tilted-heart kernel--cokernel bridge is in
+`Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
+constructs the arbitrary-short-exact six-term sequence and proves the full
+paper-shaped result from that single named category-theoretic boundary.
 The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
 
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
