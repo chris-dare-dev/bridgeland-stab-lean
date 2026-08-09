@@ -40,6 +40,7 @@ section WeakAbelian
 
 variable {t : TStructure C}
 
+/-- The abelian structure on the full heart, used for weak-slope comparisons. -/
 local instance : Abelian t.heart.FullSubcategory :=
   t.heartFullSubcategoryAbelian
 
@@ -131,6 +132,7 @@ section WeakAbelianOperations
 
 variable {t : TStructure C}
 
+/-- The abelian structure on the full heart, used for weak-HN subquotients. -/
 local instance : Abelian t.heart.FullSubcategory :=
   t.heartFullSubcategoryAbelian
 
