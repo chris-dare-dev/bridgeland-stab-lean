@@ -306,10 +306,8 @@ fidelity:
   axiom_count: 0
   axiom_details: >
     No axiom declarations. Transitive closure enumerated 2026-08-08 on the
-    #106 branch (parent 43f3d72; the reviewed module is the only Lean source
-    that moved) via `scripts/check_audit.py` over the 680 declarations named
-    in
-    scripts/Audit.lean: every one depends on a subset of
+    #110 branch (parent 7524f06) via `scripts/check_audit.py` over the 757
+    declarations named in scripts/Audit.lean: every one depends on a subset of
     [propext, Classical.choice, Quot.sound] and nothing else. No sorryAx.
     Allowlist verdict: pass, with check_audit's truncation cross-check (PR
     #102) confirming the record count against Audit.lean's own commands.
@@ -323,7 +321,7 @@ fidelity:
     history and is not rewritten.
 
     WHAT THIS COUNT IS AND IS NOT, corrected 2026-08-06 and RE-MEASURED
-    2026-08-07 at 9c34a2a. The figures below are no longer a source-text
+    2026-08-08 on the #110 branch off 7524f06. The figures below are no longer a source-text
     estimate and are no longer maintained by arithmetic; they come from a sweep
     of the built environment via `lake env lean scripts/Census.lean`, which
     counts what Lean actually has rather than what a regex finds at column 0.
@@ -344,13 +342,14 @@ fidelity:
     WeakStability lane then adds 23 records and 7 structure field
     projections, #108's noetherian-torsion layer 10 records and 9 more
     projections, and #109's phase-cutoff torsion pair 9 records with no new
-    structures: 752 named, 853 authored, 101 outside, gap still zero.
+    structures. #110's Definition-14.12 layer adds 5 records and 2 structure
+    projections: 757 named, 860 authored, 103 outside, gap still zero.
 
-    It is 752 NAMED declarations, not "every declaration this project
-    introduces". The environment holds 853 AUTHORED declarations under
+    It is 757 NAMED declarations, not "every declaration this project
+    introduces". The environment holds 860 AUTHORED declarations under
     BridgelandStabLean.* -- authored excluding constructors, recursors,
     casesOn, matchers, equation lemmas, internal names, and the four
-    generated families #105's census correction filters -- so 101 are
+    generated families #105's census correction filters -- so 103 are
     outside the gate.
 
     44 of those are `private` (42 of them theorems) and are STRUCTURALLY
@@ -360,7 +359,7 @@ fidelity:
     means adding it here" cannot be followed for them. The earlier figure 42
     was counting private THEOREMS; there are 44 private DECLARATIONS.
 
-    57 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
+    59 more are STRUCTURE FIELD PROJECTIONS emitted by the `structure` command.
     These are not a coverage gap in any useful sense and listing them would be
     noise.
 
@@ -374,8 +373,8 @@ fidelity:
     script someone runs, not a CI gate; a name added without a matching entry
     still lands green.
 
-    SECOND QUALIFICATION: 211 of the 752 entries are not theorems -- 14
-    structure, 197 other constructions. For a `def`, `#print axioms` reports
+    SECOND QUALIFICATION: 216 of the 757 entries are not theorems -- 15
+    structure, 201 other constructions. For a `def`, `#print axioms` reports
     the axiom closure of a CONSTRUCTION and asserts nothing about any
     proposition being proved. `CategoryTheory.Triangulated.
     StabilityMassTriangleInequality` is among them: it is a `def ... : Prop`,
@@ -554,6 +553,24 @@ fidelity:
     coverage map's sec-14 coordinate moves target -> mapped in the same
     commit, with the slope-phase reparametrisation named as the open gap in
     the evidence; mapped is a hypothesis, not a coverage claim.
+
+    COUNT UPDATE (WeakStability lane, the tilting property), 2026-08-08. The
+    5 additional records close #110 with the honest subset permitted by its
+    acceptance criteria: IsNoetherianTorsionSubcategory exposes the object
+    property suppressed by Definition 14.6's data structure;
+    WeakPreStabilityCondition.zeroCharge is A0 in the slicing heart;
+    HasFiniteMaxSlope states mu-plus finite as phi-plus < 1, following the
+    lane's phase-language convention; HasTiltingEnvelope is the heart triangle
+    F -> Ftilde -> F0 with F0 in A0 and Hom(A0,Ftilde[1]) = 0; and
+    TiltingProperty packages Definition 14.12(1)-(2). Audit 752 -> 757,
+    measured on the #110 branch off 7524f06. All 5 are constructions (1
+    structure, 4 defs); 0 theorems, 0 private, 5 named; 2 new structure field
+    projections (57 -> 59). PROPOSITION 14.16 AND LEMMA 14.17 ARE
+    DELIBERATELY UNDECLARED: their proofs need the weak-HN heart equivalence,
+    weak support-property transport, and heart kernel/image/cohomology
+    machinery absent at the pin. The module docstring names the exact uses.
+    The section-14 coverage coordinate remains mapped; the phase/slope
+    correspondence is still an explicit hypothesis, not a reviewed claim.
 
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three

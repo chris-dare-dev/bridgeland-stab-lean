@@ -49,6 +49,7 @@ import BridgelandStabLean.GroupAction.StabilityMassTriangle
 import BridgelandStabLean.WeakStability.Basic
 import BridgelandStabLean.WeakStability.Noetherian
 import BridgelandStabLean.WeakStability.SlopeTorsionPair
+import BridgelandStabLean.WeakStability.TiltingProperty
 
 /-!
 # BridgelandStabLean
