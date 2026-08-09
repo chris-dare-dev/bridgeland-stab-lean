@@ -64,7 +64,7 @@ public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **95 private** declarations, which remain structurally
+* it does NOT cover the **105 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,17 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **946** declarations (757 through #110, plus 94 public declarations
+* It names **963** declarations (757 through #110, plus 94 public declarations
   independently censused for #88, then 34 for the weak heart-equivalence/HN
   stack, 29 for the original/tilted-heart cohomology bridge, 31 for the
   six-term sequence boundary, and 1 for unconditional t-structure cohomology
-  homologicality). The environment holds **1110** authored declarations under
-  `BridgelandStabLean.*`, so **164 are outside this gate**, all of them private
+  homologicality, then 17 for the constructive phase-tilt classification).
+  The environment holds **1137** authored declarations under
+  `BridgelandStabLean.*`, so **174 are outside this gate**, all of them private
   or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **95 are `private`** -- 83 of them theorems -- and are *structurally*
+* **105 are `private`** -- 91 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
@@ -111,12 +112,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **279 of the 946 are not theorems** (16 `structure`, 263 other
+* **284 of the 963 are not theorems** (16 `structure`, 268 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **667** real theorems, but it is a `def ... :
+  formatted identically to the **679** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -561,6 +562,31 @@ heart function.  These declarations make no new source-coverage claim. -/
 #print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_hasHN
 #print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean
 #print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_1
+
+/-! ## WeakStability lane -- constructive phase-tilt classification
+
+The rotated weak stability function on the HRS tilt and the constructive
+direction of the phase-language counterpart of Lemma 14.17.  The reverse
+classification and stable-object refinement remain deliberately undeclared;
+these entries make no source-coverage promotion. -/
+
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltRotation
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltRotation_apply
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltCharge
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltCharge_apply
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeart_interval
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeart_iff_phaseShiftHeart
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_Z
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_charge
+#print axioms WeakStability.WeakPreStabilityCondition.zeroCharge_mem_P_one
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_zeroCharge_iff
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_isSemistable_of_ray
+#print axioms WeakStability.WeakPreStabilityCondition.IsPhaseTiltTypeOne
+#print axioms WeakStability.WeakPreStabilityCondition.IsPhaseTiltTypeTwo
+#print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_isPhaseTiltTypeOne
+#print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_isPhaseTiltTypeTwo
+#print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_phaseTiltClassification
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
