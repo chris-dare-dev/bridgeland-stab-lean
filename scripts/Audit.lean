@@ -64,7 +64,7 @@ public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **58 private** declarations, which remain structurally
+* it does NOT cover the **95 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,16 +72,17 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **914** declarations (757 through #110, plus 94 public declarations
+* It names **946** declarations (757 through #110, plus 94 public declarations
   independently censused for #88, then 34 for the weak heart-equivalence/HN
-  stack and 29 for the original/tilted-heart cohomology bridge). The
-  environment holds **1041** authored declarations under
-  `BridgelandStabLean.*`, so **127 are outside this gate**, all of them private
+  stack, 29 for the original/tilted-heart cohomology bridge, 31 for the
+  six-term sequence boundary, and 1 for unconditional t-structure cohomology
+  homologicality). The environment holds **1110** authored declarations under
+  `BridgelandStabLean.*`, so **164 are outside this gate**, all of them private
   or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **58 are `private`** -- 54 of them theorems -- and are *structurally*
+* **95 are `private`** -- 83 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
@@ -110,12 +111,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **261 of the 914 are not theorems** (16 `structure`, 245 other
+* **279 of the 946 are not theorems** (16 `structure`, 263 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **653** real theorems, but it is a `def ... :
+  formatted identically to the **667** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -390,6 +391,46 @@ cohomology sequence remains deliberately undeclared. -/
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_shortExact
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_f_isKernel
 #print axioms Tilting.HeartTorsionPair.originalCohomologyShortComplex_g_isCokernel
+
+/-! ## Tilting lane — six-term original-heart cohomology sequence
+
+Degree-zero cohomology of an arbitrary t-structure is proved homological.
+The six-term sequence is then constructed for any triangle and specialized
+to a short exact sequence in the tilted heart, with canonical identifications
+of all six terms and unconditional exactness plus endpoint mono/epi. -/
+
+#print axioms Tilting.OriginalHeartCohomologyIsHomological
+#print axioms Tilting.originalHeartCohFunctor_isHomological
+#print axioms Tilting.originalHeartCohFunctor_zero_shiftSequence
+#print axioms Tilting.originalHeartCohShiftIso
+#print axioms Tilting.originalHeartCoh_isZero_of_isGE
+#print axioms Tilting.originalHeartCoh_isZero_of_isLE
+#print axioms Tilting.originalHeartCohFunctor_shift_isZero_of_isGE
+#print axioms Tilting.originalHeartCohFunctor_shift_isZero_of_isLE
+#print axioms Tilting.originalHeartCohomologySixTermSequence
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₀Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₁Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₂Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₃Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₄Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_obj₅Iso
+#print axioms Tilting.originalHeartCohomologySixTermSequence_exact
+#print axioms Tilting.originalHeartCohomologySixTermSequence_mono_first
+#print axioms Tilting.originalHeartCohomologySixTermSequence_epi_last
+#print axioms Tilting.HeartTorsionPair.exists_distinguished_triangle_of_shortExact
+#print axioms Tilting.HeartTorsionPair.triangleOfShortExact
+#print axioms Tilting.HeartTorsionPair.triangleOfShortExact_distinguished
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₀Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₁Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₂Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₃Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₄Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_obj₅Iso
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_mono_first
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_epi_last
+#print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact_with_endpoints
 
 /-! ## WeakStability lane -- the section-14 definitions
 

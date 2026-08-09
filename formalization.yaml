@@ -590,6 +590,32 @@ fidelity:
     promote the section-14 coverage coordinate: it remains mapped, with no
     new human faithfulness review or owner signoff inferred from compilation.
 
+    COUNT UPDATE (six-term cohomology boundary), 2026-08-09.
+    Tilting/HeartCohomologySequence.lean adds 31 authored public declarations:
+    13 theorems and 18 constructions. It supplies the shift/degree comparison,
+    vanishing outside the tilted amplitude, the six-term sequence and its six
+    canonical term identifications, the short-exact-to-triangle bridge for the
+    tilted heart, and exactness with monic/epic endpoints under the explicitly
+    named OriginalHeartCohomologyIsHomological proposition. Audit 820 -> 851;
+    the environment census is 965 authored declarations, with 45 private and
+    69 structure-field projections, leaving 0 authored public declarations
+    outside the hand audit. The remaining cohomological blocker is now exactly
+    the general t-structure homologicality proposition; this commit does not
+    assert an instance, add a paper hypothesis, or promote the section-14
+    coverage coordinate beyond mapped.
+
+    COUNT UPDATE (homologicality of t-structure cohomology), 2026-08-09.
+    Tilting/HeartCohomologyHomological.lean adds 38 authored declarations:
+    37 private proof helpers (29 theorems and 8 constructions) and the public
+    theorem-instance originalHeartCohFunctor_isHomological. It proves that
+    degree-zero cohomology of every t-structure sends distinguished triangles
+    to exact short complexes, then removes the explicit homologicality
+    parameters from the six-term API. Audit 851 -> 852; the environment census
+    is 1003 authored declarations, with 82 private and 69 structure-field
+    projections, leaving 0 authored public declarations outside the hand
+    audit. The arbitrary-short-exact six-term sequence is now unconditional;
+    no axiom, paper hypothesis, or section-14 coverage promotion is introduced.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,

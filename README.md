@@ -349,11 +349,11 @@ every theorem about it vacuously true.
 t-structure, phrased inside `C`, and builds the tilted aisles.
 
 **The aisles are not defined the usual way, and the deviation is forced.**
-Textbook HRS writes `D^{≤0}_† = {X ∈ D^{≤0} : H⁰(X) ∈ T}`. **Mathlib has no
-`Hⁿ` for a t-structure at the pin** — `TStructure/` has `truncLE`, `truncGE`
-and the truncation triangle, but no cohomology functor into the heart — and the
-anchor's `H0Functor` has its *homological* property only as case-by-case
-fragments in `H0Homological.lean`. So the aisles use **Hom-orthogonality**:
+Textbook HRS writes `D^{≤0}_† = {X ∈ D^{≤0} : H⁰(X) ∈ T}`. Mathlib has no
+bundled `Hⁿ` functor into the heart at the pin: `TStructure/` supplies
+`truncLE`, `truncGE`, and truncation triangles. The project now constructs
+that functor and proves its homologicality, but the original aisle
+construction remains phrased by **Hom-orthogonality**:
 
 ```
 H⁰(X) ∈ T   ⟺   Hom(X, F) = 0 for every torsion-free F
@@ -371,9 +371,22 @@ t-structure, so it applies to both the original and tilted hearts. For every
 tilted-heart object it identifies the canonical torsion-free `H⁻¹` and torsion
 `H⁰` factors and proves
 `0 → H⁻¹(E)[1] → E → H⁰(E) → 0` short exact in the tilted heart, with the two
-maps exposed as a kernel and a cokernel. It does **not** claim the still-open
-six-term original-cohomology sequence for an arbitrary tilted-heart short
-exact sequence; that requires the homologicality gap above.
+maps exposed as a kernel and a cokernel. It does not claim the six-term
+original-cohomology sequence by itself; the next two modules supply that
+result.
+
+`HeartCohomologyHomological.lean` closes the general category-theoretic gap:
+`originalHeartCohFunctor_isHomological` proves that degree-zero cohomology of
+any t-structure sends distinguished triangles to exact short complexes in
+the heart. The proof uses only truncation triangles, octahedra, and the
+abelian heart; it requires no stability function or HN data.
+
+`HeartCohomologySequence.lean` constructs the six terms and connecting map,
+identifies them with the canonical
+`H⁻¹(P), H⁻¹(E), H⁻¹(Q), H⁰(P), H⁰(E), H⁰(Q)` objects, and converts any short
+exact sequence in the tilted heart to the required ambient distinguished
+triangle. Exactness at all four interior terms, monicity at the left
+endpoint, and epicity at the right are now unconditional.
 
 **Every `TStructure` field is proved, and `tilt` assembles them** into a
 genuine `Triangulated.TStructure`:
@@ -594,10 +607,13 @@ with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
 `muPlus < +infinity`; the unformalized slope--phase correspondence remains an
 explicit coverage gap. **Proposition 14.16 and Lemma 14.17 are deliberately
-undeclared**: their proofs still require weak support-property transport and
-the arbitrary-short-exact long cohomology bridge. The canonical two-term
-original/tilted-heart kernel--cokernel bridge is now in
-`Tilting/HeartCohomology.lean`.
+undeclared**: the reusable cohomological infrastructure is now complete, but
+the paper's semistable-object classification still has to be assembled from
+it, and Proposition 14.16 still requires weak support-property transport.
+The canonical two-term original/tilted-heart kernel--cokernel bridge is in
+`Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
+constructs and proves the arbitrary-short-exact six-term sequence
+unconditionally, using `Tilting/HeartCohomologyHomological.lean`.
 The exact blockers are recorded in `WeakStability/TiltingProperty.lean`.
 
 **Two boundaries.** The heart is carried inside `C` and subobject data is a
