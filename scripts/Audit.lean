@@ -513,7 +513,8 @@ torsion subcategory, and every heart object with phiPlus below the boundary
 has a heart-triangle envelope with zero-charge quotient and shifted
 Hom-vanishing. The later phase-language Lemma 14.17 infrastructure and
 heart-level Proposition 14.16 assembly make no coverage promotion: the map
-stays `mapped`, and the full proposition remains undeclared. -/
+stays `mapped`, and the full proposition remains undeclared. The raw
+Definition 14.12 envelope is now sufficient for the heart-level assembly. -/
 
 #print axioms WeakStability.IsNoetherianTorsionSubcategory
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge
@@ -522,6 +523,7 @@ stays `mapped`, and the full proposition remains undeclared. -/
 #print axioms WeakStability.WeakPreStabilityCondition.HasPhaseTiltingEnvelope
 #print axioms WeakStability.WeakPreStabilityCondition.HasPhaseTiltingEnvelope.hasTiltingEnvelope
 #print axioms WeakStability.WeakPreStabilityCondition.TiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.TiltingProperty.hasTiltingEnvelope_of_phaseFree
 
 /-! ## WeakStability lane -- heart equivalence and weak HN infrastructure
 
@@ -604,11 +606,11 @@ the slope--phase reparameterisation remains the mapped boundary. -/
 
 /-! ## WeakStability lane -- Proposition 14.16 heart-level assembly
 
-The maximal-zero-charge-subobject construction, phase-envelope noetherian
+The maximal-zero-charge-subobject construction, raw-envelope noetherian
 assembly, boundary-saturated weak HN assembly over the cohomological `H⁻¹`
 and `H⁰` filtrations, and support-property transport. Proposition 14.16
-itself remains undeclared: transfer from the raw Definition 14.12 envelope
-to the phase-compatible envelope remains the explicit seam. -/
+itself remains undeclared, but its heart-level constructive obligations are
+assembled directly from Definition 14.12's `TiltingProperty`. -/
 
 #print axioms WeakStability.WeakStabilityFunction.HasZeroChargeDecompositions
 #print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair
@@ -636,15 +638,19 @@ to the phase-compatible envelope remains the explicit seam. -/
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge_phaseTors
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltingEnvelope_gives_shiftedZeroChargeDecomposition
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltingEnvelope_middle_semistable
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_zeroChargeChain_terminates_of_tiltingEnvelope
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_semistableQuotient_of_saturatedExtension
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_freeShiftDecompositions
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_tiltingEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_isNoetherianObject_of_zeroCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategory
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_chainCondition
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfDecompositions
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfTiltingEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfChainCondition
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltCharge_im_pos_of_phaseTors
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_slope_lt_of_phase_separated
@@ -667,6 +673,7 @@ to the phase-compatible envelope remains the explicit seam. -/
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfTiltingProperty
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

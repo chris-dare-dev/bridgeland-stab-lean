@@ -21,10 +21,12 @@ by `phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty`; and support is
 transported unconditionally by `phaseTilt_hasSupportProperty`.
 
 The first constructor keeps the relative zero-charge chain condition and
-rank-decreasing quotient induction visible.  The second discharges both:
-phase-compatible envelopes construct the zero-charge decompositions, while
-`TiltHarderNarasimhan` saturates the boundary factor and iterates the
-cohomological reduction over the original `H⁻¹` and `H⁰` HN filtrations.
+rank-decreasing quotient induction visible.  The second discharges both from
+phase-compatible envelopes.  The final constructor starts directly from the
+raw Definition 14.12 tilting property: envelope Ext-vanishing terminates
+zero-charge chains, while `TiltHarderNarasimhan` saturates the boundary factor
+and iterates the cohomological reduction over the original `H⁻¹` and `H⁰`
+HN filtrations.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -117,6 +119,41 @@ noncomputable def phaseTiltHeartObligationsOfPhaseEnvelopes
   have hN0 : N0.pair.tors = sigma.zeroCharge :=
     Classical.choose_spec htilt.zeroCharge_noetherian
   let hdec := sigma.phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+    beta hbeta0.le hbeta1 N0 hN0 henv
+  let Nsharp :=
+    sigma.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
+      beta hbeta0.le hbeta1 htilt hdec
+  exact
+    { hasHN := sigma.phaseTilt_hasHNProperty_of_zeroChargeDecompositions
+        beta hbeta0 hbeta1 N0 hN0 hdec
+      zeroChargeNoetherian := Nsharp
+      zeroCharge_tors := rfl
+      support := sigma.phaseTilt_hasSupportProperty
+        beta hbeta0 hbeta1 Zlin hcompat hsupport }
+
+/-- Assemble all heart-level obligations for the weak upper tilt directly
+from Definition 14.12's raw `TiltingProperty`.
+
+The raw envelope middle term is not asserted to be phase-free.  Instead,
+`phaseTilt_zeroChargeChain_terminates_of_tiltingEnvelope` uses its
+Ext-vanishing to bound tilted zero-charge subobject chains; maximal
+subobjects then provide the phase-compatible decompositions consumed by the
+HN and noetherian assemblies. -/
+noncomputable def phaseTiltHeartObligationsOfTiltingProperty
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty)
+    (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
+    (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin) :
+    sigma.PhaseTiltHeartObligations beta hbeta0.le hbeta1 Zlin := by
+  let N0 := Classical.choose htilt.zeroCharge_noetherian
+  have hN0 : N0.pair.tors = sigma.zeroCharge :=
+    Classical.choose_spec htilt.zeroCharge_noetherian
+  let henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasTiltingEnvelope F :=
+    fun F hF => TiltingProperty.hasTiltingEnvelope_of_phaseFree
+      sigma htilt beta hbeta1 F hF
+  let hdec := sigma.phaseTilt_hasZeroChargeDecompositions_of_tiltingEnvelopes
     beta hbeta0.le hbeta1 N0 hN0 henv
   let Nsharp :=
     sigma.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty

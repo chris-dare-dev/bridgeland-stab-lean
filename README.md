@@ -615,17 +615,21 @@ the existing `mapped` hypothesis. **Proposition 14.16 remains deliberately
 undeclared.** Its support-property transport is now proved in
 `WeakStability/Support.lean`; `WeakStability/TiltNoetherian.lean` constructs
 the zero-charge torsion pair and its noetherian chain data from either the
-relative chain condition or phase-compatible envelopes. The latter route
-performs the envelope reduction, reduced-chain termination, maximal
-zero-charge quotient, and pullback internally.
+relative chain condition, phase-compatible envelopes, or the raw Definition
+14.12 envelope clause. In the raw route, Ext-vanishing transfers zero-charge
+subobject chains to the original zero-charge quotient; chain termination and
+the maximal-subobject construction then produce the shifted phase-compatible
+decomposition without claiming that the raw middle term is phase-free.
 `WeakStability/TiltHarderNarasimhan.lean` performs boundary-phase saturation
 without assuming the last shifted factor is already right-orthogonal, then
 iterates the cohomological reduction through the original `H⁻¹` and `H⁰` HN
 filtrations. `WeakStability/TiltAssembly.lean` combines that HN theorem with
 the noetherian and support constructions to package all three heart-level
-obligations from phase-compatible envelopes, with no external rank or
-quotient-induction premise. The remaining seam is deriving those
-phase-compatible envelopes from the raw Definition 14.12 envelope clause.
+obligations directly from `TiltingProperty`, with no external envelope, rank,
+or quotient-induction premise. The heart-level constructive seams are now
+closed. The exact Proposition 14.16 source statement remains undeclared
+because the slope--phase translation is not yet formalized or reviewed and
+the reverse weak heart--slicing equivalence is not packaged here.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

@@ -201,6 +201,140 @@ theorem phaseTiltingEnvelope_middle_semistable
       (t := sigma.slicing.toTStructure) hFss hFtildeHeart hF0 hHom hd
   exact ⟨Ftilde, F0, hFtilde, hFtildeSS, hF0, i, p, d, hd, hshiftHom⟩
 
+/-- A raw Definition 14.12 tilting envelope makes every increasing chain of
+tilted zero-charge subobjects of `F[1]` terminate.
+
+The raw middle term is not required to lie in the phase-cut free class.  For
+each subobject `A ⟶ F[1]`, the envelope's Ext-vanishing and triangle
+exactness instead give a lift `A ⟶ F⁰`.  Pulling `F⁰ ⟶ F[1]` back along
+`A ⟶ F[1]` makes this lift canonical: the pullback maps epimorphically to
+`A` and monomorphically to the original zero-charge object `F⁰`.  The
+original noetherian hypothesis stabilizes the pullback chain, after which
+epimorphic cancellation forces the given chain to stabilize. -/
+theorem phaseTilt_zeroChargeChain_terminates_of_tiltingEnvelope
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (N0 : NoetherianTorsionSubcategory sigma.slicing.toTStructure)
+    (hN0 : N0.pair.tors = sigma.zeroCharge)
+    {F : C} (hF : phaseFree sigma.slicing beta F)
+    (henv : sigma.HasTiltingEnvelope F)
+    (c : SubobjectChain
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge
+      (F⟦(1 : ℤ)⟧)) : c.Terminates := by
+  let t := sigma.slicing.toTStructure
+  let P := slicingTorsionPair sigma.slicing hbeta0 hbeta1.le
+  let W := sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1
+  let H := P.tilt.heart.FullSubcategory
+  letI : Abelian H := P.tilt.heartFullSubcategoryAbelian
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  obtain ⟨Fbar, F0, -, hF0, i, p, d, hd, hhom⟩ := henv
+  have hFshift : P.tilt.heart (F⟦(1 : ℤ)⟧) :=
+    P.free_shift_mem_tilt_heart hF
+  have hF0new : W.zeroCharge F0 :=
+    (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+      beta hbeta0 hbeta1 F0).mpr hF0
+  let F0H : H := ⟨F0, hF0new.1⟩
+  let FH : H := ⟨F⟦(1 : ℤ)⟧, hFshift⟩
+  let dH : F0H ⟶ FH := ObjectProperty.homMk d
+  have propOld (j : ℕ) : sigma.zeroCharge (c.obj j) :=
+    (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+      beta hbeta0 hbeta1 (c.obj j)).mp (c.prop j)
+  let AH (j : ℕ) : H := ⟨c.obj j, (c.toAmbient_mono j).1⟩
+  let aH (j : ℕ) : AH j ⟶ FH := ObjectProperty.homMk (c.toAmbient j)
+  have aH_mono (j : ℕ) : Mono (aH j) :=
+    mono_of_isHeartMono P.tilt (aH j) (c.toAmbient_mono j)
+  have liftExists (j : ℕ) : ∃ g : c.obj j ⟶ F0,
+      c.toAmbient j = g ≫ d := by
+    have hz : c.toAmbient j ≫ i⟦(1 : ℤ)⟧' = 0 :=
+      hhom (c.obj j) (propOld j) (c.toAmbient j ≫ i⟦(1 : ℤ)⟧')
+    exact Triangle.coyoneda_exact₁
+      (Triangle.mk i p d) hd (c.toAmbient j) hz
+  let liftToF0 (j : ℕ) : AH j ⟶ F0H :=
+    ObjectProperty.homMk (Classical.choose (liftExists j))
+  have liftToF0_fac (j : ℕ) : liftToF0 j ≫ dH = aH j := by
+    ext
+    exact (Classical.choose_spec (liftExists j)).symm
+  let PB (j : ℕ) : H := pullback dH (aH j)
+  let toF0 (j : ℕ) : PB j ⟶ F0H := pullback.fst dH (aH j)
+  let toA (j : ℕ) : PB j ⟶ AH j := pullback.snd dH (aH j)
+  have toF0_mono (j : ℕ) : Mono (toF0 j) := by
+    dsimp [toF0]
+    infer_instance
+  let sec (j : ℕ) : AH j ⟶ PB j :=
+    pullback.lift (liftToF0 j) (𝟙 (AH j)) (by simpa using liftToF0_fac j)
+  have sec_toA (j : ℕ) : sec j ≫ toA j = 𝟙 (AH j) := by
+    exact pullback.lift_snd (liftToF0 j) (𝟙 (AH j)) _
+  have toA_epi (j : ℕ) : Epi (toA j) := by
+    apply epi_of_epi_fac (sec_toA j)
+  let stepH (j : ℕ) : AH j ⟶ AH (j + 1) :=
+    ObjectProperty.homMk (c.step j)
+  have stepH_mono (j : ℕ) : Mono (stepH j) :=
+    mono_of_isHeartMono P.tilt (stepH j) (c.step_mono j)
+  have aH_step (j : ℕ) : stepH j ≫ aH (j + 1) = aH j := by
+    ext
+    exact c.comm j
+  let pbStep (j : ℕ) : PB j ⟶ PB (j + 1) :=
+    pullback.lift (toF0 j) (toA j ≫ stepH j) (by
+      rw [Category.assoc, aH_step j]
+      exact pullback.condition)
+  have pbStep_toF0 (j : ℕ) : pbStep j ≫ toF0 (j + 1) = toF0 j := by
+    exact pullback.lift_fst _ _ _
+  have pbStep_toA (j : ℕ) : pbStep j ≫ toA (j + 1) = toA j ≫ stepH j := by
+    exact pullback.lift_snd _ _ _
+  have pbStep_mono (j : ℕ) : Mono (pbStep j) := by
+    apply mono_of_mono_fac (pbStep_toF0 j)
+  have pbZero (j : ℕ) : W.zeroCharge (PB j).obj := by
+    letI : Mono (toF0 j) := toF0_mono j
+    exact (W.heartZeroCharge P.tilt).prop_of_mono (toF0 j) hF0new
+  have pbOld (j : ℕ) : sigma.zeroCharge (PB j).obj :=
+    (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+      beta hbeta0 hbeta1 (PB j).obj).mp (pbZero j)
+  let PBOld (j : ℕ) : t.heart.FullSubcategory := ⟨(PB j).obj, (pbOld j).1⟩
+  let F0Old : t.heart.FullSubcategory := ⟨F0, hF0.1⟩
+  let pbStepOld (j : ℕ) : PBOld j ⟶ PBOld (j + 1) :=
+    ObjectProperty.homMk (pbStep j).hom
+  have pbStepOld_mono (j : ℕ) : Mono (pbStepOld j) := by
+    apply mono_in_originalHeart_of_mono_in_phaseTilt
+      sigma beta hbeta0 hbeta1 (pbOld j)
+        (sigma.zeroCharge_phaseTors beta hbeta1 (pbOld (j + 1)))
+    simpa [pbStepOld, PBOld] using pbStep_mono j
+  let toF0Old (j : ℕ) : PBOld j ⟶ F0Old :=
+    ObjectProperty.homMk (toF0 j).hom
+  have toF0Old_mono (j : ℕ) : Mono (toF0Old j) := by
+    apply mono_in_originalHeart_of_mono_in_phaseTilt
+      sigma beta hbeta0 hbeta1 (pbOld j)
+        (sigma.zeroCharge_phaseTors beta hbeta1 hF0)
+    simpa [toF0Old, PBOld, F0Old] using toF0_mono j
+  let cOld : SubobjectChain t sigma.zeroCharge F0 :=
+    { obj := fun j => (PB j).obj
+      prop := pbOld
+      step := fun j => (pbStep j).hom
+      toAmbient := fun j => (toF0 j).hom
+      step_mono := fun j => isHeartMono_of_mono t (pbStepOld j)
+      toAmbient_mono := fun j => isHeartMono_of_mono t (toF0Old j)
+      comm := fun j => congrArg InducedCategory.Hom.hom (pbStep_toF0 j) }
+  obtain ⟨n, hn⟩ := noetherian_mono (t := t)
+    (fun X hX => by rw [hN0]; exact hX) N0.noetherian
+    F0 hF0.1 cOld
+  refine ⟨n, fun j hj => ?_⟩
+  haveI pbStep_hom_iso : IsIso (pbStep j).hom := by
+    exact hn j hj
+  letI : IsIso (P.tilt.heart.ι.map (pbStep j)) := by
+    change IsIso (pbStep j).hom
+    infer_instance
+  letI : IsIso (pbStep j) :=
+    isIso_of_reflects_iso (pbStep j) P.tilt.heart.ι
+  letI : Epi (toA (j + 1)) := toA_epi (j + 1)
+  letI : Epi (pbStep j ≫ toA (j + 1)) := by infer_instance
+  have stepH_epi : Epi (stepH j) := by
+    exact epi_of_epi_fac (pbStep_toA j).symm
+  have stepH_iso : IsIso (stepH j) := by
+    letI : Mono (stepH j) := stepH_mono j
+    letI : Epi (stepH j) := stepH_epi
+    exact isIso_of_mono_of_epi (stepH j)
+  simpa [stepH, AH] using (P.tilt.heart.ι.mapIso (asIso (stepH j))).isIso_hom
+
 /-- **The semistable-reduction step of Proposition 19.5.**
 
 Let `R` be an extension of a shifted old semistable `U[1]` by a zero-charge
@@ -596,8 +730,8 @@ theorem phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal
     (fun X hX => by rw [hN0]; exact hX) N0.noetherian
     S.X₃.obj NOld.property cOld
 
-/-- Phase-compatible envelopes discharge the relative-chain seam in the
-noetherian assembly.
+/-- Zero-charge decompositions of shifted phase-free objects discharge the
+relative-chain seam in the noetherian assembly.
 
 For `E` in the tilted heart, compose the envelope subobject
 `A⁰ ⟶ H⁻¹(E)[1]` with the canonical cohomology subobject
@@ -606,18 +740,28 @@ short exact sequence
 
 `coker(A⁰ ⟶ H⁻¹(E)[1]) ⟶ coker(A⁰ ⟶ E) ⟶ H⁰(E)`.
 
-Its left term is right-orthogonal by the envelope and its right term is an
-original phase-torsion object, so `phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal`
-constructs a maximal zero-charge subobject of the middle term.  The general
-pullback lemma `hasZeroChargeDecomposition_of_reduction` then lifts that
-decomposition across `A⁰ ⟶ E`. -/
-theorem phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+Its left term is right-orthogonal by the supplied decomposition and its right
+term is an original phase-torsion object, so
+`phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal` constructs a maximal
+zero-charge subobject of the middle term.  The general pullback lemma
+`hasZeroChargeDecomposition_of_reduction` then lifts that decomposition
+across `A⁰ ⟶ E`. -/
+theorem phaseTilt_hasZeroChargeDecompositions_of_freeShiftDecompositions
     (sigma : WeakPreStabilityCondition v) (beta : ℝ)
     (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
     (N0 : NoetherianTorsionSubcategory sigma.slicing.toTStructure)
     (hN0 : N0.pair.tors = sigma.zeroCharge)
-    (henv : ∀ (F : C), phaseFree sigma.slicing beta F →
-      sigma.HasPhaseTiltingEnvelope beta F) :
+    (hfreeDec : ∀ (F : C), phaseFree sigma.slicing beta F →
+      ∃ (A Q : C)
+        (_ : (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt.heart
+          (F⟦(1 : ℤ)⟧))
+        (_ : (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge A)
+        (_ : rightOrthogonal
+          (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+          (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge Q)
+        (i : A ⟶ F⟦(1 : ℤ)⟧) (p : F⟦(1 : ℤ)⟧ ⟶ Q)
+        (d : Q ⟶ A⟦(1 : ℤ)⟧),
+          Triangle.mk i p d ∈ distTriang C) :
     WeakStabilityFunction.HasZeroChargeDecompositions
       (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
       (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) := by
@@ -632,8 +776,7 @@ theorem phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
   let F : C := (P.originalHMinusOne hE).obj
   have hF : phaseFree sigma.slicing beta F := P.originalHMinusOne_free hE
   obtain ⟨A, Q, -, hA, hQ, a, q, d, hd⟩ :=
-    sigma.phaseTiltingEnvelope_gives_shiftedZeroChargeDecomposition
-      beta hbeta0 hbeta1 hF (henv F hF)
+    hfreeDec F hF
   let AH : P.tilt.heart.FullSubcategory := ⟨A, hA.1⟩
   let QH : P.tilt.heart.FullSubcategory := ⟨Q, hQ.1⟩
   let aH : AH ⟶ S.X₁ := ObjectProperty.homMk a
@@ -682,6 +825,51 @@ theorem phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
       inferInstance hepiR
   exact W.hasZeroChargeDecomposition_of_reduction
     (t := P.tilt) Red hRed hA hdecR
+
+/-- Phase-compatible envelopes provide the shifted decompositions consumed
+by `phaseTilt_hasZeroChargeDecompositions_of_freeShiftDecompositions`. -/
+theorem phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (N0 : NoetherianTorsionSubcategory sigma.slicing.toTStructure)
+    (hN0 : N0.pair.tors = sigma.zeroCharge)
+    (henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasPhaseTiltingEnvelope beta F) :
+    WeakStabilityFunction.HasZeroChargeDecompositions
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) := by
+  apply sigma.phaseTilt_hasZeroChargeDecompositions_of_freeShiftDecompositions
+    beta hbeta0 hbeta1 N0 hN0
+  intro F hF
+  exact sigma.phaseTiltingEnvelope_gives_shiftedZeroChargeDecomposition
+    beta hbeta0 hbeta1 hF (henv F hF)
+
+/-- Raw Definition 14.12 envelopes provide the phase-compatible shifted
+decompositions needed after tilting.  The bridge does not strengthen the raw
+middle term to a phase-free object: it first applies
+`phaseTilt_zeroChargeChain_terminates_of_tiltingEnvelope`, then chooses a
+maximal tilted zero-charge subobject. -/
+theorem phaseTilt_hasZeroChargeDecompositions_of_tiltingEnvelopes
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (N0 : NoetherianTorsionSubcategory sigma.slicing.toTStructure)
+    (hN0 : N0.pair.tors = sigma.zeroCharge)
+    (henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasTiltingEnvelope F) :
+    WeakStabilityFunction.HasZeroChargeDecompositions
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) := by
+  let P := slicingTorsionPair sigma.slicing hbeta0 hbeta1.le
+  let W := sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1
+  apply sigma.phaseTilt_hasZeroChargeDecompositions_of_freeShiftDecompositions
+    beta hbeta0 hbeta1 N0 hN0
+  intro F hF
+  obtain ⟨A, Q, hA, hQ, i, p, d, hd⟩ :=
+    W.hasZeroChargeDecomposition_of_chainCondition
+    (t := P.tilt) (F⟦(1 : ℤ)⟧) (P.free_shift_mem_tilt_heart hF)
+      (fun c => sigma.phaseTilt_zeroChargeChain_terminates_of_tiltingEnvelope
+        beta hbeta0 hbeta1 N0 hN0 hF (henv F hF) c)
+  exact ⟨A, Q, P.free_shift_mem_tilt_heart hF, hA, hQ, i, p, d, hd⟩
 
 /-- Every tilted-heart zero-charge object is noetherian when the original
 zero-charge class is the torsion class of a noetherian torsion subcategory.
@@ -960,6 +1148,28 @@ noncomputable def phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
   exact sigma.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
     beta hbeta0 hbeta1 htilt
       (sigma.phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+        beta hbeta0 hbeta1 N hN henv)
+
+/-- The noetherian tilted zero-charge torsion structure constructed directly
+from Definition 14.12.  Its raw envelope clause is restricted to the
+phase-cut free class by `TiltingProperty.hasTiltingEnvelope_of_phaseFree`,
+then converted to tilted zero-charge decompositions by chain termination. -/
+noncomputable def phaseTiltNoetherianTorsionSubcategoryOfTiltingEnvelopes
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty) :
+    NoetherianTorsionSubcategory
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt := by
+  let N := Classical.choose htilt.zeroCharge_noetherian
+  have hN : N.pair.tors = sigma.zeroCharge :=
+    Classical.choose_spec htilt.zeroCharge_noetherian
+  let henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasTiltingEnvelope F :=
+    fun F hF => TiltingProperty.hasTiltingEnvelope_of_phaseFree
+      sigma htilt beta hbeta1 F hF
+  exact sigma.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
+    beta hbeta0 hbeta1 htilt
+      (sigma.phaseTilt_hasZeroChargeDecompositions_of_tiltingEnvelopes
         beta hbeta0 hbeta1 N hN henv)
 
 /-- The full noetherian zero-charge torsion structure, with the relative
