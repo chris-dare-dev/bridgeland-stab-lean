@@ -44,10 +44,15 @@ cohomology homological for every t-structure without stability or HN data.
 identifies its zero-charge subcategory, and proves both directions of the
 phase-language classification in Lemma 14.17.  It also defines weak stability
 and proves the lemma's positive-imaginary/stable `moreover` clause via images
-in the tilted heart.  The exact slope-language source statement remains under
-the registry's existing `mapped` hypothesis until the slope--phase
-reparameterisation is formalized and reviewed.  Proposition 14.16 still
-requires the noetherian/weak-HN assembly and weak support-property transport.
+in the tilted heart. `WeakStability/TiltNoetherian.lean` and
+`WeakStability/TiltAssembly.lean` now construct the maximal-subobject and
+noetherian-torsion assembly from the relative chain condition and package the
+rank-decreasing HN recursion. `WeakStability/Support.lean` transports the
+support property unconditionally. The exact slope-language source statement
+remains under the registry's existing `mapped` hypothesis until the
+slope--phase reparameterisation is formalized and reviewed. Proposition 14.16
+still has two explicit constructive seams: the envelope proof of the relative
+chain condition and the cohomological construction of the HN quotient step.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -93,6 +98,34 @@ def HasTiltingEnvelope (F : C) : Prop :=
       Triangle.mk i p d ∈ distTriang C ∧
         ∀ A0 : C, sigma.zeroCharge A0 →
           ∀ f : A0 ⟶ Ftilde⟦(1 : ℤ)⟧, f = 0
+
+/-- A tilting envelope whose middle term is explicitly in the phase-cut
+torsion-free class.  Rotating its defining triangle gives the short exact
+sequence in the tilted heart used in the proof of Proposition 14.16.
+
+The paper obtains this membership implicitly when it passes from Definition
+14.12(2) to `0 → F⁰ → F[1] → F̃[1] → 0`.  It is named here so that
+the heart-membership conversion is an independently checkable boundary; it is
+not added to `TiltingProperty` as an extra axiom. -/
+def HasPhaseTiltingEnvelope (beta : ℝ) (F : C) : Prop :=
+  ∃ (Ftilde F0 : C) (_ : phaseFree sigma.slicing beta Ftilde)
+    (_ : sigma.zeroCharge F0) (i : F ⟶ Ftilde) (p : Ftilde ⟶ F0)
+    (d : F0 ⟶ F⟦(1 : ℤ)⟧),
+      Triangle.mk i p d ∈ distTriang C ∧
+        ∀ A0 : C, sigma.zeroCharge A0 →
+          ∀ f : A0 ⟶ Ftilde⟦(1 : ℤ)⟧, f = 0
+
+/-- Forgetting the phase-cut membership recovers a Definition 14.12
+envelope. -/
+theorem HasPhaseTiltingEnvelope.hasTiltingEnvelope
+    (sigma : WeakPreStabilityCondition v) {beta : ℝ} {F : C}
+    (hbeta1 : beta ≤ 1) (h : sigma.HasPhaseTiltingEnvelope beta F) :
+    sigma.HasTiltingEnvelope F := by
+  obtain ⟨Ftilde, F0, hFtilde, hF0, i, p, d, hd, hhom⟩ := h
+  exact ⟨Ftilde, F0,
+    mem_heart_of_bounds sigma.slicing hFtilde.1
+      (sigma.slicing.leProp_mono C hbeta1 Ftilde hFtilde.2),
+    hF0, i, p, d, hd, hhom⟩
 
 /-- **The tilting property, Definition 14.12 (phase-language form).**
 
