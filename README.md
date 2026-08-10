@@ -614,11 +614,20 @@ tilted-heart images. The exact slope-language source statement stays under
 the existing `mapped` hypothesis. **Proposition 14.16 remains deliberately
 undeclared.** Its support-property transport is now proved in
 `WeakStability/Support.lean`; `WeakStability/TiltNoetherian.lean` constructs
-the zero-charge torsion pair and its noetherian chain data from the relative
-chain condition; and `WeakStability/TiltAssembly.lean` combines this with a
-rank-decreasing semistable-quotient recursion to package all three heart-level
-obligations. The remaining seams are the envelope proof of that relative
-chain condition and the cohomological construction of the quotient step.
+the zero-charge torsion pair and its noetherian chain data from either the
+relative chain condition or phase-compatible envelopes. The latter route
+performs the envelope reduction, reduced-chain termination, maximal
+zero-charge quotient, and pullback internally.
+`WeakStability/TiltHarderNarasimhan.lean` constructs the cohomological
+last-factor reduction: it peels the last original `H⁻¹` HN factor, produces
+the saturated tilted semistable quotient, and identifies the recursive kernel
+as an extension of the shorter shifted prefix by a zero-charge object.
+`WeakStability/TiltAssembly.lean` combines these foundations with the generic
+rank-decreasing recursion to package all three heart-level obligations. The
+remaining seams are deriving the relative chain condition from the raw
+Definition 14.12 envelope without the explicit phase-compatibility boundary,
+and iterating the last-factor reduction through boundary-phase saturation and
+the original `H⁰` filtration.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

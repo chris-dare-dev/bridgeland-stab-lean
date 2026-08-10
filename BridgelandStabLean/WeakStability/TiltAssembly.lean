@@ -4,7 +4,7 @@ Released under the MIT license.
 -/
 import BridgelandStabLean.WeakStability.HarderNarasimhan
 import BridgelandStabLean.WeakStability.Support
-import BridgelandStabLean.WeakStability.TiltNoetherian
+import BridgelandStabLean.WeakStability.TiltHarderNarasimhan
 
 /-!
 # Heart-level assembly for the weak upper tilt
@@ -20,12 +20,12 @@ The generic HN recursion is discharged by
 by `phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty`; and support is
 transported unconditionally by `phaseTilt_hasSupportProperty`.
 
-Two constructive inputs remain visible, rather than hidden as assumptions:
-termination of zero-charge subobject chains in arbitrary tilted-heart objects
-(the envelope step of the proof) and rank-decreasing semistable quotient
-steps (the `H⁻¹`-HN-length induction described in Proposition 19.5).  The
-surrounding modules discharge the maximal-subobject, kernel/image, and
-support arguments once those inputs are supplied.
+The first constructor keeps the relative zero-charge chain condition and
+rank-decreasing quotient induction visible.  The second discharges the chain
+condition from phase-compatible envelopes. `TiltHarderNarasimhan` supplies
+the cohomological last-factor reduction underlying the quotient induction;
+boundary saturation and iteration over both original cohomology filtrations
+remain separate.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -89,6 +89,40 @@ noncomputable def phaseTiltHeartObligations
   let Nsharp :=
     sigma.phaseTiltNoetherianTorsionSubcategoryOfChainCondition
       beta hbeta0.le hbeta1 htilt hacc
+  exact
+    { hasHN := W.hasHNProperty_of_quotientInduction rank hquot
+      zeroChargeNoetherian := Nsharp
+      zeroCharge_tors := rfl
+      support := sigma.phaseTilt_hasSupportProperty
+        beta hbeta0 hbeta1 Zlin hcompat hsupport }
+
+/-- Assemble the heart-level obligations with the relative zero-charge chain
+condition discharged by phase-compatible envelopes.  Compared with
+`phaseTiltHeartObligations`, this constructor removes the order-theoretic
+`hacc` input: the envelope reduction, reduced-chain termination, and pullback
+of the maximal zero-charge subobject are performed in `TiltNoetherian`.
+
+The quotient-induction input remains visible until the last-factor reduction
+in `TiltHarderNarasimhan` is iterated over both original cohomology HN
+filtrations. -/
+noncomputable def phaseTiltHeartObligationsOfPhaseEnvelopes
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty)
+    (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
+    (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin)
+    (henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasPhaseTiltingEnvelope beta F)
+    (rank :
+      ((slicingTorsionPair sigma.slicing hbeta0.le hbeta1.le).tilt).heart.FullSubcategory
+        → ℕ)
+    (hquot : WeakStabilityFunction.HasHNQuotientInduction
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0.le hbeta1) rank) :
+    sigma.PhaseTiltHeartObligations beta hbeta0.le hbeta1 Zlin := by
+  let W := sigma.phaseTiltWeakStabilityFunction beta hbeta0.le hbeta1
+  let Nsharp :=
+    sigma.phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
+      beta hbeta0.le hbeta1 htilt henv
   exact
     { hasHN := W.hasHNProperty_of_quotientInduction rank hquot
       zeroChargeNoetherian := Nsharp
