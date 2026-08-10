@@ -675,6 +675,59 @@ assembled directly from Definition 14.12's `TiltingProperty`. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfTiltingProperty
 
+/-! ## WeakStability lane -- reverse heart--slicing foundations
+
+The extended-slope phase normalization, integer-normalized ambient phase
+family, heart-HN to ambient-Postnikov conversion, and the explicit final
+phase-tilt prestability boundary. These declarations package no source
+statement and make no §14 coverage promotion. -/
+
+#print axioms WeakStability.weakPhaseOfSlope
+#print axioms WeakStability.weakPhaseOfSlope_top
+#print axioms WeakStability.weakPhaseOfSlope_coe
+#print axioms WeakStability.weakPhaseOfSlope_coe_mem_Ioo
+#print axioms WeakStability.weakPhaseOfSlope_mem_Ioc
+#print axioms WeakStability.weakPhaseOfSlope_strictMono
+#print axioms WeakStability.weakPhaseOfSlope_lt_iff
+#print axioms WeakStability.WeakStabilityFunction.phase
+#print axioms WeakStability.WeakStabilityFunction.phase_mem_Ioc
+#print axioms WeakStability.WeakStabilityFunction.phase_lt_phase_iff
+#print axioms WeakStability.WeakStabilityFunction.phase_eq_of_iso
+#print axioms WeakStability.WeakStabilityFunction.heartPhasePredicate
+#print axioms WeakStability.WeakStabilityFunction.heartPhasePredicate_closedUnderIso
+#print axioms WeakStability.WeakStabilityFunction.heartPhasePredicate_instClosedUnderIso
+#print axioms WeakStability.WeakStabilityFunction.shiftedHeartPhasePredicate
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate
+#print axioms WeakStability.WeakStabilityFunction.shiftedHeartPhasePredicate_zero_iff
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_iff_of_mem_Ioc
+#print axioms WeakStability.WeakStabilityFunction.shiftedHeartPhasePredicate_closedUnderIso
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_closedUnderIso
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_instClosedUnderIso
+#print axioms WeakStability.WeakStabilityFunction.shiftedHeartPhasePredicate_shift_iff
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_shift_iff
+#print axioms WeakStability.WeakAbelianHNFiltration.factorInclusion
+#print axioms WeakStability.WeakAbelianHNFiltration.factorInclusion_mono
+#print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_3
+#print axioms WeakStability.WeakAbelianHNFiltration.factorTriangle
+#print axioms WeakStability.WeakAbelianHNFiltration.factorTriangle_distinguished
+#print axioms WeakStability.WeakAbelianHNFiltration.toAmbientHN
+#print axioms WeakStability.HNFiltration.relabelPhasePredicate
+#print axioms WeakStability.WeakAbelianHNFiltration.toAmbientNormalizedHN
+#print axioms WeakStability.WeakStabilityFunction.ambientHNOfHeart
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_mem_heart
+#print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations
+#print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toSlicing
+#print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toSlicing_P
+#print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toWeakPreStabilityCondition
+#print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toWeakPreStabilityCondition_slicing
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge_apply
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
+
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
 Linear algebra plus one compactness argument over a finite-dimensional real

@@ -628,8 +628,17 @@ the noetherian and support constructions to package all three heart-level
 obligations directly from `TiltingProperty`, with no external envelope, rank,
 or quotient-induction premise. The heart-level constructive seams are now
 closed. The exact Proposition 14.16 source statement remains undeclared
-because the slope--phase translation is not yet formalized or reviewed and
-the reverse weak heart--slicing equivalence is not packaged here.
+because the slope--phase ray translation is not yet formalized or reviewed
+and two ambient reverse obligations remain. The reverse infrastructure is in
+`WeakStability/HeartEquivalenceReverse.lean`: the strictly increasing
+normalization `WithTop ℝ → (0,1]`, the integer-normalized ambient phase
+predicates and their shift law, and the conversion of weak abelian HN chains
+to ambient Postnikov towers. `WeakStability/TiltPreStability.lean` connects
+those towers to `PhaseTiltHeartObligations` and packages an actual
+`WeakPreStabilityCondition` once ambient Hom vanishing, global HN extension,
+and the analytic charge-ray identity are supplied. Thus these three premises
+are now the explicit final boundary rather than an implicit missing reverse
+equivalence.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

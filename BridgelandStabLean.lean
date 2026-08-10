@@ -53,6 +53,7 @@ import BridgelandStabLean.GroupAction.EffectiveAction
 import BridgelandStabLean.GroupAction.StabilityMassTriangle
 import BridgelandStabLean.WeakStability.Basic
 import BridgelandStabLean.WeakStability.HeartEquivalence
+import BridgelandStabLean.WeakStability.HeartEquivalenceReverse
 import BridgelandStabLean.WeakStability.HarderNarasimhan
 import BridgelandStabLean.WeakStability.Noetherian
 import BridgelandStabLean.WeakStability.SlopeTorsionPair
@@ -62,6 +63,7 @@ import BridgelandStabLean.WeakStability.TiltNoetherian
 import BridgelandStabLean.WeakStability.TiltHarderNarasimhan
 import BridgelandStabLean.WeakStability.Support
 import BridgelandStabLean.WeakStability.TiltAssembly
+import BridgelandStabLean.WeakStability.TiltPreStability
 
 /-!
 # BridgelandStabLean
