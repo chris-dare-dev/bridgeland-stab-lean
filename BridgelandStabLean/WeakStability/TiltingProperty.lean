@@ -46,24 +46,30 @@ phase-language classification in Lemma 14.17.  It also defines weak stability
 and proves the lemma's positive-imaginary/stable `moreover` clause via images
 in the tilted heart. `WeakStability/TiltNoetherian.lean` constructs the
 maximal-subobject and noetherian-torsion assembly from the relative chain
-condition and also discharges that condition from phase-compatible envelopes.
+condition. It now discharges that condition directly from the raw Definition
+14.12 envelope: Ext-vanishing transfers a zero-charge subobject chain to the
+original zero-charge quotient, and maximal subobjects provide the
+phase-compatible shifted decomposition without asserting that the raw middle
+term is phase-free.
 `WeakStability/TiltHarderNarasimhan.lean` performs boundary-phase saturation
 without a last-factor right-orthogonality premise and iterates the resulting
 reduction over the original `H⁻¹` and `H⁰` HN filtrations.
 `WeakStability/TiltAssembly.lean` packages the resulting HN theorem with the
-noetherian and support obligations from phase-compatible envelopes, without
-an external rank or quotient-induction input. `WeakStability/Support.lean`
-transports the support property unconditionally. The exact slope-language
-source statement remains under the registry's existing `mapped` hypothesis
-until the slope--phase reparameterisation is formalized and reviewed.
-Proposition 14.16 now has one constructive seam: passing from the raw
-Definition 14.12 envelope to the phase-compatible envelope used by the
-heart-level assembly.
+noetherian and support obligations directly from `TiltingProperty`, without
+an external envelope, rank, or quotient-induction input.
+`WeakStability/Support.lean` transports the support property unconditionally.
+The heart-level constructive obligations are therefore assembled; the exact
+slope-language source statement remains under the registry's existing
+`mapped` hypothesis until the slope--phase reparameterisation is formalized
+and reviewed. Proposition 14.16 also remains undeclared because this layer
+deliberately does not package the reverse weak heart--slicing equivalence into
+a new `WeakPreStabilityCondition`.
 -/
 
 namespace BridgelandStabLean.WeakStability
 
 open CategoryTheory Limits Pretriangulated CategoryTheory.Triangulated
+open scoped ZeroObject
 
 variable {C : Type*} [Category C] [Preadditive C] [HasZeroObject C] [HasShift C ℤ]
   [∀ n : ℤ, (shiftFunctor C n).Additive] [Pretriangulated C] [IsTriangulated C]
@@ -148,6 +154,34 @@ structure TiltingProperty : Prop where
   /-- Definition 14.12(2), with finite maximum slope in phase language. -/
   exists_envelope : ∀ F : C, sigma.slicing.toTStructure.heart F →
     sigma.HasFiniteMaxSlope F → sigma.HasTiltingEnvelope F
+
+/-- Definition 14.12(2) supplies a raw tilting envelope for every object in a
+phase-cut torsion-free class.  The zero object is handled by the contractible
+triangle; for a nonzero object, the `leProp beta` bound makes its largest
+phase strictly smaller than `1`.
+
+This deliberately returns `HasTiltingEnvelope`, not
+`HasPhaseTiltingEnvelope`: the raw envelope's middle term need not remain in
+`P((0, beta])`.  Its Ext-vanishing is instead used to prove termination of
+zero-charge subobject chains after tilting. -/
+theorem TiltingProperty.hasTiltingEnvelope_of_phaseFree
+    (sigma : WeakPreStabilityCondition v) (h : sigma.TiltingProperty)
+    (beta : ℝ) (hbeta1 : beta < 1) (F : C)
+    (hF : phaseFree sigma.slicing beta F) : sigma.HasTiltingEnvelope F := by
+  have hFheart : sigma.slicing.toTStructure.heart F :=
+    mem_heart_of_bounds sigma.slicing hF.1
+      (sigma.slicing.leProp_mono C hbeta1.le F hF.2)
+  by_cases hFzero : IsZero F
+  · refine ⟨F, 0, hFheart, ?_, 𝟙 F, 0, 0,
+      contractible_distinguished F, ?_⟩
+    · refine ⟨mem_heart_of_bounds sigma.slicing
+        (sigma.slicing.gtProp_zero C 0) (sigma.slicing.leProp_zero C 1), ?_⟩
+      rw [K₀.of_zero, map_zero, map_zero]
+    · intro A0 hA0 f
+      exact ((shiftFunctor C (1 : ℤ)).map_isZero hFzero).eq_of_tgt f 0
+  · exact h.exists_envelope F hFheart
+      ⟨hFzero,
+        (sigma.slicing.phiPlus_le_of_leProp C hFzero hF.2).trans_lt hbeta1⟩
 
 end WeakPreStabilityCondition
 
