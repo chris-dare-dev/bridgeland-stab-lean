@@ -2,7 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
-import BridgelandStabLean.WeakStability.HeartHomVanishing
+import BridgelandStabLean.WeakStability.AmbientHarderNarasimhan
 import BridgelandStabLean.WeakStability.TiltAssembly
 
 /-!
@@ -13,15 +13,15 @@ weak heart--slicing foundations.  It isolates the exact remaining boundary
 between the completed heart-level part of Proposition 14.16 and an ambient
 weak prestability condition:
 
-* extension of the heart HN towers through shifts and finite t-cohomological
-  extensions to every ambient object;
 * the analytic ray identity relating the normalized slope phase to the
   rotated central charge.
 
-Hom vanishing is discharged unconditionally by `HeartHomVanishing`.  The
-first constructor below records the two remaining obligations without hiding
-them.  The second packages them into `WeakPreStabilityCondition`; no §14
-coverage status is promoted by this infrastructure.
+Hom vanishing is discharged by `HeartHomVanishing`, and ambient HN existence
+by `AmbientHarderNarasimhan`: boundedness of the tilted t-structure and the
+heart HN property extend the towers through the finite t-cohomological
+filtration.  The first constructor below therefore records only the remaining
+analytic compatibility obligation.  No §14 coverage status is promoted by
+this infrastructure.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -52,18 +52,14 @@ theorem phaseTiltLatticeCharge_apply
     sigma.phaseTiltLatticeCharge beta x =
       sigma.Z x * Complex.exp (-(Real.pi * beta : ℂ) * Complex.I) := rfl
 
-/-- The ambient reverse-direction data left after the heart-level HN,
-noetherian, and support obligations have been assembled. -/
+/-- The reverse-direction data left after the heart-level HN, noetherian,
+support, Hom-vanishing, and ambient HN obligations have been assembled. -/
 structure PhaseTiltPreStabilityObligations
     (sigma : WeakPreStabilityCondition v) (beta : ℝ)
     (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
     (Zlin : V →ₗ[ℝ] ℂ) where
   /-- The already assembled heart-level conclusions. -/
   heart : sigma.PhaseTiltHeartObligations beta hbeta0 hbeta1 Zlin
-  /-- Global HN existence for the induced weak phases. -/
-  ambientHN : ∀ E : C, Nonempty (HNFiltration C
-    (WeakStabilityFunction.ambientPhasePredicate
-      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)) E)
   /-- The normalized weak phase lies on the ray of the rotated charge. -/
   compat : ∀ (phi : ℝ) (E : C),
     WeakStabilityFunction.ambientPhasePredicate
@@ -89,8 +85,30 @@ theorem PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
   WeakStabilityFunction.ambientHN_exists_of_mem_heart
     (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) H.hasHN E hE
 
-/-- Package the completed heart-level phase-tilt assembly and the two
-ambient reverse obligations into the weak prestability condition sought in
+omit [FiniteDimensional ℝ V] in
+/-- The heart HN field of the phase-tilt assembly extends canonically to an
+ambient HN filtration for every object.  Boundedness of the original slicing
+t-structure is preserved by the HRS tilt, and
+`WeakStabilityFunction.ambientHN_exists_of_bounded` performs the finite
+t-cohomological assembly. -/
+theorem PhaseTiltHeartObligations.ambientHN
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (Zlin : V →ₗ[ℝ] ℂ)
+    (H : sigma.PhaseTiltHeartObligations beta hbeta0 hbeta1 Zlin)
+    (E : C) :
+    Nonempty (HNFiltration C
+      (WeakStabilityFunction.ambientPhasePredicate
+        (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)) E) :=
+  WeakStabilityFunction.ambientHN_exists_of_bounded
+    (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)
+    (heartTorsionPair_tilt_isBounded
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le)
+      (sigma.slicing.toTStructure_bounded C))
+    H.hasHN E
+
+/-- Package the completed categorical phase-tilt assembly and the remaining
+analytic ray compatibility into the weak prestability condition sought in
 Proposition 14.16. -/
 noncomputable def PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
     {sigma : WeakPreStabilityCondition v} {beta : ℝ}
@@ -100,7 +118,7 @@ noncomputable def PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
       beta hbeta0 hbeta1 Zlin) : WeakPreStabilityCondition v :=
   (WeakStabilityFunction.reverseSlicingObligationsOfHN
     (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)
-    O.ambientHN).toWeakPreStabilityCondition
+    (fun E ↦ O.heart.ambientHN sigma beta hbeta0 hbeta1 Zlin E)).toWeakPreStabilityCondition
     (sigma.phaseTiltLatticeCharge beta) O.compat
 
 omit [FiniteDimensional ℝ V] in

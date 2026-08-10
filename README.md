@@ -629,19 +629,24 @@ obligations directly from `TiltingProperty`, with no external envelope, rank,
 or quotient-induction premise. The heart-level constructive seams are now
 closed. The exact Proposition 14.16 source statement remains undeclared
 because the slope--phase ray translation is not yet formalized or reviewed
-and two ambient reverse obligations remain. The reverse infrastructure is in
+and the analytic charge-ray identity remains. The reverse infrastructure is in
 `WeakStability/HeartEquivalenceReverse.lean`: the strictly increasing
 normalization `WithTop ℝ → (0,1]`, the integer-normalized ambient phase
 predicates and their shift law, and the conversion of weak abelian HN chains
 to ambient Postnikov towers. `WeakStability/TiltPreStability.lean` connects
 those towers to `PhaseTiltHeartObligations` and packages an actual
-`WeakPreStabilityCondition` once global HN extension and the analytic
-charge-ray identity are supplied. `WeakStability/HeartHomVanishing.lean`
+`WeakPreStabilityCondition` once the analytic charge-ray identity is supplied.
+`WeakStability/HeartHomVanishing.lean`
 proves the previously separate Hom-vanishing premise unconditionally: a
 weak-slope see-saw and the heart kernel/image factorization give same-heart
 vanishing, while integer shifts and t-structure orthogonality give the full
-ambient statement. Thus only the other two premises remain as the explicit
-final boundary rather than an implicit missing reverse equivalence.
+ambient statement. `WeakStability/AmbientHarderNarasimhan.lean` proves the
+remaining categorical premise: pure cohomology towers are shifted from the
+heart and concatenated along bounded truncation triangles, with amplitude
+`[b,a]` giving the strict phase interval `(-a,1-b]`; it also proves that the
+HRS tilt of a bounded t-structure stays bounded. Thus the analytic ray
+identity is the sole explicit final boundary rather than an implicit missing
+reverse equivalence.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

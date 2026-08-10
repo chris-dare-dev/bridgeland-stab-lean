@@ -258,6 +258,99 @@ theorem WeakStabilityFunction.ambientPhasePredicate_shift_iff
     W.shiftedHeartPhasePredicate_shift_iff
       (phaseBase phi) (phaseIndex phi) X
 
+omit [IsTriangulated C] in
+/-- Shifting by an arbitrary integer translates the induced ambient weak
+phase by that integer.  This is the iteration form needed to move HN towers
+of pure t-cohomology objects to and from the heart. -/
+theorem WeakStabilityFunction.ambientPhasePredicate_shift_int
+    {t : TStructure C} (W : WeakStabilityFunction t)
+    (phi : ℝ) (X : C) (n : ℤ) :
+    W.ambientPhasePredicate phi X ↔
+      W.ambientPhasePredicate (phi + (n : ℝ)) (X⟦n⟧) := by
+  induction n using Int.induction_on generalizing phi X with
+  | zero =>
+      constructor
+      · intro hX
+        have hX' : W.ambientPhasePredicate phi (X⟦(0 : ℤ)⟧) :=
+          (W.ambientPhasePredicate phi).prop_of_iso
+            ((shiftFunctorZero C ℤ).app X).symm hX
+        simpa using hX'
+      · intro hX
+        have hX' : W.ambientPhasePredicate phi (X⟦(0 : ℤ)⟧) := by
+          simpa using hX
+        exact (W.ambientPhasePredicate phi).prop_of_iso
+          ((shiftFunctorZero C ℤ).app X) hX'
+  | succ n ih =>
+      constructor
+      · intro hX
+        let Y : C := X⟦(n : ℤ)⟧
+        have h0 : W.ambientPhasePredicate (phi + (n : ℝ)) Y := by
+          simpa [Y] using ((ih phi X).mp hX)
+        have h1 : W.ambientPhasePredicate (phi + (n : ℝ) + 1) (Y⟦(1 : ℤ)⟧) :=
+          (W.ambientPhasePredicate_shift_iff (phi + (n : ℝ)) Y).mp h0
+        simpa [Y, Nat.cast_succ, add_assoc] using
+          (W.ambientPhasePredicate (phi + (n : ℝ) + 1)).prop_of_iso
+            ((shiftFunctorAdd' C (n : ℤ) 1 ((n : ℤ) + 1) (by lia)).app X).symm h1
+      · intro hX
+        let Y : C := X⟦(n : ℤ)⟧
+        have h1 : W.ambientPhasePredicate (phi + (n : ℝ) + 1) (Y⟦(1 : ℤ)⟧) := by
+          simpa [Y, Nat.cast_succ, add_assoc] using
+            (W.ambientPhasePredicate (phi + ((n + 1 : ℕ) : ℝ))).prop_of_iso
+              ((shiftFunctorAdd' C (n : ℤ) 1 ((n : ℤ) + 1) (by lia)).app X) hX
+        have h0 : W.ambientPhasePredicate (phi + (n : ℝ)) Y :=
+          (W.ambientPhasePredicate_shift_iff (phi + (n : ℝ)) Y).mpr h1
+        exact (ih phi X).mpr (by simpa [Y] using h0)
+  | pred n ih =>
+      constructor
+      · intro hX
+        let Y : C := X⟦(-(n : ℤ))⟧
+        have h0 : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ)) Y := by
+          simpa [Y] using ((ih phi X).mp hX)
+        have h0' :
+            W.ambientPhasePredicate ((phi + (-(n : ℤ) : ℝ) - 1) + 1)
+              ((Y⟦(-1 : ℤ)⟧)⟦(1 : ℤ)⟧) := by
+          simpa [Y, sub_eq_add_neg, add_assoc] using
+            (W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ))).prop_of_iso
+              (shiftNegShift (X := Y) (i := (1 : ℤ))).symm h0
+        have h1 : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ) - 1)
+            (Y⟦(-1 : ℤ)⟧) :=
+          (W.ambientPhasePredicate_shift_iff
+            (phi + (-(n : ℤ) : ℝ) - 1) (Y⟦(-1 : ℤ)⟧)).mpr h0'
+        have h2 : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ) - 1)
+            ((shiftFunctor C (Int.negSucc n)).obj X) :=
+          (W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ) - 1)).prop_of_iso
+            ((shiftFunctorAdd' C (-(n : ℤ)) (-1 : ℤ)
+              (Int.negSucc n) (by lia)).app X).symm h1
+        simpa [Y, Int.negSucc_eq, sub_eq_add_neg, add_comm,
+          add_left_comm, add_assoc] using h2
+      · intro hX
+        let Y : C := X⟦(-(n : ℤ))⟧
+        have hX' : W.ambientPhasePredicate (phi + (Int.negSucc n : ℝ))
+            ((shiftFunctor C (Int.negSucc n)).obj X) := by
+          simpa [Int.negSucc_eq, sub_eq_add_neg, add_comm,
+            add_left_comm, add_assoc] using hX
+        have h1 : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ) - 1)
+            (Y⟦(-1 : ℤ)⟧) := by
+          have h2 : W.ambientPhasePredicate (phi + (Int.negSucc n : ℝ))
+              ((shiftFunctor C (-1 : ℤ)).obj Y) :=
+            (W.ambientPhasePredicate (phi + (Int.negSucc n : ℝ))).prop_of_iso
+              ((shiftFunctorAdd' C (-(n : ℤ)) (-1 : ℤ)
+                (Int.negSucc n) (by lia)).app X) hX'
+          simpa [Y, Int.negSucc_eq, sub_eq_add_neg, add_comm,
+            add_left_comm, add_assoc] using h2
+        have h0' :
+            W.ambientPhasePredicate ((phi + (-(n : ℤ) : ℝ) - 1) + 1)
+              ((Y⟦(-1 : ℤ)⟧)⟦(1 : ℤ)⟧) :=
+          (W.ambientPhasePredicate_shift_iff
+            (phi + (-(n : ℤ) : ℝ) - 1) (Y⟦(-1 : ℤ)⟧)).mp h1
+        have h0 : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ)) Y := by
+          have h0'' : W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ))
+              ((shiftFunctor C (1 : ℤ)).obj ((shiftFunctor C (-1 : ℤ)).obj Y)) := by
+            simpa [sub_eq_add_neg, add_assoc] using h0'
+          exact (W.ambientPhasePredicate (phi + (-(n : ℤ) : ℝ))).prop_of_iso
+            (shiftNegShift (X := Y) (i := (1 : ℤ))) h0''
+        exact (ih phi X).mpr (by simpa [Y] using h0)
+
 /-! ## Abelian HN chains as ambient Postnikov towers -/
 
 section HeartHNToAmbient
