@@ -635,10 +635,13 @@ normalization `WithTop ℝ → (0,1]`, the integer-normalized ambient phase
 predicates and their shift law, and the conversion of weak abelian HN chains
 to ambient Postnikov towers. `WeakStability/TiltPreStability.lean` connects
 those towers to `PhaseTiltHeartObligations` and packages an actual
-`WeakPreStabilityCondition` once ambient Hom vanishing, global HN extension,
-and the analytic charge-ray identity are supplied. Thus these three premises
-are now the explicit final boundary rather than an implicit missing reverse
-equivalence.
+`WeakPreStabilityCondition` once global HN extension and the analytic
+charge-ray identity are supplied. `WeakStability/HeartHomVanishing.lean`
+proves the previously separate Hom-vanishing premise unconditionally: a
+weak-slope see-saw and the heart kernel/image factorization give same-heart
+vanishing, while integer shifts and t-structure orthogonality give the full
+ambient statement. Thus only the other two premises remain as the explicit
+final boundary rather than an implicit missing reverse equivalence.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence
