@@ -612,8 +612,13 @@ classification, using the canonical original-cohomology sequence, and proves
 the positive-imaginary/stable Hom-vanishing refinement by factoring through
 tilted-heart images. The exact slope-language source statement stays under
 the existing `mapped` hypothesis. **Proposition 14.16 remains deliberately
-undeclared** and still requires the weak-HN/noetherian assembly and weak
-support-property transport.
+undeclared.** Its support-property transport is now proved in
+`WeakStability/Support.lean`; `WeakStability/TiltNoetherian.lean` constructs
+the zero-charge torsion pair and its noetherian chain data from the relative
+chain condition; and `WeakStability/TiltAssembly.lean` combines this with a
+rank-decreasing semistable-quotient recursion to package all three heart-level
+obligations. The remaining seams are the envelope proof of that relative
+chain condition and the cohomological construction of the quotient step.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

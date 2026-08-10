@@ -512,15 +512,16 @@ hypothesis, not a claim. Closes #109. -/
 Definition 14.12 in phase language: A0 is the torsion class of a noetherian
 torsion subcategory, and every heart object with phiPlus below the boundary
 has a heart-triangle envelope with zero-charge quotient and shifted
-Hom-vanishing. Proposition 14.16 and Lemma 14.17 are deliberately UNDECLARED;
-the module docstring names the missing weak-HN/support and heart
-kernel/image/cohomology infrastructure. The coverage map stays `mapped`.
-Closes #110 with the honest subset allowed by its acceptance criteria. -/
+Hom-vanishing. The later phase-language Lemma 14.17 infrastructure and
+heart-level Proposition 14.16 assembly make no coverage promotion: the map
+stays `mapped`, and the full proposition remains undeclared. -/
 
 #print axioms WeakStability.IsNoetherianTorsionSubcategory
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge
 #print axioms WeakStability.WeakPreStabilityCondition.HasFiniteMaxSlope
 #print axioms WeakStability.WeakPreStabilityCondition.HasTiltingEnvelope
+#print axioms WeakStability.WeakPreStabilityCondition.HasPhaseTiltingEnvelope
+#print axioms WeakStability.WeakPreStabilityCondition.HasPhaseTiltingEnvelope.hasTiltingEnvelope
 #print axioms WeakStability.WeakPreStabilityCondition.TiltingProperty
 
 /-! ## WeakStability lane -- heart equivalence and weak HN infrastructure
@@ -559,6 +560,10 @@ heart function.  These declarations make no new source-coverage claim. -/
 #print axioms WeakStability.WeakStabilityFunction.HasHNProperty
 #print axioms WeakStability.WeakStabilityFunction.append_hn_filtration_of_mono
 #print axioms WeakStability.WeakStabilityFunction.exists_hn_with_last_slope_of_semistable
+#print axioms WeakStability.WeakStabilityFunction.HNQuotientStep
+#print axioms WeakStability.WeakStabilityFunction.HasHNQuotientInduction
+#print axioms WeakStability.WeakStabilityFunction.hasHNProperty_of_quotientInduction
+#print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_2
 #print axioms WeakStability.WeakPreStabilityCondition.charge_arg_eq_pi_mul_of_mem_P_phi_lt_one
 #print axioms WeakStability.WeakPreStabilityCondition.charge_im_pos_of_mem_P_phi_lt_one
 #print axioms WeakStability.WeakPreStabilityCondition.slope_lt_of_mem_P_of_phase_lt
@@ -597,6 +602,45 @@ the slope--phase reparameterisation remains the mapped boundary. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltClassification_of_isSemistable
 #print axioms WeakStability.WeakPreStabilityCondition.isSemistable_of_phaseTiltClassification
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakStabilityFunction_isSemistable_iff_classification
+
+/-! ## WeakStability lane -- Proposition 14.16 heart-level assembly
+
+The maximal-zero-charge-subobject construction, phase-tilted noetherian
+chain transfer, quotient-inductive weak HN assembly, and support-property
+transport. Proposition 14.16 itself remains undeclared: the envelope-to-chain
+and cohomology-to-quotient-step seams remain explicit inputs. -/
+
+#print axioms WeakStability.WeakStabilityFunction.HasZeroChargeDecompositions
+#print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair
+#print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair_tors
+#print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair_free
+#print axioms WeakStability.WeakStabilityFunction.heartZeroCharge
+#print axioms WeakStability.WeakStabilityFunction.heartZeroCharge_isSerreClass
+#print axioms WeakStability.isHeartMono_of_mono
+#print axioms WeakStability.mono_of_isHeartMono
+#print axioms WeakStability.WeakStabilityFunction.isNoetherianObject_of_zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
+#print axioms WeakStability.mono_comp_of_zeroCharge_of_rightOrthogonal
+#print axioms WeakStability.mono_in_originalHeart_of_mono_in_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.zeroCharge_phaseTors
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltingEnvelope_gives_shiftedZeroChargeDecomposition
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_isNoetherianObject_of_zeroCharge
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategory
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_chainCondition
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfDecompositions
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfChainCondition
+#print axioms WeakStability.WeakStabilityFunction.semistableClasses
+#print axioms WeakStability.WeakStabilityFunction.HasSupportProperty
+#print axioms WeakStability.WeakStabilityFunction.isSemistable_of_zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.class_eq_zero_of_zeroCharge
+#print axioms WeakStability.phaseTiltLinearCharge
+#print axioms WeakStability.phaseTiltLinearCharge_apply
+#print axioms WeakStability.norm_phaseTiltLinearCharge
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasSupportProperty
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 

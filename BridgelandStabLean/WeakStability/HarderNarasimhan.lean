@@ -369,6 +369,88 @@ theorem WeakStabilityFunction.append_hn_filtration_of_mono
 
 end WeakAbelianOperations
 
+/-! ## HN assembly by quotient induction -/
+
+section WeakAbelianQuotientInduction
+
+variable {t : TStructure C}
+
+/-- The abelian full heart used for quotient-inductive HN assembly. -/
+local instance : Abelian t.heart.FullSubcategory :=
+  t.heartFullSubcategoryAbelian
+
+/-- One recursive step for constructing an HN filtration from its last
+semistable quotient.  The kernel has smaller rank, and the quotient slope is
+strictly below the last slope of every HN filtration of that kernel.
+
+The intended rank for Proposition 14.16 is the length of the original HN
+filtration of `H⁻¹`; Proposition 19.5 describes exactly this step. -/
+structure WeakStabilityFunction.HNQuotientStep
+    (W : WeakStabilityFunction t)
+    (rank : t.heart.FullSubcategory → ℕ)
+    (E : t.heart.FullSubcategory) where
+  /-- The recursive kernel. -/
+  K : t.heart.FullSubcategory
+  /-- The last semistable quotient. -/
+  B : t.heart.FullSubcategory
+  /-- Kernel inclusion. -/
+  i : K ⟶ E
+  /-- The inclusion is monic. -/
+  mono_i : Mono i
+  /-- Identification of its cokernel with the chosen quotient. -/
+  cokernelIso : cokernel i ≅ B
+  /-- The kernel is nonzero. -/
+  kernel_not_isZero : ¬IsZero K
+  /-- The quotient is nonzero. -/
+  quotient_not_isZero : ¬IsZero B
+  /-- The quotient is weak semistable. -/
+  quotient_semistable : W.HeartSemistable B
+  /-- The recursive measure decreases. -/
+  rank_lt : rank K < rank E
+  /-- The quotient belongs after every factor of the recursive HN
+  filtration. -/
+  slope_lt_last : ∀ F : WeakAbelianHNFiltration W K,
+    W.heartSlope B < F.μ ⟨F.n - 1, by have := F.hn; omega⟩
+
+/-- Quotient-induction data for all nonzero objects: each is already
+semistable, or admits a rank-decreasing last-quotient step. -/
+def WeakStabilityFunction.HasHNQuotientInduction
+    (W : WeakStabilityFunction t)
+    (rank : t.heart.FullSubcategory → ℕ) : Prop :=
+  ∀ E : t.heart.FullSubcategory, ¬IsZero E →
+    W.HeartSemistable E ∨ Nonempty (W.HNQuotientStep rank E)
+
+/-- **Rank-decreasing semistable quotients assemble to the weak HN
+property.**
+
+This is the formal recursion used implicitly in Proposition 14.16 and
+explicitly in Proposition 19.5. -/
+theorem WeakStabilityFunction.hasHNProperty_of_quotientInduction
+    (W : WeakStabilityFunction t)
+    (rank : t.heart.FullSubcategory → ℕ)
+    (hstep : W.HasHNQuotientInduction rank) : W.HasHNProperty := by
+  suffices hmain : ∀ n : ℕ, ∀ E : t.heart.FullSubcategory,
+      rank E = n → ¬IsZero E → Nonempty (WeakAbelianHNFiltration W E) by
+    intro E hE
+    exact hmain (rank E) E rfl hE
+  intro n
+  induction n using Nat.strong_induction_on with
+  | h n ih =>
+      intro E hrank hE
+      rcases hstep E hE with hsemistable | hrecursive
+      · obtain ⟨F, -⟩ := W.exists_hn_with_last_slope_of_semistable hE hsemistable
+        exact ⟨F⟩
+      · let S := Classical.choice hrecursive
+        letI : Mono S.i := S.mono_i
+        have hKrank : rank S.K < n := by simpa [hrank] using S.rank_lt
+        obtain ⟨F⟩ := ih (rank S.K) hKrank S.K rfl S.kernel_not_isZero
+        obtain ⟨G, -⟩ := W.append_hn_filtration_of_mono S.i F
+          S.cokernelIso S.quotient_not_isZero S.quotient_semistable
+          (S.slope_lt_last F)
+        exact ⟨G⟩
+
+end WeakAbelianQuotientInduction
+
 /-! ## Phase--slope comparison for the induced weak heart function -/
 
 namespace WeakPreStabilityCondition
