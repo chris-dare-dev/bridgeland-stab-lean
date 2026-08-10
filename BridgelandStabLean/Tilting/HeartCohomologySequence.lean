@@ -335,4 +335,97 @@ theorem HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact_wit
     P.originalCohomologySixTermSequenceOfShortExact_mono_first S hS,
     P.originalCohomologySixTermSequenceOfShortExact_epi_last S hS⟩
 
+/-! ## Quotients of pure shifted objects -/
+
+/-- A quotient of `F[1]` in the tilted heart by an original torsion
+subobject is again a pure shifted object.  The middle four terms of the
+six-term sequence simultaneously produce the original-heart short exact
+sequence `F ⟶ Ftilde ⟶ T`.
+
+This is the cohomological bridge used by boundary-phase saturation: the
+intersection with a maximal zero-charge subobject is an original torsion
+object `T`, so its quotient inside `F[1]` is `Ftilde[1]`. -/
+theorem HeartTorsionPair.exists_original_triangle_of_torsion_subobject_free_shift
+    {F T I : C} (hF : P.free F) (hT : P.tors T) (hI : P.tilt.heart I)
+    {a : T ⟶ F⟦(1 : ℤ)⟧} {q : F⟦(1 : ℤ)⟧ ⟶ I}
+    {d : I ⟶ T⟦(1 : ℤ)⟧}
+    (hd : Triangle.mk a q d ∈ distTriang C) :
+    ∃ (Ftilde : C) (_ : P.free Ftilde)
+      (i : F ⟶ Ftilde) (p : Ftilde ⟶ T) (delta : T ⟶ F⟦(1 : ℤ)⟧),
+        Triangle.mk i p delta ∈ distTriang C ∧
+          Nonempty (Ftilde⟦(1 : ℤ)⟧ ≅ I) := by
+  let H := P.tilt.heart.FullSubcategory
+  letI : Abelian H := P.tilt.heartFullSubcategoryAbelian
+  let TH : H := ⟨T, P.tors_mem_tilt_heart hT⟩
+  let FH : H := ⟨F⟦(1 : ℤ)⟧, P.free_shift_mem_tilt_heart hF⟩
+  let IH : H := ⟨I, hI⟩
+  let aH : TH ⟶ FH := ObjectProperty.homMk a
+  let qH : FH ⟶ IH := ObjectProperty.homMk q
+  have haq : aH ≫ qH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hd
+  let S : ShortComplex H := ShortComplex.mk aH qH haq
+  have hS : S.ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) P.tilt (A := TH) (B := FH) (Q := IH)
+        (f := aH) (g := qH) (δ := d) hd
+  let L := P.originalCohomologySixTermSequenceOfShortExact S hS
+  have hL : L.Exact :=
+    P.originalCohomologySixTermSequenceOfShortExact_exact S hS
+  have hzero0 : IsZero (L.obj' 0) :=
+    (P.originalHMinusOne_isZero_of_tors hT).of_iso
+      (P.originalCohomologySixTermSequenceOfShortExact_obj₀Iso S hS)
+  have hzero4 : IsZero (L.obj' 4) :=
+    (P.originalHZero_isZero_of_free_shift hF).of_iso
+      (P.originalCohomologySixTermSequenceOfShortExact_obj₄Iso S hS)
+  have hmono12 : Mono (L.map' 1 2) :=
+    (hL.exact 0).mono_g (hzero0.eq_of_src _ _)
+  have hepi23 : Epi (L.map' 2 3) :=
+    (hL.exact 2).epi_f (hzero4.eq_of_tgt _ _)
+  let FtildeH := P.originalHMinusOne hI
+  let FHeart : t.heart.FullSubcategory :=
+    ⟨F, (t.mem_heart_iff F).mpr ⟨P.free_isLE F hF, P.free_isGE F hF⟩⟩
+  let THeart : t.heart.FullSubcategory :=
+    ⟨T, (t.mem_heart_iff T).mpr ⟨P.tors_isLE T hT, P.tors_isGE T hT⟩⟩
+  let eF : L.obj' 1 ≅ FHeart :=
+    P.originalCohomologySixTermSequenceOfShortExact_obj₁Iso S hS ≪≫
+      P.originalHMinusOneIsoOfFreeShift hF
+  let eMid : L.obj' 2 ≅ FtildeH :=
+    P.originalCohomologySixTermSequenceOfShortExact_obj₂Iso S hS
+  let eT : L.obj' 3 ≅ THeart :=
+    P.originalCohomologySixTermSequenceOfShortExact_obj₃Iso S hS ≪≫
+      P.originalHZeroIsoOfTors hT
+  let iH : FHeart ⟶ FtildeH := eF.inv ≫ L.map' 1 2 ≫ eMid.hom
+  let pH : FtildeH ⟶ THeart := eMid.inv ≫ L.map' 2 3 ≫ eT.hom
+  have hip : iH ≫ pH = 0 := by
+    simp only [iH, pH, Category.assoc, Iso.hom_inv_id_assoc]
+    have hz := hL.toIsComplex.zero 1
+    simpa only [Category.assoc, comp_zero, zero_comp] using
+      congrArg (fun z => eF.inv ≫ z ≫ eT.hom) hz
+  let M : ShortComplex t.heart.FullSubcategory := ShortComplex.mk iH pH hip
+  let eLM : hL.sc 1 ≅ M := ShortComplex.isoMk eF eMid eT
+  have hMid : (hL.sc 1).ShortExact :=
+    ShortComplex.ShortExact.mk' (hL.exact 1) hmono12 hepi23
+  have hM : M.ShortExact := ShortComplex.shortExact_of_iso eLM hMid
+  letI : Mono iH := hM.mono_f
+  letI : Epi pH := hM.epi_g
+  obtain ⟨delta, hdelta⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) t iH pH hip (fun {X} x hx => by
+      exact ⟨hM.fIsKernel.lift (KernelFork.ofι x hx),
+        hM.fIsKernel.fac (KernelFork.ofι x hx)
+          WalkingParallelPair.zero⟩)
+  have hzero5 : IsZero (L.obj' 5) := by
+    let f45 := L.map' 4 5
+    letI : Epi f45 := by
+      simpa [f45] using
+        P.originalCohomologySixTermSequenceOfShortExact_epi_last S hS
+    exact IsZero.of_epi f45 hzero4
+  have hH0I : IsZero (P.originalHZero hI) :=
+    hzero5.of_iso
+      (P.originalCohomologySixTermSequenceOfShortExact_obj₅Iso S hS).symm
+  let ePure := P.originalHMinusOneShiftIsoOfHZeroIsZero hI hH0I
+  let eAmbient := P.tilt.heart.ι.mapIso ePure
+  exact ⟨FtildeH.obj, P.originalHMinusOne_free hI,
+    iH.hom, pH.hom, delta, hdelta, ⟨eAmbient⟩⟩
+
 end BridgelandStabLean.Tilting

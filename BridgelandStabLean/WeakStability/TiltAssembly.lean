@@ -21,11 +21,10 @@ by `phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty`; and support is
 transported unconditionally by `phaseTilt_hasSupportProperty`.
 
 The first constructor keeps the relative zero-charge chain condition and
-rank-decreasing quotient induction visible.  The second discharges the chain
-condition from phase-compatible envelopes. `TiltHarderNarasimhan` supplies
-the cohomological last-factor reduction underlying the quotient induction;
-boundary saturation and iteration over both original cohomology filtrations
-remain separate.
+rank-decreasing quotient induction visible.  The second discharges both:
+phase-compatible envelopes construct the zero-charge decompositions, while
+`TiltHarderNarasimhan` saturates the boundary factor and iterates the
+cohomological reduction over the original `H⁻¹` and `H⁰` HN filtrations.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -102,9 +101,9 @@ condition discharged by phase-compatible envelopes.  Compared with
 `hacc` input: the envelope reduction, reduced-chain termination, and pullback
 of the maximal zero-charge subobject are performed in `TiltNoetherian`.
 
-The quotient-induction input remains visible until the last-factor reduction
-in `TiltHarderNarasimhan` is iterated over both original cohomology HN
-filtrations. -/
+The weak HN property is then obtained by boundary saturation followed by the
+`H⁻¹` and `H⁰` filtration inductions in `TiltHarderNarasimhan`; no external
+rank or quotient-induction premise remains. -/
 noncomputable def phaseTiltHeartObligationsOfPhaseEnvelopes
     (sigma : WeakPreStabilityCondition v) (beta : ℝ)
     (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
@@ -112,19 +111,19 @@ noncomputable def phaseTiltHeartObligationsOfPhaseEnvelopes
     (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
     (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin)
     (henv : ∀ (F : C), phaseFree sigma.slicing beta F →
-      sigma.HasPhaseTiltingEnvelope beta F)
-    (rank :
-      ((slicingTorsionPair sigma.slicing hbeta0.le hbeta1.le).tilt).heart.FullSubcategory
-        → ℕ)
-    (hquot : WeakStabilityFunction.HasHNQuotientInduction
-      (sigma.phaseTiltWeakStabilityFunction beta hbeta0.le hbeta1) rank) :
+      sigma.HasPhaseTiltingEnvelope beta F) :
     sigma.PhaseTiltHeartObligations beta hbeta0.le hbeta1 Zlin := by
-  let W := sigma.phaseTiltWeakStabilityFunction beta hbeta0.le hbeta1
+  let N0 := Classical.choose htilt.zeroCharge_noetherian
+  have hN0 : N0.pair.tors = sigma.zeroCharge :=
+    Classical.choose_spec htilt.zeroCharge_noetherian
+  let hdec := sigma.phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
+    beta hbeta0.le hbeta1 N0 hN0 henv
   let Nsharp :=
-    sigma.phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
-      beta hbeta0.le hbeta1 htilt henv
+    sigma.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
+      beta hbeta0.le hbeta1 htilt hdec
   exact
-    { hasHN := W.hasHNProperty_of_quotientInduction rank hquot
+    { hasHN := sigma.phaseTilt_hasHNProperty_of_zeroChargeDecompositions
+        beta hbeta0 hbeta1 N0 hN0 hdec
       zeroChargeNoetherian := Nsharp
       zeroCharge_tors := rfl
       support := sigma.phaseTilt_hasSupportProperty

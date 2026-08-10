@@ -3,6 +3,7 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.WeakStability.TiltSemistable
+import BridgelandStabLean.Tilting.HeartCohomologySequence
 import Mathlib.CategoryTheory.Subobject.NoetherianObject
 
 /-!
@@ -330,6 +331,193 @@ theorem phaseTilt_semistableQuotient_of_saturatedExtension
   have hBss : W.IsSemistable B :=
     sigma.isSemistable_of_isPhaseTiltTypeTwo beta hbeta0 hbeta1
       hB.1 hBcharge0 hTypeTwo
+  exact ⟨A, B, hA, hB, a, q, delta, hAB, hBss, hBcharge⟩
+
+/-- **Boundary-phase saturation.**
+
+The maximal zero-charge quotient of an extension of `U[1]` by a zero-charge
+object is semistable without assuming in advance that `U[1]` is
+right-orthogonal to zero-charge objects.  Intersecting the maximal
+zero-charge subobject with `U[1]` gives an original torsion object.  The
+six-term original-cohomology sequence identifies the quotient of that
+intersection with `Utilde[1]` and supplies an envelope
+`U ⟶ Utilde ⟶ A0`.  Its inclusion into the maximal quotient forces the
+envelope's right-orthogonality, so `Utilde` is semistable and the quotient is
+of phase-tilt type two. -/
+theorem phaseTilt_semistableQuotient_of_extension
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
+    (hdec : WeakStabilityFunction.HasZeroChargeDecompositions
+      (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1))
+    {U V R : C}
+    (hUfree : phaseFree sigma.slicing beta U)
+    (hUss : sigma.weakStabilityFunctionOnHeart.IsSemistable U)
+    (hUcharge :
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).charge
+        (U⟦(1 : ℤ)⟧) ≠ 0)
+    (hV : (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge V)
+    (hR : ((slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt).heart R)
+    {i : U⟦(1 : ℤ)⟧ ⟶ R} {p : R ⟶ V}
+    {d : V ⟶ U⟦(1 : ℤ)⟧⟦(1 : ℤ)⟧}
+    (hd : Triangle.mk i p d ∈ distTriang C) :
+    ∃ (A B : C)
+      (_ : (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge A)
+      (_ : rightOrthogonal
+        (slicingTorsionPair sigma.slicing hbeta0 hbeta1.le).tilt
+        (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).zeroCharge B)
+      (a : A ⟶ R) (q : R ⟶ B) (delta : B ⟶ A⟦(1 : ℤ)⟧),
+        Triangle.mk a q delta ∈ distTriang C ∧
+          (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).IsSemistable B ∧
+          (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).charge B =
+            (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1).charge
+              (U⟦(1 : ℤ)⟧) := by
+  let P := slicingTorsionPair sigma.slicing hbeta0 hbeta1.le
+  let W := sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1
+  let H := P.tilt.heart.FullSubcategory
+  letI : Abelian H := P.tilt.heartFullSubcategoryAbelian
+  have hUshift : P.tilt.heart (U⟦(1 : ℤ)⟧) :=
+    P.free_shift_mem_tilt_heart hUfree
+  let UH : H := ⟨U⟦(1 : ℤ)⟧, hUshift⟩
+  let RH : H := ⟨R, hR⟩
+  let VH : H := ⟨V, hV.1⟩
+  let iH : UH ⟶ RH := ObjectProperty.homMk i
+  let pH : RH ⟶ VH := ObjectProperty.homMk p
+  have hip : iH ≫ pH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hd
+  have hS : (ShortComplex.mk iH pH hip).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) P.tilt (A := UH) (B := RH) (Q := VH)
+        (f := iH) (g := pH) (δ := d) hd
+  obtain ⟨A, B, hA, hB, a, q, delta, hAB⟩ := hdec R hR
+  let AH : H := ⟨A, hA.1⟩
+  let BH : H := ⟨B, hB.1⟩
+  let aH : AH ⟶ RH := ObjectProperty.homMk a
+  let qH : RH ⟶ BH := ObjectProperty.homMk q
+  have haq : aH ≫ qH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hAB
+  have hT : (ShortComplex.mk aH qH haq).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) P.tilt (A := AH) (B := RH) (Q := BH)
+        (f := aH) (g := qH) (δ := delta) hAB
+  letI : Mono iH := hS.mono_f
+  letI : Mono aH := hT.mono_f
+  let PB : H := pullback iH aH
+  let kU : PB ⟶ UH := pullback.fst iH aH
+  let kA : PB ⟶ AH := pullback.snd iH aH
+  let sq : IsPullback kU kA iH aH := IsPullback.of_hasPullback iH aH
+  letI : Mono kU := inferInstance
+  letI : Mono kA := inferInstance
+  have hPB : W.heartZeroCharge P.tilt PB :=
+    (W.heartZeroCharge P.tilt).prop_of_mono kA hA
+  have hPBOld : sigma.zeroCharge PB.obj :=
+    (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+      beta hbeta0 hbeta1 PB.obj).mp hPB
+  have hPBtors : P.tors PB.obj :=
+    sigma.zeroCharge_phaseTors beta hbeta1 hPBOld
+  let IH : H := cokernel kU
+  let piI : UH ⟶ IH := cokernel.π kU
+  have hkpi : kU ≫ piI = 0 := cokernel.condition kU
+  have hIseq : (ShortComplex.mk kU piI hkpi).ShortExact :=
+    ShortComplex.ShortExact.mk' (ShortComplex.exact_cokernel kU)
+      inferInstance inferInstance
+  obtain ⟨dI, hdI⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) P.tilt kU piI hkpi (fun {X} x hx => by
+      exact ⟨hIseq.fIsKernel.lift (KernelFork.ofι x hx),
+        hIseq.fIsKernel.fac (KernelFork.ofι x hx)
+          WalkingParallelPair.zero⟩)
+  obtain ⟨Utilde, hUtildefree, u, r, du, hUtri, ⟨eI⟩⟩ :=
+    P.exists_original_triangle_of_torsion_subobject_free_shift
+      hUfree hPBtors IH.property hdI
+  let cIB : IH ⟶ cokernel aH :=
+    cokernel.map kU aH kA iH sq.w
+  haveI : Mono cIB := Abelian.mono_cokernel_map_of_isPullback sq
+  let eB : cokernel aH ≅ BH :=
+    IsColimit.coconePointUniqueUpToIso (cokernelIsCokernel aH)
+      hT.gIsCokernel
+  let m : IH ⟶ BH := cIB ≫ eB.hom
+  letI : Mono m := by dsimp [m]; infer_instance
+  have hShiftHom : ∀ A0 : C, sigma.zeroCharge A0 →
+      ∀ f : A0 ⟶ Utilde⟦(1 : ℤ)⟧, f = 0 := by
+    intro A0 hA0 f
+    have hA0new : W.zeroCharge A0 :=
+      (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+        beta hbeta0 hbeta1 A0).mpr hA0
+    let A0H : H := ⟨A0, hA0new.1⟩
+    let fH : A0H ⟶ IH := ObjectProperty.homMk (f ≫ eI.hom)
+    have hfhm : fH ≫ m = 0 := by
+      ext
+      change (f ≫ eI.hom) ≫ m.hom = 0
+      simpa only [Category.assoc] using
+        hB.2 A0 hA0new (f ≫ eI.hom ≫ m.hom)
+    have hfH : fH = 0 := by
+      apply (cancel_mono m).mp
+      simpa using hfhm
+    have hfI : f ≫ eI.hom = 0 :=
+      congrArg InducedCategory.Hom.hom hfH
+    exact (cancel_mono eI.hom).mp (by simpa using hfI)
+  have hUtildeHeart : sigma.slicing.toTStructure.heart Utilde :=
+    mem_heart_of_bounds sigma.slicing hUtildefree.1
+      (sigma.slicing.leProp_mono C hbeta1.le Utilde hUtildefree.2)
+  have hHom : ∀ A0 : C, sigma.weakStabilityFunctionOnHeart.zeroCharge A0 →
+      ∀ f : A0 ⟶ Utilde, f = 0 := by
+    intro A0 hA0 f
+    exact sigma.slicing.zero_of_gtProp_leProp_general C beta
+      (sigma.zeroCharge_phaseTors beta hbeta1 hA0).1 hUtildefree.2 f
+  have hUtildess : sigma.weakStabilityFunctionOnHeart.IsSemistable Utilde :=
+    sigma.weakStabilityFunctionOnHeart.isSemistable_middle_of_zeroCharge_quotient
+      (t := sigma.slicing.toTStructure) hUss hUtildeHeart hPBOld hHom hUtri
+  let Vprime : H := cokernel m
+  let gB : BH ⟶ Vprime := cokernel.π m
+  have hmg : m ≫ gB = 0 := cokernel.condition m
+  have hBV : (ShortComplex.mk m gB hmg).ShortExact :=
+    ShortComplex.ShortExact.mk' (ShortComplex.exact_cokernel m)
+      inferInstance inferInstance
+  obtain ⟨dV, hdV⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) P.tilt m gB hmg (fun {X} x hx => by
+      exact ⟨hBV.fIsKernel.lift (KernelFork.ofι x hx),
+        hBV.fIsKernel.fac (KernelFork.ofι x hx)
+          WalkingParallelPair.zero⟩)
+  have hRcharge : W.charge R = W.charge (U⟦(1 : ℤ)⟧) := by
+    have hsum := W.charge_triangle' hd
+    rw [hV.2, add_zero] at hsum
+    exact hsum
+  have hBcharge : W.charge B = W.charge (U⟦(1 : ℤ)⟧) := by
+    have hsum := W.charge_triangle' hAB
+    rw [hA.2, zero_add] at hsum
+    exact hsum.symm.trans hRcharge
+  have hIcharge : W.charge IH.obj = W.charge (U⟦(1 : ℤ)⟧) := by
+    have hsum := W.charge_triangle' hdI
+    rw [hPB.2, zero_add] at hsum
+    exact hsum.symm
+  have hVcharge : W.charge Vprime.obj = 0 := by
+    have hsum := W.charge_triangle' hdV
+    rw [hBcharge, hIcharge] at hsum
+    apply add_left_cancel (a := W.charge (U⟦(1 : ℤ)⟧))
+    simpa using hsum.symm
+  have hVprime : W.zeroCharge Vprime.obj := ⟨Vprime.property, hVcharge⟩
+  have hVprimeOld : sigma.zeroCharge Vprime.obj :=
+    (sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+      beta hbeta0 hbeta1 Vprime.obj).mp hVprime
+  let fB : Utilde⟦(1 : ℤ)⟧ ⟶ B := eI.hom ≫ m.hom
+  let dB : Vprime.obj ⟶ Utilde⟦(1 : ℤ)⟧⟦(1 : ℤ)⟧ :=
+    dV ≫ eI.inv⟦(1 : ℤ)⟧'
+  have hBtri : Triangle.mk fB gB.hom dB ∈ distTriang C := by
+    refine isomorphic_distinguished _ hdV _ ?_
+    exact Triangle.isoMk _ _ eI (Iso.refl _) (Iso.refl _)
+      (by simp [fB]) (by simp) (by simp [dB, ← Functor.map_comp])
+  have hTypeTwo : sigma.IsPhaseTiltTypeTwo beta hbeta0 hbeta1 B := by
+    refine ⟨Utilde, Vprime.obj, hUtildefree, hUtildess, hVprimeOld,
+      fB, gB.hom, dB, hBtri, ?_⟩
+    intro _ A0 hA0 z
+    exact hB.2 A0
+      ((sigma.phaseTiltWeakStabilityFunction_zeroCharge_iff
+        beta hbeta0 hbeta1 A0).mpr hA0) z
+  have hBss : W.IsSemistable B :=
+    sigma.isSemistable_of_isPhaseTiltTypeTwo beta hbeta0 hbeta1
+      hB.1 (hBcharge.symm ▸ hUcharge) hTypeTwo
   exact ⟨A, B, hA, hB, a, q, delta, hAB, hBss, hBcharge⟩
 
 /-- **The chain-transfer step in Proposition 14.16.**

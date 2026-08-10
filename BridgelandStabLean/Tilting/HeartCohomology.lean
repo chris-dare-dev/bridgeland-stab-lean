@@ -331,4 +331,70 @@ theorem HeartTorsionPair.originalCohomologyShortComplex_g_isCokernel
   exact (ShortComplex.exact_and_epi_g_iff_g_is_cokernel
     (P.originalCohomologyShortComplex hX)).mp ⟨hShort.exact, hShort.epi_g⟩
 
+/-! ## Pure shifted objects -/
+
+/-- The original degree-minus-one cohomology of a torsion object vanishes. -/
+theorem HeartTorsionPair.originalHMinusOne_isZero_of_tors
+    [IsTriangulated C] {T : C} (hT : P.tors T) :
+    IsZero (P.originalHMinusOne (P.tors_mem_tilt_heart hT)) := by
+  haveI : t.IsGE T 0 := P.tors_isGE T hT
+  refine ObjectProperty.FullSubcategory.isZero_of_obj_isZero (C := C) ?_
+  exact (shiftFunctor C (-1 : ℤ)).map_isZero
+    (t.isZero_truncLT_obj_of_isGE 0 T)
+
+/-- The original `H⁰` of a torsion object is canonically the object itself. -/
+noncomputable def HeartTorsionPair.originalHZeroIsoOfTors
+    [IsTriangulated C] {T : C} (hT : P.tors T) :
+    P.originalHZero (P.tors_mem_tilt_heart hT) ≅
+      ⟨T, (t.mem_heart_iff T).mpr ⟨P.tors_isLE T hT, P.tors_isGE T hT⟩⟩ :=
+  (P.originalHeartCohIsoHZero (P.tors_mem_tilt_heart hT)).symm ≪≫
+    originalHeartCohIsoOfHeart t
+      ⟨T, (t.mem_heart_iff T).mpr ⟨P.tors_isLE T hT, P.tors_isGE T hT⟩⟩
+
+/-- The original degree-zero cohomology of a shifted torsion-free object
+vanishes.  This is the endpoint calculation used when a quotient in the
+tilted heart is shown to remain a pure shifted object. -/
+theorem HeartTorsionPair.originalHZero_isZero_of_free_shift
+    [IsTriangulated C] {F : C} (hF : P.free F) :
+    IsZero (P.originalHZero (P.free_shift_mem_tilt_heart hF)) := by
+  haveI : t.IsLE F 0 := P.free_isLE F hF
+  haveI : t.IsLE (F⟦(1 : ℤ)⟧) (-1) :=
+    t.isLE_shift F 0 1 (-1) (by lia)
+  refine ObjectProperty.FullSubcategory.isZero_of_obj_isZero (C := C) ?_
+  exact t.isZero_truncGE_obj_of_isLE (-1) 0 (by lia) (F⟦(1 : ℤ)⟧)
+
+/-- If the original `H⁰` of a tilted-heart object vanishes, its canonical
+`H⁻¹[1]` subobject is an isomorphism. -/
+noncomputable def HeartTorsionPair.originalHMinusOneShiftIsoOfHZeroIsZero
+    [IsTriangulated C] {X : C} (hX : P.tilt.heart X)
+    (hzero : IsZero (P.originalHZero hX)) :
+    P.originalHMinusOneShiftInTiltHeart hX ≅ P.objectInTiltHeart hX := by
+  letI : Abelian P.tilt.heart.FullSubcategory :=
+    P.tilt.heartFullSubcategoryAbelian
+  let S := P.originalCohomologyShortComplex hX
+  have hS : S.ShortExact := P.originalCohomologyShortComplex_shortExact hX
+  have hzero' : IsZero S.X₃ := by
+    apply ObjectProperty.FullSubcategory.isZero_of_obj_isZero (C := C)
+    exact (t.heart).ι.map_isZero hzero
+  exact @asIso _ _ _ _ S.f ((hS.isIso_f_iff).2 hzero')
+
+/-- The original `H⁻¹` of `F[1]` is canonically isomorphic to `F` when
+`F` is torsion-free. -/
+noncomputable def HeartTorsionPair.originalHMinusOneIsoOfFreeShift
+    [IsTriangulated C] {F : C} (hF : P.free F) :
+    P.originalHMinusOne (P.free_shift_mem_tilt_heart hF) ≅
+      ⟨F, (t.mem_heart_iff F).mpr ⟨P.free_isLE F hF, P.free_isGE F hF⟩⟩ := by
+  let hFshift := P.free_shift_mem_tilt_heart hF
+  let eTilt := P.originalHMinusOneShiftIsoOfHZeroIsZero hFshift
+    (P.originalHZero_isZero_of_free_shift hF)
+  let eAmbient := P.tilt.heart.ι.mapIso eTilt
+  let eShift := (shiftFunctor C (-1 : ℤ)).mapIso eAmbient
+  let eLeft :=
+    (shiftFunctorCompIsoId C (1 : ℤ) (-1 : ℤ) (by lia)).app
+      (P.originalHMinusOne hFshift).obj
+  let eRight :=
+    (shiftFunctorCompIsoId C (1 : ℤ) (-1 : ℤ) (by lia)).app F
+  refine ObjectProperty.isoMk _ ?_
+  exact eLeft.symm ≪≫ eShift ≪≫ eRight
+
 end BridgelandStabLean.Tilting

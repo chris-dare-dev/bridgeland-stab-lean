@@ -271,7 +271,7 @@ private theorem pi_mul_phiMinus_le_charge_arg_of_charge_ne_zero
 
 /-- A nonzero charged torsion-class object lies in the open upper half-plane
 after a nontrivial phase rotation. -/
-private theorem phaseTiltCharge_im_pos_of_phaseTors
+theorem phaseTiltCharge_im_pos_of_phaseTors
     (sigma : WeakPreStabilityCondition v) {beta : ℝ}
     (hbeta0 : 0 < beta) {E : C}
     (hE : phaseTors sigma.slicing beta E)
@@ -322,7 +322,7 @@ private theorem phaseTiltCharge_im_pos_of_phaseTors
 
 /-- Strict phase separation below phase `1` gives strict slope separation
 after rotation. -/
-private theorem phaseTilt_slope_lt_of_phase_separated
+theorem phaseTilt_slope_lt_of_phase_separated
     (sigma : WeakPreStabilityCondition v) {beta : ℝ}
     {tTilt : TStructure C} (W : WeakStabilityFunction tTilt) {A B : C}
     (hAheart : sigma.slicing.toTStructure.heart A)
@@ -407,7 +407,7 @@ theorem phaseTilt_slope_shift_lt_shift_of_phase_separated
 
 /-- A higher-phase unshifted factor has smaller tilted slope than the shift
 of a lower-phase factor. -/
-private theorem phaseTilt_slope_unshifted_lt_shifted_of_phase_separated
+theorem phaseTilt_slope_unshifted_lt_shifted_of_phase_separated
     (sigma : WeakPreStabilityCondition v) {beta : ℝ}
     {tTilt : TStructure C} (W : WeakStabilityFunction tTilt) {U V : C}
     (hUheart : sigma.slicing.toTStructure.heart U)
