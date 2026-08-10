@@ -425,6 +425,12 @@ of all six terms and unconditional exactness plus endpoint mono/epi. -/
 #print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_mono_first
 #print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_epi_last
 #print axioms Tilting.HeartTorsionPair.originalCohomologySixTermSequenceOfShortExact_exact_with_endpoints
+#print axioms Tilting.HeartTorsionPair.originalHMinusOne_isZero_of_tors
+#print axioms Tilting.HeartTorsionPair.originalHZeroIsoOfTors
+#print axioms Tilting.HeartTorsionPair.originalHZero_isZero_of_free_shift
+#print axioms Tilting.HeartTorsionPair.originalHMinusOneShiftIsoOfHZeroIsZero
+#print axioms Tilting.HeartTorsionPair.originalHMinusOneIsoOfFreeShift
+#print axioms Tilting.HeartTorsionPair.exists_original_triangle_of_torsion_subobject_free_shift
 
 /-! ## WeakStability lane -- the section-14 definitions
 
@@ -599,10 +605,10 @@ the slope--phase reparameterisation remains the mapped boundary. -/
 /-! ## WeakStability lane -- Proposition 14.16 heart-level assembly
 
 The maximal-zero-charge-subobject construction, phase-envelope noetherian
-assembly, quotient-inductive weak HN assembly, the cohomological `H⁻¹`
-last-factor reduction, and support-property transport. Proposition 14.16
-itself remains undeclared: raw-envelope chain transfer, boundary saturation,
-and iteration through `H⁰` remain explicit seams. -/
+assembly, boundary-saturated weak HN assembly over the cohomological `H⁻¹`
+and `H⁰` filtrations, and support-property transport. Proposition 14.16
+itself remains undeclared: transfer from the raw Definition 14.12 envelope
+to the phase-compatible envelope remains the explicit seam. -/
 
 #print axioms WeakStability.WeakStabilityFunction.HasZeroChargeDecompositions
 #print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair
@@ -640,8 +646,16 @@ and iteration through `H⁰` remain explicit seams. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfChainCondition
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltCharge_im_pos_of_phaseTors
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_slope_lt_of_phase_separated
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_slope_shift_lt_shift_of_phase_separated
-#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hnLastQuotient_of_saturatedFactor
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_slope_unshifted_lt_shifted_of_phase_separated
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_semistableQuotient_of_extension
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hnLastQuotient
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_existsHNWithLastSource_of_freeShift_zeroCharge_extension
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasHN_of_freeShift_zeroCharge_extension
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hZeroLastQuotient
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasHNProperty_of_zeroChargeDecompositions
 #print axioms WeakStability.WeakStabilityFunction.semistableClasses
 #print axioms WeakStability.WeakStabilityFunction.HasSupportProperty
 #print axioms WeakStability.WeakStabilityFunction.isSemistable_of_zeroCharge

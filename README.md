@@ -618,16 +618,14 @@ the zero-charge torsion pair and its noetherian chain data from either the
 relative chain condition or phase-compatible envelopes. The latter route
 performs the envelope reduction, reduced-chain termination, maximal
 zero-charge quotient, and pullback internally.
-`WeakStability/TiltHarderNarasimhan.lean` constructs the cohomological
-last-factor reduction: it peels the last original `H⁻¹` HN factor, produces
-the saturated tilted semistable quotient, and identifies the recursive kernel
-as an extension of the shorter shifted prefix by a zero-charge object.
-`WeakStability/TiltAssembly.lean` combines these foundations with the generic
-rank-decreasing recursion to package all three heart-level obligations. The
-remaining seams are deriving the relative chain condition from the raw
-Definition 14.12 envelope without the explicit phase-compatibility boundary,
-and iterating the last-factor reduction through boundary-phase saturation and
-the original `H⁰` filtration.
+`WeakStability/TiltHarderNarasimhan.lean` performs boundary-phase saturation
+without assuming the last shifted factor is already right-orthogonal, then
+iterates the cohomological reduction through the original `H⁻¹` and `H⁰` HN
+filtrations. `WeakStability/TiltAssembly.lean` combines that HN theorem with
+the noetherian and support constructions to package all three heart-level
+obligations from phase-compatible envelopes, with no external rank or
+quotient-induction premise. The remaining seam is deriving those
+phase-compatible envelopes from the raw Definition 14.12 envelope clause.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

@@ -47,17 +47,18 @@ and proves the lemma's positive-imaginary/stable `moreover` clause via images
 in the tilted heart. `WeakStability/TiltNoetherian.lean` constructs the
 maximal-subobject and noetherian-torsion assembly from the relative chain
 condition and also discharges that condition from phase-compatible envelopes.
-`WeakStability/TiltHarderNarasimhan.lean` constructs the cohomological
-last-factor quotient and recursive-kernel step for a saturated `H⁻¹` factor;
-`WeakStability/TiltAssembly.lean` packages these foundations with the generic
-rank-decreasing HN recursion. `WeakStability/Support.lean` transports the
-support property unconditionally. The exact slope-language source statement
-remains under the registry's existing `mapped` hypothesis until the
-slope--phase reparameterisation is formalized and reviewed. Proposition 14.16
-still has two narrower constructive seams: passing from the raw Definition
-14.12 envelope to the relative chain condition without the explicit
-phase-compatibility boundary, and iterating the last-factor reduction through
-boundary saturation and the original `H⁰` filtration.
+`WeakStability/TiltHarderNarasimhan.lean` performs boundary-phase saturation
+without a last-factor right-orthogonality premise and iterates the resulting
+reduction over the original `H⁻¹` and `H⁰` HN filtrations.
+`WeakStability/TiltAssembly.lean` packages the resulting HN theorem with the
+noetherian and support obligations from phase-compatible envelopes, without
+an external rank or quotient-induction input. `WeakStability/Support.lean`
+transports the support property unconditionally. The exact slope-language
+source statement remains under the registry's existing `mapped` hypothesis
+until the slope--phase reparameterisation is formalized and reviewed.
+Proposition 14.16 now has one constructive seam: passing from the raw
+Definition 14.12 envelope to the phase-compatible envelope used by the
+heart-level assembly.
 -/
 
 namespace BridgelandStabLean.WeakStability
