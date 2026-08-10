@@ -44,15 +44,20 @@ cohomology homological for every t-structure without stability or HN data.
 identifies its zero-charge subcategory, and proves both directions of the
 phase-language classification in Lemma 14.17.  It also defines weak stability
 and proves the lemma's positive-imaginary/stable `moreover` clause via images
-in the tilted heart. `WeakStability/TiltNoetherian.lean` and
-`WeakStability/TiltAssembly.lean` now construct the maximal-subobject and
-noetherian-torsion assembly from the relative chain condition and package the
+in the tilted heart. `WeakStability/TiltNoetherian.lean` constructs the
+maximal-subobject and noetherian-torsion assembly from the relative chain
+condition and also discharges that condition from phase-compatible envelopes.
+`WeakStability/TiltHarderNarasimhan.lean` constructs the cohomological
+last-factor quotient and recursive-kernel step for a saturated `H⁻¹` factor;
+`WeakStability/TiltAssembly.lean` packages these foundations with the generic
 rank-decreasing HN recursion. `WeakStability/Support.lean` transports the
 support property unconditionally. The exact slope-language source statement
 remains under the registry's existing `mapped` hypothesis until the
 slope--phase reparameterisation is formalized and reviewed. Proposition 14.16
-still has two explicit constructive seams: the envelope proof of the relative
-chain condition and the cohomological construction of the HN quotient step.
+still has two narrower constructive seams: passing from the raw Definition
+14.12 envelope to the relative chain condition without the explicit
+phase-compatibility boundary, and iterating the last-factor reduction through
+boundary saturation and the original `H⁰` filtration.
 -/
 
 namespace BridgelandStabLean.WeakStability

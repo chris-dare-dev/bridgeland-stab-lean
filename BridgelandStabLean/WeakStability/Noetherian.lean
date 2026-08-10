@@ -6,6 +6,8 @@ import BridgelandStabLean.WeakStability.Basic
 import BridgelandStabLean.Tilting.HeartTorsionPair
 import BridgelandStability.HeartEquivalence.Basic
 import Mathlib.CategoryTheory.Abelian.SerreClass.Basic
+import Mathlib.CategoryTheory.Abelian.CommSq
+import Mathlib.CategoryTheory.Abelian.DiagramLemmas.KernelCokernelComp
 import Mathlib.CategoryTheory.Subobject.NoetherianObject
 import Mathlib.CategoryTheory.Limits.Shapes.Pullback.IsPullback.Kernels
 
@@ -127,6 +129,14 @@ structure NoetherianTorsionSubcategory where
 receiving no nonzero map from the class. This is Definition 14.6's `B^⊥`. -/
 def rightOrthogonal (B : ObjectProperty C) : ObjectProperty C :=
   fun X => t.heart X ∧ ∀ T : C, B T → ∀ f : T ⟶ X, f = 0
+
+/-- Right orthogonality is invariant under isomorphism of the target. -/
+theorem rightOrthogonal_of_iso {B : ObjectProperty C} {X Y : C}
+    (e : X ≅ Y) (hY : rightOrthogonal t B Y) : rightOrthogonal t B X := by
+  refine ⟨ObjectProperty.prop_of_iso t.heart e.symm hY.1, ?_⟩
+  intro T hT f
+  apply (cancel_mono e.hom).mp
+  rw [hY.2 T hT (f ≫ e.hom), zero_comp]
 
 /-- **A torsion pair's free class is the right orthogonal of its torsion
 class** — so the pair carried by `NoetherianTorsionSubcategory` really is
@@ -309,6 +319,284 @@ section HeartObjects
 
 variable [IsTriangulated C]
 
+/-- For composable monomorphisms `X ⟶ Y ⟶ Z`, the canonical sequence
+`coker(X ⟶ Y) ⟶ coker(X ⟶ Z) ⟶ coker(Y ⟶ Z)` extracted from the
+kernel--cokernel sequence of a composition. -/
+noncomputable def cokernelCompShortComplex
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z) : ShortComplex A :=
+  (kernelCokernelCompSequence_exact f g).sc 3
+
+/-- The canonical cokernel-of-a-composite sequence is short exact when the
+second map is a monomorphism. -/
+theorem cokernelCompShortComplex_shortExact
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z) [Mono g] :
+    (cokernelCompShortComplex f g).ShortExact := by
+  let L := kernelCokernelCompSequence f g
+  have hL := kernelCokernelCompSequence_exact f g
+  have hmono : Mono (L.map' 3 4) := by
+    apply (hL.exact 2).mono_g
+    exact (isZero_kernel_of_mono g).eq_of_src _ _
+  have hepi : Epi (L.map' 4 5) := inferInstance
+  exact ShortComplex.ShortExact.mk' (hL.exact 3) hmono hepi
+
+/-- The middle three terms
+`ker g ⟶ coker f ⟶ coker (f ≫ g)` of the kernel--cokernel sequence. -/
+noncomputable def kernelCokernelCompMiddleShortComplex
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z) : ShortComplex A :=
+  (kernelCokernelCompSequence_exact f g).sc 2
+
+/-- The middle kernel--cokernel sequence is short exact when `f ≫ g` is
+monic and `g` is epic.  This is the 3×3 fragment used when a
+zero-charge subobject of an extension maps monomorphically to its right-hand
+term. -/
+theorem kernelCokernelCompMiddleShortComplex_shortExact
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z)
+    [Mono (f ≫ g)] [Epi g] :
+    (kernelCokernelCompMiddleShortComplex f g).ShortExact := by
+  let L := kernelCokernelCompSequence f g
+  have hL := kernelCokernelCompSequence_exact f g
+  have hmono : Mono (L.map' 2 3) := by
+    apply (hL.exact 1).mono_g
+    exact (isZero_kernel_of_mono (f ≫ g)).eq_of_src _ _
+  have hepi : Epi (L.map' 3 4) := by
+    apply (hL.exact 3).epi_f
+    exact (isZero_cokernel_of_epi g).eq_of_tgt _ _
+  exact ShortComplex.ShortExact.mk' (hL.exact 2) hmono hepi
+
+/-- The first three terms
+`ker f ⟶ ker (f ≫ g) ⟶ ker g` of the kernel--cokernel sequence. -/
+noncomputable def kernelCompShortComplex
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z) : ShortComplex A :=
+  (kernelCokernelCompSequence_exact f g).sc 0
+
+/-- If `f` is epic, the first three kernels in the composition sequence form
+a short exact sequence. -/
+theorem kernelCompShortComplex_shortExact
+    {A : Type*} [Category A] [Abelian A]
+    {X Y Z : A} (f : X ⟶ Y) (g : Y ⟶ Z) [Epi f] :
+    (kernelCompShortComplex f g).ShortExact := by
+  let L := kernelCokernelCompSequence f g
+  have hL := kernelCokernelCompSequence_exact f g
+  have hmono : Mono (L.map' 0 1) := inferInstance
+  have hepi : Epi (L.map' 1 2) := by
+    apply (hL.exact 1).epi_f
+    exact (isZero_cokernel_of_epi f).eq_of_tgt _ _
+  exact ShortComplex.ShortExact.mk' (hL.exact 0) hmono hepi
+
+/-- Saturating a semistable object by a zero-charge quotient preserves
+semistability provided the saturated middle term receives no maps from
+zero-charge objects.
+
+For a test subobject `X ⟶ E`, pull it back to the semistable subobject
+`F ⟶ E`.  The quotient of the pullback inside `X` embeds into the
+zero-charge quotient `V`, so it has zero charge.  Consequently the two
+charges in the semistability comparison for `E` agree with those in the
+corresponding comparison for `F`. -/
+theorem WeakStabilityFunction.isSemistable_middle_of_zeroCharge_quotient
+    (W : WeakStabilityFunction t) {F E V : C}
+    (hF : W.IsSemistable F) (hE : t.heart E) (hV : W.zeroCharge V)
+    (hHom : ∀ A : C, W.zeroCharge A → ∀ f : A ⟶ E, f = 0)
+    {i : F ⟶ E} {p : E ⟶ V} {d : V ⟶ F⟦(1 : ℤ)⟧}
+    (hd : Triangle.mk i p d ∈ distTriang C) : W.IsSemistable E := by
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  let FH : t.heart.FullSubcategory := ⟨F, hF.1⟩
+  let EH : t.heart.FullSubcategory := ⟨E, hE⟩
+  let VH : t.heart.FullSubcategory := ⟨V, hV.1⟩
+  let iH : FH ⟶ EH := ObjectProperty.homMk i
+  let pH : EH ⟶ VH := ObjectProperty.homMk p
+  have hip : iH ≫ pH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hd
+  have hOuter : (ShortComplex.mk iH pH hip).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) t (A := FH) (B := EH) (Q := VH)
+        (f := iH) (g := pH) (δ := d) hd
+  letI : Mono iH := hOuter.mono_f
+  refine ⟨hE, ?_⟩
+  intro X Y hX hY hX0 hY0 x y delta hXY
+  let XH : t.heart.FullSubcategory := ⟨X, hX⟩
+  let YH : t.heart.FullSubcategory := ⟨Y, hY⟩
+  let xH : XH ⟶ EH := ObjectProperty.homMk x
+  let yH : EH ⟶ YH := ObjectProperty.homMk y
+  have hxy : xH ≫ yH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hXY
+  have hInner : (ShortComplex.mk xH yH hxy).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) t (A := XH) (B := EH) (Q := YH)
+        (f := xH) (g := yH) (δ := delta) hXY
+  letI : Mono xH := hInner.mono_f
+  let PB : t.heart.FullSubcategory := pullback iH xH
+  let kF : PB ⟶ FH := pullback.fst iH xH
+  let kX : PB ⟶ XH := pullback.snd iH xH
+  let sq : IsPullback kF kX iH xH := IsPullback.of_hasPullback iH xH
+  let IX : t.heart.FullSubcategory := cokernel kX
+  let cIX : IX ⟶ cokernel iH :=
+    cokernel.map kX iH kF xH sq.w.symm
+  haveI : Mono cIX := Abelian.mono_cokernel_map_of_isPullback sq.flip
+  let eV : cokernel iH ≅ VH :=
+    IsColimit.coconePointUniqueUpToIso (cokernelIsCokernel iH)
+      hOuter.gIsCokernel
+  have hVcan : W.heartZeroCharge t (cokernel iH) :=
+    ObjectProperty.prop_of_iso (W.heartZeroCharge t) eV.symm hV
+  have hIX : W.heartZeroCharge t IX :=
+    (W.heartZeroCharge t).prop_of_mono cIX hVcan
+  let πX : XH ⟶ IX := cokernel.π kX
+  have hkXπ : kX ≫ πX = 0 := cokernel.condition kX
+  have hKX : (ShortComplex.mk kX πX hkXπ).ShortExact :=
+    ShortComplex.ShortExact.mk' (ShortComplex.exact_cokernel kX)
+      inferInstance inferInstance
+  obtain ⟨dX, hdX⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) t kX πX hkXπ (fun {A} a ha => by
+      exact ⟨hKX.fIsKernel.lift (KernelFork.ofι a ha),
+        hKX.fIsKernel.fac (KernelFork.ofι a ha)
+          WalkingParallelPair.zero⟩)
+  have hchargeX : W.charge X = W.charge PB.obj := by
+    have hsum := W.charge_triangle' hdX
+    rw [hIX.2, add_zero] at hsum
+    exact hsum
+  have hPB0 : ¬IsZero PB.obj := by
+    intro hPB
+    have hXcharge0 : W.charge X = 0 := by
+      rw [hchargeX]
+      exact W.charge_isZero hPB
+    have hxzero : x = 0 := hHom X ⟨hX, hXcharge0⟩ x
+    letI : Mono xH := hInner.mono_f
+    have hXHzero : IsZero XH := IsZero.of_mono_eq_zero xH (by ext; exact hxzero)
+    exact hX0 ((t.heart).ι.map_isZero hXHzero)
+  let QF : t.heart.FullSubcategory := cokernel kF
+  let πF : FH ⟶ QF := cokernel.π kF
+  have hkFπ : kF ≫ πF = 0 := cokernel.condition kF
+  have hKF : (ShortComplex.mk kF πF hkFπ).ShortExact :=
+    ShortComplex.ShortExact.mk' (ShortComplex.exact_cokernel kF)
+      inferInstance inferInstance
+  obtain ⟨dF, hdF⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) t kF πF hkFπ (fun {A} a ha => by
+      exact ⟨hKF.fIsKernel.lift (KernelFork.ofι a ha),
+        hKF.fIsKernel.fac (KernelFork.ofι a ha)
+          WalkingParallelPair.zero⟩)
+  have hchargeOuter := W.charge_triangle' hd
+  have hchargeInner := W.charge_triangle' hXY
+  have hchargeF := W.charge_triangle' hdF
+  have hchargeY : W.charge Y = W.charge QF.obj := by
+    apply add_left_cancel (a := W.charge PB.obj)
+    calc
+      W.charge PB.obj + W.charge Y = W.charge X + W.charge Y := by rw [hchargeX]
+      _ = W.charge E := hchargeInner.symm
+      _ = W.charge F := by rw [hchargeOuter, hV.2, add_zero]
+      _ = W.charge PB.obj + W.charge QF.obj := hchargeF
+  by_cases hQF0 : IsZero QF.obj
+  · have hYcharge0 : W.charge Y = 0 := hchargeY.trans (W.charge_isZero hQF0)
+    unfold WeakStabilityFunction.slope
+    rw [hYcharge0]
+    simp only [Complex.zero_im, lt_self_iff_false, ↓reduceIte]
+    exact le_top
+  · have hslope := hF.2 PB.property QF.property hPB0 hQF0
+        kF.hom πF.hom dF hdF
+    unfold WeakStabilityFunction.slope at hslope ⊢
+    rwa [hchargeX, hchargeY]
+
+/-- A quotient of a semistable heart object by a zero-charge subobject is
+semistable.
+
+For a test subobject `X ⟶ B` of the quotient, pull it back along
+`E ⟶ B`.  The pullback is the kernel of the composite `E ⟶ B ⟶ Y`.
+The three resulting short exact sequences show that the pullback has the
+same charge as `X`; semistability of `E` therefore gives precisely the
+required comparison for `B`. -/
+theorem WeakStabilityFunction.isSemistable_quotient_of_zeroCharge_subobject
+    (W : WeakStabilityFunction t) {A E B : C}
+    (hA : W.zeroCharge A) (hE : W.IsSemistable E) (hB : t.heart B)
+    {i : A ⟶ E} {p : E ⟶ B} {d : B ⟶ A⟦(1 : ℤ)⟧}
+    (hd : Triangle.mk i p d ∈ distTriang C) : W.IsSemistable B := by
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  let AH : t.heart.FullSubcategory := ⟨A, hA.1⟩
+  let EH : t.heart.FullSubcategory := ⟨E, hE.1⟩
+  let BH : t.heart.FullSubcategory := ⟨B, hB⟩
+  let iH : AH ⟶ EH := ObjectProperty.homMk i
+  let pH : EH ⟶ BH := ObjectProperty.homMk p
+  have hip : iH ≫ pH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hd
+  have hOuter : (ShortComplex.mk iH pH hip).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) t (A := AH) (B := EH) (Q := BH)
+        (f := iH) (g := pH) (δ := d) hd
+  letI : Epi pH := hOuter.epi_g
+  refine ⟨hB, ?_⟩
+  intro X Y hX hY hX0 hY0 x y delta hXY
+  let XH : t.heart.FullSubcategory := ⟨X, hX⟩
+  let YH : t.heart.FullSubcategory := ⟨Y, hY⟩
+  let xH : XH ⟶ BH := ObjectProperty.homMk x
+  let yH : BH ⟶ YH := ObjectProperty.homMk y
+  have hxy : xH ≫ yH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hXY
+  have hInner : (ShortComplex.mk xH yH hxy).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) t (A := XH) (B := BH) (Q := YH)
+        (f := xH) (g := yH) (δ := delta) hXY
+  letI : Mono xH := hInner.mono_f
+  letI : Epi yH := hInner.epi_g
+  let PB : t.heart.FullSubcategory := pullback pH xH
+  let j : PB ⟶ EH := pullback.fst pH xH
+  let q : PB ⟶ XH := pullback.snd pH xH
+  let e : EH ⟶ YH := pH ≫ yH
+  have hje : j ≫ e = 0 := by
+    dsimp [j, e]
+    rw [pullback.condition_assoc, hxy, comp_zero]
+  let hKernel : IsLimit (KernelFork.ofι j hje) := by
+    apply KernelFork.IsLimit.ofι'
+    intro Z k hk
+    have hkp : (k ≫ pH) ≫ yH = 0 := by
+      simpa [e, Category.assoc] using hk
+    let lX : Z ⟶ XH :=
+      hInner.fIsKernel.lift (KernelFork.ofι (k ≫ pH) hkp)
+    have hlX : lX ≫ xH = k ≫ pH :=
+      hInner.fIsKernel.fac (KernelFork.ofι (k ≫ pH) hkp)
+        WalkingParallelPair.zero
+    exact ⟨pullback.lift k lX hlX.symm, pullback.lift_fst _ _ _⟩
+  haveI : Epi e := by
+    dsimp [e]
+    infer_instance
+  have hMiddle : (ShortComplex.mk j e hje).ShortExact :=
+    ShortComplex.ShortExact.mk'
+      ((ShortComplex.mk j e hje).exact_of_f_is_kernel hKernel)
+        inferInstance inferInstance
+  haveI : Epi q := by
+    dsimp [q]
+    infer_instance
+  have hPB0 : ¬IsZero PB.obj := by
+    intro hPB
+    have hqzero : q = 0 := by
+      ext
+      exact hPB.eq_of_src q.hom 0
+    have hXHzero : IsZero XH := IsZero.of_epi_eq_zero q hqzero
+    exact hX0 ((t.heart).ι.map_isZero hXHzero)
+  obtain ⟨dPB, hdPB⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) t j e hje (fun {Z} k hk => by
+      exact ⟨hMiddle.fIsKernel.lift (KernelFork.ofι k hk),
+        hMiddle.fIsKernel.fac (KernelFork.ofι k hk)
+          WalkingParallelPair.zero⟩)
+  have hchargeOuter := W.charge_triangle' hd
+  have hchargeInner := W.charge_triangle' hXY
+  have hchargeMiddle := W.charge_triangle' hdPB
+  have hchargePB : W.charge PB.obj = W.charge X := by
+    apply add_right_cancel (b := W.charge Y)
+    calc
+      W.charge PB.obj + W.charge Y = W.charge E := hchargeMiddle.symm
+      _ = W.charge B := by rw [hchargeOuter, hA.2, zero_add]
+      _ = W.charge X + W.charge Y := hchargeInner
+  have hslope := hE.2 PB.property YH.property hPB0 hY0
+    j.hom e.hom dPB hdPB
+  unfold WeakStabilityFunction.slope at hslope ⊢
+  rwa [hchargePB] at hslope
+
 /-- A monomorphism in the abelian full heart gives a heart monomorphism in
 the ambient triangle formulation used by `SubobjectChain`. -/
 theorem isHeartMono_of_mono {A E : t.heart.FullSubcategory}
@@ -408,20 +696,18 @@ theorem WeakStabilityFunction.isNoetherianObject_of_zeroCharge
       exact Subobject.eq_of_comm e (by
         exact Subobject.ofLE_arrow (f.monotone (Nat.le_succ m)))
 
-/-- If zero-charge subobject chains terminate in every heart object, then
-every object has a maximal zero-charge subobject and the corresponding
-quotient is right-orthogonal.  Thus the relative chain condition constructs
-the zero-charge torsion pair, rather than merely verifying noetherianity after
-the pair has been supplied.
+/-- If zero-charge subobject chains terminate in a fixed heart object, then
+that object has a maximal zero-charge subobject and the corresponding quotient
+is right-orthogonal.
 
 The right-orthogonality proof takes the image of a hypothetical map into the
 quotient and pulls it back to a larger zero-charge subobject. -/
-theorem WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
-    (W : WeakStabilityFunction t)
-    (hacc : ∀ (E : C), t.heart E →
-      ∀ c : SubobjectChain t W.zeroCharge E, c.Terminates) :
-    W.HasZeroChargeDecompositions := by
-  intro E hE
+theorem WeakStabilityFunction.hasZeroChargeDecomposition_of_chainCondition
+    (W : WeakStabilityFunction t) (E : C) (hE : t.heart E)
+    (hacc : ∀ c : SubobjectChain t W.zeroCharge E, c.Terminates) :
+    ∃ (A Q : C) (_ : W.zeroCharge A) (_ : rightOrthogonal t W.zeroCharge Q)
+      (i : A ⟶ E) (p : E ⟶ Q) (d : Q ⟶ A⟦(1 : ℤ)⟧),
+      Triangle.mk i p d ∈ distTriang C := by
   let EH : t.heart.FullSubcategory := ⟨E, hE⟩
   let ZSub := {S : Subobject EH // W.heartZeroCharge t (S : t.heart.FullSubcategory)}
   have hwf : WellFoundedGT ZSub := by
@@ -443,7 +729,7 @@ theorem WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
           exact congrArg
             (fun k : (f j : t.heart.FullSubcategory) ⟶ EH => k.hom)
             (Subobject.ofLE_arrow (f.monotone (Nat.le_succ j))) }
-    obtain ⟨n, hn⟩ := hacc E hE c
+    obtain ⟨n, hn⟩ := hacc c
     refine ⟨n, fun m hnm => ?_⟩
     induction m, hnm using Nat.le_induction with
     | base => rfl
@@ -549,6 +835,123 @@ theorem WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
         hshort.fIsKernel.fac (KernelFork.ofι a ha)
           WalkingParallelPair.zero⟩)
   exact ⟨MH.obj, QH.obj, M.2, hQorth, iH.hom, pH.hom, d, hd⟩
+
+/-- A zero-charge decomposition lifts across a short exact sequence whose
+kernel has zero charge.  Concretely, the zero-charge subobject of the
+quotient is pulled back to the middle term; its pullback is again
+zero-charge because it is an extension of the old kernel by that subobject.
+
+This is the abelian pullback step used after the envelope reduction in the
+proof of Proposition 14.16. -/
+theorem WeakStabilityFunction.hasZeroChargeDecomposition_of_reduction
+    (W : WeakStabilityFunction t)
+    (S : ShortComplex t.heart.FullSubcategory) (hS : S.ShortExact)
+    (hA : W.zeroCharge S.X₁.obj)
+    (hred : ∃ (B Q : C) (_ : W.zeroCharge B)
+      (_ : rightOrthogonal t W.zeroCharge Q)
+      (i : B ⟶ S.X₃.obj) (p : S.X₃.obj ⟶ Q)
+      (d : Q ⟶ B⟦(1 : ℤ)⟧), Triangle.mk i p d ∈ distTriang C) :
+    ∃ (B Q : C) (_ : W.zeroCharge B)
+      (_ : rightOrthogonal t W.zeroCharge Q)
+      (i : B ⟶ S.X₂.obj) (p : S.X₂.obj ⟶ Q)
+      (d : Q ⟶ B⟦(1 : ℤ)⟧), Triangle.mk i p d ∈ distTriang C := by
+  letI : Abelian t.heart.FullSubcategory := t.heartFullSubcategoryAbelian
+  obtain ⟨B, Q, hB, hQ, i, p, d, hd⟩ := hred
+  let BH : t.heart.FullSubcategory := ⟨B, hB.1⟩
+  let QH : t.heart.FullSubcategory := ⟨Q, hQ.1⟩
+  let iH : BH ⟶ S.X₃ := ObjectProperty.homMk i
+  let pH : S.X₃ ⟶ QH := ObjectProperty.homMk p
+  have hip : iH ≫ pH = 0 := by
+    ext
+    exact comp_distTriang_mor_zero₁₂ _ hd
+  have hT : (ShortComplex.mk iH pH hip).ShortExact :=
+    TStructure.heartFullSubcategory_shortExact_of_distTriang
+      (C := C) t (A := BH) (B := S.X₃) (Q := QH)
+        (f := iH) (g := pH) (δ := d) hd
+  letI : Mono iH := hT.mono_f
+  letI : Epi pH := hT.epi_g
+  letI : Mono S.f := hS.mono_f
+  letI : Epi S.g := hS.epi_g
+  let PB : t.heart.FullSubcategory := pullback S.g iH
+  let j : PB ⟶ S.X₂ := pullback.fst S.g iH
+  let q : PB ⟶ BH := pullback.snd S.g iH
+  let e : S.X₂ ⟶ QH := S.g ≫ pH
+  have hje : j ≫ e = 0 := by
+    dsimp [j, e]
+    rw [pullback.condition_assoc, hip, comp_zero]
+  let hKernel : IsLimit (KernelFork.ofι j hje) := by
+    apply KernelFork.IsLimit.ofι'
+    intro X k hk
+    have hkp : (k ≫ S.g) ≫ pH = 0 := by
+      simpa [e, Category.assoc] using hk
+    let lB : X ⟶ BH := hT.fIsKernel.lift (KernelFork.ofι (k ≫ S.g) hkp)
+    have hlB : lB ≫ iH = k ≫ S.g :=
+      hT.fIsKernel.fac (KernelFork.ofι (k ≫ S.g) hkp)
+        WalkingParallelPair.zero
+    exact ⟨pullback.lift k lB hlB.symm, pullback.lift_fst _ _ _⟩
+  haveI : Epi e := by
+    dsimp [e]
+    infer_instance
+  have hMiddle : (ShortComplex.mk j e hje).ShortExact :=
+    ShortComplex.ShortExact.mk'
+      ((ShortComplex.mk j e hje).exact_of_f_is_kernel hKernel)
+        inferInstance inferInstance
+  haveI : Epi q := by
+    dsimp [q]
+    infer_instance
+  let a : S.X₁ ⟶ PB := pullback.lift S.f 0 (by simp)
+  letI : Mono a :=
+    mono_of_mono_fac (pullback.lift_fst S.f (0 : S.X₁ ⟶ BH) _)
+  have haq : a ≫ q = 0 := by
+    exact pullback.lift_snd S.f (0 : S.X₁ ⟶ BH) _
+  let hAKernel : IsLimit (KernelFork.ofι a haq) := by
+    apply KernelFork.IsLimit.ofι'
+    intro X k hk
+    have hkg : (k ≫ j) ≫ S.g = 0 := by
+      rw [Category.assoc, pullback.condition, ← Category.assoc]
+      simpa [q] using congrArg (fun u ↦ u ≫ iH) hk
+    let lA : X ⟶ S.X₁ :=
+      hS.fIsKernel.lift (KernelFork.ofι (k ≫ j) hkg)
+    have hlA : lA ≫ S.f = k ≫ j :=
+      hS.fIsKernel.fac (KernelFork.ofι (k ≫ j) hkg)
+        WalkingParallelPair.zero
+    refine ⟨lA, ?_⟩
+    apply pullback.hom_ext
+    · calc
+        (lA ≫ a) ≫ j = lA ≫ (a ≫ j) := Category.assoc _ _ _
+        _ = lA ≫ S.f := by rw [show a ≫ j = S.f from pullback.lift_fst _ _ _]
+        _ = k ≫ j := hlA
+    · calc
+        (lA ≫ a) ≫ q = lA ≫ (a ≫ q) := Category.assoc _ _ _
+        _ = 0 := by rw [haq, comp_zero]
+        _ = k ≫ q := hk.symm
+  have hLeft : (ShortComplex.mk a q haq).ShortExact :=
+    ShortComplex.ShortExact.mk'
+      ((ShortComplex.mk a q haq).exact_of_f_is_kernel hAKernel)
+        inferInstance inferInstance
+  have hPBzero : W.zeroCharge PB.obj := by
+    have hPBheartZero : W.heartZeroCharge t PB :=
+      (W.heartZeroCharge t).prop_X₂_of_shortExact hLeft hA hB
+    exact hPBheartZero
+  obtain ⟨delta, hdelta⟩ := TStructure.heartFullSubcategory_shortExact_triangle
+    (C := C) t j e hje (fun {X} k hk => by
+      exact ⟨hMiddle.fIsKernel.lift (KernelFork.ofι k hk),
+        hMiddle.fIsKernel.fac (KernelFork.ofι k hk)
+          WalkingParallelPair.zero⟩)
+  exact ⟨PB.obj, Q, hPBzero, hQ, j.hom, e.hom, delta, hdelta⟩
+
+/-- If zero-charge subobject chains terminate in every heart object, then
+every object has a maximal zero-charge subobject and the corresponding
+quotient is right-orthogonal.  Thus the relative chain condition constructs
+the zero-charge torsion pair, rather than merely verifying noetherianity after
+the pair has been supplied. -/
+theorem WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
+    (W : WeakStabilityFunction t)
+    (hacc : ∀ (E : C), t.heart E →
+      ∀ c : SubobjectChain t W.zeroCharge E, c.Terminates) :
+    W.HasZeroChargeDecompositions := by
+  intro E hE
+  exact W.hasZeroChargeDecomposition_of_chainCondition (t := t) E hE (hacc E hE)
 
 end HeartObjects
 

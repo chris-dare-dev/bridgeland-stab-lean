@@ -633,6 +633,24 @@ fidelity:
     coordinate remains mapped; this update supplies no dated review quotation,
     owner signoff, or slope--phase reparameterisation.
 
+    COUNT UPDATE (phase-tilt noetherian and H-minus-one reduction), 2026-08-09.
+    The audit grows 1010 -> 1028: 13 theorems and 5 constructions. The
+    environment census grows 1207 -> 1224 authored declarations; one formerly
+    private phase/slope comparison is now public, so the residual counts are
+    113 private declarations and 83 structure-field projections, again leaving
+    0 authored public declarations outside the hand audit. The additions give
+    generic kernel--cokernel composition fragments, semistability under a
+    zero-charge quotient or saturation, zero-charge decomposition and
+    noetherian assembly from phase-compatible envelopes, and the
+    cohomological H-minus-one last-factor reduction. That reduction returns
+    both the saturated semistable quotient and a recursive kernel expressed as
+    an extension of the shorter shifted prefix by a zero-charge object. The
+    section-14 coordinate remains mapped and Proposition 14.16 remains
+    undeclared: deriving the relative chain condition from the raw Definition
+    14.12 envelope, boundary-phase saturation, and iteration through the
+    original H-zero filtration remain explicit seams. No dated review quote,
+    owner signoff, or slope--phase reparameterisation is added.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,

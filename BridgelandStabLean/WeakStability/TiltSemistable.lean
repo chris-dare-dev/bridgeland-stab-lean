@@ -358,8 +358,9 @@ private theorem phaseTilt_slope_lt_of_phase_separated
     exact hAcrossB
   exact slope_lt_of_cross_pos W hAtilt hBtilt hA0 hB0 hcross
 
-/-- The shifted version of strict phase/slope separation. -/
-private theorem phaseTilt_slope_shift_lt_shift_of_phase_separated
+/-- The shifted version of strict phase/slope separation.  This public form
+is used by the `H⁻¹` quotient induction for the weak upper tilt. -/
+theorem phaseTilt_slope_shift_lt_shift_of_phase_separated
     (sigma : WeakPreStabilityCondition v) {beta : ℝ}
     {tTilt : TStructure C} (W : WeakStabilityFunction tTilt) {A B : C}
     (hAheart : sigma.slicing.toTStructure.heart A)

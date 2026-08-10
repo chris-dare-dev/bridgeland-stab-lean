@@ -59,6 +59,7 @@ import BridgelandStabLean.WeakStability.SlopeTorsionPair
 import BridgelandStabLean.WeakStability.TiltingProperty
 import BridgelandStabLean.WeakStability.TiltSemistable
 import BridgelandStabLean.WeakStability.TiltNoetherian
+import BridgelandStabLean.WeakStability.TiltHarderNarasimhan
 import BridgelandStabLean.WeakStability.Support
 import BridgelandStabLean.WeakStability.TiltAssembly
 

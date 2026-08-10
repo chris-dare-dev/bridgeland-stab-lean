@@ -58,13 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after merging the #88 and weak-stability
-branches on 2026-08-09.** Every
+**THE GAP IS NOW ZERO, re-measured after the phase-tilt noetherian/HN
+foundations on 2026-08-09.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **114 private** declarations, which remain structurally
+* it does NOT cover the **113 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,25 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **973** declarations (757 through #110, plus 94 public declarations
-  independently censused for #88, then 34 for the weak heart-equivalence/HN
-  stack, 29 for the original/tilted-heart cohomology bridge, 31 for the
-  six-term sequence boundary, and 1 for unconditional t-structure cohomology
-  homologicality, then 27 for the full phase-tilt classification and stable
-  refinement).  The environment holds **1156** authored declarations under
-  `BridgelandStabLean.*`, so **183 are outside this gate**, all of them private
-  or projections. ("Authored" excludes constructors,
+* It names **1028** declarations. The environment holds **1224** authored
+  declarations under `BridgelandStabLean.*`, so **196 are outside this gate**,
+  all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **114 are `private`** -- 100 of them theorems -- and are *structurally*
+* **113 are `private`** -- 99 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **69 are structure field projections** emitted by the `structure` command
-  (41 before the six original WeakStability structures, 59 after those six,
-  then 10 from `WeakAbelianHNFiltration`).
+* **83 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -605,10 +598,11 @@ the slope--phase reparameterisation remains the mapped boundary. -/
 
 /-! ## WeakStability lane -- Proposition 14.16 heart-level assembly
 
-The maximal-zero-charge-subobject construction, phase-tilted noetherian
-chain transfer, quotient-inductive weak HN assembly, and support-property
-transport. Proposition 14.16 itself remains undeclared: the envelope-to-chain
-and cohomology-to-quotient-step seams remain explicit inputs. -/
+The maximal-zero-charge-subobject construction, phase-envelope noetherian
+assembly, quotient-inductive weak HN assembly, the cohomological `H⁻¹`
+last-factor reduction, and support-property transport. Proposition 14.16
+itself remains undeclared: raw-envelope chain transfer, boundary saturation,
+and iteration through `H⁰` remain explicit seams. -/
 
 #print axioms WeakStability.WeakStabilityFunction.HasZeroChargeDecompositions
 #print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair
@@ -616,21 +610,38 @@ and cohomology-to-quotient-step seams remain explicit inputs. -/
 #print axioms WeakStability.WeakStabilityFunction.zeroChargeTorsionPair_free
 #print axioms WeakStability.WeakStabilityFunction.heartZeroCharge
 #print axioms WeakStability.WeakStabilityFunction.heartZeroCharge_isSerreClass
+#print axioms WeakStability.rightOrthogonal_of_iso
+#print axioms WeakStability.cokernelCompShortComplex
+#print axioms WeakStability.cokernelCompShortComplex_shortExact
+#print axioms WeakStability.kernelCokernelCompMiddleShortComplex
+#print axioms WeakStability.kernelCokernelCompMiddleShortComplex_shortExact
+#print axioms WeakStability.kernelCompShortComplex
+#print axioms WeakStability.kernelCompShortComplex_shortExact
+#print axioms WeakStability.WeakStabilityFunction.isSemistable_middle_of_zeroCharge_quotient
+#print axioms WeakStability.WeakStabilityFunction.isSemistable_quotient_of_zeroCharge_subobject
 #print axioms WeakStability.isHeartMono_of_mono
 #print axioms WeakStability.mono_of_isHeartMono
 #print axioms WeakStability.WeakStabilityFunction.isNoetherianObject_of_zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.hasZeroChargeDecomposition_of_chainCondition
 #print axioms WeakStability.WeakStabilityFunction.hasZeroChargeDecompositions_of_chainCondition
+#print axioms WeakStability.WeakStabilityFunction.hasZeroChargeDecomposition_of_reduction
 #print axioms WeakStability.mono_comp_of_zeroCharge_of_rightOrthogonal
 #print axioms WeakStability.mono_in_originalHeart_of_mono_in_phaseTilt
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge_phaseTors
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltingEnvelope_gives_shiftedZeroChargeDecomposition
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltingEnvelope_middle_semistable
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_semistableQuotient_of_saturatedExtension
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_zeroChargeChain_terminates_of_rightOrthogonal
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_phaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_isNoetherianObject_of_zeroCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategory
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasZeroChargeDecompositions_of_chainCondition
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfDecompositions
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfPhaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltNoetherianTorsionSubcategoryOfChainCondition
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_slope_shift_lt_shift_of_phase_separated
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hnLastQuotient_of_saturatedFactor
 #print axioms WeakStability.WeakStabilityFunction.semistableClasses
 #print axioms WeakStability.WeakStabilityFunction.HasSupportProperty
 #print axioms WeakStability.WeakStabilityFunction.isSemistable_of_zeroCharge
@@ -641,6 +652,7 @@ and cohomology-to-quotient-step seams remain explicit inputs. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasSupportProperty
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
