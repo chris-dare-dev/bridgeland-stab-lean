@@ -727,6 +727,13 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
+#print axioms WeakStability.WeakStabilityFunction.slope_between_of_triangle
+#print axioms WeakStability.WeakStabilityFunction.instAbelianFullSubcategoryHeart
+#print axioms WeakStability.WeakStabilityFunction.slope_le_of_heart_epi
+#print axioms WeakStability.WeakStabilityFunction.heart_subobject_slope_le
+#print axioms WeakStability.WeakStabilityFunction.heart_hom_zero_of_semistable_phase_gt
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_hom_zero
+#print axioms WeakStability.WeakStabilityFunction.reverseSlicingObligationsOfHN
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
