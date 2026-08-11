@@ -684,6 +684,22 @@ fidelity:
     audit. Of the 1128 gated declarations, 793 are theorems and 335 are
     constructions or structures.
 
+    COUNT UPDATE (PR #132 adversarial follow-ups), 2026-08-11. The redundant
+    one-field `PhaseTiltPreStabilityObligations` wrapper, its heart projection,
+    and its three public conversion declarations are removed. A new public
+    theorem isolates the HN consequence of `TiltingProperty`, and the direct
+    phase-tilt weak-prestability constructor now needs only the tilting
+    property rather than unrelated linear-charge and support inputs. Audit
+    1128 -> 1125 and the environment census 1325 -> 1321. The measured residue
+    is 111 private declarations plus 85 structure-field projections, leaving
+    0 authored public declarations outside the hand audit. Of the 1125 gated
+    declarations, 792 are theorems and 333 are constructions or structures
+    (19 structures and 314 other non-theorems). Documentation now states the
+    zero-charge boundary only in ray language, and the PR #132 review handoff
+    records the historical emitter and merge-CI evidence exactly. These
+    maintenance changes do not promote the section-14 coordinate, declare
+    Proposition 14.16, or add human source-faithfulness review.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,

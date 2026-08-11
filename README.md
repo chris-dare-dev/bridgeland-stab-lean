@@ -644,10 +644,12 @@ pinned source. The reverse infrastructure is in
 `WeakStability/HeartEquivalenceReverse.lean`: the strictly increasing
 normalization `WithTop ℝ → (0,1]`, the integer-normalized ambient phase
 predicates and their shift law, and the conversion of weak abelian HN chains
-to ambient Postnikov towers. `WeakStability/ChargeRay.lean` proves the analytic
-identity `μ = -cot(πφ)` in the form needed here: every weak upper-half-plane
-charge lies on the ray of `weakPhaseOfSlope μ`, including the zero-radius
-integer boundary, and the identity is preserved by arbitrary integer shifts.
+to ambient Postnikov towers. `WeakStability/ChargeRay.lean` proves the ray
+statement needed here: every weak upper-half-plane charge lies on the ray of
+`weakPhaseOfSlope μ`, including the zero-radius integer boundary, and ray
+equality is preserved by arbitrary integer shifts. On the finite,
+positive-imaginary branch this recovers `μ = -cot(πφ)`; the boundary is stated
+only in ray language because cotangent is undefined there.
 `WeakStability/TiltPreStability.lean` connects those results to
 `PhaseTiltHeartObligations` and packages an actual `WeakPreStabilityCondition`
 without an external compatibility premise.

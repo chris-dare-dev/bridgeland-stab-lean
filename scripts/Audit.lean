@@ -58,8 +58,8 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after the weak charge-ray and phase-tilt
-prestability assembly on 2026-08-10.** Every
+**THE GAP IS NOW ZERO, re-measured after the PR #132 adversarial follow-ups on
+2026-08-11.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
@@ -72,8 +72,8 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1128** declarations. The environment holds **1325** authored
-  declarations under `BridgelandStabLean.*`, so **197 are outside this gate**,
+* It names **1125** declarations. The environment holds **1321** authored
+  declarations under `BridgelandStabLean.*`, so **196 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
@@ -83,7 +83,7 @@ four qualifications in this comment are unaffected by it:
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **86 are structure field projections** emitted by the `structure` command.
+* **85 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **335 of the 1128 are not theorems** (20 `structure`, 315 other
+* **333 of the 1125 are not theorems** (19 `structure`, 314 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **793** real theorems, but it is a `def ... :
+  formatted identically to the **792** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -677,6 +677,7 @@ assembled directly from Definition 14.12's `TiltingProperty`. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasHNPropertyOfTiltingProperty
 
 /-! ## WeakStability lane -- reverse heart--slicing foundations
 
@@ -738,16 +739,12 @@ no source statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toWeakPreStabilityCondition_slicing
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge_apply
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_ambientPhasePredicate_charge_ray
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_Z
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_P
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_Z
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_P
