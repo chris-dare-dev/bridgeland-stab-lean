@@ -651,6 +651,22 @@ fidelity:
     original H-zero filtration remain explicit seams. No dated review quote,
     owner signoff, or slope--phase reparameterisation is added.
 
+    COUNT UPDATE (weak charge rays and ambient phase tilt), 2026-08-10. The
+    11 additional audited declarations are 9 theorems and 2 constructions.
+    `WeakStability/ChargeRay.lean` proves the finite normalized-slope ray,
+    the nonnegative phase-1 boundary, integer ray translation, and ambient
+    shifted compatibility. `WeakStability/TiltPreStability.lean` uses those
+    results to remove the external compatibility field, construct a weak
+    prestability condition from the heart obligations, and expose the direct
+    phase-language constructor from `TiltingProperty`. Audit 1110 -> 1121.
+    The environment census grows 1308 -> 1318 authored declarations: the 11
+    new public audited declarations are offset by removing the former
+    `compat` structure projection. The resulting census is 111 private
+    declarations and 86 structure-field projections, with 0 authored public
+    declarations outside the hand audit. The section-14 coordinate remains
+    mapped. Proposition 14.16 is not declared and no source-faithfulness
+    review or owner signoff is inferred from the completed Lean construction.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,

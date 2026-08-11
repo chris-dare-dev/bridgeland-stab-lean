@@ -54,6 +54,7 @@ import BridgelandStabLean.GroupAction.StabilityMassTriangle
 import BridgelandStabLean.WeakStability.Basic
 import BridgelandStabLean.WeakStability.HeartEquivalence
 import BridgelandStabLean.WeakStability.HeartEquivalenceReverse
+import BridgelandStabLean.WeakStability.ChargeRay
 import BridgelandStabLean.WeakStability.HeartHomVanishing
 import BridgelandStabLean.WeakStability.AmbientHarderNarasimhan
 import BridgelandStabLean.WeakStability.HarderNarasimhan

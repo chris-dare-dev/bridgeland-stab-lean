@@ -3,25 +3,24 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.WeakStability.AmbientHarderNarasimhan
+import BridgelandStabLean.WeakStability.ChargeRay
 import BridgelandStabLean.WeakStability.TiltAssembly
 
 /-!
 # Reverse weak heart--slicing assembly for the phase tilt
 
 This module connects the heart-level output of `TiltAssembly` to the reverse
-weak heart--slicing foundations.  It isolates the exact remaining boundary
-between the completed heart-level part of Proposition 14.16 and an ambient
-weak prestability condition:
-
-* the analytic ray identity relating the normalized slope phase to the
-  rotated central charge.
+weak heart--slicing foundations.  The analytic ray identity is supplied by
+`ChargeRay`: normalized weak slopes give the required heart charge rays, and
+integer shifts give the ambient compatibility axiom.
 
 Hom vanishing is discharged by `HeartHomVanishing`, and ambient HN existence
 by `AmbientHarderNarasimhan`: boundedness of the tilted t-structure and the
 heart HN property extend the towers through the finite t-cohomological
-filtration.  The first constructor below therefore records only the remaining
-analytic compatibility obligation.  No §14 coverage status is promoted by
-this infrastructure.
+filtration.  Consequently the phase-language weak upper tilt is now packaged
+without an external reverse-equivalence premise.  No §14 coverage status is
+promoted by this infrastructure; the exact slope-language source statement
+still requires a source-faithfulness review.
 -/
 
 namespace BridgelandStabLean.WeakStability
@@ -52,22 +51,35 @@ theorem phaseTiltLatticeCharge_apply
     sigma.phaseTiltLatticeCharge beta x =
       sigma.Z x * Complex.exp (-(Real.pi * beta : ℂ) * Complex.I) := rfl
 
-/-- The reverse-direction data left after the heart-level HN, noetherian,
-support, Hom-vanishing, and ambient HN obligations have been assembled. -/
+/-- The heart-level data used by the reverse phase-tilt constructor.  Charge
+ray compatibility is now a theorem of every weak stability function rather
+than an external field. -/
 structure PhaseTiltPreStabilityObligations
     (sigma : WeakPreStabilityCondition v) (beta : ℝ)
     (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
     (Zlin : V →ₗ[ℝ] ℂ) where
-  /-- The already assembled heart-level conclusions. -/
+  /-- The assembled heart-level conclusions. -/
   heart : sigma.PhaseTiltHeartObligations beta hbeta0 hbeta1 Zlin
-  /-- The normalized weak phase lies on the ray of the rotated charge. -/
-  compat : ∀ (phi : ℝ) (E : C),
+
+omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
+/-- The normalized ambient weak phase lies on the ray of the rotated lattice
+charge.  This is the analytic compatibility field that was previously left
+as an input to `PhaseTiltPreStabilityObligations`. -/
+theorem phaseTilt_ambientPhasePredicate_charge_ray
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1) :
+    ∀ (phi : ℝ) (E : C),
     WeakStabilityFunction.ambientPhasePredicate
       (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) phi E →
     ¬IsZero E → ∃ m : ℝ, 0 ≤ m ∧
       ((∀ n : ℤ, phi ≠ (n : ℝ)) → 0 < m) ∧
       sigma.phaseTiltLatticeCharge beta (v (K₀.of C E)) =
-        (m : ℂ) * Complex.exp ((Real.pi * phi : ℂ) * Complex.I)
+        (m : ℂ) * Complex.exp ((Real.pi * phi : ℂ) * Complex.I) := by
+  intro phi E hP hE0
+  simpa only [phaseTiltLatticeCharge_apply,
+    phaseTiltWeakStabilityFunction_charge] using
+    WeakStabilityFunction.ambientPhasePredicate_charge_ray
+      (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) phi E hP hE0
 
 omit [FiniteDimensional ℝ V] in
 /-- The heart-level HN field of the phase-tilt assembly gives ambient HN
@@ -107,19 +119,51 @@ theorem PhaseTiltHeartObligations.ambientHN
       (sigma.slicing.toTStructure_bounded C))
     H.hasHN E
 
-/-- Package the completed categorical phase-tilt assembly and the remaining
-analytic ray compatibility into the weak prestability condition sought in
-Proposition 14.16. -/
+/-- Package the completed heart-level phase-tilt assembly as an ambient weak
+prestability condition.  Both ambient HN existence and charge-ray
+compatibility are derived rather than supplied as premises. -/
+noncomputable def PhaseTiltHeartObligations.toWeakPreStabilityCondition
+    {sigma : WeakPreStabilityCondition v} {beta : ℝ}
+    {hbeta0 : 0 ≤ beta} {hbeta1 : beta < 1}
+    {Zlin : V →ₗ[ℝ] ℂ}
+    (H : sigma.PhaseTiltHeartObligations
+      beta hbeta0 hbeta1 Zlin) : WeakPreStabilityCondition v :=
+  (WeakStabilityFunction.reverseSlicingObligationsOfHN
+    (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)
+    (fun E ↦ H.ambientHN sigma beta hbeta0 hbeta1 Zlin E)).toWeakPreStabilityCondition
+    (sigma.phaseTiltLatticeCharge beta)
+    (sigma.phaseTilt_ambientPhasePredicate_charge_ray beta hbeta0 hbeta1)
+
+omit [FiniteDimensional ℝ V] in
+@[simp]
+theorem PhaseTiltHeartObligations.toWeakPreStabilityCondition_Z
+    {sigma : WeakPreStabilityCondition v} {beta : ℝ}
+    {hbeta0 : 0 ≤ beta} {hbeta1 : beta < 1}
+    {Zlin : V →ₗ[ℝ] ℂ}
+    (H : sigma.PhaseTiltHeartObligations beta hbeta0 hbeta1 Zlin) :
+    H.toWeakPreStabilityCondition.Z = sigma.phaseTiltLatticeCharge beta := rfl
+
+omit [FiniteDimensional ℝ V] in
+@[simp]
+theorem PhaseTiltHeartObligations.toWeakPreStabilityCondition_P
+    {sigma : WeakPreStabilityCondition v} {beta : ℝ}
+    {hbeta0 : 0 ≤ beta} {hbeta1 : beta < 1}
+    {Zlin : V →ₗ[ℝ] ℂ}
+    (H : sigma.PhaseTiltHeartObligations beta hbeta0 hbeta1 Zlin) :
+    H.toWeakPreStabilityCondition.slicing.P =
+      WeakStabilityFunction.ambientPhasePredicate
+        (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) := rfl
+
+/-- Backwards-compatible obligation wrapper for the direct heart-level
+constructor.  Its sole field is the heart assembly; analytic compatibility is
+the theorem `phaseTilt_ambientPhasePredicate_charge_ray`. -/
 noncomputable def PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
     {sigma : WeakPreStabilityCondition v} {beta : ℝ}
     {hbeta0 : 0 ≤ beta} {hbeta1 : beta < 1}
     {Zlin : V →ₗ[ℝ] ℂ}
     (O : sigma.PhaseTiltPreStabilityObligations
       beta hbeta0 hbeta1 Zlin) : WeakPreStabilityCondition v :=
-  (WeakStabilityFunction.reverseSlicingObligationsOfHN
-    (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1)
-    (fun E ↦ O.heart.ambientHN sigma beta hbeta0 hbeta1 Zlin E)).toWeakPreStabilityCondition
-    (sigma.phaseTiltLatticeCharge beta) O.compat
+  O.heart.toWeakPreStabilityCondition
 
 omit [FiniteDimensional ℝ V] in
 @[simp]
@@ -140,6 +184,44 @@ theorem PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
     O.toWeakPreStabilityCondition.slicing.P =
       WeakStabilityFunction.ambientPhasePredicate
         (sigma.phaseTiltWeakStabilityFunction beta hbeta0 hbeta1) := rfl
+
+/-- The phase-language weak upper tilt constructed directly from Definition
+14.12's tilting property, the original support property, and the linear
+realization of the charge.  This declaration deliberately makes no claim that
+the exact slope-language statement of Proposition 14.16 has been reviewed. -/
+noncomputable def phaseTiltWeakPreStabilityConditionOfTiltingProperty
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty)
+    (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
+    (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin) :
+    WeakPreStabilityCondition v :=
+  (sigma.phaseTiltHeartObligationsOfTiltingProperty
+    beta hbeta0 hbeta1 htilt Zlin hcompat hsupport).toWeakPreStabilityCondition
+
+omit [FiniteDimensional ℝ V] in
+@[simp]
+theorem phaseTiltWeakPreStabilityConditionOfTiltingProperty_Z
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty)
+    (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
+    (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin) :
+    (sigma.phaseTiltWeakPreStabilityConditionOfTiltingProperty beta hbeta0 hbeta1
+      htilt Zlin hcompat hsupport).Z = sigma.phaseTiltLatticeCharge beta := rfl
+
+omit [FiniteDimensional ℝ V] in
+@[simp]
+theorem phaseTiltWeakPreStabilityConditionOfTiltingProperty_P
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty)
+    (Zlin : V →ₗ[ℝ] ℂ) (hcompat : ∀ x : V, Zlin x = sigma.Z x)
+    (hsupport : sigma.weakStabilityFunctionOnHeart.HasSupportProperty v Zlin) :
+    (sigma.phaseTiltWeakPreStabilityConditionOfTiltingProperty beta hbeta0 hbeta1
+      htilt Zlin hcompat hsupport).slicing.P =
+      WeakStabilityFunction.ambientPhasePredicate
+        (sigma.phaseTiltWeakStabilityFunction beta hbeta0.le hbeta1) := rfl
 
 end WeakPreStabilityCondition
 

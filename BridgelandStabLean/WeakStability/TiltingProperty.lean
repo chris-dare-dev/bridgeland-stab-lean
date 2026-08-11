@@ -13,10 +13,11 @@ reviewed abstract layer.  A weak prestability condition already carries its
 Harder--Narasimhan slicing, so the paper's condition `muPlus F < +infinity`
 is phrased here as `phiPlus F < 1`: for an object of the slicing heart these
 say that the largest HN factor is off the real-axis boundary.  This is the
-same phase-language convention as `SlopeTorsionPair.lean`.  The numerical
-identity `mu = -cot (pi * phi)` is not formalized, so this declaration is a
-candidate for Definition 14.12 under the coverage map's existing `mapped`
-hypothesis, not a reviewed source claim.
+same phase-language convention as `SlopeTorsionPair.lean`.  The normalized
+slope--phase ray identity is formalized downstream in
+`WeakStability/ChargeRay.lean`; the exact Definition 14.12 source comparison
+has not yet received the review needed to move the coverage map beyond its
+existing `mapped` hypothesis.
 
 The short exact sequence `F -> Ftilde -> F0` in part (2) is a distinguished
 triangle whose three vertices lie in the heart, following the convention of
@@ -60,10 +61,12 @@ an external envelope, rank, or quotient-induction input.
 `WeakStability/Support.lean` transports the support property unconditionally.
 The heart-level constructive obligations are therefore assembled; the exact
 slope-language source statement remains under the registry's existing
-`mapped` hypothesis until the slope--phase reparameterisation is formalized
-and reviewed. Proposition 14.16 also remains undeclared because this layer
-deliberately does not package the reverse weak heart--slicing equivalence into
-a new `WeakPreStabilityCondition`.
+`mapped` hypothesis until the exact slope-cutoff reparameterisation is
+reviewed. `WeakStability/ChargeRay.lean` now proves the normalized
+slope--phase charge-ray identity, and `WeakStability/TiltPreStability.lean`
+packages the reverse construction as a new `WeakPreStabilityCondition`.
+Proposition 14.16 nevertheless remains undeclared until the exact source
+statement receives the required faithfulness review and owner signoff.
 -/
 
 namespace BridgelandStabLean.WeakStability
