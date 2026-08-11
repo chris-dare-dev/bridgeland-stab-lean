@@ -5,7 +5,7 @@
 # mirror, and a single parser does NOT read both without a shim. The known
 # divergences, as of 2026-08-04:
 #
-#   - the anchor's first key, `schema_version`, is absent here;
+#   - the foundational library's first key, `schema_version`, is absent here;
 #   - `dependencies` is a list of mappings here, a list of strings there;
 #   - `human_review` is a scalar here, a list of mappings there;
 #   - `machine_review` and `source_mapping` are scalars here, mappings there;
@@ -29,7 +29,7 @@ artifact:
     category, which Mathlib lacks at the pin; the Kontsevich-Soibelman
     quadratic-form reformulation of the support property; charges on the free
     lattice of simples; numerical walls in the (s,t) half plane; and the
-    Bridgeland 2007 section 8 GL+(2,R)-tilde action the anchor does not cover.
+    Bridgeland 2007 section 8 GL+(2,R)-tilde action the foundational library does not cover.
 
     The Mukai, Tilting, Support and WeakStability lanes are NOT scoped to
     this record's `source`; the WeakStability lane is motivated by
@@ -201,7 +201,7 @@ fidelity:
     overlap generates the full kernel in every category.
 
     CLOSED IN PART 2026-08-06: the full-coordinate metric and isometry track.
-    AutIsometry.lean first proved exact preservation of the anchor's
+    AutIsometry.lean first proved exact preservation of the foundational library's
     phase-only slicingDist. StabilityMass.lean now defines the finite charge-
     norm sum of an HN filtration and a choice-free mass envelope as the
     supremum over all HN filtrations; it proves positivity, isomorphism
@@ -289,11 +289,11 @@ fidelity:
 
     AutPairQuot v is NOT Aut(D), and is further from it than AutQuot: its
     elements are pairs, and toAutQuot is neither injective nor surjective in
-    general. See notes/anchor-api-map.md section 7.
+    general. See notes/dependencies/BridgelandStabilityAPI.md section 7.
 
     CORRECTION (2026-08-03): an earlier revision of this field recorded step 3c
     as BLOCKED on a strict-finite-length restriction lemma said to be absent
-    from the anchor. That was wrong. The lemma is
+    from the foundational library. That was wrong. The lemma is
     interval_thinFiniteLength_of_inclusion_strict, at
     Deformation/IntervalSelection.lean:354, stated for two different slicings.
     The search behind the earlier claim covered IntervalCategory/ and
@@ -418,7 +418,7 @@ fidelity:
     COUNT UPDATE (AutIsometry), 2026-08-06. The 9 additional records cover
     iso-invariance of intrinsic phases, preservation and reflection of zero
     objects by an equivalence, phase transport, and preservation of the
-    anchor's slicingDist through the bare and quotient autoequivalence actions.
+    foundational library's slicingDist through the bare and quotient autoequivalence actions.
 
     COUNT UPDATE (full metric chain), 2026-08-06. The 41 additional records
     comprise 12 for HN filtration mass, the choice-free mass envelope, and
@@ -465,7 +465,7 @@ fidelity:
     unlike the Tilting entry below there is no construction among them. None
     uses compactness or finite-dimensionality; all three are stated with
     FiniteDimensional omitted, which makes them strictly more general than the
-    surrounding file. S remains an arbitrary subset and no anchor type,
+    surrounding file. S remains an arbitrary subset and no foundational library type,
     triangulated category or geometric object appears, so this lane still
     asserts nothing about semistable objects.
 
@@ -576,7 +576,7 @@ fidelity:
     2026-08-09. The two stacked weak-stability commits 6dbb425 and b699ff6
     add 34 authored public declarations: the forward slicing-to-heart bridge,
     isomorphism transport, and abelian weak HN filtrations with existence for
-    the induced heart function. Tilting/HeartCohomology.lean adds 29 more: a
+    the induced heart function. StabilityCondition/Weak/Tilting/Cohomology/Basic.lean adds 29 more: a
     t-structure-only cohomology functor usable for both hearts, the canonical
     torsion-free H-minus-one and torsion H-zero factors of a tilted-heart
     object, their distinguished triangle and tilted-heart short exact
@@ -591,7 +591,7 @@ fidelity:
     new human faithfulness review or owner signoff inferred from compilation.
 
     COUNT UPDATE (six-term cohomology boundary), 2026-08-09.
-    Tilting/HeartCohomologySequence.lean adds 31 authored public declarations:
+    StabilityCondition/Weak/Tilting/Cohomology/Sequence.lean adds 31 authored public declarations:
     13 theorems and 18 constructions. It supplies the shift/degree comparison,
     vanishing outside the tilted amplitude, the six-term sequence and its six
     canonical term identifications, the short-exact-to-triangle bridge for the
@@ -605,7 +605,7 @@ fidelity:
     coverage coordinate beyond mapped.
 
     COUNT UPDATE (homologicality of t-structure cohomology), 2026-08-09.
-    Tilting/HeartCohomologyHomological.lean adds 38 authored declarations:
+    StabilityCondition/Weak/Tilting/Cohomology/Homological.lean adds 38 authored declarations:
     37 private proof helpers (29 theorems and 8 constructions) and the public
     theorem-instance originalHeartCohFunctor_isHomological. It proves that
     degree-zero cohomology of every t-structure sends distinguished triangles
@@ -653,9 +653,9 @@ fidelity:
 
     COUNT UPDATE (weak charge rays and ambient phase tilt), 2026-08-10. The
     11 additional audited declarations are 9 theorems and 2 constructions.
-    `WeakStability/ChargeRay.lean` proves the finite normalized-slope ray,
+    `StabilityCondition/Weak/Basic/ChargeRay.lean` proves the finite normalized-slope ray,
     the nonnegative phase-1 boundary, integer ray translation, and ambient
-    shifted compatibility. `WeakStability/TiltPreStability.lean` uses those
+    shifted compatibility. `StabilityCondition/Weak/Tilting/PreStability.lean` uses those
     results to remove the external compatibility field, construct a weak
     prestability condition from the heart obligations, and expose the direct
     phase-language constructor from `TiltingProperty`. Audit 1110 -> 1121.
@@ -670,7 +670,8 @@ fidelity:
     COUNT UPDATE (current-main H-zero exactness adapter), 2026-08-10. Issue
     #89 is implemented as a narrow bridge over the already-proved generic
     t-structure cohomology theorem, not as a wholesale port of stale draft PR
-    #100. `GroupAction/H0ExactnessBridge.lean` adds 7 audited public
+    #100. `StabilityCondition/Metric/Mass/Subadditivity/CohomologyExactness.lean`
+    adds 7 audited public
     declarations: 5 theorems and 2 constructions. It records the definitional
     identification of the anchor's `HeartStabilityData.H0Functor` with
     `originalHeartCohFunctor`, transports homologicality without installing a
@@ -721,7 +722,7 @@ fidelity:
     the parse hazard scripts/check_audit.py carries a regression test for.
 
     COUNT UPDATE (Tilting lane, heart increment), 2026-08-06. The 9 additional
-    records are BridgelandStabLean/Tilting/HeartTorsionPair.lean: the
+    records are BridgelandStabLean/StabilityCondition/Weak/Tilting/TorsionPair/Heart.lean: the
     HeartTorsionPair datum, the two tilted aisles with their isomorphism-closure
     instances, the factorisation lemma and its uniqueness counterpart, the
     orthogonality characterisation of the torsion class, and the Hom-vanishing
@@ -731,7 +732,7 @@ fidelity:
     tiltGE are `def ... : ObjectProperty C`).
 
     COUNT UPDATE (Wall lane), 2026-08-06. The 21 additional records are the
-    whole of BridgelandStabLean/Wall/Numerical.lean: the class abbreviation and
+    whole of BridgelandStabLean/StabilityCondition/Walls/Numerical/Basic.lean: the class abbreviation and
     its three accessors, the two charge components, the three minors, the wall
     expression, the collapse identity, the circle and line forms, the shift and
     its four invariance lemmas, the charge-degeneracy criterion, and the
@@ -740,14 +741,14 @@ fidelity:
     constructions (9 def, 1 abbrev).
 
     COUNT UPDATE (FiniteLength lane), 2026-08-06. The 10 additional records are
-    the whole of BridgelandStabLean/FiniteLength/SimpleCharge.lean: the two
-    cone-closure lemmas the anchor lacks, the charge construction and its two
+    the whole of BridgelandStabLean/StabilityCondition/Weak/Foundations/SimpleCharge.lean: the two
+    cone-closure lemmas the foundational library lacks, the charge construction and its two
     computation lemmas, the freeness/uniqueness pair, and the three half-plane
     consequences. Audit count 585 -> 595. Coverage complete: 10 top-level
     declarations, 0 private, 10 named. 9 are theorems; 1 is a construction.
 
     COUNT UPDATE (Support lane), 2026-08-06. The 11 additional records are the
-    whole of BridgelandStabLean/Support/SupportProperty.lean: the support
+    whole of BridgelandStabLean/StabilityCondition/Support/Basic.lean: the support
     property, the two hypothesis structures, the compact slice and its
     compactness, the normalisation lemma, both directions of the equivalence,
     the equivalence itself, and two elementary consequences. Audit count
@@ -757,7 +758,7 @@ fidelity:
     nothing about the property holding of anything.
 
     COUNT UPDATE (Tilting lane), 2026-08-06. The 11 additional records are the
-    whole of BridgelandStabLean/Tilting/TorsionPair.lean: the TorsionPair
+    whole of BridgelandStabLean/StabilityCondition/Weak/Tilting/TorsionPair/Basic.lean: the TorsionPair
     structure, the zero-intersection lemma, the two orthogonality
     characterisations, closure of the torsion-free class under subobjects and
     of the torsion class under quotients, closure of both under extensions, the
@@ -770,7 +771,7 @@ fidelity:
     known_divergences.
 
     COUNT UPDATE (Mukai lane), 2026-08-06. The 66 additional records are the
-    whole of BridgelandStabLean/Mukai/: 39 from Lattice.lean (the pairing, its
+    whole of BridgelandStabLean/Lattice/Mukai/: 39 from Lattice.lean (the pairing, its
     bilinearity, symmetry, the quadratic refinement, evenness, the
     spherical/isotropic conditions, the expectedDim bookkeeping, the outer
     hyperbolic plane, and the bundled bilinear map) and 27 from RankTwo.lean
@@ -780,7 +781,7 @@ fidelity:
 
     THIS LANE'S COVERAGE IS COMPLETE, which is NOT true of the record above and
     is stated separately for that reason. A direct census of
-    BridgelandStabLean/Mukai/ finds exactly 66 top-level declarations and ZERO
+    BridgelandStabLean/Lattice/Mukai/ finds exactly 66 top-level declarations and ZERO
     `private` ones, and scripts/Audit.lean names all 66. There is no shortfall
     here of the kind the preceding paragraphs describe for GLTildeSurj.lean.
 
@@ -1119,7 +1120,7 @@ fidelity:
     a BUILD TARGET, not a separate manual step: scripts/Audit.lean is covered
     by `[[lean_lib]] name = "Audit"` (srcDir = "scripts"), so it cannot fall
     behind the source tree. Its 124 audit records at 5b40d5a are build output.
-    The anchor itself was also built from source for the first
+    The foundational library itself was also built from source for the first
     time (74 files, exit 0) -- it is not covered by Mathlib's cache and nothing
     had imported it until the step-3 API read.
 
@@ -1168,7 +1169,7 @@ fidelity:
     plane are tilt-stability material (Arcara-Bertram, Maciocia,
     Bayer-Macri-Toda), not Bridgeland 2007. No @[cites], no registry entries.
 
-    Wall/Numerical.lean works with NumClass = R x R x R, a triple `(r, c, d)`
+    StabilityCondition/Walls/Numerical/Basic.lean works with NumClass = R x R x R, a triple `(r, c, d)`
     standing for (ch0, ch1.H, ch2), and the twisted charge
     Re Z = -d + s c - (s^2/2) r + (t^2/2) r, Im Z = t (c - s r). The wall
     expression is the cross product of two charges. The central result,
@@ -1236,20 +1237,20 @@ fidelity:
     key, not to attach an existing one that does not fit.
 
     What the lane proves is the LATTICE HALF only, over the model `Fin n -> Z`.
-    It supplies the two cone-closure facts the anchor lacks -- closure under
+    It supplies the two cone-closure facts the foundational library lacks -- closure under
     multiplication by a positive real, and closure under a nonempty finite sum
     -- then builds the additive charge determined by a choice of value per
     basis vector, proves that choice free and unique (existsUnique_charge), and
     proves that a nonzero N-combination of cone values stays in the cone
     (mem_cone_natCombination), hence is nonzero. The cone itself,
     CategoryTheory.upperHalfPlaneUnion, and its closure under addition are the
-    anchor's; this is the first of the lanes added in this series to import the
-    anchor at all.
+    foundational library's; this is the first of the lanes added in this series to import the
+    foundational library at all.
 
     The two new cone lemmas are deliberately placed in this repo's own
     namespace rather than injected as CategoryTheory.upperHalfPlaneUnion_*.
-    CLAUDE.md section 1 tracks 21 dot-notation extensions on anchor types as
-    collision candidates for a future anchor bump; nothing needs these two by
+    CLAUDE.md section 1 tracks 21 dot-notation extensions on foundational library types as
+    collision candidates for a future foundational library bump; nothing needs these two by
     dot notation, so the list is not lengthened.
 
     Support/ MAPS TO NO SECTION OF `source` EITHER. The support property is
@@ -1257,7 +1258,7 @@ fidelity:
     by Bayer-Macri-Stellari; neither is Bridgeland 2007. No @[cites] records,
     no registry entries.
 
-    Support/SupportProperty.lean works over a finite-dimensional real normed
+    StabilityCondition/Support/Basic.lean works over a finite-dimensional real normed
     space V, a linear charge Z : V -> W into a normed space, and an arbitrary
     subset S. It defines the support property as the uniform comparison
     ||v|| <= C ||Z v|| on S, and proves it equivalent to the existence of a
@@ -1272,7 +1273,7 @@ fidelity:
     Happel-Reiten-Smalo/Dickson material, not Bridgeland 2007, so like Mukai/
     it carries no @[cites] records and no registry entries.
 
-    Tilting/TorsionPair.lean defines a torsion pair on an abelian category as
+    StabilityCondition/Weak/Tilting/TorsionPair/Basic.lean defines a torsion pair on an abelian category as
     two isomorphism-closed ObjectProperties with (i) every map from a torsion
     object to a torsion-free object zero and (ii) every object fitting in a
     short exact sequence with torsion sub and torsion-free quotient. MATHLIB
@@ -1280,7 +1281,7 @@ fidelity:
     torsion in algebra (Algebra/Group/Torsion.lean, GroupTheory/Torsion.lean,
     RingTheory/Flat/TorsionFree.lean and the rest); there is no torsion pair,
     torsion theory or torsion class for abelian categories. So this is built
-    from scratch, and it imports only Mathlib -- no anchor, no triangulated
+    from scratch, and it imports only Mathlib -- no foundational library, no triangulated
     category, no geometry.
 
     What is proved: each class is exactly the orthogonal of the other
@@ -1305,14 +1306,14 @@ fidelity:
     lane is currently uncited, and "uncited" is the honest state, not an
     oversight to be papered over.
 
-    What it contains. Mukai/Lattice.lean defines the extension of an additive
+    What it contains. Lattice/Mukai/Basic.lean defines the extension of an additive
     group N carrying a symmetric Z-bilinear form b to Z x N x Z with pairing
     <(r,c,s),(r',c',s')> = b c c' - r s' - r' s, proves bilinearity in each
     slot, symmetry from symmetry of b, the quadratic refinement
     <v,v> = b c c - 2 r s, evenness of the extension of an even lattice, the
     spherical (<v,v> = -2) and isotropic (<v,v> = 0) conditions and their
     disjointness, and that the outer two summands span a hyperbolic plane --
-    two isotropic generators pairing to -1. Mukai/RankTwo.lean defines the Gram
+    two isotropic generators pairing to -1. Lattice/Mukai/RankTwo.lean defines the Gram
     determinant of a pair, proves it transforms by the SQUARE of the
     change-of-basis determinant for an arbitrary integer 2x2 matrix (not only
     unimodular ones), defines the negative-Gram hyperbolic-pair condition and
@@ -1324,16 +1325,16 @@ fidelity:
 
     Lattice/ maps to no single paper section: it is the rank-2 torsion-free
     arithmetic underlying the Enriques-Kuznetsov article's section 8.4-8.6
-    numerical steps. GroupAction/ targets Bridgeland 2007 section 8 (Lemma 8.2
+    numerical steps. StabilityCondition/Symmetry/ targets Bridgeland 2007 section 8 (Lemma 8.2
     and the autoequivalence action). It now contains: NormalizedShift, the
     group of +1-equivariant order isomorphisms of R (step 1); and GLTilde,
     Bridgeland's concrete presentation of GL+(2,R)-tilde as pairs (T, f) of a
     positive-determinant matrix and a normalized shift agreeing on the circle
     of phases, proved to be a group under componentwise multiplication with
     both projections group homs (step 2); ComplexBridge, reconciling the
-    anchor's C-valued central charge with GLTilde's action on Fin 2 -> R
+    foundational library's C-valued central charge with GLTilde's action on Fin 2 -> R
     (step 3 groundwork); and SlicingAction, the MulAction of NormalizedShift
-    (and hence of GLTilde, via toShiftHom) on the anchor's Slicing C by phase
+    (and hence of GLTilde, via toShiftHom) on the foundational library's Slicing C by phase
     relabelling, with one_smul and mul_smul proved (step 3a); and
     PreStabilityAction, where BOTH factors act at once -- the shift relabels
     the slicing and the matrix transforms the central charge -- giving
@@ -1346,7 +1347,7 @@ fidelity:
     map_add_one via integer translation and a modulus on a compact window),
     with exists_radius as the consumable form, and SlicingAction adds
     relabel_intervalProp: interval subcategories are reindexed exactly, as an
-    equality of ObjectProperty. Those two, plus the anchor's own
+    equality of ObjectProperty. Those two, plus the foundational library's own
     interval_thinFiniteLength_of_inclusion_strict, give relabel_isLocallyFinite
     and hence StabilityAction: MulAction GLTilde
     (StabilityCondition.WithClassMap C v), both laws proved (step 3c).
@@ -1388,7 +1389,7 @@ fidelity:
     a tower / filtration through a triangulated functor, and Slicing.mapEquiv
     transports a slicing along a triangulated auto-equivalence --
     (Phi . s).P phi X = s.P phi (Phi-inverse X), dual to relabel, which moves
-    phases and fixes objects. The anchor has NO functor transport of its own,
+    phases and fixes objects. The foundational library has NO functor transport of its own,
     only HNFiltration.ofIso along an object isomorphism, so these are built
     from scratch.
 
@@ -1443,7 +1444,7 @@ fidelity:
     StrictFiniteLength.lean extracts the general
     strict-hypothesis transfer lemma (isStrictArtinian_of_faithful_strict and
     its Noetherian twin) for an ARBITRARY full faithful strict-mono-preserving
-    functor -- the anchor's own two interval lemmas are instances of it -- plus
+    functor -- the foundational library's own two interval lemmas are instances of it -- plus
     mapEquiv_intervalProp_iff, recording that under Aut the interval endpoints
     do NOT move. AutStabilityAction assembles the induced interval functor,
     strict-mono preservation, local finiteness with the same eta, and the
@@ -1457,7 +1458,7 @@ fidelity:
     GLTildeJointContinuousAction proves the GLTilde action jointly continuous,
     gives AutPairQuot its standard discrete symmetry-group topology, and
     supplies ContinuousSMul for both factors and their product. API details
-    are mapped in notes/anchor-api-map.md.
+    are mapped in notes/dependencies/BridgelandStabilityAPI.md.
 
     ComponentAction adds the induced action on connected-component labels,
     component-to-component homeomorphisms, and component-stabilizer actions.
@@ -1469,14 +1470,14 @@ fidelity:
 
     AutIsometry.lean (2026-08-05) targets the ISOMETRY clause of Lemma 8.2,
     partially. mapEquiv_slicingDist proves the Aut action preserves the
-    anchor's slicingDist -- the sup over nonzero objects of the phi-plus and
+    foundational library's slicingDist -- the sup over nonzero objects of the phi-plus and
     phi-minus discrepancies, StabilityCondition/Defs.lean -- exactly, with no
     finiteness hypothesis and with both sides allowed to be infinite.
     actStabAut_slicingDist and AutPairQuot_smul_slicingDist carry it from bare
     slicings to stability conditions and to the MulAction of AutPairQuot v.
     Two supporting lemmas were missing and are stated here for the first time:
     Slicing.phiPlus_congr / phiMinus_congr, the iso-invariance of the intrinsic
-    phases, which the anchor inlines at four separate sites in
+    phases, which the foundational library inlines at four separate sites in
     Deformation/DeformedGtLe.lean without ever naming; and isZero_functor_iff /
     isZero_inverse_iff, which Functor.map_isZero gives in one direction only.
 
@@ -1504,7 +1505,7 @@ fidelity:
     What this is NOT is in known_divergences and must be read before citing it.
   known_divergences: >
     MASS-TRIANGLE OBLIGATION NARROWED 2026-08-07, not discharged.
-    BridgelandStabLean/GroupAction/StabilityMassTriangle.lean proves
+    BridgelandStabLean/StabilityCondition/Metric/Mass/Subadditivity/Triangle.lean proves
     stabilityMassTriangleInequality_of_semistable: the general
     StabilityMassTriangleInequality follows from the strictly weaker
     StabilityMassSemistableTriangleInequality, which restricts to distinguished
@@ -1583,10 +1584,12 @@ fidelity:
     written with cohomology functors, D^{<=0}_dagger = {X in D^{<=0} : H^0(X) in
     T}. MATHLIB HAS NO BUNDLED H^n FUNCTOR INTO THE HEART AT THE PIN --
     TStructure/ carries truncLE, truncGE and the truncation triangle. This
-    project constructs the functor in Tilting/HeartCohomology.lean and proves
-    it homological in Tilting/HeartCohomologyHomological.lean;
-    GroupAction/H0ExactnessBridge.lean transports that result to the anchor's
-    H0Functor. The original aisle construction remains defined by
+    project constructs the functor in
+    StabilityCondition/Weak/Tilting/Cohomology/Basic.lean and proves it
+    homological in StabilityCondition/Weak/Tilting/Cohomology/Homological.lean;
+    StabilityCondition/Metric/Mass/Subadditivity/CohomologyExactness.lean
+    transports that result to the stability-condition API. The original aisle
+    construction remains defined by
     HOM-ORTHOGONALITY, which needs no cohomology functor: for X in D^{<=0} and
     F in the heart the counit gives Hom(X,F) = Hom(H^0 X, F), and the torsion
     class is the left orthogonal of the torsion-free class, so "H^0(X) in T" is
@@ -1684,8 +1687,8 @@ fidelity:
     abelian on the classes of the simples. IT EXISTS IN NEITHER MATHLIB NOR THE
     ANCHOR at the pin. Mathlib's Order/JordanHolder.lean is about modular
     lattices and is not connected to K_0 of a category, and a search of the
-    whole anchor for jordan/holder/compositionSeries/free-on-simples returns
-    nothing; the anchor's GrothendieckGroup/ builds K_0 as a quotient of a free
+    whole foundational library for jordan/holder/compositionSeries/free-on-simples returns
+    nothing; the foundational library's GrothendieckGroup/ builds K_0 as a quotient of a free
     abelian group by a relation subgroup and never says that quotient is free
     on the simples. So this is an unrealized assumption of exactly the kind
     Lattice/NumericalK.lean already records, and it is never discharged.
@@ -1728,7 +1731,7 @@ fidelity:
 
     SUPPORT LANE: `S` IS AN ARBITRARY SET. It is not identified with the
     classes of sigma-semistable objects, and nothing in the lane mentions a
-    triangulated category, a slicing, a stability condition, or the anchor. The
+    triangulated category, a slicing, a stability condition, or the foundational library. The
     identification is what would make these theorems statements about
     Bridgeland stability, and it is not made. Every result holds verbatim for
     any other subset of the space.
@@ -1782,7 +1785,7 @@ fidelity:
     CLAUDE.md section 4. Do not cite this lane as "the Bayer-Macri wall
     classification is formalized".
 
-    GroupAction/GLTilde.lean defines GLTilde as Bridgeland's pair presentation
+    StabilityCondition/Symmetry/GLTilde/Basic.lean defines GLTilde as Bridgeland's pair presentation
     of GL+(2,R)-tilde. The group, surjective projection, Z fibre, explicit
     section, global topology, continuity of the projection, contractibility,
     simple connectedness, covering-map property, and topological-group
@@ -1794,7 +1797,7 @@ fidelity:
     universal-cover predicate at this pin, so these exact declarations are the
     public trust surface rather than an inferred larger API.
 
-    GroupAction/AutIsometry.lean proves preservation of the anchor's phase-only
+    StabilityCondition/Metric/Isometry/Phase.lean proves preservation of the foundational library's phase-only
     slicingDist. StabilityMass.lean, HNMassUniqueness.lean, and
     StabilityDistance.lean now supply a literal finite HN-mass coordinate and
     AutFullIsometry.lean proves that AutPairQuot v preserves the resulting
@@ -1829,7 +1832,7 @@ fidelity:
     literal paper theorem; call it full-distance invariance for the compatible
     autoequivalence group and state the remaining group-level boundary.
 
-    GroupAction/QuotAutAction.lean defines AutQuot C as the quotient of
+    StabilityCondition/Symmetry/Autoequivalence/Slicing/Quotient.lean defines AutQuot C as the quotient of
     triangulated auto-equivalences by natural isomorphism of the forward
     functors. Inverse natural isomorphisms are derived from uniqueness of right
     adjoints. No separate external object named Aut(D) is identified with this
