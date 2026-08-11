@@ -31,11 +31,10 @@ closures of the aisle and co-aisle.
 
 The paper's (14.1) is written in slope language on the heart of a weak
 stability condition: `T^β = {μ⁻ > β}`, `F^β = {μ⁺ ≤ β}`. This file's pair is
-the same construction in **phase** language on the slicing heart; the slope
-and phase parametrisations are related by `μ = -cot(πφ)` on `(0, 1)`, an
-order-preserving reparametrisation that is **not formalized here**. The
-coverage map records this as a `mapped` hypothesis, not a claim — see
-`registry/coverage-1902.08184v4.json`.
+the same construction in **phase** language on the slicing heart.  The exact
+finite-slope reparametrisation and equality of the two pairs are formalized
+downstream in `TorsionPair/SourceSlope.lean`.  The coverage map remains
+`mapped` pending its separate source-review protocol.
 -/
 
 namespace BridgelandStabLean.WeakStability

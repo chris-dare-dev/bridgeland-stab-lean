@@ -18,9 +18,9 @@ Hom vanishing is discharged by `HeartHomVanishing`, and ambient HN existence
 by `AmbientHarderNarasimhan`: boundedness of the tilted t-structure and the
 heart HN property extend the towers through the finite t-cohomological
 filtration.  Consequently the phase-language weak upper tilt is now packaged
-without an external reverse-equivalence premise.  No §14 coverage status is
-promoted by this infrastructure; the exact slope-language source statement
-still requires a source-faithfulness review.
+without an external reverse-equivalence premise.  The exact slope-language
+adapter and source-normalized theorem are exposed separately by
+`Tilting/Source`; this infrastructure alone makes no coverage promotion.
 -/
 
 namespace BridgelandStabLean.WeakStability

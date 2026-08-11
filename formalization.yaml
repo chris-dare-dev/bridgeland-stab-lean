@@ -716,6 +716,19 @@ fidelity:
     axiom-gating correction only; it supplies no mathematical or
     source-faithfulness verdict for the concurrent mass-subadditivity work.
 
+    COUNT UPDATE (issue #81 source-facing §14 completion), 2026-08-11.
+    The finite weak-slope adapter, exact display (14.1) torsion pair, analytic
+    normalization `Z/(i-beta)`, source-normalized weak function and
+    prestability constructor, support transport, sign-separated Lemma 14.17,
+    stable refinement, and Proposition 14.16 conclusion package add 57 gated
+    public declarations. Audit names 1245 declarations and the environment
+    census reports 1448 authored declarations, 109 private declarations, and
+    94 structure-field projections, leaving 0 authored public declarations
+    outside the hand audit. Of the gated declarations, 886 are theorems, 21
+    are structures, and 338 are other non-theorems. The §14 coverage
+    coordinate deliberately stays `mapped`; these candidates do not acquire
+    a source-faithfulness verdict or owner acceptance merely by compiling.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
