@@ -55,6 +55,7 @@ import BridgelandStabLean.WeakStability.Basic
 import BridgelandStabLean.WeakStability.HeartEquivalence
 import BridgelandStabLean.WeakStability.HeartEquivalenceReverse
 import BridgelandStabLean.WeakStability.HeartHomVanishing
+import BridgelandStabLean.WeakStability.AmbientHarderNarasimhan
 import BridgelandStabLean.WeakStability.HarderNarasimhan
 import BridgelandStabLean.WeakStability.Noetherian
 import BridgelandStabLean.WeakStability.SlopeTorsionPair

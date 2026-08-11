@@ -705,6 +705,7 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_instClosedUnderIso
 #print axioms WeakStability.WeakStabilityFunction.shiftedHeartPhasePredicate_shift_iff
 #print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_shift_iff
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_shift_int
 #print axioms WeakStability.WeakAbelianHNFiltration.factorInclusion
 #print axioms WeakStability.WeakAbelianHNFiltration.factorInclusion_mono
 #print axioms WeakStability.instAbelianFullSubcategoryHeart_bridgelandStabLean_3
@@ -715,6 +716,14 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakAbelianHNFiltration.toAmbientNormalizedHN
 #print axioms WeakStability.WeakStabilityFunction.ambientHNOfHeart
 #print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_mem_heart
+#print axioms WeakStability.HNFiltration.shiftWeakAmbient
+#print axioms WeakStability.HNFiltration.shiftWeakAmbient_phase
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_mem_heart_with_phase_bounds
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_pure
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_width
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_exists_of_bounded
+#print axioms WeakStability.WeakStabilityFunction.ambientHN_of_bounded
+#print axioms WeakStability.heartTorsionPair_tilt_isBounded
 #print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations
 #print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toSlicing
 #print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toSlicing_P
@@ -724,6 +733,7 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge_apply
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
