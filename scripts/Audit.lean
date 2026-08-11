@@ -72,7 +72,7 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1121** declarations. The environment holds **1318** authored
+* It names **1128** declarations. The environment holds **1325** authored
   declarations under `BridgelandStabLean.*`, so **197 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **333 of the 1121 are not theorems** (20 `structure`, 313 other
+* **335 of the 1128 are not theorems** (20 `structure`, 315 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **788** real theorems, but it is a `def ... :
+  formatted identically to the **793** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -259,10 +259,11 @@ Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
 
 /-! ## Tilting lane — torsion pairs on a heart, and the tilted aisles
 
-The aisles are defined by HOM-ORTHOGONALITY, not with a cohomology functor:
-Mathlib has no `H^n` for a t-structure at the pin, and the anchor's `H0Functor`
-has its homological property only as case-by-case fragments. `zero'` is proved
-here; `exists_triangle_zero_one` is NOT, and is not declared with `sorry`. -/
+The aisles are defined by HOM-ORTHOGONALITY, not with a cohomology functor.
+Mathlib has no bundled `H^n` functor into the heart at the pin. This project
+now constructs one and proves it homological, but that later result does not
+change the original aisle definition. `zero'` is proved here;
+`exists_triangle_zero_one` is NOT, and is not declared with `sorry`. -/
 
 #print axioms Tilting.HeartTorsionPair
 #print axioms Tilting.HeartTorsionPair.tiltLE
@@ -1558,6 +1559,23 @@ this against the file by eye. -/
 #print axioms CategoryTheory.Triangulated.stabilityEMetricSpace_toTopologicalSpace
 #print axioms CategoryTheory.Triangulated.stabilityPseudoEMetricSpaceOfMassTriangle
 #print axioms CategoryTheory.Triangulated.stabilityEMetricSpaceOfMassTriangle
+
+/-! ## H⁰ exactness bridge — current-main adapter for issue #89
+
+The generic Tilting cohomology functor is homological. This narrow adapter
+records its definitional identification with the anchor's
+`HeartStabilityData.H0Functor`, transports homologicality without adding a new
+global instance, and discharges exactness plus the monic cokernel comparison
+for heart-source triangles. `Exact`, not `ShortExact`, is the valid conclusion.
+No mass theorem or source-faithfulness claim is made here. -/
+
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0FunctorIsoOriginalHeartCohFunctor
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0Functor_isHomological_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_isHomological_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_iff_mono_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_unconditional
 
 /-! ## The octahedral reduction of the mass triangle inequality -/
 

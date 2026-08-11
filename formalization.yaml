@@ -667,6 +667,23 @@ fidelity:
     mapped. Proposition 14.16 is not declared and no source-faithfulness
     review or owner signoff is inferred from the completed Lean construction.
 
+    COUNT UPDATE (current-main H-zero exactness adapter), 2026-08-10. Issue
+    #89 is implemented as a narrow bridge over the already-proved generic
+    t-structure cohomology theorem, not as a wholesale port of stale draft PR
+    #100. `GroupAction/H0ExactnessBridge.lean` adds 7 audited public
+    declarations: 5 theorems and 2 constructions. It records the definitional
+    identification of the anchor's `HeartStabilityData.H0Functor` with
+    `originalHeartCohFunctor`, transports homologicality without installing a
+    new global instance, and proves exactness at the middle term of the
+    heart-source H-zero complex together with the equivalent monic cokernel
+    comparison. The valid conclusion is `ShortComplex.Exact`, not
+    `ShortExact`; no mass inequality or source-faithfulness result is claimed.
+    Audit 1121 -> 1128. The environment census grows 1318 -> 1325 authored
+    declarations, with 111 private declarations and 86 structure-field
+    projections, leaving 0 authored public declarations outside the hand
+    audit. Of the 1128 gated declarations, 793 are theorems and 335 are
+    constructions or structures.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
@@ -1564,17 +1581,19 @@ fidelity:
     TILTING LANE, HEART INCREMENT: THE AISLES ARE NOT DEFINED THE USUAL WAY,
     AND THE DEVIATION IS FORCED. The Happel-Reiten-Smalo aisles are normally
     written with cohomology functors, D^{<=0}_dagger = {X in D^{<=0} : H^0(X) in
-    T}. MATHLIB HAS NO H^n FOR A T-STRUCTURE AT THE PIN -- TStructure/ carries
-    truncLE, truncGE and the truncation triangle but no cohomology functor into
-    the heart -- and the anchor's H0Functor has its homological property only as
-    case-by-case fragments in HeartEquivalence/H0Homological.lean, never
-    unconditionally. So the aisles are defined by HOM-ORTHOGONALITY instead,
-    which needs no cohomology functor: for X in D^{<=0} and F in the heart the
-    counit gives Hom(X,F) = Hom(H^0 X, F), and the torsion class is the left
-    orthogonal of the torsion-free class, so "H^0(X) in T" is equivalent to
-    "Hom(X,F) = 0 for every torsion-free F". The two formulations agree wherever
-    the usual one can be stated. But they are not literally the same definition,
-    and a reader comparing this file to a textbook must know that.
+    T}. MATHLIB HAS NO BUNDLED H^n FUNCTOR INTO THE HEART AT THE PIN --
+    TStructure/ carries truncLE, truncGE and the truncation triangle. This
+    project constructs the functor in Tilting/HeartCohomology.lean and proves
+    it homological in Tilting/HeartCohomologyHomological.lean;
+    GroupAction/H0ExactnessBridge.lean transports that result to the anchor's
+    H0Functor. The original aisle construction remains defined by
+    HOM-ORTHOGONALITY, which needs no cohomology functor: for X in D^{<=0} and
+    F in the heart the counit gives Hom(X,F) = Hom(H^0 X, F), and the torsion
+    class is the left orthogonal of the torsion-free class, so "H^0(X) in T" is
+    equivalent to "Hom(X,F) = 0 for every torsion-free F". The two formulations
+    agree wherever the usual one can be stated. But they are not literally the
+    same definition, and a reader comparing this file to a textbook must know
+    that.
 
     TILTING LANE: THE HAPPEL-REITEN-SMALO TILT IS FORMALIZED. Every field of
     Triangulated.TStructure is proved and `tilt` assembles them into a genuine
@@ -1582,12 +1601,12 @@ fidelity:
     `exists_tilt_triangle`, built from two octahedra. NOTHING IS DECLARED WITH
     SORRY.
 
-    The construction uses NO COHOMOLOGY FUNCTOR anywhere, which is why it is
-    possible at this pin at all: Mathlib has no H^n for a t-structure, and the
-    anchor's H0Functor has its homological property only as case-by-case
-    fragments. tau^{>=0}X plays the role of H^0(X), exists_factor_truncGE plays
-    the role of the counit isomorphism, and Hom-orthogonality plays the role of
-    membership in the torsion class.
+    The aisle construction itself uses NO COHOMOLOGY FUNCTOR: at the time it
+    was introduced Mathlib had no bundled H^n functor into the heart, and the
+    later project-level homologicality theorem does not alter the definition.
+    tau^{>=0}X plays the role of H^0(X), exists_factor_truncGE plays the role of
+    the counit isomorphism, and Hom-orthogonality plays the role of membership
+    in the torsion class.
 
     THE AISLES ARE THEREFORE NOT DEFINED THE TEXTBOOK WAY, and a reader
     comparing this to a source must know it. Textbook HRS writes
