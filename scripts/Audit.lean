@@ -167,7 +167,7 @@ open BridgelandStabLean
 
 Pure lattice arithmetic. Nothing here is a statement about a K3 surface, a
 Mukai lattice of a variety, or any geometric object; see the module docstrings
-in `BridgelandStabLean/Mukai/`. -/
+in `BridgelandStabLean/Lattice/Mukai/`. -/
 
 #print axioms Mukai.MukaiLattice
 #print axioms Mukai.pairing
@@ -242,7 +242,7 @@ in `BridgelandStabLean/Mukai/`. -/
 /-! ## Tilting lane — torsion pairs in an abelian category
 
 Mathlib has no torsion pair for abelian categories at the pin, so this is built
-from scratch. Pure abelian-category theory: no anchor import, no geometry. The
+from scratch. Pure abelian-category theory: no foundational library import, no geometry. The
 Happel-Reiten-Smalo tilt itself is NOT here; see the module docstring. -/
 
 #print axioms Tilting.TorsionPair
@@ -763,7 +763,7 @@ no source statement and make no §14 coverage promotion. -/
 
 Linear algebra plus one compactness argument over a finite-dimensional real
 normed space. `S` is an ARBITRARY subset; it is not identified with the classes
-of semistable objects, which would need a stability condition. No anchor
+of semistable objects, which would need a stability condition. No foundational library
 import, no geometry. -/
 
 #print axioms Support.HasSupportProperty
@@ -785,7 +785,7 @@ import, no geometry. -/
 
 `Fin n -> Z` is a MODEL of `K_0(A)` for a finite-length abelian category, not
 an identification: that is Jordan-Holder, which exists in neither Mathlib nor
-the anchor. Every result is a theorem about `Fin n -> Z`. -/
+the foundational library. Every result is a theorem about `Fin n -> Z`. -/
 
 #print axioms FiniteLength.mem_cone_smul
 #print axioms FiniteLength.mem_cone_sum
@@ -941,7 +941,7 @@ rather than decorative. -/
 
 /-! ## AutAction — transport along a triangulated auto-equivalence
 
-These extend the anchor's own namespace, since they are API for its types. -/
+These extend the foundational library's own namespace, since they are API for its types. -/
 
 #print axioms CategoryTheory.Triangulated.PostnikovTower.mapF
 #print axioms CategoryTheory.Triangulated.HNFiltration.mapF
@@ -1331,7 +1331,7 @@ this against the file by eye. -/
 #print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_mem_combinedActionKernel
 #print axioms BridgelandStabLean.GroupAction.deck_one_shiftTwo_eq_one_in_effective
 
-/-! ## AutIsometry — the action preserves the anchor's phase distance -/
+/-! ## AutIsometry — the action preserves the foundational library's phase distance -/
 
 #print axioms CategoryTheory.Triangulated.Slicing.phiPlus_congr
 #print axioms CategoryTheory.Triangulated.Slicing.phiMinus_congr
@@ -1581,8 +1581,11 @@ No mass theorem or source-faithfulness claim is made here. -/
 
 #print axioms CategoryTheory.Triangulated.stabilityMass_eq_ofReal_norm_charge
 #print axioms CategoryTheory.Triangulated.exists_headTail_stabilityMass
-#print axioms CategoryTheory.Triangulated.StabilityMassSemistableTriangleInequality
-#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable
+#print axioms CategoryTheory.Triangulated.HNFiltration.exists_headTail_mass
+#print axioms CategoryTheory.Triangulated.StabilityMassSemistableLeftTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable_obj₁
+#print axioms CategoryTheory.Triangulated.stabilityMassSemistableLeftTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality
 
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 
