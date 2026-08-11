@@ -29,24 +29,30 @@ not promote `sec-14-weak-stability-tilting` beyond `mapped`.
    consequence of Definition 14.12. The direct weak-prestability constructor
    and its `Z`/`P` lemmas now require only `htilt`; `Zlin`, charge compatibility,
    and support are no longer premises.
-5. **F5, overstrong cotangent prose — fixed.** The README uses ray language at
-   the zero-radius integer boundary and limits `μ = -cot(πφ)` to the finite,
-   positive-imaginary branch.
+5. **F5, overstrong cotangent prose — fixed.** The corrective commit split the
+   finite-branch cotangent statement from the boundary ray statement. The
+   concurrent current-main README rewrite removes the detailed claim entirely.
 6. **F6, branch CI cited for the merge — fixed.** The handoff now cites the
    successful merge run `31451034804`.
 
 ## Measured trust surface after the correction
 
+After reconciliation with the concurrent current-main taxonomy merge,
 `scripts/Census.lean` reports:
 
-- 1,321 authored declarations;
-- 1,125 declarations named by `scripts/Audit.lean`;
-- 111 private declarations and 85 structure projections outside that list;
-- 792 gated theorems, 19 gated structures, and 314 other gated
+- 1,382 authored declarations;
+- 1,188 declarations named by `scripts/Audit.lean`;
+- 109 private declarations and 85 structure projections outside that list;
+- 846 gated theorems, 19 gated structures, and 323 other gated
   non-theorems;
 - zero authored public declarations outside the hand audit.
 
-The independent environment emitter reports 2,631 constants, 1,424 in scope,
+The taxonomy merge initially exposed 60 unaudited public declarations in the
+expanded cohomological-exactness and mass-triangle modules. They are now named
+by the audit and subjected to its axiom gate; this is an inventory correction,
+not a review of those concurrent mathematical changes.
+
+The independent environment emitter reports 2,759 constants, 1,492 in scope,
 12 cited declarations, and zero constants whose axiom closure contains
 `sorryAx`.
 
