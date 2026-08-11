@@ -584,9 +584,10 @@ the slicing heart, unconditional on the slicing axioms: the HN cut is the
 decomposition and the slicing's phase-ordered vanishing is the orthogonality.
 The reviewed tilt applies, and `slicingTilt_heart_iff` identifies the tilted
 heart with extensions of `P((β,1])` by `P((0,β])⟦1⟧` — the `A^{♯β}` of the
-paper, **up to the slope–phase reparametrisation `μ = -cot(πφ)`, which is not
-formalized**; the coverage map records `mapped`, a hypothesis with that named
-gap, not a claim.
+paper, up to the exact slope-cutoff translation. The normalized
+slope--phase ray identity is formalized in `WeakStability/ChargeRay.lean`, but
+the source-facing display (14.1) equivalence has not been packaged and
+reviewed; the coverage map therefore remains `mapped`, not a claim.
 
 **Noetherian torsion subcategories** (#108): Definition 14.6, with Remark
 14.7's chain condition *as* the definition — the full heart is abelian, but
@@ -605,8 +606,8 @@ the torsion class of a `NoetherianTorsionSubcategory`; for every heart object
 with `phiPlus < 1`, `HasTiltingEnvelope` supplies the heart triangle
 `F -> Ftilde -> F0` with `F0` of zero charge and every map
 `A0 -> Ftilde⟦1⟧` zero. The `phiPlus < 1` premise is the phase form of
-`muPlus < +infinity`; the unformalized slope--phase correspondence remains an
-explicit coverage gap. `WeakStability/TiltSemistable.lean` now proves both
+`muPlus < +infinity`; the exact source-facing cutoff comparison remains an
+explicit review gap. `WeakStability/TiltSemistable.lean` now proves both
 directions of Lemma 14.17's **phase-language** semistable-object
 classification, using the canonical original-cohomology sequence, and proves
 the positive-imaginary/stable Hom-vanishing refinement by factoring through
@@ -628,14 +629,18 @@ the noetherian and support constructions to package all three heart-level
 obligations directly from `TiltingProperty`, with no external envelope, rank,
 or quotient-induction premise. The heart-level constructive seams are now
 closed. The exact Proposition 14.16 source statement remains undeclared
-because the slope--phase ray translation is not yet formalized or reviewed
-and the analytic charge-ray identity remains. The reverse infrastructure is in
+because the exact slope-cutoff translation has not been reviewed against the
+pinned source. The reverse infrastructure is in
 `WeakStability/HeartEquivalenceReverse.lean`: the strictly increasing
 normalization `WithTop ℝ → (0,1]`, the integer-normalized ambient phase
 predicates and their shift law, and the conversion of weak abelian HN chains
-to ambient Postnikov towers. `WeakStability/TiltPreStability.lean` connects
-those towers to `PhaseTiltHeartObligations` and packages an actual
-`WeakPreStabilityCondition` once the analytic charge-ray identity is supplied.
+to ambient Postnikov towers. `WeakStability/ChargeRay.lean` proves the analytic
+identity `μ = -cot(πφ)` in the form needed here: every weak upper-half-plane
+charge lies on the ray of `weakPhaseOfSlope μ`, including the zero-radius
+integer boundary, and the identity is preserved by arbitrary integer shifts.
+`WeakStability/TiltPreStability.lean` connects those results to
+`PhaseTiltHeartObligations` and packages an actual `WeakPreStabilityCondition`
+without an external compatibility premise.
 `WeakStability/HeartHomVanishing.lean`
 proves the previously separate Hom-vanishing premise unconditionally: a
 weak-slope see-saw and the heart kernel/image factorization give same-heart
@@ -645,8 +650,9 @@ remaining categorical premise: pure cohomology towers are shifted from the
 heart and concatenated along bounded truncation triangles, with amplitude
 `[b,a]` giving the strict phase interval `(-a,1-b]`; it also proves that the
 HRS tilt of a bounded t-structure stays bounded. Thus the analytic ray
-identity is the sole explicit final boundary rather than an implicit missing
-reverse equivalence.
+and categorical reverse phase-language assembly is closed. The remaining
+boundary is source-faithfulness review of the exact slope-language statement,
+not a missing Lean construction.
 The canonical two-term original/tilted-heart kernel--cokernel bridge is in
 `Tilting/HeartCohomology.lean`; `Tilting/HeartCohomologySequence.lean`
 constructs and proves the arbitrary-short-exact six-term sequence

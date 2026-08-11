@@ -58,13 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after the phase-tilt noetherian/HN
-foundations on 2026-08-09.** Every
+**THE GAP IS NOW ZERO, re-measured after the weak charge-ray and phase-tilt
+prestability assembly on 2026-08-10.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **113 private** declarations, which remain structurally
+* it does NOT cover the **111 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1028** declarations. The environment holds **1224** authored
-  declarations under `BridgelandStabLean.*`, so **196 are outside this gate**,
+* It names **1121** declarations. The environment holds **1318** authored
+  declarations under `BridgelandStabLean.*`, so **197 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **113 are `private`** -- 99 of them theorems -- and are *structurally*
+* **111 are `private`** -- 97 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **83 are structure field projections** emitted by the `structure` command.
+* **86 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **285 of the 973 are not theorems** (16 `structure`, 269 other
+* **333 of the 1121 are not theorems** (20 `structure`, 313 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **688** real theorems, but it is a `def ... :
+  formatted identically to the **788** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -492,9 +492,10 @@ Display (14.1) in phase language, unconditional on the slicing axioms: the
 pair (P((b,1]), P((0,b])) as a HeartTorsionPair on the slicing-induced
 t-structure, with the HN cut as decomposition and the slicing's own
 hom-vanishing as the orthogonality. slicingTilt_heart_iff composes with
-tilt_heart_iff (#106) to identify the tilted heart. The slope-phase
-reparametrisation is NOT formalized; the coverage map records `mapped`, a
-hypothesis, not a claim. Closes #109. -/
+tilt_heart_iff (#106) to identify the tilted heart. The normalized
+slope--phase ray identity is formalized later in this lane, but the exact
+source-facing cutoff equivalence is not packaged or reviewed; the coverage
+map therefore remains `mapped`, not a claim. Closes #109. -/
 
 #print axioms WeakStability.phaseTors
 #print axioms WeakStability.phaseFree
@@ -512,9 +513,10 @@ Definition 14.12 in phase language: A0 is the torsion class of a noetherian
 torsion subcategory, and every heart object with phiPlus below the boundary
 has a heart-triangle envelope with zero-charge quotient and shifted
 Hom-vanishing. The later phase-language Lemma 14.17 infrastructure and
-heart-level Proposition 14.16 assembly make no coverage promotion: the map
-stays `mapped`, and the full proposition remains undeclared. The raw
-Definition 14.12 envelope is now sufficient for the heart-level assembly. -/
+phase-language Proposition 14.16 infrastructure make no coverage promotion:
+the map stays `mapped`, and the exact source proposition remains undeclared.
+The raw Definition 14.12 envelope is now sufficient for the heart-level
+assembly. -/
 
 #print axioms WeakStability.IsNoetherianTorsionSubcategory
 #print axioms WeakStability.WeakPreStabilityCondition.zeroCharge
@@ -678,9 +680,9 @@ assembled directly from Definition 14.12's `TiltingProperty`. -/
 /-! ## WeakStability lane -- reverse heart--slicing foundations
 
 The extended-slope phase normalization, integer-normalized ambient phase
-family, heart-HN to ambient-Postnikov conversion, and the explicit final
-phase-tilt prestability boundary. These declarations package no source
-statement and make no §14 coverage promotion. -/
+family, analytic charge-ray identity, heart-HN to ambient-Postnikov
+conversion, and phase-tilt prestability assembly. These declarations package
+no source statement and make no §14 coverage promotion. -/
 
 #print axioms WeakStability.weakPhaseOfSlope
 #print axioms WeakStability.weakPhaseOfSlope_top
@@ -689,6 +691,10 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.weakPhaseOfSlope_mem_Ioc
 #print axioms WeakStability.weakPhaseOfSlope_strictMono
 #print axioms WeakStability.weakPhaseOfSlope_lt_iff
+#print axioms WeakStability.complex_eq_pos_mul_exp_weakPhaseOfSlope
+#print axioms WeakStability.WeakStabilityFunction.charge_ray_of_mem_heart
+#print axioms WeakStability.negOnePow_mul_exp_pi_eq_exp_add_int
+#print axioms WeakStability.WeakStabilityFunction.ambientPhasePredicate_charge_ray
 #print axioms WeakStability.WeakStabilityFunction.phase
 #print axioms WeakStability.WeakStabilityFunction.phase_mem_Ioc
 #print axioms WeakStability.WeakStabilityFunction.phase_lt_phase_iff
@@ -732,11 +738,18 @@ statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge_apply
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_ambientPhasePredicate_charge_ray
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_Z
+#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_P
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_Z
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_P
 #print axioms WeakStability.WeakStabilityFunction.slope_between_of_triangle
 #print axioms WeakStability.WeakStabilityFunction.instAbelianFullSubcategoryHeart
 #print axioms WeakStability.WeakStabilityFunction.slope_le_of_heart_epi
