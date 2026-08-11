@@ -15,58 +15,31 @@ is phrased here as `phiPlus F < 1`: for an object of the slicing heart these
 say that the largest HN factor is off the real-axis boundary.  This is the
 same phase-language convention as `SlopeTorsionPair.lean`.  The normalized
 slope--phase ray identity is formalized downstream in
-`StabilityCondition/Weak/Basic/ChargeRay.lean`; the exact Definition 14.12 source comparison
-has not yet received the review needed to move the coverage map beyond its
-existing `mapped` hypothesis.
+`StabilityCondition/Weak/Basic/ChargeRay.lean`, and the exact finite-slope
+adapter is provided by `Tilting/TorsionPair/SourceSlope.lean`.  The coverage
+coordinate remains `mapped`; review and owner-gated promotion are separate
+governance steps.
 
 The short exact sequence `F -> Ftilde -> F0` in part (2) is a distinguished
 triangle whose three vertices lie in the heart, following the convention of
 `Basic.lean` and `Noetherian.lean`.  The condition
 `Hom(A0, Ftilde[1]) = 0` is stated literally as vanishing of every such map.
 
-## What remains deliberately undeclared
+## Downstream source theorem
 
-**Proposition 14.16 is left undeclared.**  Its paper proof uses the weak-HN
-heart equivalence of Lemma 14.4 and the support-property transport of
-Remark 14.9.  `StabilityCondition/Weak/Heart/Equivalence.lean` constructs the
-heart-level weak stability function and identifies its semistable nonzero
-heart objects with slicing semistability;
-`StabilityCondition/Weak/HarderNarasimhan/Heart.lean` now packages the abelian weak HN
-filtration and proves its existence for that induced function.
-`StabilityCondition/Weak/Tilting/Cohomology/Basic.lean` supplies the common
-cohomology functor, the canonical `H⁻¹[1] → E → H⁰` short exact sequence, and
-its kernel/cokernel witnesses.  `StabilityCondition/Weak/Tilting/Cohomology/Sequence.lean`
-constructs the arbitrary-short-exact six-term sequence, identifies all six
-canonical factors, and proves exactness plus the two endpoint properties
-unconditionally.  The underlying general theorem is supplied by
-`StabilityCondition/Weak/Tilting/Cohomology/Homological.lean`, which proves degree-zero
-cohomology homological for every t-structure without stability or HN data.
-`StabilityCondition/Weak/Tilting/Semistable.lean` constructs the rotated weak function,
-identifies its zero-charge subcategory, and proves both directions of the
-phase-language classification in Lemma 14.17.  It also defines weak stability
-and proves the lemma's positive-imaginary/stable `moreover` clause via images
-in the tilted heart. `StabilityCondition/Weak/Tilting/Noetherian.lean` constructs the
-maximal-subobject and noetherian-torsion assembly from the relative chain
-condition. It now discharges that condition directly from the raw Definition
-14.12 envelope: Ext-vanishing transfers a zero-charge subobject chain to the
-original zero-charge quotient, and maximal subobjects provide the
-phase-compatible shifted decomposition without asserting that the raw middle
-term is phase-free.
-`StabilityCondition/Weak/Tilting/HarderNarasimhan.lean` performs boundary-phase saturation
-without a last-factor right-orthogonality premise and iterates the resulting
-reduction over the original `H⁻¹` and `H⁰` HN filtrations.
-`StabilityCondition/Weak/Tilting/Assembly.lean` packages the resulting HN theorem with the
-noetherian and support obligations directly from `TiltingProperty`, without
-an external envelope, rank, or quotient-induction input.
-`StabilityCondition/Weak/Support/Basic.lean` transports the support property unconditionally.
-The heart-level constructive obligations are therefore assembled; the exact
-slope-language source statement remains under the registry's existing
-`mapped` hypothesis until the exact slope-cutoff reparameterisation is
-reviewed. `StabilityCondition/Weak/Basic/ChargeRay.lean` now proves the normalized
-slope--phase charge-ray identity, and `StabilityCondition/Weak/Tilting/PreStability.lean`
-packages the reverse construction as a new `WeakPreStabilityCondition`.
-Proposition 14.16 nevertheless remains undeclared until the exact source
-statement receives the required faithfulness review and owner signoff.
+The categorical work is assembled in the `Tilting` modules: heart
+cohomology, the semistable classification, termination of zero-charge chains,
+the HN recursion, support transport, and reverse slicing.  The exact
+source-facing statements now live in `Tilting/Source`:
+
+* `slopeTorsionPair` is display (14.1) with its finite weak-slope parameter;
+* `sourceTiltWeakStabilityFunction_isSemistable_iff_classification` is the
+  sign-separated statement of Lemma 14.17;
+* `sourceTiltConclusion` packages Proposition 14.16 with charge `Z/(I-b)`,
+  support, and the noetherian zero-charge torsion conclusion.
+
+Those declarations do not by themselves promote the coverage registry past
+`mapped`; source review evidence and owner signoff remain required.
 -/
 
 namespace BridgelandStabLean.WeakStability

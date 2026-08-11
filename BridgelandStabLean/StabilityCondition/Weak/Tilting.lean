@@ -10,5 +10,6 @@ import BridgelandStabLean.StabilityCondition.Weak.Tilting.Noetherian
 import BridgelandStabLean.StabilityCondition.Weak.Tilting.HarderNarasimhan
 import BridgelandStabLean.StabilityCondition.Weak.Tilting.Assembly
 import BridgelandStabLean.StabilityCondition.Weak.Tilting.PreStability
+import BridgelandStabLean.StabilityCondition.Weak.Tilting.Source
 
 /-! # Tilting weak stability conditions -/

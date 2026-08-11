@@ -72,8 +72,8 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1188** declarations. The environment holds **1382** authored
-  declarations under `BridgelandStabLean.*`, so **194 are outside this gate**,
+* It names **1245** declarations. The environment holds **1448** authored
+  declarations under `BridgelandStabLean.*`, so **203 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
@@ -83,7 +83,7 @@ four qualifications in this comment are unaffected by it:
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **85 are structure field projections** emitted by the `structure` command.
+* **94 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **342 of the 1188 are not theorems** (19 `structure`, 323 other
+* **359 of the 1245 are not theorems** (21 `structure`, 338 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **846** real theorems, but it is a `def ... :
+  formatted identically to the **886** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -748,6 +748,66 @@ no source statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_Z
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_P
+
+/-! ## WeakStability lane -- source-normalized §14 tilting -/
+
+#print axioms WeakStability.WeakPreStabilityCondition.weakStabilityFunctionOnHeart_phase_eq_of_mem_P_phi
+#print axioms WeakStability.WeakPreStabilityCondition.ExtremalHNData
+#print axioms WeakStability.WeakPreStabilityCondition.extremalHNData
+#print axioms WeakStability.WeakPreStabilityCondition.muPlus
+#print axioms WeakStability.WeakPreStabilityCondition.muMinus
+#print axioms WeakStability.WeakPreStabilityCondition.weakPhaseOfSlope_muPlus
+#print axioms WeakStability.WeakPreStabilityCondition.weakPhaseOfSlope_muMinus
+#print axioms WeakStability.WeakPreStabilityCondition.slopeCutPhase
+#print axioms WeakStability.WeakPreStabilityCondition.slopeCutPhase_mem_Ioo
+#print axioms WeakStability.WeakPreStabilityCondition.muMinus_gt_iff_phiMinus_gt
+#print axioms WeakStability.WeakPreStabilityCondition.muPlus_le_iff_phiPlus_le
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTors
+#print axioms WeakStability.WeakPreStabilityCondition.slopeFree
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTors_iff_phaseTors
+#print axioms WeakStability.WeakPreStabilityCondition.slopeFree_iff_phaseFree
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTorsionPair
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTorsionPair_tors
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTorsionPair_free
+#print axioms WeakStability.WeakPreStabilityCondition.slopeTilt_heart_iff
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltScale
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltScale_pos
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTilt_multiplier
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltRotation
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltRotation_apply
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltRotation_eq_scale_phaseTiltRotation
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltLatticeCharge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltLatticeCharge_apply
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltLatticeCharge_eq_scale_phaseTiltLatticeCharge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltCharge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltCharge_apply
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltCharge_eq_scale_phaseTiltCharge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_Z
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_charge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_charge_eq_scale_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_slope_eq_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_isSemistable_iff_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_isStable_iff_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_zeroCharge_iff
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_ambientPhasePredicate_eq_phaseTilt
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakPreStabilityConditionOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakPreStabilityConditionOfTiltingProperty_Z
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakPreStabilityConditionOfTiltingProperty_P
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakPreStabilityConditionOfTiltingProperty_P_source
+#print axioms WeakStability.sourceTiltLinearCharge
+#print axioms WeakStability.sourceTiltLinearCharge_apply
+#print axioms WeakStability.sourceTiltLinearCharge_eq_scale_phaseTiltLinearCharge
+#print axioms WeakStability.norm_sourceTiltLinearCharge
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTilt_hasSupportProperty
+#print axioms WeakStability.WeakPreStabilityCondition.SourceTiltConclusion
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltConclusion
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltConclusion_condition_Z
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_isSemistable_iff_phaseClassification
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTilt_typeOne_im_nonneg
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTilt_typeTwo_im_neg
+#print axioms WeakStability.WeakPreStabilityCondition.sourceTiltWeakStabilityFunction_isSemistable_iff_classification
+#print axioms WeakStability.WeakPreStabilityCondition.hom_eq_zero_of_zeroCharge_to_sourceTiltSemistable
 #print axioms WeakStability.WeakStabilityFunction.slope_between_of_triangle
 #print axioms WeakStability.WeakStabilityFunction.instAbelianFullSubcategoryHeart
 #print axioms WeakStability.WeakStabilityFunction.slope_le_of_heart_epi
