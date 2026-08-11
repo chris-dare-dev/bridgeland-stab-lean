@@ -79,12 +79,13 @@ command, not a citation.
 ### Bumping the anchor pin: check the injected names first
 
 `ForMathlib/` is not the only place a pin bump can create a duplicate. This repo
-declares **21 dot-notation extensions on types it does not own**, all of them
+declares **31 dot-notation extensions on types it does not own**, all of them
 anchor types, and none is covered by the table above:
 
 | owner type | injected here |
 |---|---|
-| `HNFiltration` | `exists_headTail`, `mapF`, `mass`, `mass_appendFactor`, `mass_dropFirst`, `mass_eq_mass`, `mass_eq_zero_of_isZero`, `mass_ofIso`, `mass_pos`, `mass_prefix_last` |
+| `HNFiltration` | `exists_headTail`, `mapF`, `mass`, `mass_appendFactor`, `mass_dropFirst`, `mass_eq_mass`, `mass_eq_zero_of_isZero`, `mass_ofIso`, `mass_pos`, `mass_prefix_last`, `relabelPhasePredicate`, `shiftWeakAmbient`, `shiftWeakAmbient_phase` |
+| `HeartStabilityData` | `H0FunctorIsoOriginalHeartCohFunctor`, `H0Functor_isHomological_unconditional`, `H0primeFunctor_isHomological_unconditional`, `heartSourceH0Complex`, `heartSourceH0Complex_exact`, `heartSourceH0Complex_exact_iff_mono_cokernelDesc`, `mono_heartSourceH0primeShortComplex_cokernelDesc_unconditional` |
 | `K₀` | `mapF`, `mapF_comp`, `mapF_congr`, `mapF_id`, `mapF_of`, `mapF_shift_neg_two` |
 | `Slicing` | `mapEquiv`, `mapEquiv_P`, `phiMinus_congr`, `phiPlus_congr` |
 | `PostnikovTower` | `mapF` |
@@ -92,8 +93,8 @@ anchor types, and none is covered by the table above:
 Regenerate the list with:
 
 ```bash
-grep -hoE "^(private )?(noncomputable )?(scoped )?(theorem|lemma|def|instance|abbrev) (Slicing|HNFiltration|PostnikovTower|K₀)\.[A-Za-z_'0-9]+" \
-  BridgelandStabLean/GroupAction/*.lean | sed -E 's/^.*(theorem|lemma|def|instance|abbrev) //' | sort -u
+grep -rhoE "^(private )?(noncomputable )?(scoped )?(theorem|lemma|def|instance|abbrev) (Slicing|HNFiltration|HeartStabilityData|PostnikovTower|K₀)\.[A-Za-z_'0-9]+" \
+  BridgelandStabLean/ | sed -E 's/^.*(theorem|lemma|def|instance|abbrev) //' | sort -u
 ```
 
 Before bumping the anchor, check each against the new anchor tree. If upstream

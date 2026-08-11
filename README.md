@@ -381,6 +381,16 @@ any t-structure sends distinguished triangles to exact short complexes in
 the heart. The proof uses only truncation triangles, octahedra, and the
 abelian heart; it requires no stability function or HN data.
 
+`GroupAction/H0ExactnessBridge.lean` is the focused current-main adapter for
+issue #89. It identifies the anchor's `HeartStabilityData.H0Functor`
+definitionally with `originalHeartCohFunctor`, transports homologicality
+without installing a new global instance, and exposes the exact-middle-term
+and monic-cokernel conclusions intended for the current-main mass-triangle
+rewrite of stale PR #103. The conclusion is `ShortComplex.Exact`, not
+`ShortExact`; no mass inequality is proved in this module. This replaces the
+duplicated homologicality proof in stale draft PR #100 rather than porting that
+draft wholesale.
+
 `HeartCohomologySequence.lean` constructs the six terms and connecting map,
 identifies them with the canonical
 `H⁻¹(P), H⁻¹(E), H⁻¹(Q), H⁰(P), H⁰(E), H⁰(Q)` objects, and converts any short

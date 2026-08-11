@@ -26,9 +26,10 @@ D^{≤0}_† = {X ∈ D^{≤0} : H⁰(X) ∈ T},   D^{≥0}_† = {X ∈ D^{≥-
 
 **Mathlib has no `Hⁿ` for a t-structure at the pin** — `TStructure/` carries
 `truncLE`, `truncGE` and the truncation triangle, but no cohomology functor
-into the heart. The anchor has an `H0Functor`, but its *homological* property
-is present only as a list of case-by-case fragments in
-`HeartEquivalence/H0Homological.lean`, not as an unconditional statement.
+into the heart. This project now constructs that functor and proves it
+homological, then `GroupAction/H0ExactnessBridge.lean` transports the result
+to the anchor's `H0Functor`. The aisle construction here predates that bridge
+and does not depend on it.
 
 So the aisles here are defined by **Hom-orthogonality instead**, which needs no
 cohomology functor at all. For `X ∈ D^{≤0}` and `F` in the heart the counit
