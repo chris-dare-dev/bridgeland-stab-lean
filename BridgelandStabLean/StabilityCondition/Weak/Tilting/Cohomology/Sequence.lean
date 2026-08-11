@@ -3,6 +3,12 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.StabilityCondition.Weak.Tilting.Cohomology.Homological
+-- `Sequence.lean` genuinely needs anchor-only heart machinery
+-- (`truncGELEObjShiftIso`, `heartFullSubcategory_shortExact_triangle`).
+-- It used to inherit this import transitively through `Cohomology.Basic`; that file
+-- is now anchor-free, so the dependence is declared here instead of inherited.
+import BridgelandStability.HeartEquivalence.Basic
+import BridgelandStability.HeartEquivalence.H0Homological
 
 /-!
 # Six-term original-heart cohomology sequences

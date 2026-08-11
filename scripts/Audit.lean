@@ -138,6 +138,18 @@ open BridgelandStabLean
 /-! ## ForMathlib — results Mathlib lacks at the pin -/
 
 #print axioms Matrix.polarFactor
+
+-- Vendored from the anchor so that `Weak/Tilting/Cohomology/{Basic,Homological}.lean`
+-- need not import `BridgelandStability`. Deletion conditions are in the file headers.
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.ObjectProperty.FullSubcategory.isZero_of_obj_isZero
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_hι
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_admissible
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartAbelian
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_biprod
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartFullSubcategoryAbelian
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartFullSubcategory_shortExact_of_distTriang
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.truncGE_map_comp_descTruncGE
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.exists_truncLT_octahedral_split
 #print axioms Matrix.polarFactor_posSemidef
 #print axioms Matrix.polarFactor_mul_self
 #print axioms Matrix.polarFactor_isHermitian
