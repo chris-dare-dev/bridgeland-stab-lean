@@ -64,7 +64,7 @@ public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **109 private** declarations, which remain structurally
+* it does NOT cover the **111 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1245** declarations. The environment holds **1448** authored
-  declarations under `BridgelandStabLean.*`, so **203 are outside this gate**,
+* It names **1296** declarations. The environment holds **1508** authored
+  declarations under `BridgelandStabLean.*`, so **212 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **109 are `private`** -- 95 of them theorems -- and are *structurally*
+* **111 are `private`** -- 97 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **94 are structure field projections** emitted by the `structure` command.
+* **101 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **359 of the 1245 are not theorems** (21 `structure`, 338 other
+* **374 of the 1296 are not theorems** (24 `structure`, 350 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **886** real theorems, but it is a `def ... :
+  formatted identically to the **922** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -673,6 +673,16 @@ assembled directly from Definition 14.12's `TiltingProperty`. -/
 #print axioms WeakStability.phaseTiltLinearCharge_apply
 #print axioms WeakStability.norm_phaseTiltLinearCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasSupportProperty
+#print axioms WeakStability.WeakStabilityFunction.QuadraticSupportData
+#print axioms WeakStability.WeakStabilityFunction.QuadraticSupportData.hasSupportProperty
+#print axioms WeakStability.WeakStabilityFunction.QuadraticSupportData.class_eq_zero_of_zeroCharge
+#print axioms WeakStability.WeakStabilityFunction.UniformQuadraticSupportData
+#print axioms WeakStability.WeakStabilityFunction.UniformQuadraticSupportData.fiber
+#print axioms WeakStability.WeakStabilityFunction.UniformQuadraticSupportData.reindex
+#print axioms WeakStability.WeakStabilityFunction.QuadraticSupportData.constant
+#print axioms WeakStability.WeakStabilityFunction.QuotientUniformQuadraticSupportData
+#print axioms WeakStability.WeakStabilityFunction.QuotientUniformQuadraticSupportData.fiber
+#print axioms WeakStability.WeakStabilityFunction.QuotientUniformQuadraticSupportData.zero_class_eq_zero
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
@@ -818,10 +828,12 @@ no source statement and make no §14 coverage promotion. -/
 
 /-! ## Support lane — the Kontsevich-Soibelman quadratic-form reformulation
 
-Linear algebra plus one compactness argument over a finite-dimensional real
-normed space. `S` is an ARBITRARY subset; it is not identified with the classes
-of semistable objects, which would need a stability condition. No foundational library
-import, no geometry. -/
+The basic statements are linear algebra plus one compactness argument over a
+finite-dimensional real normed space and keep `S` arbitrary. The later
+genuine/uniform/quotient declarations add bundled quadratic forms, a saturated
+integral quotient, and a weak-stability adapter whose selected loci are actual
+nonzero weak-semistable heart classes. The adapter still supplies no geometric
+family, HN structure over a curve, boundedness, or moduli theory. -/
 
 #print axioms Support.HasSupportProperty
 #print axioms Support.IsHomogTwo
@@ -837,6 +849,47 @@ import, no geometry. -/
 #print axioms Support.hasSupportProperty_of_norm_sub_le
 #print axioms Support.HasSupportProperty.exists_tolerance
 #print axioms Support.isOpen_hasSupportProperty
+#print axioms Support.quadraticForm_isHomogTwo
+#print axioms Support.HasQuadraticSupportProperty
+#print axioms Support.HasQuadraticSupportProperty.hasSupportProperty
+#print axioms Support.HasQuadraticSupportProperty.mono
+#print axioms Support.familyLocus
+#print axioms Support.HasUniformQuadraticSupportProperty
+#print axioms Support.HasUniformQuadraticSupportProperty.fiber
+#print axioms Support.hasUniformQuadraticSupportProperty_of_union
+#print axioms Support.hasUniformQuadraticSupportProperty_iff_union
+#print axioms Support.HasUniformQuadraticSupportProperty.reindex
+#print axioms Support.HasQuadraticSupportProperty.constant
+#print axioms Support.hasUniformQuadraticSupportProperty_constant_iff
+#print axioms Support.transportQuadraticForm
+#print axioms Support.transportQuadraticForm_apply
+#print axioms Support.isCompatible_transport
+#print axioms Support.HasUniformQuadraticSupportProperty.transport
+#print axioms Support.hasUniformQuadraticSupportProperty_transport_iff
+#print axioms Support.quotientCharge
+#print axioms Support.quotientCharge_mkQ
+#print axioms Support.quotientFamilyLocus
+#print axioms Support.HasUniformQuadraticSupportPropertyModulo
+#print axioms Support.hasUniformQuadraticSupportPropertyModulo_iff
+#print axioms Support.HasUniformQuadraticSupportPropertyModulo.fiber
+#print axioms Support.HasUniformQuadraticSupportPropertyModulo.hasSupportProperty
+#print axioms Support.mkQ_eq_zero_of_mem
+#print axioms Support.HasQuadraticSupportProperty.constant_modulo
+#print axioms Support.ZeroChargeLattice.IsSaturated
+#print axioms Support.ZeroChargeLattice.saturatedClosure
+#print axioms Support.ZeroChargeLattice.subset_saturatedClosure
+#print axioms Support.ZeroChargeLattice.isSaturated_saturatedClosure
+#print axioms Support.ZeroChargeLattice.saturatedClosure_le
+#print axioms Support.ZeroChargeLattice.neg_mem_saturatedClosure_iff
+#print axioms Support.ZeroChargeLattice.Quotient
+#print axioms Support.ZeroChargeLattice.quotientClass
+#print axioms Support.ZeroChargeLattice.quotientClass_eq_zero_iff
+#print axioms Support.ZeroChargeLattice.quotient_isAddTorsionFree
+#print axioms Support.ZeroChargeLattice.quotient_moduleFinite
+#print axioms Support.ZeroChargeLattice.quotient_moduleFree
+#print axioms Support.ZeroChargeLattice.saturatedClosure_le_ker
+#print axioms Support.ZeroChargeLattice.quotientCharge
+#print axioms Support.ZeroChargeLattice.quotientCharge_quotientClass
 
 /-! ## FiniteLength lane — charges on the free lattice of simples
 

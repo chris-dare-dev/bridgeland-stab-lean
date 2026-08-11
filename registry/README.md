@@ -18,9 +18,11 @@ mfc registry validate registry/bridgeland2007.json \
 ("Stability conditions in families", Bayer–Lahoz–Macrì–Nuer–Perry–Stellari,
 v4 of 2022-01-25, DOI 10.1007/s10240-021-00124-6) and maps its Parts I–VI and
 the near-term section coordinates (§14, §§18/21, §§20–23) onto statuses.
-**Every entry is `target`, which is a zero-claim status**; the only status
-that ever counts as coverage is `formalized`, which requires review evidence
-plus explicit owner acceptance, and nothing has it. The map does not touch
+At the 2026-08-11 issue-#82 mapping there are two `mapped` candidate
+coordinates (§14 and §§18/21) and eight `target` coordinates. `mapped` names
+candidate declarations and source coordinates; it is not a source-faithfulness
+verdict. The only status that ever counts as coverage is `formalized`, which
+requires review evidence plus explicit owner acceptance, and nothing has it. The map does not touch
 `formalization.yaml`'s `source` (still the Bridgeland 2007 record), mints no
 key, and contains no corpus-derived identifier — the local arXMCP notebook
 holds 548 chunks of this paper but records no arXiv version (#44), so quotes,

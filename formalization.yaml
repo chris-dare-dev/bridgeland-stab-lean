@@ -31,16 +31,19 @@ artifact:
     lattice of simples; numerical walls in the (s,t) half plane; and the
     Bridgeland 2007 section 8 GL+(2,R)-tilde action the foundational library does not cover.
 
-    The Mukai, Tilting, Support and WeakStability lanes are NOT scoped to
-    this record's `source`; the WeakStability lane is motivated by
-    1902.08184v4 (section 14) and bound to nothing yet -- see
+    The Mukai and general Tilting lanes are not globally scoped to this
+    record's `source`. The source-facing WeakStability §14 and Support
+    §§18/21 submodules now have candidate mappings to 1902.08184v4, but the
+    registry deliberately records them only as `mapped` -- see
     registry/coverage-1902.08184v4.json. The Tilting lane DOES contain the Happel-Reiten-Smalo tilt as of
     PR #76 (HeartTorsionPair.tilt, a full Triangulated.TStructure, with the
     textbook-agreement theorems added under #94), but the tilt carries no
     binding to this record's source and no connection to any stability
     condition -- see the Tilting paragraphs under known_divergences. The
-    Support lane's equivalence is asymmetrically stronger and weaker than the
-    literature's. See source_mapping and known_divergences.
+    basic Support lane's norm equivalence remains asymmetrically stronger and
+    weaker than the literature's, while its newer quadratic/quotient/weak
+    adapters expose genuine bundled forms without claiming the missing
+    geometric-family layer. See source_mapping and known_divergences.
   date: 2026-08-03
   authors:
     - Chris Dare
@@ -729,6 +732,23 @@ fidelity:
     coordinate deliberately stays `mapped`; these candidates do not acquire
     a source-faithfulness verdict or owner acceptance merely by compiling.
 
+    COUNT UPDATE (issue #82 genuine and uniform quadratic support),
+    2026-08-11. The support lane now contains bundled real quadratic forms,
+    same-form indexed support, constant-family and reindexing constructors,
+    two-way transport along linear equivalences, a descended charge and
+    semistable loci on a real quotient, and the saturated integral
+    zero-charge subgroup whose finite quotient is proved free abelian. The
+    weak layer binds these predicates to actual nonzero weak-semistable heart
+    classes and records compatibility with the weak charge. Audit names 1296
+    declarations and the environment census reports 1508 authored
+    declarations, 111 private declarations, and 101 structure-field
+    projections, leaving 0 authored public declarations outside the hand
+    audit. Of the gated declarations, 922 are theorems, 24 are structures,
+    and 350 are other non-theorems. The §§18/21 coordinate is promoted only
+    from `target` to `mapped`: varying geometric fibers, HN structures,
+    boundedness of moduli, and the scalar-extension comparison between the
+    integral and real quotients are not claimed.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
@@ -1297,10 +1317,13 @@ fidelity:
     collision candidates for a future foundational library bump; nothing needs these two by
     dot notation, so the list is not lengthened.
 
-    Support/ MAPS TO NO SECTION OF `source` EITHER. The support property is
-    Kontsevich-Soibelman, and the quadratic-form reformulation is the one used
-    by Bayer-Macri-Stellari; neither is Bridgeland 2007. No @[cites] records,
-    no registry entries.
+    The generic Support/ lane MAPS TO NO SECTION OF this record's `source`.
+    The support property is Kontsevich-Soibelman, and the quadratic-form
+    reformulation is the one used by Bayer-Macri-Stellari; neither is
+    Bridgeland 2007. Separately, the genuine/uniform/quotient adapters are
+    candidate-mapped to §§18/21 of arXiv:1902.08184v4 in that paper's coverage
+    registry. They carry no `@[cites]` record and the mapping is not a
+    reviewed source claim.
 
     StabilityCondition/Support/Basic.lean works over a finite-dimensional real normed
     space V, a linear charge Z : V -> W into a normed space, and an arbitrary
@@ -1769,16 +1792,21 @@ fidelity:
     inner-product refinement. So DO NOT cite hasSupportProperty_iff as "the
     support property is equivalent to the existence of a quadratic form". It is
     equivalent to the existence of a continuous degree-two homogeneous function
-    with those sign conditions. Closing the gap means restricting to an inner
-    product space and building an actual QuadraticMap with its
-    `exists_companion'` field; that is not done.
+    with those sign conditions. `Support/Quadratic.lean` now provides the
+    genuine bundled-form predicate and proves the one direction needed by the
+    source-facing uniform-support API: a compatible `QuadraticForm R V`
+    implies the norm support property. It does NOT upgrade
+    `hasSupportProperty_iff`; the converse from an arbitrary norm estimate to
+    a bundled form remains unproved for the reason just stated.
 
-    SUPPORT LANE: `S` IS AN ARBITRARY SET. It is not identified with the
-    classes of sigma-semistable objects, and nothing in the lane mentions a
-    triangulated category, a slicing, a stability condition, or the foundational library. The
-    identification is what would make these theorems statements about
-    Bridgeland stability, and it is not made. Every result holds verbatim for
-    any other subset of the space.
+    SUPPORT LANE: THE GENERIC `S` REMAINS AN ARBITRARY SET, BUT A WEAK
+    SEMISTABLE ADAPTER NOW EXISTS. `Support/Basic.lean` and the generic
+    quadratic/uniform/quotient modules work for arbitrary selected loci.
+    `Weak/Support/Quadratic.lean` specializes those loci to the actual classes
+    of nonzero weak-semistable heart objects and stores compatibility with the
+    weak charge. That adapter still has one abstract category and heart; it is
+    not a collection of geometric fiber categories, an HN structure over a
+    curve, or a bounded moduli problem.
 
     THE HAPPEL-REITEN-SMALO TILT IS NOT FORMALIZED, and the directory name
     `Tilting/` invites the opposite reading, so it is stated here rather than
