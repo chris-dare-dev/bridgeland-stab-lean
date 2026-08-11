@@ -58,13 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after reconciling the PR #132 adversarial
-follow-ups with the current-main taxonomy merge on 2026-08-11.** Every
+**THE GAP IS NOW ZERO, re-measured after adding the issue #83 abstract
+families interfaces on 2026-08-11.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **111 private** declarations, which remain structurally
+* it does NOT cover the **114 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1296** declarations. The environment holds **1508** authored
-  declarations under `BridgelandStabLean.*`, so **212 are outside this gate**,
+* It names **1353** declarations. The environment holds **1621** authored
+  declarations under `BridgelandStabLean.*`, so **268 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **111 are `private`** -- 97 of them theorems -- and are *structurally*
+* **114 are `private`** -- 100 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **101 are structure field projections** emitted by the `structure` command.
+* **154 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **374 of the 1296 are not theorems** (24 `structure`, 350 other
+* **410 of the 1353 are not theorems** (40 `structure`, 370 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **922** real theorems, but it is a `def ... :
+  formatted identically to the **943** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -1925,3 +1925,63 @@ example : Continuous fun p : (GLTilde × AutPairQuot v) ×
 end AutPairChecks
 
 end SlicingChecks
+
+/-! ## Families lane -- abstract Definition 20.5/21.15 interfaces -/
+
+#print axioms StabilityFamilies.ChargeProbe
+#print axioms StabilityFamilies.ChargeProbe.IsLocallyConstant
+#print axioms StabilityFamilies.UniversallyLocallyConstantCharge
+#print axioms StabilityFamilies.ChargeProbe.constant
+#print axioms StabilityFamilies.ChargeProbe.constant_isLocallyConstant
+#print axioms StabilityFamilies.universallyLocallyConstantCharge_constant
+#print axioms StabilityFamilies.OpenLocusProbe
+#print axioms StabilityFamilies.OpenLocusProbe.IsOpen
+#print axioms StabilityFamilies.UniversalOpenness
+#print axioms StabilityFamilies.OpenLocusProbe.full
+#print axioms StabilityFamilies.OpenLocusProbe.full_isOpen
+#print axioms StabilityFamilies.universalOpenness_full
+#print axioms StabilityFamilies.GenericSemistabilityProbe
+#print axioms StabilityFamilies.GenericSemistabilityProbe.IsGenericallyOpen
+#print axioms StabilityFamilies.UniversalGenericOpenness
+#print axioms StabilityFamilies.GenericSemistabilityProbe.full
+#print axioms StabilityFamilies.GenericSemistabilityProbe.full_isGenericallyOpen
+#print axioms StabilityFamilies.universalGenericOpenness_full
+#print axioms StabilityFamilies.DedekindHNProblem
+#print axioms StabilityFamilies.IntegratesAfterDedekindBaseChange
+#print axioms StabilityFamilies.DedekindHNProblem.constant
+#print axioms StabilityFamilies.integratesAfterDedekindBaseChange_constant
+#print axioms StabilityFamilies.WeakDedekindHNProblem
+#print axioms StabilityFamilies.WeakIntegratesAfterDedekindBaseChange
+#print axioms StabilityFamilies.WeakDedekindHNProblem.constant
+#print axioms StabilityFamilies.weakIntegratesAfterDedekindBaseChange_constant
+#print axioms StabilityFamilies.BoundednessProblem
+#print axioms StabilityFamilies.UniversalBoundedness
+#print axioms StabilityFamilies.BoundednessProblem.trivial
+#print axioms StabilityFamilies.universalBoundedness_trivial
+#print axioms StabilityFamilies.OrdinaryDefinition20_5Conditions
+#print axioms StabilityFamilies.WeakDefinition20_5Conditions
+#print axioms StabilityFamilies.OrdinaryStabilityInFamiliesData
+#print axioms StabilityFamilies.OrdinaryStabilityInFamiliesData.punit
+#print axioms StabilityFamilies.ordinary_punit_locallyConstantCharge
+#print axioms StabilityFamilies.HasGaussianRationalValues
+#print axioms StabilityFamilies.hasGaussianRationalValues_zero
+#print axioms StabilityFamilies.WeakChargeProbe
+#print axioms StabilityFamilies.WeakChargeProbe.toChargeProbe
+#print axioms StabilityFamilies.WeakChargeProbe.constant
+#print axioms StabilityFamilies.WeakChargeProbe.constant_isLocallyConstant
+#print axioms StabilityFamilies.WeakSemistabilityProbe
+#print axioms StabilityFamilies.WeakSemistabilityProbe.toGenericProbe
+#print axioms StabilityFamilies.WeakSemistabilityProbe.constant
+#print axioms StabilityFamilies.WeakSemistabilityProbe.constant_isGenericallyOpen
+#print axioms StabilityFamilies.WeakDefinition20_5ClauseZero
+#print axioms StabilityFamilies.WeakDefinition20_5ClauseZero.reindex
+#print axioms StabilityFamilies.weakDefinition20_5ClauseZero_constant
+#print axioms StabilityFamilies.WeakQuotientQuadraticSupportData
+#print axioms StabilityFamilies.WeakQuotientQuadraticSupportData.constant
+#print axioms StabilityFamilies.quotientUniformQuadraticSupportData_reindex
+#print axioms StabilityFamilies.WeakStabilityInFamiliesData
+#print axioms StabilityFamilies.WeakStabilityInFamiliesData.constant
+#print axioms StabilityFamilies.WeakStabilityInFamiliesData.punit
+#print axioms StabilityFamilies.Theorem22_2SourceClauses
+#print axioms StabilityFamilies.Theorem22_2DependencyContract
+#print axioms StabilityFamilies.Theorem22_2DependencyContract.hasSourceClauses

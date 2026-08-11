@@ -749,6 +749,27 @@ fidelity:
     boundedness of moduli, and the scalar-extension comparison between the
     integral and real quotients are not claimed.
 
+    COUNT UPDATE (issue #83 abstract family interfaces), 2026-08-11.
+    The families lane separates the universally locally constant charge,
+    openness, Dedekind-base HN integration, uniform quotient support, and
+    boundedness clauses of Definitions 20.5 and 21.15. It supplies ordinary
+    and weak combined packages, binds weak charge and semistability probes to
+    actual indexed weak functions on one fixed category and heart, and gives
+    fully inhabited PUnit constant-family witnesses. A separate Theorem 22.2
+    contract records the four source clauses used in its proof together with
+    all missing geometric dependencies, but no manifold or local-isomorphism
+    theorem is declared. These modules add 57 gated public declarations.
+    Audit names 1353 declarations and the environment census reports 1621
+    authored declarations, 114 private declarations, and 154 structure-field
+    projections, leaving 0 authored public declarations outside the hand
+    audit. Of the gated declarations, 943 are theorems, 40 are structures,
+    and 370 are other non-theorems. Candidate declaration/source-coordinate
+    links now exist, but governance keeps the §§20--23 coordinate at
+    `target` pending adversarial review and owner acceptance. A future
+    `mapped` status would still mean candidate mapping, not a
+    source-faithfulness verdict. There is no geometric family implementation
+    or proof of Theorem 22.2.
+
     COUNT UPDATE (Wall lane, the nested wall theorem), 2026-08-07. The 13
     additional records are the orthogonality identity minor_orth, the three
     cross terms crossAB/crossAC/crossBC with their three antisymmetry lemmas,
@@ -1807,6 +1828,20 @@ fidelity:
     weak charge. That adapter still has one abstract category and heart; it is
     not a collection of geometric fiber categories, an HN structure over a
     curve, or a bounded moduli problem.
+
+    FAMILIES LANE: THE NEW INTERFACES NAME GEOMETRIC OBLIGATIONS; THEY DO NOT
+    IMPLEMENT GEOMETRY. `Families/Basic.lean` quantifies over probes supplied
+    by a client, and the eligibility predicate on a `DedekindHNProblem` is
+    where that client must recognize essentially-finite-type Dedekind base
+    changes. `Families/Weak.lean` improves semantic binding in the available
+    fixed-category model: its charge and semistability probes evaluate actual
+    indexed weak functions, and its support field is the genuine quotient
+    package. It still has one category and heart, not varying geometric
+    fibers. `BoundednessProblem` stores a caller-supplied predicate and proves
+    no moduli boundedness. The PUnit witnesses establish logical nonvacuity,
+    not the existence of a nontrivial geometric family. The Theorem 22.2
+    dependency contract has no theorem producing a complex manifold or local
+    isomorphism.
 
     THE HAPPEL-REITEN-SMALO TILT IS NOT FORMALIZED, and the directory name
     `Tilting/` invites the opposite reading, so it is stated here rather than
