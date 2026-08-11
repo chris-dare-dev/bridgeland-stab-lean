@@ -58,13 +58,13 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after the weak charge-ray and phase-tilt
-prestability assembly on 2026-08-10.** Every
+**THE GAP IS NOW ZERO, re-measured after reconciling the PR #132 adversarial
+follow-ups with the current-main taxonomy merge on 2026-08-11.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
 
-* it does NOT cover the **111 private** declarations, which remain structurally
+* it does NOT cover the **109 private** declarations, which remain structurally
   unlistable;
 * it does NOT make this file a gate -- `#print axioms` still exits 0 on
   `[sorryAx]`, and nothing here fails on a missing name;
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1128** declarations. The environment holds **1325** authored
-  declarations under `BridgelandStabLean.*`, so **197 are outside this gate**,
+* It names **1188** declarations. The environment holds **1382** authored
+  declarations under `BridgelandStabLean.*`, so **194 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **111 are `private`** -- 97 of them theorems -- and are *structurally*
+* **109 are `private`** -- 95 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **86 are structure field projections** emitted by the `structure` command.
+* **85 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **335 of the 1128 are not theorems** (20 `structure`, 315 other
+* **342 of the 1188 are not theorems** (19 `structure`, 323 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **793** real theorems, but it is a `def ... :
+  formatted identically to the **846** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -677,6 +677,7 @@ assembled directly from Definition 14.12's `TiltingProperty`. -/
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfPhaseEnvelopes
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltHeartObligationsOfTiltingProperty
+#print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_hasHNPropertyOfTiltingProperty
 
 /-! ## WeakStability lane -- reverse heart--slicing foundations
 
@@ -738,16 +739,12 @@ no source statement and make no §14 coverage promotion. -/
 #print axioms WeakStability.WeakStabilityFunction.ReverseSlicingObligations.toWeakPreStabilityCondition_slicing
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltLatticeCharge_apply
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTilt_ambientPhasePredicate_charge_ray
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN_exists_of_mem_tiltedHeart
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.ambientHN
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_Z
 #print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltHeartObligations.toWeakPreStabilityCondition_P
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_Z
-#print axioms WeakStability.WeakPreStabilityCondition.PhaseTiltPreStabilityObligations.toWeakPreStabilityCondition_P
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_Z
 #print axioms WeakStability.WeakPreStabilityCondition.phaseTiltWeakPreStabilityConditionOfTiltingProperty_P
@@ -1576,6 +1573,24 @@ No mass theorem or source-faithfulness claim is made here. -/
 #print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_iff_mono_cokernelDesc
 #print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact
 #print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_unconditional
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_H0primeFunctor_map_mor₂_of_obj₁_isGE_one
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_H0Functor_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.isIso_H0primeFunctor_map_truncLEι
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_comp
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeObjIsoTruncGEOfIsLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_zero
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_map_distinguished_exact_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_comp_assoc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.heartSourceH0Complex_exact_of_isHomological
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_naturality_assoc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE_fromH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.mono_heartSourceH0primeShortComplex_cokernelDesc_of_H0Functor
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.H0primeFunctor_map_distinguished_exact_of_obj₁_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.toH0primeHom_of_isLE
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_naturality
+#print axioms CategoryTheory.Triangulated.HeartStabilityData.fromH0primeHom_of_isLE_toH0primeHom_of_isLE
 
 /-! ## The octahedral reduction of the mass triangle inequality -/
 
@@ -1586,6 +1601,48 @@ No mass theorem or source-faithfulness claim is made here. -/
 #print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality_of_semistable_obj₁
 #print axioms CategoryTheory.Triangulated.stabilityMassSemistableLeftTriangleInequality
 #print axioms CategoryTheory.Triangulated.stabilityMassTriangleInequality
+#print axioms CategoryTheory.Triangulated.stabilityMassBoundaryHeartInequality
+#print axioms CategoryTheory.Triangulated.stabilityMass_H0FunctorShift_negOne_zero_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_one
+#print axioms CategoryTheory.Triangulated.HNFiltration.unrotateStability
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_appendFactor
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_same_phase
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.charge_triangle
+#print axioms CategoryTheory.Triangulated.StabilityMassBoundaryHeartInequality
+#print axioms CategoryTheory.Triangulated.stabilityMass_liftedRotation
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_charge
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart
+#print axioms CategoryTheory.Triangulated.phaseOne_endpoints_of_heart_shortExact
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_rotateStability
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_unrotateStability
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable
+#print axioms CategoryTheory.Triangulated.StabilityMassHeartShortExactInequality
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.mem_slicing_of_heart_isSemistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one_of_amplitude
+#print axioms CategoryTheory.Triangulated.HNFiltration.rotateStability
+#print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_obj₂_semistable
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_Zobj
+#print axioms CategoryTheory.Triangulated.heartShortExact_exists_distinguished_triangle
+#print axioms CategoryTheory.Triangulated.norm_charge_le_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_shift_neg_one
+#print axioms CategoryTheory.Triangulated.norm_actC_rotationGLPos
+#print axioms CategoryTheory.Triangulated.HNFiltration.mass_appendFactor
+#print axioms CategoryTheory.Triangulated.actC_rotationGLPos
+#print axioms CategoryTheory.Triangulated.stabilityMassHeartShortExactInequality_of_triangle
+#print axioms CategoryTheory.Triangulated.stabilityMass_heartCoh_negOne_zero_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_shift_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₂_semistable
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_gtProp_leProp
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_eq_heartCoh_negOne_add_zero
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_toReal_triangle_eq_add_of_hn_separated
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observableStabilityFunctionOnHeart_hasHN
+#print axioms CategoryTheory.Triangulated.AbelianHNFiltration.mass_eq_stabilityMass_toReal
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_obj₁_phase_one_of_obj₃_le_one
+#print axioms CategoryTheory.Triangulated.stabilityMass_triangle_le_of_same_phase
+#print axioms CategoryTheory.Triangulated.stabilityMass_heart_shortExact_le_of_same_phase
+#print axioms CategoryTheory.Triangulated.StabilityCondition.WithClassMap.observable_slicing
 
 /-! ## AutFullIsometry — invariance of all three coordinates -/
 

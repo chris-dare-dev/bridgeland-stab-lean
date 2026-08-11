@@ -45,9 +45,9 @@ variable {v : K₀ C →+ V}
 
 namespace WeakPreStabilityCondition
 
-/-- The heart-level conclusions needed for the weak upper tilt.  This does
-not assert the reverse weak heart--slicing equivalence, so it deliberately
-does not package a new `WeakPreStabilityCondition`. -/
+/-- The heart-level input to the ambient phase-tilt constructor.  It packages
+the HN, noetherian, and support conclusions without itself asserting a
+paper-level source statement. -/
 structure PhaseTiltHeartObligations
     (sigma : WeakPreStabilityCondition v) (beta : ℝ)
     (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1)
@@ -165,6 +165,28 @@ noncomputable def phaseTiltHeartObligationsOfTiltingProperty
       zeroCharge_tors := rfl
       support := sigma.phaseTilt_hasSupportProperty
         beta hbeta0 hbeta1 Zlin hcompat hsupport }
+
+omit [NormedSpace ℝ V] [FiniteDimensional ℝ V] in
+/-- Definition 14.12's tilting property supplies the heart-level HN property
+for the rotated weak stability function, independently of any numerical
+realization or support-property input. -/
+theorem phaseTilt_hasHNPropertyOfTiltingProperty
+    (sigma : WeakPreStabilityCondition v) (beta : ℝ)
+    (hbeta0 : 0 < beta) (hbeta1 : beta < 1)
+    (htilt : sigma.TiltingProperty) :
+    (sigma.phaseTiltWeakStabilityFunction
+      beta hbeta0.le hbeta1).HasHNProperty := by
+  let N0 := Classical.choose htilt.zeroCharge_noetherian
+  have hN0 : N0.pair.tors = sigma.zeroCharge :=
+    Classical.choose_spec htilt.zeroCharge_noetherian
+  let henv : ∀ (F : C), phaseFree sigma.slicing beta F →
+      sigma.HasTiltingEnvelope F :=
+    fun F hF => TiltingProperty.hasTiltingEnvelope_of_phaseFree
+      sigma htilt beta hbeta1 F hF
+  let hdec := sigma.phaseTilt_hasZeroChargeDecompositions_of_tiltingEnvelopes
+    beta hbeta0.le hbeta1 N0 hN0 henv
+  exact sigma.phaseTilt_hasHNProperty_of_zeroChargeDecompositions
+    beta hbeta0 hbeta1 N0 hN0 hdec
 
 end WeakPreStabilityCondition
 
