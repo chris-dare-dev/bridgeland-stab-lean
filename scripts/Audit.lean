@@ -1938,6 +1938,54 @@ end AutPairChecks
 
 end SlicingChecks
 
+/-! ## Slicing-order and abstract Bayer-property lane
+
+These declarations formalize the abstract order apparatus shared by the two
+2026 source papers.  They carry no `@[cites]` relation: source-faithfulness
+review and coverage-map promotion remain separate governance steps. -/
+
+#print axioms CategoryTheory.Triangulated.Slicing.Precedes
+#print axioms CategoryTheory.Triangulated.Slicing.PrecedesWeak
+#print axioms CategoryTheory.Triangulated.Slicing.LiPrecedes
+#print axioms CategoryTheory.Triangulated.Slicing.LiPrecedesWeak
+#print axioms CategoryTheory.Triangulated.Slicing.liPrecedes_iff_precedes
+#print axioms CategoryTheory.Triangulated.Slicing.liPrecedesWeak_iff_precedesWeak
+#print axioms CategoryTheory.Triangulated.Slicing.precedes_iff_phiPlus_lt
+#print axioms CategoryTheory.Triangulated.Slicing.precedesWeak_iff_phiPlus_le
+#print axioms CategoryTheory.Triangulated.Slicing.Precedes.weak
+#print axioms CategoryTheory.Triangulated.Slicing.precedesWeak_refl
+#print axioms CategoryTheory.Triangulated.Slicing.precedes_phaseShift_one
+#print axioms CategoryTheory.Triangulated.Slicing.precedes_iff_lt_phiMinus
+#print axioms CategoryTheory.Triangulated.Slicing.precedesWeak_iff_le_phiMinus
+#print axioms CategoryTheory.Triangulated.Slicing.precedes_iff_extreme_phases_lt
+#print axioms CategoryTheory.Triangulated.Slicing.precedesWeak_iff_extreme_phases_le
+#print axioms CategoryTheory.Triangulated.Slicing.Precedes.trans
+#print axioms CategoryTheory.Triangulated.Slicing.PrecedesWeak.trans
+#print axioms CategoryTheory.Triangulated.Slicing.Precedes.trans_weak
+#print axioms CategoryTheory.Triangulated.Slicing.PrecedesWeak.trans_strict
+#print axioms CategoryTheory.Triangulated.Slicing.mapEquiv_ltProp_iff
+#print axioms CategoryTheory.Triangulated.Slicing.mapEquiv_leProp_iff
+#print axioms BridgelandStabLean.GroupAction.TriEquiv.precedes_act_iff
+#print axioms BridgelandStabLean.GroupAction.TriEquiv.precedesWeak_act_iff
+#print axioms BridgelandStabLean.GroupAction.AutQuot.precedes_smul_iff
+#print axioms BridgelandStabLean.GroupAction.AutQuot.precedesWeak_smul_iff
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.smul_slicing
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.precedes_smul_stability_iff
+#print axioms BridgelandStabLean.GroupAction.AutPairQuot.precedesWeak_smul_stability_iff
+#print axioms BridgelandStabLean.GroupAction.HasBayerProperty
+#print axioms BridgelandStabLean.GroupAction.SlicingBayerProperty
+#print axioms BridgelandStabLean.GroupAction.hasBayerProperty_iff
+#print axioms BridgelandStabLean.GroupAction.hasBayerProperty_one_zero
+#print axioms BridgelandStabLean.GroupAction.hasBayerProperty_smul_iff
+#print axioms BridgelandStabLean.GroupAction.BayerProperty
+#print axioms BridgelandStabLean.GroupAction.bayerProperty_iff
+#print axioms BridgelandStabLean.GroupAction.bayerProperty_one_zero
+#print axioms CategoryTheory.Triangulated.CofiltrationData
+#print axioms CategoryTheory.Triangulated.CofiltrationData.remainder
+#print axioms CategoryTheory.Triangulated.CofiltrationProperty
+#print axioms CategoryTheory.Triangulated.CofiltrationPropertyInfinity
+#print axioms CategoryTheory.Triangulated.CofiltrationPropertyInfinity.toCofiltrationProperty
+
 /-! ## Families lane -- abstract Definition 20.5/21.15 interfaces -/
 
 #print axioms StabilityFamilies.ChargeProbe

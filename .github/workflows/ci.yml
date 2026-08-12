@@ -98,6 +98,11 @@ jobs:
       - name: environment linters
         run: lake exe runLinter BridgelandStabLean
 
+      - name: coverage maps
+        run: |
+          python3 scripts/check_coverage_map.py
+          python3 scripts/check_coverage_map.py registry/coverage-2607.28411.json
+
       # Belt and braces. The axiom gate above already fails on `sorryAx`, which
       # cannot be evaded by declaration syntax the way a source grep can — but a
       # `sorry` that somehow reached the build without reaching the audit's
