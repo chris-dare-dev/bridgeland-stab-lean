@@ -141,6 +141,20 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.Tilting.originalHeartCoh_isZero_of_isZero
 #print axioms BridgelandStabLean.Tilting.originalHeartCoh_map_isTExact
 
+/-! ## TStructure — truncation functors commute with the shift (#151) -/
+
+#print axioms BridgelandStabLean.TStructure.shiftedTriangleLTGE
+#print axioms BridgelandStabLean.TStructure.shiftedTriangleLTGE_distinguished
+#print axioms BridgelandStabLean.TStructure.isLE_shiftedTriangleLTGE_obj₁
+#print axioms BridgelandStabLean.TStructure.isGE_shiftedTriangleLTGE_obj₃
+#print axioms BridgelandStabLean.TStructure.exists_shiftedTriangleLTGE_iso
+#print axioms BridgelandStabLean.TStructure.shiftedTriangleLTGEIso
+#print axioms BridgelandStabLean.TStructure.shiftedTriangleLTGEIso_hom₂
+#print axioms BridgelandStabLean.TStructure.truncLTShiftIso
+#print axioms BridgelandStabLean.TStructure.truncGEShiftIso
+#print axioms BridgelandStabLean.TStructure.truncLTShiftIso_hom_comp_truncLTι
+#print axioms BridgelandStabLean.TStructure.truncGEπ_comp_truncGEShiftIso_hom
+
 /-! ## TStructure — bounded t-structures and t-exact functors (#146) -/
 
 #print axioms BridgelandStabLean.TStructure.IsBounded
