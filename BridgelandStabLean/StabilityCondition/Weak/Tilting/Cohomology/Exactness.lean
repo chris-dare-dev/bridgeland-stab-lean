@@ -18,8 +18,9 @@ records what is still missing for the full long exact sequence.
 * `originalHeartCoh_exact_of_distTriang`: the degree-zero short complex of a
   distinguished triangle is exact in the heart.
 * `originalHeartCoh_isZero_of_isZero`: degree-zero cohomology kills zero objects.
-* `originalHeartCoh_map_isTExact`: a t-exact functor commutes with membership of
-  the heart, so degree-zero cohomology transports along it at the level of objects.
+* `heart_map_originalHeartCoh`: a t-exact functor carries `H⁰_t(X)` into the
+  heart of the target t-structure, so degree-zero cohomology transports along it
+  at the level of objects.
 
 ## What is NOT here, and what it would take
 
@@ -96,7 +97,7 @@ the targets of `originalHeartCohFunctor`.
 This is the object-level statement. The natural transformation
 `F ∘ H⁰_t ⟶ H⁰_{t'} ∘ F` needs the truncation–shift API described in the module
 docstring and is deliberately not asserted here. -/
-theorem originalHeartCoh_map_isTExact [Functor.IsTExact F t t'] (X : C) :
+theorem heart_map_originalHeartCoh [Functor.IsTExact F t t'] (X : C) :
     t'.heart (F.obj ((originalHeartCohFunctor t 0).obj X).obj) :=
   Functor.heart_map_of_isTExact _ ((originalHeartCohFunctor t 0).obj X).property
 

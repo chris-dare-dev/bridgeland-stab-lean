@@ -139,7 +139,7 @@ open BridgelandStabLean
 
 #print axioms BridgelandStabLean.Tilting.originalHeartCoh_exact_of_distTriang
 #print axioms BridgelandStabLean.Tilting.originalHeartCoh_isZero_of_isZero
-#print axioms BridgelandStabLean.Tilting.originalHeartCoh_map_isTExact
+#print axioms BridgelandStabLean.Tilting.heart_map_originalHeartCoh
 
 /-! ## TStructure — bounded t-structures and t-exact functors (#146) -/
 
@@ -147,7 +147,6 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.TStructure.isBounded_iff
 #print axioms BridgelandStabLean.TStructure.exists_isLE
 #print axioms BridgelandStabLean.TStructure.exists_isGE
-#print axioms BridgelandStabLean.TStructure.isLE_shift_of_isBounded
 #print axioms BridgelandStabLean.TStructure.IsNondegenerate
 #print axioms BridgelandStabLean.TStructure.isNondegenerate_of_isBounded
 #print axioms BridgelandStabLean.Functor.IsRightTExact
@@ -155,6 +154,11 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.Functor.IsTExact
 #print axioms BridgelandStabLean.Functor.isLE_map_of_isRightTExact
 #print axioms BridgelandStabLean.Functor.isGE_map_of_isLeftTExact
+#print axioms BridgelandStabLean.Functor.isTExact_of
+#print axioms BridgelandStabLean.Functor.isRightTExact_of_isLE_zero
+#print axioms BridgelandStabLean.Functor.isLeftTExact_of_isGE_zero
+#print axioms BridgelandStabLean.Functor.isLeftTExact_rightAdjoint
+#print axioms BridgelandStabLean.Functor.isRightTExact_leftAdjoint
 #print axioms BridgelandStabLean.Functor.heart_map_of_isTExact
 #print axioms BridgelandStabLean.Functor.isRightTExact_comp
 #print axioms BridgelandStabLean.Functor.isLeftTExact_comp
@@ -162,6 +166,13 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.Functor.isRightTExact_id
 #print axioms BridgelandStabLean.Functor.isLeftTExact_id
 #print axioms BridgelandStabLean.Functor.isTExact_id
+
+/-! ## Anchor — bridges to the foundational library (#146) -/
+
+#print axioms BridgelandStabLean.Anchor.isBounded_iff_anchor
+#print axioms BridgelandStabLean.Anchor.isBounded_of_anchor
+#print axioms BridgelandStabLean.Anchor.anchor_isBounded
+#print axioms BridgelandStabLean.Anchor.isNondegenerate_of_anchor_isBounded
 
 /-! ## ForMathlib — results Mathlib lacks at the pin -/
 

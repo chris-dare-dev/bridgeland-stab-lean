@@ -18,6 +18,13 @@ only after the replacement is present at the new pin and the complete build succ
 
 Place code beneath the narrowest stable mathematical owner:
 
+- `TStructure/` for abstract t-structure theory: statements about a t-structure
+  on a pretriangulated category that mention no charge, no slicing, and no
+  stability condition. Anchor-free, and every module in it is registered in
+  `scripts/check_anchor_free.py`.
+- `Anchor/` for compatibility bridges to the foundational library. These modules
+  import `BridgelandStability` on purpose and are the *only* place a duplicated
+  notion may be reconciled. Nothing anchor-free may depend on them.
 - `Lattice/{Arithmetic,Numerical,Mukai}` for lattice theory.
 - `StabilityCondition/Phase` for phase relabelling and analysis.
 - `StabilityCondition/Symmetry/{GLTilde,Autoequivalence,Combined}` for actions.

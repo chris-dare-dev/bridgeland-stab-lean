@@ -23,6 +23,17 @@ without those as definitions the hypothesis cannot be written down at all.
   a functor's compatibility with a t-structure on its source and one on its
   target.
 
+## Main results
+
+* `Functor.isRightTExact_of_isLE_zero` / `Functor.isLeftTExact_of_isGE_zero`:
+  for a shift-commuting functor, degree `0` suffices.
+* `Functor.isTExact_of`: assemble `IsTExact` from its two halves.
+* `Functor.isLeftTExact_rightAdjoint` / `Functor.isRightTExact_leftAdjoint`:
+  right t-exactness of a left adjoint and left t-exactness of its right adjoint
+  determine each other.
+* `Functor.isRightTExact_comp` / `isLeftTExact_comp` / `isTExact_comp`, and the
+  identity functor.
+
 ## Namespacing, and why it is not in `CategoryTheory`
 
 Everything here lives under `BridgelandStabLean`. The foundational library
@@ -34,8 +45,12 @@ import — *"environment already contains ..."* — because both end up in one
 environment.
 
 This module is deliberately anchor-free, so it cannot simply reuse the
-foundational definition. A bridge lemma identifying the two belongs in a
-stability-facing module that already imports the anchor, not here.
+foundational definition. The two are equivalent but **not** definitionally
+equal, and dot notation `t.IsBounded` always resolves to the foundational one,
+because dot notation looks in the namespace of the type rather than in the open
+namespaces. The bridge identifying them is proved in
+`BridgelandStabLean.Anchor.TStructure`, which imports the anchor; use it rather
+than assuming the two names interchange.
 
 ## Conventions
 
@@ -94,11 +109,6 @@ theorem exists_isLE (h : TStructure.IsBounded t) (X : C) : ∃ n : ℤ, t.IsLE X
 
 /-- On a bounded t-structure every object admits a connective bound. -/
 theorem exists_isGE (h : TStructure.IsBounded t) (X : C) : ∃ n : ℤ, t.IsGE X n := (h X).1
-
-/-- Boundedness is a property of the ambient category, so it transfers along a
-shift. -/
-theorem isLE_shift_of_isBounded (h : TStructure.IsBounded t) (X : C) (a : ℤ) :
-    ∃ n : ℤ, t.IsLE (X⟦a⟧) n := exists_isLE h _
 
 end Bounded
 
@@ -171,6 +181,92 @@ theorem isLE_map_of_isRightTExact [Functor.IsRightTExact F t t'] (X : C) (n : �
 theorem isGE_map_of_isLeftTExact [Functor.IsLeftTExact F t t'] (X : C) (n : ℤ)
     [t.IsGE X n] : t'.IsGE (F.obj X) n :=
   IsLeftTExact.isGE_map X n ‹_›
+
+/-- Both halves assemble into `IsTExact`.
+
+This is not an `instance`: `IsTExact`'s parents are already instances by
+projection, so registering the converse would let instance search cycle between
+them. `IsTExact.mk` has no explicit fields, so neither `⟨_, _⟩` nor
+`inferInstance` reaches this — the lemma is the intended route. -/
+theorem isTExact_of [Functor.IsRightTExact F t t'] [Functor.IsLeftTExact F t t'] :
+    Functor.IsTExact F t t' := {}
+
+section OfDegreeZero
+
+/-- For a shift-commuting functor, right t-exactness at degree `0` gives it at
+every degree.
+
+The class is quantified over all `n` because a bare functor need not commute
+with the shift, and then the degrees are genuinely independent. Every functor
+one applies this to in practice does commute with the shift, so this is the
+constructor to reach for. -/
+theorem isRightTExact_of_isLE_zero [F.CommShift ℤ]
+    (h : ∀ X : C, t.IsLE X 0 → t'.IsLE (F.obj X) 0) :
+    Functor.IsRightTExact F t t' where
+  isLE_map X n hX := by
+    haveI := hX
+    haveI : t.IsLE (X⟦n⟧) 0 := t.isLE_shift X n n 0 (by lia)
+    haveI := h _ this
+    have e : F.obj (X⟦n⟧) ≅ (F.obj X)⟦n⟧ := (F.commShiftIso n).app X
+    haveI : t'.IsLE ((F.obj X)⟦n⟧) 0 := t'.isLE_of_iso e 0
+    exact (t'.isLE_shift_iff (F.obj X) n n 0 (by lia)).1 this
+
+/-- For a shift-commuting functor, left t-exactness at degree `0` gives it at
+every degree. -/
+theorem isLeftTExact_of_isGE_zero [F.CommShift ℤ]
+    (h : ∀ X : C, t.IsGE X 0 → t'.IsGE (F.obj X) 0) :
+    Functor.IsLeftTExact F t t' where
+  isGE_map X n hX := by
+    haveI := hX
+    haveI : t.IsGE (X⟦n⟧) 0 := t.isGE_shift X n n 0 (by lia)
+    haveI := h _ this
+    have e : F.obj (X⟦n⟧) ≅ (F.obj X)⟦n⟧ := (F.commShiftIso n).app X
+    haveI : t'.IsGE ((F.obj X)⟦n⟧) 0 := t'.isGE_of_iso e 0
+    exact (t'.isGE_shift_iff (F.obj X) n n 0 (by lia)).1 this
+
+end OfDegreeZero
+
+section Adjunction
+
+variable {G : D ⥤ C}
+
+/-- **The right adjoint of a right t-exact functor is left t-exact.**
+
+This is the closure lemma the inducing theorem actually consumes: its hypothesis
+is right t-exactness of `Φ Φᴸ`, and what one has in hand is an adjunction.
+
+The proof is the orthogonality characterization of `Dᵗ≥ⁿ`: a map `A ⟶ G Y` with
+`A` in `Dᵗ≤ⁿ⁻¹` transposes to `F A ⟶ Y` with `F A` in `D'ᵗ'≤ⁿ⁻¹` and `Y` in
+`D'ᵗ'≥ⁿ`, hence zero. -/
+theorem isLeftTExact_rightAdjoint [G.Additive] (adj : F ⊣ G)
+    [Functor.IsRightTExact F t t'] : Functor.IsLeftTExact G t' t where
+  isGE_map Y n hY := by
+    haveI := hY
+    rw [t.isGE_iff_orthogonal (n - 1) n (by lia)]
+    intro A f hA
+    haveI := hA
+    haveI : t'.IsLE (F.obj A) (n - 1) := IsRightTExact.isLE_map A (n - 1) hA
+    have hg : (adj.homEquiv A Y).symm f = 0 := t'.zero _ (n - 1) n (by lia)
+    have hf := congrArg (adj.homEquiv A Y) hg
+    simpa [Adjunction.homEquiv_unit] using hf
+
+/-- **The left adjoint of a left t-exact functor is right t-exact.**
+
+Dual to `isLeftTExact_rightAdjoint`, through the orthogonality characterization
+of `Dᵗ≤ⁿ`. -/
+theorem isRightTExact_leftAdjoint [F.Additive] (adj : F ⊣ G)
+    [Functor.IsLeftTExact G t' t] : Functor.IsRightTExact F t t' where
+  isLE_map X n hX := by
+    haveI := hX
+    rw [t'.isLE_iff_orthogonal n (n + 1) (by lia)]
+    intro Y g hY
+    haveI := hY
+    haveI : t.IsGE (G.obj Y) (n + 1) := IsLeftTExact.isGE_map Y (n + 1) hY
+    have hf : adj.homEquiv X Y g = 0 := t.zero _ n (n + 1) (by lia)
+    have hg := congrArg (adj.homEquiv X Y).symm hf
+    simpa [Adjunction.homEquiv_counit] using hg
+
+end Adjunction
 
 /-- A t-exact functor carries the heart into the heart. -/
 theorem heart_map_of_isTExact [Functor.IsTExact F t t'] (X : C) (hX : t.heart X) :
