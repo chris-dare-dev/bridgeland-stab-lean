@@ -135,6 +135,12 @@ import BridgelandStabLean
 
 open BridgelandStabLean
 
+/-! ## Cohomology exactness (#146) -/
+
+#print axioms BridgelandStabLean.Tilting.originalHeartCoh_exact_of_distTriang
+#print axioms BridgelandStabLean.Tilting.originalHeartCoh_isZero_of_isZero
+#print axioms BridgelandStabLean.Tilting.originalHeartCoh_map_isTExact
+
 /-! ## TStructure — bounded t-structures and t-exact functors (#146) -/
 
 #print axioms BridgelandStabLean.TStructure.IsBounded

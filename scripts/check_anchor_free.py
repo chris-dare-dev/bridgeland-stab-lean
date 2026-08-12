@@ -31,6 +31,7 @@ ANCHOR_FREE = [
     "BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.HeartAbelian",
     "BridgelandStabLean.StabilityCondition.Weak.Tilting.Cohomology.Basic",
     "BridgelandStabLean.StabilityCondition.Weak.Tilting.Cohomology.Homological",
+    "BridgelandStabLean.StabilityCondition.Weak.Tilting.Cohomology.Exactness",
     "BridgelandStabLean.StabilityCondition.Weak.Tilting.TorsionPair.Basic",
     "BridgelandStabLean.StabilityCondition.Weak.Tilting.TorsionPair.Heart",
 ]
