@@ -4,6 +4,7 @@ Released under the MIT license.
 -/
 import BridgelandStabLean.StabilityCondition.Phase.Order.Basic
 import BridgelandStabLean.StabilityCondition.Phase.Order.Characterizations
+import BridgelandStabLean.StabilityCondition.Phase.Order.Functoriality
 import BridgelandStabLean.StabilityCondition.Phase.Order.Equivariance
 import BridgelandStabLean.StabilityCondition.Phase.Order.Bayer
 import BridgelandStabLean.StabilityCondition.Phase.Order.Cofiltration

@@ -111,4 +111,24 @@ theorem Slicing.precedes_phaseShift_one (s : Slicing C) :
   change phi < phi + 1
   linarith
 
+/-- Shifting a slicing down by `t` subtracts `t` from the highest phase of a
+nonzero object. -/
+theorem Slicing.phaseShift_phiPlus (s : Slicing C) (t : ℝ) (E : C)
+    (hE0 : ¬IsZero E) :
+    (s.phaseShift C t).phiPlus C E hE0 = s.phiPlus C E hE0 - t := by
+  obtain ⟨F, hn, hfirst, _⟩ := HNFiltration.exists_both_nonzero C s hE0
+  rw [(s.phaseShift C t).phiPlus_eq C E hE0 (F.phaseShift (C := C) t) hn hfirst,
+    s.phiPlus_eq C E hE0 F hn hfirst]
+  rfl
+
+/-- Shifting a slicing down by `t` subtracts `t` from the lowest phase of a
+nonzero object. -/
+theorem Slicing.phaseShift_phiMinus (s : Slicing C) (t : ℝ) (E : C)
+    (hE0 : ¬IsZero E) :
+    (s.phaseShift C t).phiMinus C E hE0 = s.phiMinus C E hE0 - t := by
+  obtain ⟨F, hn, _, hlast⟩ := HNFiltration.exists_both_nonzero C s hE0
+  rw [(s.phaseShift C t).phiMinus_eq C E hE0 (F.phaseShift (C := C) t) hn hlast,
+    s.phiMinus_eq C E hE0 F hn hlast]
+  rfl
+
 end CategoryTheory.Triangulated

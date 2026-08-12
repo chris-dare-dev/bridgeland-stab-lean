@@ -3,7 +3,7 @@
 Date: 2026-08-11
 Branch: `agent/issue-141-slicing-orders`
 Base: `87279440a8056781e31ecd1fd7a229efe92bd7b8` (main after PR #149)
-Scope: first reviewable theorem slice of issue #141; this does not close the epic
+Scope: reviewable abstract theorem slice of issue #141; this does not close the epic
 
 ## What this branch claims
 
@@ -15,9 +15,17 @@ Scope: first reviewable theorem slice of issue #141; this does not close the epi
   mixed transitivity holds; and `P ≺ P[1]`.
 - Simultaneous autoequivalence transport preserves both relations, including
   the action of `AutPairQuot v` on class-map stability conditions.
+- A hypothesis-carrying preimage package proves that any future pullback or
+  pushforward slicing construction preserving phase slices and strict/weak
+  upper windows preserves the corresponding order. No geometric functor is
+  manufactured by this interface.
 - `BayerProperty` is the comparison `P_sigma ⪯ P_(q • sigma)[l]` for a fixed
   `AutPairQuot v` and fixed integer; `SlicingBayerProperty` is its reusable
   `AutQuot C`-level abstraction.
+- The two intrinsic Lemma 3.17 phase formulations are proved for arbitrary
+  quotient representatives: inverse-image `phiPlus` with the `[-l]` shift
+  moved into the inequality, and forward-image `phiMinus` with `[l]` encoded
+  as the equivalent lower bound `phi - l`.
 - `CofiltrationProperty` models the categorical content of Definition 3.22:
   a finite distinguished-triangle sequence, positive finite-biproduct
   multiplicities, terminal zero object, and final shifted cone in
@@ -32,9 +40,6 @@ Scope: first reviewable theorem slice of issue #141; this does not close the epi
   pullback/pushforward slicings, base change, or moduli.
 - It does not prove the geometric filtration property (Definition 3.19) or
   Propositions 3.21, 3.24, 3.26, or 3.27.
-- It does not yet add the conditional abstract `f_sharp`/`f^sharp` wrappers
-  from Remark 3.14(3); that is a natural follow-up once the chosen functor
-  interface is fixed.
 - It does not bind `@[cites]` or assert source-faithfulness.
 - `registry/coverage-2607.28411.json` is deliberately all `target`; only the
   landing PR may propose the issue-prescribed §3.4 `target -> mapped` change.
@@ -60,6 +65,7 @@ Pinned PDF downloaded 2026-08-11:
 
 - `BridgelandStabLean/StabilityCondition/Phase/Order/Basic.lean`
 - `BridgelandStabLean/StabilityCondition/Phase/Order/Characterizations.lean`
+- `BridgelandStabLean/StabilityCondition/Phase/Order/Functoriality.lean`
 - `BridgelandStabLean/StabilityCondition/Phase/Order/Equivariance.lean`
 - `BridgelandStabLean/StabilityCondition/Phase/Order/Bayer.lean`
 - `BridgelandStabLean/StabilityCondition/Phase/Order/Cofiltration.lean`
@@ -86,7 +92,13 @@ Pinned PDF downloaded 2026-08-11:
    cone rather than merely to its shift?
 9. Are any docstrings stronger than the Lean statements, particularly around
    the geometric propositions intentionally left out?
-10. Should the landing promote only the §3.4 near-term coordinate to `mapped`,
+10. Does `SlicingOrderPreimageData` state a sufficient and honest conditional
+    version of Remark 3.14(3), without implying that a geometric pullback or
+    pushforward was constructed?
+11. Do the representative Bayer formulas correctly account for the inverse
+    twist and integer shifts in Lemma 3.17(2)/(3), including the unit/counit
+    orientations used in the forward-image lower-phase proof?
+12. Should the landing promote only the §3.4 near-term coordinate to `mapped`,
     and if so is the proposed review evidence sufficient under repository
     governance?
 
@@ -104,18 +116,26 @@ git diff --check
 rg -n '\b(sorry|admit|axiom)\b' BridgelandStabLean/StabilityCondition/Phase/Order
 ```
 
-Expected census:
+Expected census after the conditional transport and Lemma 3.17 extension:
 
-- 124 modules;
-- 1686 authored declarations;
+- 125 modules;
+- 1703 authored declarations;
 - 114 private declarations, 100 theorems;
-- 164 structure projections;
-- 1403 hand-audited public declarations;
+- 167 structure projections;
+- 1417 hand-audited public declarations;
 - five pre-existing generated `HeartAbelian` companions outside the audit;
 - no declaration introduced by this branch outside the audit.
 
-Local observations already made: 3882-job library build green; environment
+Local observations already made: 3883-job library build green; environment
 linter green; both coverage validators green; diff check green; and the final
-single-threaded exact audit covered all 1403 commands within the repository
+single-threaded exact audit covered all 1417 commands within the repository
 allowlist with no `sorryAx`. Earlier concurrent audit attempts were externally
 terminated and the truncation guard correctly rejected those prefixes.
+
+## Landing-time promotion proposal (not applied)
+
+The branch deliberately leaves `sec-3-4-bayer-property` at `target`. If an
+independent review accepts the source coordinates and the theorem orientations,
+the landing PR may propose the issue-prescribed `target -> mapped` change using
+that dated verdict as evidence. Neither this authoring handoff nor CI is an
+independent source-faithfulness review, so neither is sufficient on its own.

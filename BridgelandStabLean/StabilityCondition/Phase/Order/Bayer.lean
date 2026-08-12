@@ -3,6 +3,7 @@ Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
 import BridgelandStabLean.StabilityCondition.Phase.Order.Equivariance
+import BridgelandStabLean.StabilityCondition.Metric.Isometry.Phase
 
 /-!
 # The abstract Bayer property
@@ -103,6 +104,112 @@ theorem bayerProperty_iff (sigma : StabilityCondition.WithClassMap C v)
     BayerProperty sigma q l ↔
       HasBayerProperty sigma.slicing (AutPairQuot.toAutQuot q) l := by
   rw [BayerProperty, HasBayerProperty, AutPairQuot.smul_slicing]
+
+/-- Upper-phase formulation of the paper-facing Bayer property.  For an
+object semistable in the original slicing, its highest phase in the acted and
+shifted slicing is at most its original phase. -/
+theorem bayerProperty_iff_phiPlus_le
+    (sigma : StabilityCondition.WithClassMap C v) (q : AutPairQuot v) (l : ℤ) :
+    BayerProperty sigma q l ↔
+      ∀ {E : C} {phi : ℝ} (_hE : sigma.slicing.P phi E)
+        (hE0 : ¬IsZero E),
+        ((q • sigma).slicing.phaseShift C (l : ℝ)).phiPlus C E hE0 ≤ phi := by
+  unfold BayerProperty
+  exact sigma.slicing.precedesWeak_iff_phiPlus_le C
+    ((q • sigma).slicing.phaseShift C (l : ℝ))
+
+/-- Lower-phase formulation of the paper-facing Bayer property.  For an
+object semistable in the acted and shifted slicing, its lowest phase in the
+original slicing is at least its acted phase. -/
+theorem bayerProperty_iff_le_phiMinus
+    (sigma : StabilityCondition.WithClassMap C v) (q : AutPairQuot v) (l : ℤ) :
+    BayerProperty sigma q l ↔
+      ∀ {E : C} {phi : ℝ}
+        (_hE : ((q • sigma).slicing.phaseShift C (l : ℝ)).P phi E)
+        (hE0 : ¬IsZero E), phi ≤ sigma.slicing.phiMinus C E hE0 := by
+  unfold BayerProperty
+  exact sigma.slicing.precedesWeak_iff_le_phiMinus C
+    ((q • sigma).slicing.phaseShift C (l : ℝ))
+
+/-- Lemma 3.17(2) at the representative level.  The inverse object map appears
+explicitly because `a.Φ` is a chosen autoequivalence rather than only its
+natural-isomorphism class.  The phase shift `[-l]` in the paper has been moved
+to the right-hand side of the inequality. -/
+theorem bayerProperty_mk_iff_inverse_phiPlus_le
+    (sigma : StabilityCondition.WithClassMap C v) (a : AutPair v) (l : ℤ) :
+    BayerProperty sigma (AutPairQuot.mk a) l ↔
+      ∀ {E : C} {phi : ℝ} (_hE : sigma.slicing.P phi E)
+        (hInv0 : ¬IsZero (a.Φ.e.inverse.obj E)),
+        sigma.slicing.phiPlus C (a.Φ.e.inverse.obj E) hInv0 ≤ phi + l := by
+  rw [bayerProperty_iff_phiPlus_le]
+  constructor
+  · intro h E phi hE hInv0
+    have hE0 : ¬IsZero E := fun hZ ↦
+      hInv0 (a.Φ.e.inverse.map_isZero hZ)
+    have hBound := h hE hE0
+    change ((sigma.slicing.mapEquiv a.Φ.e).phaseShift C (l : ℝ)).phiPlus
+      C E hE0 ≤ phi at hBound
+    rw [Slicing.phaseShift_phiPlus C (sigma.slicing.mapEquiv a.Φ.e)
+        (l : ℝ) E hE0,
+      CategoryTheory.Triangulated.mapEquiv_phiPlus a.Φ.e sigma.slicing E
+        hE0 hInv0] at hBound
+    exact (sub_le_iff_le_add.mp hBound)
+  · intro h E phi hE hE0
+    have hInv0 : ¬IsZero (a.Φ.e.inverse.obj E) := fun hZ ↦
+      hE0 (IsZero.of_iso (a.Φ.e.functor.map_isZero hZ)
+        (a.Φ.e.counitIso.app E).symm)
+    have hBound := h hE hInv0
+    change ((sigma.slicing.mapEquiv a.Φ.e).phaseShift C (l : ℝ)).phiPlus
+      C E hE0 ≤ phi
+    rw [Slicing.phaseShift_phiPlus C (sigma.slicing.mapEquiv a.Φ.e)
+        (l : ℝ) E hE0,
+      CategoryTheory.Triangulated.mapEquiv_phiPlus a.Φ.e sigma.slicing E
+        hE0 hInv0]
+    exact (sub_le_iff_le_add.mpr hBound)
+
+/-- Preimage form of Lemma 3.17(3).  Semistability for the acted and shifted
+slicing is rewritten as semistability of the inverse image in the original
+slicing; the conclusion is the corresponding original lowest-phase bound. -/
+theorem bayerProperty_mk_iff_inverse_le_phiMinus
+    (sigma : StabilityCondition.WithClassMap C v) (a : AutPair v) (l : ℤ) :
+    BayerProperty sigma (AutPairQuot.mk a) l ↔
+      ∀ {E : C} {phi : ℝ}
+        (_hE : sigma.slicing.P (phi + l) (a.Φ.e.inverse.obj E))
+        (hE0 : ¬IsZero E), phi ≤ sigma.slicing.phiMinus C E hE0 := by
+  rw [bayerProperty_iff_le_phiMinus]
+  rfl
+
+/-- Lemma 3.17(3) at the representative level.  For an original semistable
+object, the lowest phase of its forward image is bounded below by `phi - l`.
+Equivalently, shifting that image by `[l]` gives the paper's inequality
+`phiMinus (a.Φ(F)[l]) ≥ phi`. -/
+theorem bayerProperty_mk_iff_sub_le_functor_phiMinus
+    (sigma : StabilityCondition.WithClassMap C v) (a : AutPair v) (l : ℤ) :
+    BayerProperty sigma (AutPairQuot.mk a) l ↔
+      ∀ {F : C} {phi : ℝ} (_hF : sigma.slicing.P phi F)
+        (hMap0 : ¬IsZero (a.Φ.e.functor.obj F)),
+        phi - l ≤ sigma.slicing.phiMinus C (a.Φ.e.functor.obj F) hMap0 := by
+  rw [bayerProperty_iff_le_phiMinus]
+  constructor
+  · intro h F phi hF hMap0
+    apply h (E := a.Φ.e.functor.obj F) (phi := phi - l) ?_ hMap0
+    change sigma.slicing.P ((phi - (l : ℝ)) + l)
+      (a.Φ.e.inverse.obj (a.Φ.e.functor.obj F))
+    simpa only [sub_add_cancel] using
+      (ObjectProperty.prop_of_iso _ (a.Φ.e.unitIso.app F) hF)
+  · intro h E phi hE hE0
+    change sigma.slicing.P (phi + l) (a.Φ.e.inverse.obj E) at hE
+    have hMap0 : ¬IsZero
+        (a.Φ.e.functor.obj (a.Φ.e.inverse.obj E)) := fun hZ ↦
+      hE0 (IsZero.of_iso hZ (a.Φ.e.counitIso.app E).symm)
+    have hBound := h hE hMap0
+    have hPhase : sigma.slicing.phiMinus C
+        (a.Φ.e.functor.obj (a.Φ.e.inverse.obj E)) hMap0 =
+        sigma.slicing.phiMinus C E hE0 := by
+      simpa using sigma.slicing.phiMinus_congr (a.Φ.e.counitIso.app E)
+        hMap0 hE0
+    rw [hPhase] at hBound
+    simpa only [add_sub_cancel_right] using hBound
 
 /-- The identity compatible autoequivalence with zero phase shift satisfies
 the paper-facing Bayer property. -/
