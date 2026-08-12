@@ -135,6 +135,28 @@ import BridgelandStabLean
 
 open BridgelandStabLean
 
+/-! ## TStructure — bounded t-structures and t-exact functors (#146) -/
+
+#print axioms BridgelandStabLean.TStructure.IsBounded
+#print axioms BridgelandStabLean.TStructure.isBounded_iff
+#print axioms BridgelandStabLean.TStructure.exists_isLE
+#print axioms BridgelandStabLean.TStructure.exists_isGE
+#print axioms BridgelandStabLean.TStructure.isLE_shift_of_isBounded
+#print axioms BridgelandStabLean.TStructure.IsNondegenerate
+#print axioms BridgelandStabLean.TStructure.isNondegenerate_of_isBounded
+#print axioms BridgelandStabLean.Functor.IsRightTExact
+#print axioms BridgelandStabLean.Functor.IsLeftTExact
+#print axioms BridgelandStabLean.Functor.IsTExact
+#print axioms BridgelandStabLean.Functor.isLE_map_of_isRightTExact
+#print axioms BridgelandStabLean.Functor.isGE_map_of_isLeftTExact
+#print axioms BridgelandStabLean.Functor.heart_map_of_isTExact
+#print axioms BridgelandStabLean.Functor.isRightTExact_comp
+#print axioms BridgelandStabLean.Functor.isLeftTExact_comp
+#print axioms BridgelandStabLean.Functor.isTExact_comp
+#print axioms BridgelandStabLean.Functor.isRightTExact_id
+#print axioms BridgelandStabLean.Functor.isLeftTExact_id
+#print axioms BridgelandStabLean.Functor.isTExact_id
+
 /-! ## ForMathlib — results Mathlib lacks at the pin -/
 
 #print axioms Matrix.polarFactor

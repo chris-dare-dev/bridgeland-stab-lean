@@ -2,6 +2,7 @@
 Copyright (c) 2026 Chris Dare. All rights reserved.
 Released under the MIT license.
 -/
+import BridgelandStabLean.TStructure
 import BridgelandStabLean.ForMathlib
 import BridgelandStabLean.Lattice
 import BridgelandStabLean.StabilityCondition
