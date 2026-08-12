@@ -128,4 +128,13 @@ theorem truncGEπ_comp_truncGEShiftIso_hom :
   simpa [truncGEShiftIso, shiftedTriangleLTGE, shiftedTriangleLTGEIso_hom₂]
     using (shiftedTriangleLTGEIso t a n X).hom.comm₂
 
+/-- Inverse form of `truncGEπ_comp_truncGEShiftIso_hom`, used to prove
+naturality of the comparison. -/
+@[reassoc]
+theorem truncGEπ_comp_truncGEShiftIso_inv :
+    (t.truncGEπ a).app (X⟦n⟧) ≫ (truncGEShiftIso t a n X).inv =
+      n.negOnePow • ((t.truncGEπ (a + n)).app X)⟦n⟧' := by
+  rw [← truncGEπ_comp_truncGEShiftIso_hom t a n X]
+  simp
+
 end BridgelandStabLean.TStructure

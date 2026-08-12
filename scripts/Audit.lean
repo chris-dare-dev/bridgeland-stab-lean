@@ -58,8 +58,8 @@ to **488**. Both were right against the filter of the day, and both are
 superseded here -- the 821 in particular counted the 30 generated names
 described above. **Re-run the command; do not adjust the numbers.**
 
-**THE GAP IS NOW ZERO, re-measured after adding the issue #83 abstract
-families interfaces on 2026-08-11.** Every
+**THE GAP IS NOW ZERO, re-measured after adding the issue #151
+truncation--shift naturality bridge on 2026-08-12.** Every
 public declaration in this library that is not a structure field projection is
 named below. Be precise about what that does and does not mean -- three of the
 four qualifications in this comment are unaffected by it:
@@ -72,18 +72,18 @@ four qualifications in this comment are unaffected by it:
   green without an entry here. Zero is a measurement taken at a commit, not a
   property the build maintains.
 
-* It names **1353** declarations. The environment holds **1621** authored
-  declarations under `BridgelandStabLean.*`, so **268 are outside this gate**,
+* It names **1412** declarations. The environment holds **1686** authored
+  declarations under `BridgelandStabLean.*`, so **274 are outside this gate**,
   all of them private or projections. ("Authored" excludes constructors,
   recursors, `casesOn`, matchers, equation lemmas, internal names, and the four
   generated families named above -- none of which anybody writes or could
   list.)
-* **114 are `private`** -- 100 of them theorems -- and are *structurally*
+* **116 are `private`** -- 100 of them theorems -- and are *structurally*
   unlistable: Lean mangles a private name to `_private.<Module>.<n>.<Name>`,
   which cannot be written as a short name from an importing module. The
   instruction below cannot be followed for them, and no amount of diligence
   changes that.
-* **154 are structure field projections** emitted by the `structure` command.
+* **160 are structure field projections** emitted by the `structure` command.
   These are not a coverage gap in any useful sense; listing them would be noise.
   They are called out because a census that does not separate them reports a
   shortfall five times the real one.
@@ -105,12 +105,12 @@ four qualifications in this comment are unaffected by it:
   when a name it *should* list appears. `scripts/Census.lean` is the thing that
   reports it, but it is a script you run, not a CI gate; a name added without a
   matching entry here still lands green.
-* **410 of the 1353 are not theorems** (40 `structure`, 370 other
+* **427 of the 1412 are not theorems** (44 `structure`, 383 other
   constructions).
   For a `def`, `#print axioms` reports the axiom closure of a CONSTRUCTION and
   asserts nothing about any proposition. In particular
   `CategoryTheory.Triangulated.StabilityMassTriangleInequality` appears below
-  formatted identically to the **943** real theorems, but it is a `def ... :
+  formatted identically to the **983** real theorems, but it is a `def ... :
   Prop` -- its clean line means the definition is axiom-clean, NOT that the
   proposition holds.
 
@@ -153,7 +153,19 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.TStructure.truncLTShiftIso
 #print axioms BridgelandStabLean.TStructure.truncGEShiftIso
 #print axioms BridgelandStabLean.TStructure.truncLTShiftIso_hom_comp_truncLTι
+#print axioms BridgelandStabLean.TStructure.truncLTShiftIso_hom_comp_truncLTι_assoc
 #print axioms BridgelandStabLean.TStructure.truncGEπ_comp_truncGEShiftIso_hom
+#print axioms BridgelandStabLean.TStructure.truncGEπ_comp_truncGEShiftIso_hom_assoc
+#print axioms BridgelandStabLean.TStructure.truncGEπ_comp_truncGEShiftIso_inv
+#print axioms BridgelandStabLean.TStructure.truncGEπ_comp_truncGEShiftIso_inv_assoc
+#print axioms BridgelandStabLean.TStructure.truncLTShiftNatIso
+#print axioms BridgelandStabLean.TStructure.truncGEShiftNatIso
+#print axioms BridgelandStabLean.TStructure.truncLEShiftNatIso
+#print axioms BridgelandStabLean.TStructure.truncGELEShiftNatIso
+#print axioms BridgelandStabLean.Tilting.originalHeartCohUnderlyingShiftNatIso
+#print axioms BridgelandStabLean.Tilting.originalHeartCohShiftNatIso
+#print axioms BridgelandStabLean.Tilting.OriginalHeartCohomologyIsHomological
+#print axioms BridgelandStabLean.Tilting.originalHeartCohFunctor_isHomological
 
 /-! ## TStructure — bounded t-structures and t-exact functors (#146) -/
 
@@ -188,10 +200,15 @@ open BridgelandStabLean
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_admissible
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartAbelian
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_biprod
-#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartFullSubcategoryAbelian
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartFullSubcategory_shortExact_of_distTriang
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.truncGE_map_comp_descTruncGE
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.truncGE_map_comp_descTruncGE_assoc
 #print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.exists_truncLT_octahedral_split
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_containsZero
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_closedUnderBinaryProducts
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_closedUnderFiniteProducts
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heart_hasFiniteProducts
+#print axioms BridgelandStabLean.ForMathlib.CategoryTheory.Triangulated.TStructure.heartFullSubcategoryAbelian
 #print axioms Matrix.polarFactor_posSemidef
 #print axioms Matrix.polarFactor_mul_self
 #print axioms Matrix.polarFactor_isHermitian
