@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> Development has moved to
+> **[derived-alg-geo-lean](https://github.com/chris-dare-dev/derived-alg-geo-lean)**.
+> This repository is retained as a read-only historical archive. Please use the new repository
+> for current code, issues, milestones, and pull requests.
+
 # BridgelandStabLean
 
 BridgelandStabLean is a Lean 4 library for the structure and geometry of Bridgeland stability
